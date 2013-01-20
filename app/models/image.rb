@@ -26,11 +26,4 @@ class Image < ActiveRecord::Base
   def download_remote_image
     self.image = open(self.image_url)
   end
-
-  rails_admin do
-		base do
-			fields :image
-		end
-		visible false
-	end
 end

@@ -89,17 +89,6 @@ class Book < ActiveRecord::Base
     h
   end
 
-  rails_admin do
-    include_all_fields
-    field :published do
-      label "Publised (YYYY/MM/DD) OR (YYYY/MM) OR (YYYY)"
-    end
-    field :carts do
-      visible false
-    end
-    field :orders do
-      visible false
-    end
-  end
+
 
 end

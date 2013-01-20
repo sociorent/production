@@ -1,0 +1,102 @@
+#main_wrapper {
+	border: 4px solid black;
+}
+
+#logo {
+	text-align: left;
+}
+#divider{
+	text-align: center;
+	font-weight: bold;
+}
+
+#user_address {
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 30px;
+	text-transform: capitalize;
+}
+
+#order_number {
+	font-weight: bold;
+	font-size: 20px;
+	text-align: right;
+	line-height: 42px;
+}
+
+#price_table {
+	font-size: 25px;
+	margin-top: 40px;
+}
+
+#price_table td {
+	width: 300px;
+}
+
+#price_container {
+	text-align: center;
+}
+
+#price_container p {
+	font-size: 35px;
+	line-height: 42px;
+	font-weight: bold;
+}
+
+#payment_type {
+	text-decoration: underline;
+}
+
+#total_quantity {
+	font-size: 30px;
+	line-height: 45px;
+}
+
+#price_box {
+	padding-left: 100px;
+	margin-bottom: 25px;
+}
+
+#socio_rent_address {
+	border-width: 2px 0px;
+	border-style: solid;
+	border-color: black;
+	margin-top: 20px;
+	font-size: 16px;
+	padding: 10px 0px
+}
+
+#shipping_price {
+	font-size: 12px;
+	float: right;
+}
+
+#footer {
+	text-align: center;
+	margin-top: 25px;
+}
+
+#books_list {
+	padding-top: 25;
+	margin-bottom: 25px;
+}
+
+#invoice_title {
+	float: right;
+	font-size: 30px;
+	font-weight: bold;
+	padding-top: 25px;
+}
+
+#logo_text {
+	float: left;
+}
+
+#logo_text {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#user_invoice_address {
+	text-align: right;
+}

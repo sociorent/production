@@ -1,0 +1,87 @@
+<%= stylesheet_link_tag "home/print_label", :media => 'print, screen' %>
+<%= stylesheet_link_tag "global/bootstrap.min.css", :media => 'print, screen' %>
+<div class="container" id="main_wrapper">
+	<div class="span10 offset1">
+		<p id="logo">
+		<span id="logo_text">
+		<img src="assets/Sociorent.png" /> <br>
+		Sociorent Student Services Private Limited
+		</span>
+		<span id="invoice_title">INVOICE</span>
+		</p>
+		<p id="divider">===================================================================================================
+	</div>
+	<div class="span10 offset1">
+		<div class="span4">
+			Sociorent.com, Manyata Embassy Business Park, Magnolia,
+Block B, Level 4, Outer Ring Road, Nagawara, Bangalore – 560 045.
+Phone: +91-7353-11-2345.
+		</div>
+		<div class="span5">
+		<p class="span5" id="order_number">
+			Order: <%= @order.random%><br>
+			Date: <%= @shipped.first.shipped_date.strftime("%d/%m/%Y")%><br>
+			Customer ID : <%= @order.user.id %><br>
+			</p>
+
+			<p class="span5" id="user_invoice_address">TO
+		<%= @order.user.name %> <br>
+		<% addr=JSON.parse @order.user.address%>
+		<% addr.each do |k,v| %>
+		  <%=v%><br>
+		<% end %>
+	</p>
+
+	</div>
+	<div class="span10 offset1" id="books_list">
+		<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+	</div>
+	<div class="span12" id="price_container">
+		<% if @order.order_type == "COD" %>
+			<p id="payment_type">CASH ON DELIVERY</p>
+			<p id="collect_amount">AMOUNT TO BE COLLECTED: Rs. <%=@shipped_amount%></p>
+		<% else %>
+			<p id="payment_type">PREPAID</p>
+		<% end %>
+		<p id="total_quantity">Total Quantity Inside: <%= @shipped.count %></p>
+	</div>
+	<div class="span10 offset1">
+		<p id="socio_rent_address">From: Sociorent.com, Manyata Embassy Business Park, Magnolia,
+Block B, Level 4, Outer Ring Road, Nagawara, Bangalore – 560 045.
+Phone: +91-7353-11-2345.</p>
+	</div>
+	<div class="span10 offset1">
+		<p id="footer">
+			Contains Printed Books. Please handle with care.
+		</p>
+	</div>
+</div>

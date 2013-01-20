@@ -23,10 +23,4 @@ class GeneralImage < ActiveRecord::Base
   belongs_to :general
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  rails_admin do
-		base do
-			fields :image
-		end
-		visible false
-	end
 end

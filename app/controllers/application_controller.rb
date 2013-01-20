@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   #before_filter :add_www_subdomain
-  rescue_from Exception, with: :render_404
-  rescue_from ActionController::RoutingError, with: :render_404
-  rescue_from ActionController::UnknownController, with: :render_404
+  # rescue_from Exception, with: :render_404
+  # rescue_from ActionController::RoutingError, with: :render_404
+  # rescue_from ActionController::UnknownController, with: :render_404
 
-  rescue_from AbstractController::ActionNotFound, with: :render_404 # To prevent Rails 3.2.8 deprecation warnings
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
+  # rescue_from AbstractController::ActionNotFound, with: :render_404 # To prevent Rails 3.2.8 deprecation warnings
+  # rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   protect_from_forgery
   def send_sms(receipient,msg)
@@ -24,9 +24,9 @@ class ApplicationController < ActionController::Base
     end
   end
   def render_404(exception = nil)
-        flash[:warning]="Page not found"
-    #render :text=>exception and return
-    redirect_to "/"
+    flash[:warning]="Page not found"
+    render :text=>exception and return
+   # redirect_to "/"
   end
 
   private
@@ -35,4 +35,11 @@ class ApplicationController < ActionController::Base
       redirect_to "http://www.sociorent.com"
     end
   end
+  def authenticate_admin!
+    authenticate_user! 
+    unless current_user.is_admin?
+      flash[:alert] = "Unauthorized Access!"
+      redirect_to root_path 
+    end
+  end    
 end

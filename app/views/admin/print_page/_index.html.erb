@@ -1,0 +1,33 @@
+<div class="row">
+	<div class="pull_left">
+		<p>To</p>
+		<p><%= order.user.name %> </p>
+		<% addr=JSON.parse order.user.address%>
+		<% addr.each do |k,v| %>
+		  <p><%= v%></p>
+		<% end %>
+	</div>
+	<div class="pull_right">
+		<p>Order# <%= order.random%></p>
+	</div>
+	<div class="clearfix"></div>
+</div>	
+<table class="table">
+	<tr>
+		<td>Shipment Items Value </td>
+		<td>Rs.<%= total_amount%>
+	</tr>
+	<tr>
+		<td>Total Value </td>
+		<td>Rs.<%= total_amount%>
+	</tr>
+</table>
+	<h2><%= (order.order_type=="COD")? "CASH ON DELIVERY" : "PREPAID" %></h2>
+	<h4>Total Quantity Inside : <%= shipped.count %>
+
+		<hr>
+		<p>From: Sociorent.com, Manyata Embassy Business Park, Magnolia,
+Block B, Level 4, Outer Ring Road, Nagawara, Bangalore – 560 045.
+Phone: +91-7353-11-2345.</p>
+		<hr>
+		<p>Contains Printed Books. Please handle with care.</p>

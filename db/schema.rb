@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121231100727) do
+ActiveRecord::Schema.define(:version => 20130119222208) do
+
+  create_table "active_admin_comments", :force => true do |t|
+    t.string   "resource_id",   :null => false
+    t.string   "resource_type", :null => false
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.text     "body"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "namespace"
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
+  add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
+  add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "ambassadors", :force => true do |t|
     t.integer  "college_id"
@@ -75,6 +90,7 @@ ActiveRecord::Schema.define(:version => 20121231100727) do
     t.boolean  "shipped",         :default => false
     t.string   "courier_name"
     t.string   "tracking_number"
+    t.datetime "shipped_date"
   end
 
   add_index "book_orders", ["book_id"], :name => "index_book_orders_on_book_id"
@@ -254,6 +270,7 @@ ActiveRecord::Schema.define(:version => 20121231100727) do
     t.boolean  "accept_terms_of_use"
     t.string   "citruspay_response"
     t.string   "COD_mobile"
+    t.string   "status"
   end
 
   create_table "pincodes", :force => true do |t|
@@ -313,6 +330,12 @@ ActiveRecord::Schema.define(:version => 20121231100727) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "shippings", :force => true do |t|
+    t.integer  "book_order_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "sms", :force => true do |t|

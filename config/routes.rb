@@ -1,5 +1,8 @@
 Sociorent::Application.routes.draw do
 
+  ActiveAdmin.routes(self)
+  
+
   get "home/index"
   match "/search" => "home#search"
   post "home/book_request"
@@ -28,11 +31,10 @@ Sociorent::Application.routes.draw do
   match "pincodes" =>"home#gharpay_pincode"
   match "getSignature" =>"home#citrus_signature"
   match "/verify_code" => "orders#verify_code"
-  mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
-
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
-
+  match "/print_label" => "home#print_label"
+  match "/print_invoice" => "home#print_invoice"
   
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
     get '/users/auth/:provider' => 'users/omniauth_callbacks#passthru'
   end
@@ -90,7 +92,7 @@ Sociorent::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => 'home#index'
   
-  match '*a', :to => 'errors#routing'
+  #match '*a', :to => 'errors#routing'
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

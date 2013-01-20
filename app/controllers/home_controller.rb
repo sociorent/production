@@ -260,6 +260,41 @@ class HomeController < ApplicationController
     signature = OpenSSL::HMAC.hexdigest(digest, merchant_secret_key, sign_text)
     render :text=>signature
   end
+
+  def print_label
+    @order=Order.find(params[:order])
+    shipped_date = params[:date] || Time.now
+    @shipped = @order.book_orders.where("shipped_date=?",shipped_date.to_datetime().getutc)
+    @shipped_amount = @shipped.inject(0) {|sum, hash| sum + hash.book.price} #=> 30
+    @total_amount = @order.deposit_total
+    if @total_amount < 1000
+      @order.book_orders.where("shipped_date IS NOT NULL").order("shipped_date").limit(1).each do |current_order|
+        if current_order.shipped_date == shipped_date.to_datetime().getutc
+          @shipped_amount += 50
+          @shipping_added = true
+        end
+      end
+    end 
+    render "print_label", :layout=>false 
+  end
+
+  def print_invoice
+    @order=Order.find(params[:order])
+    shipped_date = params[:date] || Time.now
+    @shipped = @order.book_orders.where("shipped_date=?",shipped_date.to_datetime().getutc)
+    @shipped_amount = @shipped.inject(0) {|sum, hash| sum + hash.book.price} #=> 30
+    @total_amount = @order.deposit_total
+    if @total_amount < 1000
+      @order.book_orders.where("shipped_date IS NOT NULL").order("shipped_date").limit(1).each do |current_order|
+        if current_order.shipped_date == shipped_date.to_datetime().getutc
+          @shipped_amount += 50
+          @shipping_added = true
+        end
+      end
+    end
+
+    render "print_invoice", :layout=>false
+  end
   
   private
 

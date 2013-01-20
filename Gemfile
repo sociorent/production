@@ -43,7 +43,6 @@ gem 'capistrano'
 # gem 'debugger'
 
 gem 'devise'
-gem 'rails_admin'
 
 gem 'omniauth'
 gem 'oauth2'
@@ -69,3 +68,5 @@ gem "mechanize"
 
 gem 'thinking-sphinx-raspell', '1.1.2',
   :require => 'thinking_sphinx/raspell'
+gem 'activeadmin'
+gem "meta_search",    '>= 1.1.0.pre'

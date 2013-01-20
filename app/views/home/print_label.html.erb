@@ -1,0 +1,58 @@
+<%= stylesheet_link_tag "home/print_label", :media => 'print, screen' %>
+<%= stylesheet_link_tag "global/bootstrap.min.css", :media => 'print, screen' %>
+<div class="container" id="main_wrapper">
+	<div class="span10 offset1">
+		<p id="logo"><img src="assets/Sociorent.png" /></p>
+		<p id="divider">===================================================================================================
+	</div>
+	<div class="span10 offset1">
+		<p class="span6" id="user_address">TO
+		<%= @order.user.name %> <br>
+		<% addr=JSON.parse @order.user.address%>
+		<% addr.each do |k,v| %>
+		  <%=v%><br>
+		<% end %>
+</p>
+		<p class="span3" id="order_number">
+			Order# <%= @order.random%>
+			Ph: <%= @order.user.mobile_number %>
+			</p>
+	</div>
+	<div class="span10 offset1" id="price_box">
+		<table class="table-bordered" id="price_table">
+      <tbody>
+        <tr>
+          <td>Shipment Items Value</td>
+          <td>Rs. <%= @shipped_amount%> 
+          	<% if @shipping_added %>
+							<p id="shipping_price">*(50 Rs shipping charge added)</p>
+						<% end %>
+					</td>
+        </tr>
+        <tr>
+          <td>Total Value</td>
+          <td>Rs. <%= @total_amount%></td>
+        </tr>
+      </tbody>
+    </table>
+	</div>
+	<div class="span12" id="price_container">
+		<% if @order.order_type == "COD" %>
+			<p id="payment_type">CASH ON DELIVERY</p>
+			<p id="collect_amount">AMOUNT TO BE COLLECTED: Rs. <%=@shipped_amount%></p>
+		<% else %>
+			<p id="payment_type">PREPAID</p>
+		<% end %>
+		<p id="total_quantity">Total Quantity Inside: <%= @shipped.count %></p>
+	</div>
+	<div class="span10 offset1">
+		<p id="socio_rent_address">From: Sociorent.com, Manyata Embassy Business Park, Magnolia,
+Block B, Level 4, Outer Ring Road, Nagawara, Bangalore – 560 045.
+Phone: +91-7353-11-2345.</p>
+	</div>
+	<div class="span10 offset1">
+		<p id="footer">
+			Contains Printed Books. Please handle with care.
+		</p>
+	</div>
+</div>

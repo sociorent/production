@@ -4,12 +4,4 @@ class Review < ActiveRecord::Base
   belongs_to :book
   belongs_to :user
 
-  rails_admin do
-		base do
-			fields :user
-			fields :rating
-			fields :content
-		end
-		visible false
-	end
 end

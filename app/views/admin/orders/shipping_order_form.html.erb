@@ -1,3 +1,4 @@
+<% if @book_orders.count > 0  %>
 <h4>Update Shipping</h4>
 
 <div>
@@ -9,10 +10,24 @@
 		</div>
 	<% end %>
 	<br/>
+		<div>
+			<p><input type="text" id="courier_name" placeholder="Courier"></p>
+			<p><input type="text" id="tracking_number" placeholder="Tracking number"></p>
+			<p><input type="submit" class="btn btn-success" value="Shipped" id="update_shipping">
+		</div>
+	<% else %>
+		
+		<h5>All Books were Shipped</h5>
+	<% end %>
 	<div>
-		<p><input type="text" id="courier_name" placeholder="Courier"></p>
-		<p><input type="text" id="tracking_number" placeholder="Tracking number"></p>
-		<p><input type="submit" class="btn btn-success" value="Shipped" id="update_shipping"></p>
+		<% @dates.each do |date| %>
+			<% unless date.nil? %>
+				------------------ (<%=date%>) ---------------------------
+				<p><a href="/print_label?order=<%=@order.id%>&date=<%=date%>" target="_blank">Address Label</a></p>
+				<p><a href="/print_invoice?order=<%=@order.id%>&date=<%=date%>" target="_blank">Invoice</a></p>
+
+			<% end %>
+		<% end %>
 	</div>
 </div>
 
@@ -22,7 +37,7 @@
 		window.book_orders = new Array();
 
 		$("#update_shipping").click(function(){
-			var url = "/cb_admin/order/" + <%= raw @object.id %> + "/shipping";
+			var url = "/admin/orders/" + <%= raw @order.id %> + "/shipping_order";
 			$.ajax(url, {
 				type:"post",
 				async:true,
@@ -32,7 +47,8 @@
 					book_orders: JSON.stringify(window.book_orders),
 				},
 				success: function(){
-					window.location.href = "/cb_admin/order/" + <%= raw @object.id %>;
+					alert("Books have been marked as shipped")
+					window.location.href = "/admin/orders/" + <%= raw @order.id %>;
 				}
 			});
 		});

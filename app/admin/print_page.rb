@@ -1,4 +1,5 @@
 ActiveAdmin.register_page "Print Page" do
+	menu false
 	content do
 		@order=Order.find(params[:order])
 		shipped_date = params[:date] || Time.now

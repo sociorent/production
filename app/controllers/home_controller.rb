@@ -282,7 +282,10 @@ class HomeController < ApplicationController
     @order=Order.find(params[:order])
     shipped_date = params[:date] || Time.now
     @shipped = @order.book_orders.where("shipped_date=?",shipped_date.to_datetime().getutc)
-    @shipped_amount = @shipped.inject(0) {|sum, hash| sum + hash.book.price} #=> 30
+    @shipped_amount = 0
+    @shipped.each do |book_order|
+      @shipped_amount += book_order.book.price
+    end
     @total_amount = @order.deposit_total
     if @total_amount < 1000
       @order.book_orders.where("shipped_date IS NOT NULL").order("shipped_date").limit(1).each do |current_order|

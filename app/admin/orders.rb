@@ -1,21 +1,20 @@
 ActiveAdmin.register Order do
   scope :All
-  scope :Cancelled
+  scope :New
+  scope :Approved
   scope :Shipped
+  scope :Cancelled
   config.clear_action_items!
   index do
-  	column :id
+  	selectable_column
   	column "Order ID", :random
   	column "User", :user_name do |order|
   		order.user.name
   	end
   	column :order_type
-  	column :payment_done
   	column :deposit_total
-  	column :rental_total
-  	column :gharpay_id
-  	column :citruspay_response
   	column :COD_mobile
+    column "Order Date",:created_at
     column "" do |resource|
       links = ''.html_safe
       links += link_to 'View', resource_path(resource), :class => "member_link view_link"
@@ -28,16 +27,24 @@ ActiveAdmin.register Order do
     @dates = @order.book_orders.select("DISTINCT(shipped_date)").pluck(:shipped_date)
     @book_orders = @order.book_orders.where(:shipped => false)
   end
-
-  member_action :shipping_cancel_form do 
-    @order = Order.find(params[:id])
-  end
   
-  member_action :shipping_cancel, :method=>:get do 
+  member_action :cancel_order, :method=>:get do 
     @order = Order.find(params[:id])
     @order.status = 'cancel'
     @order.save
-    redirect_to '/admin/orders'
+    @order.books.update_all({:status => 'cancel'}, ["status != 'shipped'"])
+    flash[:notice] = "Order Cancelled Successfully!"
+    redirect_to :action => :show
+  end
+
+
+  member_action :approve_order, :method=>:get do 
+    @order = Order.find(params[:id])
+    @order.status = 'approved'
+    @order.save
+    @order.books.update_all({:status => 'unshipped'}, ["status != 'shipped'"])
+    flash[:notice] = "Order Approved Successfully!"
+    redirect_to :action => :show
   end
 
   action_item :only => [:show] do
@@ -45,9 +52,13 @@ ActiveAdmin.register Order do
   end
 
   action_item :only => [:show] do
-    link_to('Cancel Order',shipping_cancel_form_admin_order_path(order))
+    link_to('Approve Order',approve_order_admin_order_path(order))
   end
-  
+
+  action_item :only => [:show] do
+    link_to('Cancel Order',cancel_order_admin_order_path(order))
+  end
+
   member_action :shipping_order, :method=>:post do 
     @order= Order.find(params[:id])
 
@@ -55,7 +66,7 @@ ActiveAdmin.register Order do
     book_order_ids.each do |book_order_id|
       book_order = BookOrder.find(book_order_id.to_i)
       if book_order
-        book_order.update_attributes(:shipped => true,  :shipped_date=>Time.now, :tracking_number => params[:tracking_number], :courier_name => params[:courier_name])
+        book_order.update_attributes(:shipped => true, :status => "shipped", :shipped_date=>Time.now, :tracking_number => params[:tracking_number], :courier_name => params[:courier_name])
       end
     end
     if book_order_ids.count > 0

@@ -7,8 +7,10 @@ class Order < ActiveRecord::Base
   belongs_to :user
   belongs_to :college
   scope :All
+  scope :New, (where :status => "new")
   scope :Cancelled, (where :status => "cancel")
   scope :Shipped, (where :status => "shipped")
+  scope :Approved, (where :status => "approved")
   after_create do |order|
   	unique = 0
   	until unique == 1

@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
 		user_address=JSON.parse(user.address)
 		address=user_address.map{|k,v| "#{v}"}.join(',')
 		# creating an order
-		order = user.orders.create(:total => total, :rental_total => rental_total, :deposit_total => deposit_total, :order_type => order_type, :accept_terms_of_use => accept_terms_of_use)
+		order = user.orders.create(:total => total, :rental_total => rental_total, :deposit_total => deposit_total, :order_type => order_type, :accept_terms_of_use => accept_terms_of_use, :status => 'new')
 		if order_type == "gharpay"
 			order_array={}
 			dd=Time.now + (24*60*60*3)
@@ -67,6 +67,11 @@ class OrdersController < ApplicationController
 		order.books = books
 		order.save
     
+    # Changing the Current Status all books orders to unshipped
+    # TODO : Should be implemented in above line
+    order.books.update_all(:status => "unshipped")
+
+
 		# empty the cart
 		cart.book_carts.each do |book_cart|
 			book_cart.delete

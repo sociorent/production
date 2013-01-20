@@ -1,7 +1,8 @@
 class BookOrder < ActiveRecord::Base
-  attr_accessible :shipped, :tracking_number, :courier_name, :shipped_date
+  attr_accessible :shipped, :tracking_number, :courier_name, :shipped_date, :status
   belongs_to :book
   belongs_to :order
-  scope :unshipped, (where :shipped => false)
-  scope :shipped, (where :shipped => true)
+  scope :Unshipped, (where :status => 'unshipped')
+  scope :Shipped, (where :status => 'shipped')
+  scope :Cancelled, (where :status => 'cancel')
 end

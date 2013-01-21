@@ -22,6 +22,28 @@ ActiveAdmin.register Order do
       links
     end
   end
+
+  show do |order|
+    attributes_table do
+      row :id
+      row :user_name do 
+        order.user.name
+      end
+      row :order_type
+      row :deposit_total
+      row :COD_mobile
+      row :created_at do 
+        order.created_at
+      end
+      row :items do
+        #TODO : Print it Neatly
+        order.books.select("name, isbn13").each do |b|
+        end
+      end
+      row :status
+    end
+  end
+
   member_action :shipping_order_form do 
     @order = Order.find(params[:id])
     @dates = @order.book_orders.select("DISTINCT(shipped_date)").pluck(:shipped_date)

@@ -71,7 +71,6 @@ class OrdersController < ApplicationController
     # TODO : Should be implemented in above line
     order.books.update_all(:status => "unshipped")
 
-
 		# empty the cart
 		cart.book_carts.each do |book_cart|
 			book_cart.delete

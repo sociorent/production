@@ -1,0 +1,51 @@
+<% if @book_orders.count > 0  %>
+<h4>Cancel order</h4>
+
+<div>
+	<h5>Books Ordered</h5>
+	<% @book_orders.each do	|book_order| %>
+		<div>
+			<input type="checkbox" id="book_order_<%= book_order.id %>" class="book_order_checkbox" value="<%= book_order.shipped %>">
+			<label for="book_order_<%= book_order.id %>" style="display:inline;"><%= book_order.book.name %></label>
+		</div>
+		
+	<% end %>
+	<div>
+			<p><input type="submit" class="btn btn-success" value="Cancel Selected Items" id="cancel_order"></p>
+	</div>
+	<br/>
+	<% else %>
+		
+		<h5>All Books were Shipped</h5>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		window.book_orders = new Array();
+
+		$("#cancel_order").click(function(){
+			var url = "/admin/orders/" + <%= raw @order.id %> + "/cancel_order";
+			$.ajax(url, {
+				type:"post",
+				async:true,
+				data:{
+					book_orders: JSON.stringify(window.book_orders),
+				},
+				success: function(){
+					alert("Checked Items cancelled")
+					window.location.href = "/admin/orders/" + <%= raw @order.id %>;
+				}
+			});
+		});
+
+		$(".book_order_checkbox").change(function(){
+			book_order_id = parseInt(this.id.replace("book_order_",""));
+			if ($(this).attr("checked"))
+				window.book_orders.push(book_order_id);
+			else
+				window.book_orders.pop(book_order_id);
+		});
+	});
+</script>

@@ -10,6 +10,11 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+//= require global/jquery.ui.core.js
+//= require global/jquery.ui.widget.js
+//= require global/jquery.ui.position.js
+//= require global/jquery.ui.menu.js
+//= require global/jquery.ui.autocomplete.js
 //= require ./inner.js.coffee
 //= require_tree ./models/.
 //= require_tree ./collections/.

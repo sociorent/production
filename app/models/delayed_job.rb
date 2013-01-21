@@ -28,16 +28,16 @@ class DelayedJob
 	    end
 	  end
 
-	  # mail 
-		UserMailer.order_email(user, order).deliver
-
-		# sms
+	  # sms
 		if order.order_type == "bank"
     	send_sms(user.mobile_number,bank_sms_text)
     else 
     	send_sms(user.mobile_number,"Your order #{order.random} has been successfully received and will be processed. Please visit Sociorent.com to track the status of the order. Thank you.")
     end
 
+    # mail 
+		UserMailer.order_email(user, order).deliver
+		
     # gharpay
     if order.order_type=="gharpay"
     	cart_items=[]

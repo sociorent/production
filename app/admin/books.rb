@@ -34,4 +34,61 @@ ActiveAdmin.register Book do
   	render :partial => "admin/book/index"
   	default_actions
   end
+  show do |ad|
+      attributes_table do
+        row :name
+        row :author
+        row :isbn10
+        row :isbn13
+        row :description
+        row :binding
+        row :pages
+        row :published
+        row :price
+        row :strengths
+        row :weaknesses
+        row :edition
+        row :rank
+        row :availability
+        row :category
+        row :publisher
+        row :images do |book|
+          image_tag(book.images.first.image, :width=>100)
+        end
+      end
+      active_admin_comments
+    end
+  form do |f|
+
+
+  	f.inputs "Book" do
+	  	f.input :name
+	  	f.input :author
+	  	f.input :isbn13
+	  	f.input :isbn10
+	  	f.input :description
+	  	f.input :binding
+	  	f.input :pages
+	  	f.input :published
+	  	f.input :price
+	  	f.input :strengths
+	  	f.input :weaknesses
+	  	f.input :edition
+	  	f.input :rank
+	  	f.input :availability
+	  	f.input :category
+	  	f.input :publisher
+  		f.has_many :images do |img_f|
+  			f.inputs "Image" do
+	 				# if !img_f.object.nil?
+	     #    # show the destroy checkbox only if it is an existing appointment
+	     #    # else, there's already dynamic JS to add / remove new appointments
+	     #    	img_f.input :_destroy, :as => :boolean, :label => "Destroy?"
+	     #  	end
+      		img_f.input :image
+      	end
+      end
+      f.buttons
+  	end
+  end
 end

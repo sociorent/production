@@ -12,8 +12,8 @@ class UsersController < ApplicationController
 
   def save_user_details
     user = current_user
-    college = College.where(:name => params[:college]).first
-    stream = Stream.where(:name => params[:stream]).first
+    college = College.find(params[:college])
+    stream = Stream.find(params[:stream])
     temp_id="#{params[:college][0..2].downcase}-#{rand(1000..1000000)}"
     while User.where(:unique_id=>temp_id).count>0 
       temp_id="#{params[:college][0..2].downcase}-#{rand(1000..1000000)}"
@@ -75,5 +75,21 @@ class UsersController < ApplicationController
     user.ambassador = ambassador
     user.save
     render :nothing => true
+  end
+
+  def get_colleges
+    result=[]
+    College.where("name like ?","%#{params['term']}%").limit(20).each do |c|
+        result << {"id"=>c.id, "label"=>c.name, "value" => c.name}
+    end
+    render :text=>result.to_json()
+  end
+
+  def get_streams
+    result=[]
+    Stream.where("name like ?","%#{params['term']}%").limit(20).each do |s|
+        result << {"id"=>s.id, "label"=>s.name, "value" => s.name}
+    end
+    render :text=>result.to_json()
   end
 end

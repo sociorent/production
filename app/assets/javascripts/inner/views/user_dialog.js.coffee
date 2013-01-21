@@ -14,7 +14,8 @@ $(document).ready ->
 
 		initialize: ->
 			_.bindAll this, 'render'
-
+			
+  
 		highlight_current_menu: (ev)->
 			$(".menu").removeClass "active"
 			current = ev.target

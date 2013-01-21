@@ -199,23 +199,15 @@
 			    </div>
 			  </div>
 			  <div class="control-group">
-			    <label class="control-label" for="profile_college">College</label>
+			    <label class="control-label" for="profile_college"  placeholder="Enter College Name">College</label>
 			    <div class="controls">
-			      <select id="profile_college" name="college">
-				  		<% @college_names.each do |name| %>
-				  			<option value="<%= name %>"><%= name %></option>
-				  		<% end %>
-				  	</select>
+			    	<input type="text" id="profile_college" value="<%%= college.name %>" name="college" autocomplete="off">
 			    </div>
 			  </div>
 			  <div class="control-group">
 			    <label class="control-label" for="profile_course">Course</label>
 			    <div class="controls">
-			    	<select id="profile_streams" name="stream">
-				  		<% @streams.each do |name| %>
-				  			<option value="<%= name %>"><%= name %></option>
-				  		<% end %>
-				  	</select>
+			    	<input type="text" id="profile_streams" name="stream" autocomplete="off"  placeholder="Enter Stream" value="<%%= stream.name %>">
 			    </div>
 			  </div>
 			  <div class="control-group">

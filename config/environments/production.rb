@@ -25,8 +25,9 @@ Sociorent::Application.configure do
   config.assets.version = "1.0"
 
   config.assets.precompile += ['global/application.css', 'index/application.css', 'get_user_details.css', 'orders/print_invoice.css', 'inner.css']
-  config.assets.precompile += ['global/application.js', 'homepage/homepage.js', 'inner/application.js']
   config.assets.precompile += ['global/bootstrap.min.css','global/jquery-ui-1.8.24.custom.css', 'home/print_label.css', 'global/jquery-ui-1.9.1.custom.min.js', 'global/jquery.ui.dialog.js']
+
+  config.assets.precompile += ['global/application.js', 'homepage/homepage.js', 'inner/application.js','get_user_details/get_user_details_manifest.js']
   
   # Defaults to nil and saved in location specified by config.assets.prefix
   # config.assets.manifest = YOUR_PATH
@@ -78,8 +79,8 @@ Sociorent::Application.configure do
     :address              => "smtp.gmail.com",
     :port                 => 587,
     :domain               => 'baci.lindsaar.net',
-    :user_name            => 'alert@sociorent.com',
-    :password             => 'Sociorent1',
+    :user_name            => 'sociorent.com@gmail.com',
+    :password             => 'Sociorent123',
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
 end

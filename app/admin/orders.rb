@@ -4,6 +4,7 @@ ActiveAdmin.register Order do
   scope :Approved
   scope :Shipped
   scope :Cancelled
+  scope :Partially_Cancelled
   config.clear_action_items!
   index do
   	selectable_column
@@ -49,13 +50,25 @@ ActiveAdmin.register Order do
     @dates = @order.book_orders.select("DISTINCT(shipped_date)").pluck(:shipped_date)
     @book_orders = @order.book_orders.where(:shipped => false)
   end
-  
-  member_action :cancel_order, :method=>:get do 
+  member_action :cancel_order_form, :method => :get do
     @order = Order.find(params[:id])
-    @order.status = 'cancel'
-    @order.save
-    @order.books.update_all({:status => 'cancel'}, ["status != 'shipped'"])
-    flash[:notice] = "Order Cancelled Successfully!"
+    @book_orders=@order.book_orders.where(:status=>nil)
+  end
+  member_action :cancel_order, :method=>:post do 
+    order= Order.find(params[:id])
+    book_order_ids = JSON.parse params[:book_orders]
+    book_order_ids.each do |book_order_id|
+      book_order = BookOrder.find(book_order_id.to_i)
+      if book_order
+        book_order.update_attributes(:status => "cancel")
+      end
+    end
+    if book_order_ids.count == order.book_orders.count
+      order.update_attributes(:status=>"cancel")
+    else
+      order.update_attributes(:status=>"partial_cancel")
+    end
+    flash[:notice] = "OrderItems Cancelled Successfully!"
     redirect_to :action => :show
   end
 
@@ -78,7 +91,7 @@ ActiveAdmin.register Order do
   end
 
   action_item :only => [:show] do
-    link_to('Cancel Order',cancel_order_admin_order_path(order))
+    link_to('Cancel Order',cancel_order_form_admin_order_path(order))
   end
 
   member_action :shipping_order, :method=>:post do 

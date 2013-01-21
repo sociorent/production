@@ -82,9 +82,23 @@
 		$("#user_dialog").html(view.render().el);
 		sociorent.fn.shipping_validation("profile_shipping_form");
 
+		//autocomplete for colleges and streams
+		$("#profile_college").autocomplete({
+			source: "/get_colleges",
+			minLength: 2,
+			select: function(event, ui){
+				$(this).attr("rel",ui.item.id);
+			}
+		});
+		$("#profile_streams").autocomplete({
+			source: "/get_streams",
+			minLength: 2,
+			select: function(event, ui){
+				$(this).attr("rel",ui.item.id);
+			}
+		});
+
 		// use chosen plugin
-		$("#profile_college").val(sociorent.models.user_object.get("college").name).chosen();
-		$("#profile_streams").val(sociorent.models.user_object.get("stream").name).chosen();
 		$("#profile_address_state").val(sociorent.models.user_object.get("address").address_state).chosen();
 		// orders collection reset
 		sociorent.collections.order_object.reset(<%= raw @orders.to_json(:include => {:books => {:only => [:name, :price, :author, :id]}, :book_orders => {:only => [:shipped, :tracking_number, :courier_name, :book_id]}}) %>);

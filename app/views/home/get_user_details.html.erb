@@ -1,20 +1,13 @@
 <%= stylesheet_link_tag "get_user_details" %>
+<%= javascript_include_tag "get_user_details/get_user_details_manifest.js" %>
 <div id="loading_div">Loading ... Please wait</div>
 <div id="content">
 	<form id="form">
 	  <legend>Give us a few more details</legend>
 	  <p><input type="text" placeholder="Mobile Number" name="mobile" id="mobile"></p>
 	  <p>
-	  	<select id="college"><option value="">Enter College Name</option>
-	  		<% @college_names.each do |name| %>
-	  			<option value="<%= name %>"><%= name %></option>
-	  		<% end %>
-	  	</select>
-	  	<select id="streams"><option value="">Enter Stream</option>
-	  		<% @streams.each do |name| %>
-	  			<option value="<%= name %>"><%= name %></option>
-	  		<% end %>
-	  	</select>
+	  	<input type="text" id="college" name="colleges" autocomplete="off" placeholder="Enter College Name">
+	  	<input type="text" id="streams" name="streams" autocomplete="off"  placeholder="Enter Stream">
 	  </p>
 	  <p class='reg_submit'><button type="submit" class="btn">Submit</button></p>
 	</form>
@@ -23,14 +16,25 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		$("#college").chosen();
-
-		$("#streams").chosen();
+	$( "#college" ).autocomplete({
+            source: "/get_colleges",
+            minLength: 2,
+            select: function (event, ui) {
+                    $(this).attr("rel",ui.item.id);
+            }
+  });
+  $( "#streams" ).autocomplete({
+            source: "/get_streams",
+            minLength: 2,
+            select: function (event, ui) {
+                    $(this).attr("rel",ui.item.id);
+            }
+  });
 
 		$("#form").submit(function(){
 			mobile = $.trim($("#mobile").val());
-			college = $("#college").val();
-			stream = $("#streams").val();
+			college = $("#college").attr("rel");
+			stream = $("#streams").attr("rel");
 			if(!college)
 				$("#error").html("Please select your college.");
 			else if(!stream)
@@ -63,6 +67,12 @@
 		      minlength: 10,
 		      maxlength: 11,
 		      remote :"/validate/mobile"
+		    },
+		    colleges:{
+		    	required:true
+		    },
+		    streams:{
+		    	required:true
 		    }
 		  },
 		  highlight: function(label) {

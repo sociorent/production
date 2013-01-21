@@ -47,7 +47,7 @@ sociorent.collections.cart = Backbone.Collection.extend
 sociorent.fn.calculate_cart_deposit_total = ()->
 	total = 0
 	_.each sociorent.collections.cart_object.models, (model)->
-		total += model.get("price")
+		total += parseInt(model.get("price"))
 	if total < 1000 && total != 0
 		sociorent.shipping_charge = 50
 		$("#shipping_charge span").html 50
@@ -59,6 +59,6 @@ sociorent.fn.calculate_cart_deposit_total = ()->
 sociorent.fn.calculate_cart_rental_total = ()->
 	total = 0
 	_.each sociorent.collections.cart_object.models, (model)->
-		rental = ((model.get("price")*model.get("publisher").rental)/100).toFixed(0)
+		rental = (parseInt(model.get("price")*model.get("publisher").rental)/100).toFixed(0)
 		total += parseInt(rental)
 	total

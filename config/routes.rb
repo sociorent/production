@@ -33,8 +33,11 @@ Sociorent::Application.routes.draw do
   match "/verify_code" => "orders#verify_code"
   match "/print_label" => "home#print_label"
   match "/print_invoice" => "home#print_invoice"
-  
+  match "/get_colleges" =>"users#get_colleges"
+  match "/get_streams" => "users#get_streams"
+
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
   devise_scope :user do
     get '/users/auth/:provider' => 'users/omniauth_callbacks#passthru'
   end
@@ -91,8 +94,10 @@ Sociorent::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => 'home#index'
-  
-  #match '*a', :to => 'errors#routing'
+
+  match '/system/*a', :to => 'errors#ignore_routing'
+
+  match '*a', :to => 'errors#routing'
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

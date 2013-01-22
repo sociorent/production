@@ -22,21 +22,9 @@ ActiveAdmin.register User do
     #    user.address
     #   end
     # end
-    column "College", :college_id do |college|
-    	div do 
-    		College.find(college).name rescue ""
-    	end
-    end
-    column "Stream",:stream_id do |stream|
-    	div do 
-    		Stream.find(stream).name rescue ""
-    	end
-    end
-    column "Ambassador", :ambassador_id do |amb|
-    	div do
-    		User.find(amb).name
-    	end
-    end
+    column "College", :college
+    column "Stream",:stream
+    column "Ambassador", :ambassador
     default_actions
   end
   

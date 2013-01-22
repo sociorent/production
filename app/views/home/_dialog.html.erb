@@ -162,7 +162,7 @@
 			<form id="citruspay_form" method="post" action="https://sandbox.citruspay.com/aph4zl0gst">
 				<input type="hidden" name="merchantAccessKey" value="IIAF0HRCHCGW8R6FG0F1">
 				<input type="hidden" name="secSignature">
-				<input type="hidden" name="merchantTxnId" value="<%= rand(100000..10000000)%>">
+				
 				<input type="hidden" name="orderAmount">
 				<input type="hidden" name="currency" value="INR">
 				<input type="hidden" name="reqtime" value="<%= Time.now.to_i * 1000 %>">

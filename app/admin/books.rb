@@ -79,15 +79,15 @@ ActiveAdmin.register Book do
 	  	f.input :category
 	  	f.input :publisher
   		f.has_many :images do |img_f|
-  			f.inputs "Image" do
-	 				# if !img_f.object.nil?
-	     #    # show the destroy checkbox only if it is an existing appointment
-	     #    # else, there's already dynamic JS to add / remove new appointments
-	     #    	img_f.input :_destroy, :as => :boolean, :label => "Destroy?"
-	     #  	end
-      		img_f.input :image
-      	end
-      end
+  			img_f.inputs "Image" do
+          puts img_f.object.new_record?
+          if img_f.object.new_record?
+            img_f.input :image
+          else
+            img_f.input :image,:hint =>img_f.template.image_tag(img_f.object.image,:width=>100)
+          end
+        end
+     	end
       f.buttons
   	end
   end

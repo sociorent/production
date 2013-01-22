@@ -53,7 +53,7 @@
 				  	<tr>
 				  		<td><%= c+=1 %></td>
 				  		<td><%= a.ambassador_manager.name %></td>
-				  		<td><%=@college = College.find(a.college_id).name%></td>
+				  		<td><%= @college = College.find(a.college_id).name rescue nil%></td>
 				  	</tr>
 			  	<% end %>
 	  	</tbody>

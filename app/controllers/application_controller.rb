@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
   def send_sms(receipient,msg)
+    return true
+    
     user_pwd="Sathish@sociorent.com:Sathish1"
     sender_id="SOCRNT"
     url= "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=#{user_pwd}&senderID=#{sender_id}&receipientno=#{receipient}&dcs=0&msgtxt=#{msg}&state=4"
@@ -41,5 +43,7 @@ class ApplicationController < ActionController::Base
       flash[:alert] = "Unauthorized Access!"
       redirect_to root_path 
     end
-  end    
+  end  
+
+  
 end

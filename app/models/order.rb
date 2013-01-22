@@ -6,11 +6,22 @@ class Order < ActiveRecord::Base
   belongs_to :user
   belongs_to :college
   scope :All
-  scope :New, (where :status => "new")
-  scope :Cancelled, (where :status => "cancel")
-  scope :Shipped, (where :status => "shipped")
-  scope :Approved, (where :status => "approved")
-  scope :Partially_Cancelled,(where :status=>"partial_cancel")
+  scope :New, (where :status => 0 )
+  scope :Cancelled, (where :status => 4 )
+  scope :Shipped, (where :status => 1)
+  scope :Unshipped, (where :status => 2)
+  scope :Approved, (where 'status in (1,2,5,7)' )
+  scope :Partially_Unshipped_and_Shipped,(where :status => 3 )
+  scope :Partially_Cancelled_and_Shipped,(where :status => 5 )
+  scope :Partially_Cancelled_and_Unshipped,(where :status => 6 )
+  scope :Partially_Cancelled_and_Unshipped_and_Shipped,(where :status => 7 )
+
+
+  before_create :on => :create ,do 
+    self.status = 0
+  end 
+
+
   after_create do |order|
   	unique = 0
   	until unique == 1
@@ -27,4 +38,24 @@ class Order < ActiveRecord::Base
   def order_type_enum
     ['cash', 'cheque', 'gharpay']
   end
+
+  def order_status(cur_status = self.status.to_i)
+  #contants for order status
+
+     state = { 
+      0 => 'New' ,
+      1 => 'Fully Shipped' ,
+      2 => 'Fully Unshipped' ,
+      3 => 'Partially Shipped and Unshipped' ,
+      4 => 'Fully Cancelled',
+      5 => 'Partially Cancelled and Partially Shipped',
+      6 => 'Partially Cancelled and Partially Unshipped',
+      7 => 'Partially Cancelled and Partially Unshipped and Partially Shipped',
+      8 => 'Approved' 
+    }
+    
+    state[cur_status]
+  end
+
+
 end

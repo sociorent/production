@@ -180,6 +180,9 @@
 		<div class="menu" href="#orders_box" id="profile_orders_button">Orders</div>
 		<div class="menu" href="#wishlist_box" id="profile_wishlist_button">Wishlist</div>
 		<div class="menu" href="#shipping_box" id="profile_shipping_button">Shipping Address</div>
+		<% unless @user.ambassador_manager.nil? %>
+		<div class="menu" href="#ambassador_box" id="ambassador_button">Referenced Users</div>
+		<% end %>
 	</div>
 	<div id="user_dialog_right">
 		<div id="profile" class="menu_content">
@@ -277,6 +280,19 @@
 			  <div id="profile_shipping_form_error"></div>
 			</form>
 		</div>
+		<% unless @user.ambassador_manager.nil? %>
+		<% users=@user.ambassador_manager.users %>
+		<div id="ambassador_box" class="menu_content">
+			<div class="reference_title">Referred Users</div>
+			<% if users.count >0 %>
+				<% users.each do |user| %>
+					<p><%= user.name %></p> %>
+				<% end %>
+			<% else %>
+				<legend> No more users referred by you. </legend>
+			<% end %>
+		</div>
+		<% end %>
 	</div>
 	<div class="clear"></div>
 </script>

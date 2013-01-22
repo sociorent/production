@@ -5,10 +5,14 @@ ActiveAdmin.register Ambassador do
   	column "Ambassador", :ambassador do |amb|
   		amb.ambassador_manager.name
   	end
-
-  	column "College", :amb_college do |amb|
-  		Ambassador.find(amb).college.name
-  	end
+    column :colleges do |amb|
+      html=""
+      amb.colleges.each do |col|
+        html+="#{col.name}"
+        html+="<br>"
+      end
+      raw html
+    end
 
   	default_actions
   end

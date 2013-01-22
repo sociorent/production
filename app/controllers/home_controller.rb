@@ -2,8 +2,8 @@ class HomeController < ApplicationController
   def index
     @user=current_user
     if @user
-      # check if user has college
-      if @user.mobile_number.nil?
+      # check if user has mobile ,college, stream 
+      if @user.mobile_number.nil? || @user.college.nil? || @user.stream.nil?
         redirect_to "/welcome"
         return
       end

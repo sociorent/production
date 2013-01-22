@@ -7,7 +7,7 @@ class College < ActiveRecord::Base
 
   has_many :class_adoptions, :dependent => :destroy
 
-  has_many :ambassadors
+  has_and_belongs_to_many :ambassadors
 
   has_many :counters
 

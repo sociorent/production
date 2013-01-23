@@ -51,9 +51,11 @@ ActiveAdmin.register Order do
       row :items do
         #TODO : Print it Neatly
         html=""
-        order.books.select("name, isbn13").each do |b|
+        order.books.select("name, isbn13, author,publisher_id").each do |b|
           html+="#{b.name} -> "
-          html+="#{b.isbn13} <br>"
+          html+="#{b.isbn13} -> "
+          html+="#{b.author} -> "
+          html+="#{b.publisher.name}<br>"
         end
         raw html
       end

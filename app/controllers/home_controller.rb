@@ -33,6 +33,20 @@ class HomeController < ApplicationController
       end
       # orders made by the user
       @orders = @user.orders
+      #referrals by ambassador 
+      unless @user.ambassador_manager.nil?
+        @users_of_ambassador = Hash.new
+        @ambassador = @user.ambassador_manager
+        @ambassador.colleges.includes(:users).each do |college|
+          # college ambassador count is one and ambassador should not be included
+          if college.ambassadors.count == 1 
+            @users_of_ambassador[college.name] = college.users.where("id <>?",@user.id)
+          elsif college.ambassadors.count > 1
+            @users_of_ambassador[college.name] = @ambassador.users
+          end
+        end
+      end
+
       # companies for internship
       @companies = Company.all
   		# render inner when user is logged in

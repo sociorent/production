@@ -161,8 +161,7 @@ $(document).ready ->
 
 				when  "citrus_pay"
 					# calculating order amount
-					#orderAmt = sociorent.fn.calculate_cart_deposit_total() + sociorent.shipping_charge
-					orderAmt=1
+					orderAmt = sociorent.fn.calculate_cart_deposit_total() + sociorent.shipping_charge
 					# setting merchant id for getting signature
 					merchantId="wnw4zo7md1"
 					# signature parameter

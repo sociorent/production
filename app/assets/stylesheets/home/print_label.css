@@ -123,3 +123,7 @@
 	text-align: right !important;
 	font-weight: bold;
 }
+
+#user_address_content{
+	margin-left:1em;
+}

@@ -8,12 +8,13 @@
 	<div class="span10 offset1">
 		
 		<p class="span6" id="user_address">TO <br/>
-
-			&nbsp; &nbsp; <%= @order.user.name%><br/> 
-			<% addr=JSON.parse @order.user.address%>
-			<% addr.each do |k,v| %>
-				&nbsp; &nbsp; <%=v%><br/>
-			<% end %>
+			<span id="user_address_content">
+				<%= @order.user.name%><br/> 
+				<% addr=JSON.parse @order.user.address%>
+				<% addr.each do |k,v| %>
+					&nbsp; &nbsp; <%=v%><br/>
+				<% end %>
+			</span>
 		</p>
 
 		<p class="span3" id="order_number">

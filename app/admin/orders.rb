@@ -51,11 +51,15 @@ ActiveAdmin.register Order do
       row :items do
         #TODO : Print it Neatly
         html=""
-        order.books.select("name, isbn13, author,publisher_id").each do |b|
+        order.books.select("name, isbn13, author,publisher_id,price").each do |b|
           html+="#{b.name} -> "
-          html+="#{b.isbn13} -> "
           html+="#{b.author} -> "
-          html+="#{b.publisher.name}<br>"
+          html+="#{b.publisher.name} -> "
+          html+="#{b.isbn13} -> "
+          html+="#{b.price} -> "
+          rental=((b.price.to_i * b.publisher.rental.to_i)/100).ceil
+          html+="#{rental} <br> "
+          
         end
         raw html
       end

@@ -299,9 +299,14 @@
               </thead>
               <tbody>
 					<% @users_of_ambassador.each do |college,users| %>
-						<tr><th colspan=3><%= college %></th></tr>
+						<% user_count= users.count%>
+						<% ambassador_orders = 0 %>
+						<% users.each do |user| %>
+						<% ambassador_orders += user.orders.count%>
+						<% end %>
+						<tr><th colspan=3><%= college %>(<%= pluralize(ambassador_orders,'order')%> from <%= pluralize(user_count,"Signup")%>)</th></tr>
 						<% users_have_orders= 0 %>
-						<%if users.count>0 %>
+						<%if user_count>0 %>
 							<% users.each do |user| %>
 								<% order = user.orders %>
 								<% if order.count > 0 %>
@@ -320,7 +325,7 @@
 							<% end %>
 						<% end %>
 						<% if users_have_orders == 0 %>
-							<tr><th colspan=3>No referrals </th></tr>
+							<tr><th colspan=3>No orders </th></tr>
 						<% end %>
 					<% end %>
 				<% else %>

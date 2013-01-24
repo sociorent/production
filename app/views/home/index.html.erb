@@ -1,5 +1,14 @@
 <%= stylesheet_link_tag "index/application" %>
+<%= stylesheet_link_tag "inner" %>
 <%= javascript_include_tag "homepage/homepage" %>
+
+
+<%= render "book_details_box" %>
+<%= render "book_details_template" %>
+<%= render "review_template" %>
+
+
+
 <div id="loading_div">Loading ... Please wait</div>
 <div class="video_content wrapper">
 	<div class="grid_3_5">
@@ -162,7 +171,10 @@ $("document").ready(function(){
 		height: 700,
 		width: 1050,
 		resizable: false,
-    modal: true
+    	modal: true,
+    	close:function(){
+    		window.location.hash ="";
+    	}
   });
 
   $("#login_box").dialog({
@@ -276,6 +288,24 @@ $("document").ready(function(){
     return false;
 	})
 	
+
+	$("#book_details_box").dialog({
+		autoOpen: false,
+		draggable: false,
+		height: "auto",
+		title:"Book Details",
+		width: 1050,
+		resizable: false,
+		modal: true,
+
+		close:function(){
+				window.location.hash ="";
+			}
+
+	});
+
+
+
 });
 </script>
 <%= render :partial => "index_template" %>

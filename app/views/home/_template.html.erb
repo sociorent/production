@@ -106,7 +106,8 @@
 
 			<% if current_user %>
 				<form class="reviews_form">
-					<textarea placeholder="Write a review" class="reviews_input"></textarea><br/>
+					<input type="text" class="reviews_input" id="review_semester" placeholder="Write your Semester Eg: 1">
+					<textarea placeholder="Write a review" id="review_text_content" class="reviews_input"></textarea><br/>
 					<button type="submit" class="btn reviews_submit">Submit</button>
 				</form>
 			<% end %>
@@ -390,10 +391,14 @@
 </script>
 
 <script type="script/template" id="review_template">
+<div class="review_single">
 	<div class="review_single_left"><%%= user.name %></div>
 	<div class="review_single_right"><%%= content %></div>
 	<div class="clear"></div>
+
+</div>
 </script>
+
 
 <script type="script/template" id="compare_search_template">
 	<%%= name %>

@@ -73,10 +73,16 @@ $(document).ready ->
 
 		make_review: ->
 			that = this
-			content = $.trim($(".reviews_input").val())
+			semester = $.trim($("#review_semester").val())
+
+			content = $.trim($("#review_text_content").val())
+
+			if semester == ""
+				alert "Please enter your Semester Eg: 1"
+				return false
 			if content == ""
-				alert "please enter the content of the review"
-				false
+				alert "Please write your review before submitting"
+				return false
 			else
 				sociorent.fn.show_notification()
 				$.ajax "/home/make_review" ,
@@ -85,6 +91,7 @@ $(document).ready ->
 						data:
 							book: that.model.id
 							content: content
+							semester: semester
 						success: (msg)->
 							sociorent.fn.hide_notification()
 							$(".reviews_form").hide()
@@ -97,7 +104,7 @@ $(document).ready ->
 
 		focus_review_input: ->
 			$(".reviews_form").show()
-			$(".reviews_input").focus()
+			$("#review_semester").focus()
 			$("#book_details_box").animate({scrollTop: $("#book_details_box")[0].scrollHeight}, 300)
 
 		search_author: (ev)->

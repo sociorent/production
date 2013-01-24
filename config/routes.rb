@@ -35,6 +35,9 @@ Sociorent::Application.routes.draw do
   match "/get_colleges" =>"users#get_colleges"
   match "/get_streams" => "users#get_streams"
 
+  #matches #book/isbn
+  get '/book/:isbn' => "home#book_deatils"
+
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   devise_scope :user do

@@ -127,7 +127,11 @@
 			title:"Book Details",
 			width: 1050,
 			resizable: false,
-      modal: true
+      		modal: true,
+      		close:function(){
+      			window.location.hash="";
+      		}
+
 		});
 
 		$("#cart_box").dialog({

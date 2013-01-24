@@ -77,6 +77,11 @@ $(document).ready ->
 					$(".book_details .add_to_cart").html "In Your Cart"
 				$("#book_details_box").scrollTop("0px")
 				$("#book_details_box").dialog("open")
+
+				#add has for the url
+
+				window.location.hash = "book/" + @model.get "isbn13"
+
 				# update authors in book details
 				author = @model.get "author"
 				author_array = author.split ","

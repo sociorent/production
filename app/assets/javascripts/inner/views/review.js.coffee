@@ -1,7 +1,5 @@
 $(document).ready ->
 	sociorent.views.review = Backbone.View.extend
-		tagName: "div"
-		className: "review_single"
 
 		template: _.template $("#review_template").html()
 

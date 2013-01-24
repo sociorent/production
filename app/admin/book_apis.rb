@@ -1,14 +1,38 @@
+##
+#require this csv file
+# it contains the 
 require 'csv'
+
+##== Displays BookAPI
+# This Activeadmin  contains the api's to fetch the book details
+#
 ActiveAdmin.register BookApi do
+
+	## Book Detils form
+	# This is a collection action form which gets the book details from the admin
+	#
 	collection_action :book_details_form do
 	end
-  collection_action :get_book_details, :method=>:post do
+
+	## Display Book Details
+	# This collection action displays the book details for the isbns
+	# whcih are fetched from Flipkart
+  	collection_action :get_book_details, :method=>:post do
+
+  	  #get the isbns via post
 	  isbns = params[:isbn].split(",")
+
+	  #store isbn for which we could not get the details
 	  isbn_failed=[]
+	  
+	  #Loop over all the isbns we got and fetch the details from
+	  #flipkart
 	  isbns.each do |isbn|
 	    if isbn.to_i.is_a? (Integer)
 	      book_details = BookFinder.flipkart(isbn)
 	      puts book_details
+
+	      #if the isbn is present store the book details
 	      unless book_details['Book'].empty?
 		      book = Hash.new()
 		      book["book"] = book_details["Book"]
@@ -27,21 +51,42 @@ ActiveAdmin.register BookApi do
 		      book["description"]=book_details["description"]
 		      book["college"]=book_details["college"]
 		      book["stream"]=book_details["stream"] 
+
+		      #if the BookApi Could not be created then
+		      #store it in the failed isbn storage
 		      unless BookApi.create(book)
 		      	isbn_failed << isbn
 		      end
+
+		      #if there is not details for the requested isbn
+		      # then store it in the failed isbn list
 		    else
 		    	isbn_failed << isbn
 		    end
 	    end
 	  end
+
+	  #if we have failed isbn, Display them to the admin
 	  flash[:notice] = (isbn_failed.count > 0) ? "#{isbn_failed.join(",")} isbns failded to update" : "Books created"
+
+	  #redirect to the index action to list all the books details
 	  redirect_to :action => :index
 	end
+
+
 	collection_action :finalize_book_form do
 	end
+
+	##Update the existing book details
+	#Import the CSV file
+	#and put them into the db
 	collection_action :update_book_details, :method=>:post do
+
+	#read the csv file
     csvfile = params[:book_csv].read
+
+    #parse the csv file and put each row into an hash
+    #and try to  validate it and save
     CSV.parse(csvfile) do |row|
 	    begin
 	      unless row[7] == "" || row[7] == "0" || row[7] ==" - "
@@ -59,8 +104,12 @@ ActiveAdmin.register BookApi do
 	        book["description"]=row[16].force_encoding("UTF-8") if row[16]
 	        book["description"].gsub!('<a href="#">top</a>',"") if row[16]
 	        
+	        #Check if we have description and if present, check its encoding.
 	        if row[16] && book["description"].valid_encoding?
 	          # book["language"] = row[10]
+
+	          #check the publisher parsed is not empty and already present
+	          #in out database. If not present Create a new entry for the publisher
 	          if row[7] !="" && row[7]!="0" && row[7]!=" - "
 	            publisher = Publisher.where(:name=>row[7]).first
 	            if publisher.nil?
@@ -69,7 +118,9 @@ ActiveAdmin.register BookApi do
 	          end
 	        end
 
-	        # puts book
+	        #Check if we have a book with the same isbn.
+	        #if not save it.
+	        #If the book is already present update its entries.
 	        if Book.where(:isbn13=>row[4]).count == 0
 	          book_save=Book.create(book)
 	        else
@@ -78,21 +129,24 @@ ActiveAdmin.register BookApi do
 	          book_save.update_attributes(book)
 	        end
 
+	        #Check the college. If its not present create a new one
+	        #or else assign the correspnding college
 	        college = College.where(:name =>row[17]).first
-
 	        college = College.create(:name=>row[17]) if college.nil?
-	        
-
 	        book_save.book_colleges.create(:college_id=>college.id)
-	        stream=Stream.where(:name =>row[18]).first
 
-	        
+	        #Check the Stream. If its not present create a new one
+	        #or else assign the correspnding Stream
+	        stream=Stream.where(:name =>row[18]).first
 	        stream=Stream.create(:name=>row[18]) if stream.nil?
-	        
 	        book_save.book_streams.create(:stream_id=>stream.id)
+
+	        #save the publisher
 	        book_save.publisher=publisher
 
-	        if row[13] !="" && row[13]!="0" && row[13]!=" - "
+	        #Check the Image url. If its not present create a new one
+	        #or else assign the correspnding Image
+        	if row[13] !="" && row[13]!="0" && row[13]!=" - "	
 	          begin
 	            if book_save.images.nil? 
 	              book_save.images.create(:image_url=>row[13])
@@ -102,6 +156,8 @@ ActiveAdmin.register BookApi do
 	          rescue
 	          end
 	        end
+
+	        #finalyy save the whole book details
 	        book_save.save
 	      end
 	    rescue EncodingError => e
@@ -109,6 +165,9 @@ ActiveAdmin.register BookApi do
 	      next
 	    end
 	  end
+
+	  #after parsing the whole csv file
+	  #redirect to display the books
 	  redirect_to "/admin/books"
   end
   action_item :only => [:index] do

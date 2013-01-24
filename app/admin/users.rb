@@ -1,5 +1,13 @@
+##== User
+# This ActiveAdmin contains the details of the user
+# and provides the management functions on those things
+# 
 ActiveAdmin.register User do
+
   config.clear_action_items!
+
+  ##Index Action
+  #This action displays the user details on the dashboard
   index do
     selectable_column
   	column :name

@@ -1,7 +1,16 @@
+
+##== Main Dashboard Page
+# This ActiveAdmin is the main dashboard page
+# that the appears when the admin logs in.
+# 
 ActiveAdmin.register_page "Dashboard" do
+
+    #sets the priority for the label that should appear firs
+    #also tells to internationalize the Label that is being displayed
 
   menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
 
+  
   content :title => proc{ I18n.t("active_admin.dashboard") } do
     div :class => "blank_slate_container", :id => "dashboard_default_message" do
       span :class => "blank_slate" do

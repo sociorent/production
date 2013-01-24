@@ -57,4 +57,94 @@ $(document).ready(function(){
 	if($("#page_not_found").html().trim()!="")
 		$("#page_not_found").fadeIn(1000).delay(5000).fadeOut(300);
 	$(".rails_notice").delay(5000).fadeOut(300);
+
+//start router on page load
+
+
+
+//my own code
+
+//trigger hash once	
+
+if ( /^book\/\d{13}/i.test(window.location.hash.substr(1)) ){
+	
+  	$.ajax( {
+  		url:"/" + window.location.hash.substr(1),
+  		dataType:"json",
+  		success:function(data){
+
+  			$(".reviews_content").html("");
+
+  			var temp = _.template($("#book_details_template").html());
+  			var review = _.template($("#review_template").html());
+
+			$("#book_details_box").html(temp(data)).dialog("open");//.css({top:0,position:fixed});
+
+  			for (var i in data.reviews )
+  			{
+  				$(".reviews_content").append(review(data.reviews[i]))
+  			}
+  			$(".reviews_content").show();
+			// view = new sociorent.views.review({model: data.reviews });
+
+			// $(".reviews_content").append(view.render().el)
+	  	}
+	  });
+
+
+}
+
+
+// var Router = Backbone.Router.extend({
+//   routes: {
+//   	"" : "index",
+//     "book/:isbn" : "showbook"
+//   },
+//   initialize: function() {
+
+//   	var that = this;
+
+// 	this.route("book", "showbook", function() {
+//       that.showbook();
+//     });
+
+//   },
+
+//   showbook: function(isbn) {
+//   	$.ajax( {
+//   		url:"/book/" + isbn ,
+//   		dataType:"json",
+//   		success:function(data){
+
+//   			$(".reviews_content").html("");
+
+//   			var temp = _.template($("#book_details_template").html());
+//   			var review = _.template($("#review_template").html());
+
+// 			$("#book_details_box").html(temp(data)).dialog("open");//.css({top:0,position:fixed});
+
+//   			for (var i in data.reviews )
+//   			{
+//   				$(".reviews_content").append(review(data.reviews[i]))
+//   			}
+//   			$(".reviews_content").show();
+// 			// view = new sociorent.views.review({model: data.reviews });
+
+// 			// $(".reviews_content").append(view.render().el)
+// 	  	},
+// 	  	error:function(){
+// 	  		alert("err");
+// 	  	}
+//   	});
+//   }
+
+// });
+
+// 	var app_router = new Router();
+
+// 	Backbone.history.start();
+
+
 });
+
+

@@ -1,13 +1,48 @@
+## Orders Dashboard
+# This dashboard contains details and management 
+# functions of the Orders
 ActiveAdmin.register Order do
+
+  ##Scope
+  # A scope is something that is used to fileter data during display
+  #The details are contained in the corresponding model
+
+  ##All scope
+  #Displays all the orders
   scope :All
+
+  ##New scope
+  #Displays all the orders
   scope :New
+
+  ##Approved scope
+  #Displays all the approved orders
   scope :Approved
+
+  ##Shipped scope
+  #Displays all the Shipped orders
   scope :Shipped
+
+  ##Shipped scope
+  #Displays all the Shipped orders
   scope :Unshipped
+
+  ##Cancelled scope
+  #Displays all the Cancelled orders
   scope :Cancelled
+
+  ##Partially unshipped scope
+  #Displays all the Partially unshipped orders
   scope :Partially_unshipped
+
+  ##Partially Shipped scope
+  #Displays all the Partially Shipped orders
   scope :Partially_shipped
+
+  ##Partially Chipped scope
+  #Displays all the Partially Chipped orders
   scope :Partially_cancelled
+
 
   config.clear_action_items!
   actions :all, :except => [:edit]
@@ -70,18 +105,26 @@ ActiveAdmin.register Order do
     active_admin_comments
   end
 
+  ##Shipping order form
+  #display the datat for the shipping order
   member_action :shipping_order_form do 
     @order = Order.find(params[:id])
     @dates = @order.book_orders.select("DISTINCT(shipped_date)").pluck(:shipped_date)
     @book_orders = @order.book_orders.where('shipped = false and status not in(1,5,4)')
   end
 
+  
+  #Cancel an Order
+  #This action cancels the particular order which is displayed
   member_action :cancel_order_form, :method => :get do
     @order = Order.find(params[:id])
     @book_orders=@order.book_orders.where("status in (0,2,3,6,7)")
     @cancelled_orders = @order.book_orders.where("status = 4")
   end
 
+  ## Cancel Order
+  # This action performs the Cancellation of the Order
+  #and updating the details of the order to Cancelled
   member_action :cancel_order, :method=>:post do 
     scope=:ALL
     
@@ -107,6 +150,9 @@ ActiveAdmin.register Order do
   end
 
 
+  ## Approving Order
+  # This action performs the Approval of the Order
+  #and updating the details of the order to approved
   member_action :approve_order, :method=>:get do 
     @order = Order.find(params[:id])
     
@@ -120,6 +166,8 @@ ActiveAdmin.register Order do
     redirect_to :action => :index, :scope => state[:value]
   end
 
+  #Display these actions only on the show action
+  #hide for rest of the action
   action_item :only => [:show] do
     link_to('Shipping Details',shipping_order_form_admin_order_path(order))
   end
@@ -132,6 +180,9 @@ ActiveAdmin.register Order do
     link_to('Cancel Order',cancel_order_form_admin_order_path(order))
   end
 
+  ## Shipping Order
+  # This action performs the creation of the Shipping entry 
+  #and updating the details of the order to shipped
   member_action :shipping_order, :method=>:post do 
     @order= Order.find(params[:id])
     if params[:book_order]
@@ -157,6 +208,8 @@ ActiveAdmin.register Order do
   end
 
 
+## Include helpers
+#include the helper function that are available in the Application Helper
 controller do 
   include ApplicationHelper
 end

@@ -31,6 +31,12 @@ $(document).ready ->
 				model: @model
 			$("#book_details").append view.render().el
 			$(view.el).find(".timeago").timeago()
+
+
+			#add has for the url
+
+			window.location.hash = "book/" + @model.get "isbn13"
+				
 			# update authors in book details
 			author = @model.get "author"
 			author_array = author.split ","
@@ -125,8 +131,6 @@ $(document).ready ->
 			-model.id
 
 	sociorent.views.review = Backbone.View.extend
-		tagName: "div"
-		className: "review_single"
 
 		template: _.template $("#review_template").html()
 

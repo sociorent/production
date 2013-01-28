@@ -47,13 +47,16 @@
            </tr>
          </thead>
 	  		<tbody>
-			  	<% @ambas = Ambassador.all%>
+			  	<% @ambas = Ambassador.includes(:colleges).all%>
 			  	<% c = 0 %>
 			  	<% @ambas.each do |a|%>
 				  	<tr>
 				  		<td><%= c+=1 %></td>
 				  		<td><%= a.ambassador_manager.name %></td>
-				  		<td><%= @college = College.find(a.college_id).name rescue nil%></td>
+				  		<td><% a.colleges.each do |college| %>
+				  			<%= college.name %><br>
+				  		<% end %>
+				  		</td>
 				  	</tr>
 			  	<% end %>
 	  	</tbody>

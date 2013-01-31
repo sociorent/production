@@ -1,0 +1,46 @@
+<% if @book_orders.count > 0  %>
+<h4>Update Shipping</h4>
+
+<div>
+	<h5>Books Ordered <i><small>(which are not yet shipped)</small></i></h5>
+	<%= form_tag("#{shipping_order_ab_admin_order_path(@order)}",:id=>"shipping_order_form")%>
+	<% @book_orders.each do	|book_order| %>
+		<div>
+			<input type="checkbox" id="book_order_<%= book_order.id %>" class="book_order_checkbox" name="book_order[<%=book_order.id%>]" >
+			<label for="book_order_<%= book_order.id %>" style="display:inline;"><%= book_order.book.name %></label>
+		</div>
+	<% end %>
+	<br/>
+		<div>
+			<p><input type="text" id="courier_name" placeholder="Courier"></p>
+			<p><input type="text" id="tracking_number" placeholder="Tracking number"></p>
+			<p><input type="submit" class="btn btn-success" value="Shipped" id="update_shipping">
+		</div>
+	</form>
+	<% else %>
+		
+		<h5>All Books were Shipped</h5>
+	<% end %>
+	<div>
+		<% @dates.each do |date| %>
+			<% unless date.nil? %>
+				------------------ (<%=date%>) ---------------------------
+				<p><a href="/print_label?order=<%=@order.id%>&date=<%=date%>" target="_blank">Address Label</a></p>
+				<p><a href="/print_invoice?order=<%=@order.id%>&date=<%=date%>" target="_blank">Invoice</a></p>
+
+			<% end %>
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#shipping_order_form").submit(function(){
+			if($(".book_order_checkbox:checked").length==0)
+			{
+				alert("Please check atleast one item");
+				return false;
+			}
+		});
+	});
+</script>

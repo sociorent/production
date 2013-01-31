@@ -1,0 +1,14 @@
+<%= form_tag "/admin/book_apis/update_book_details",:multipart=>"true", class: "form-horizontal" do |f| %>
+   <div class="control-group">
+		<label class="control-label">Upload the CSV file</label>
+		<div class="controls">
+				<input type="file" name="book_csv" >
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+				<input type="submit" class="btn">
+		</div>
+	</div>
+<% end %>
+ 

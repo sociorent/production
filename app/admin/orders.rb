@@ -233,7 +233,7 @@ ActiveAdmin.register Order do
         order.books.select("name, isbn13, author,publisher_id,price").each do |b|
           html+="#{b.name} -> "
           html+="#{b.author} -> "
-          html+="#{b.publisher.name} -> "
+          html+=(b.publisher) ? "#{b.publisher.name} -> " : " - "
           html+="#{b.isbn13} -> "
           html+="#{b.price} -> "
           rental=((b.price.to_i * b.publisher.rental.to_i)/100).ceil

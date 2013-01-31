@@ -2,7 +2,7 @@
 
 <% if params[:id].nil? %>
 	
-	<%= form_for Order.new, :url => "/ab_admin/orders/create", :method => :post ,:remote => true do |f| %>
+	<%= form_for Order.new, :url => "/admin/orders/create", :method => :post ,:remote => true do |f| %>
 
 	<fieldset class="inputs">
 
@@ -99,7 +99,7 @@
 		$("#fetch_amounts").click(function(){
 
 			$.ajax({
-				url: '/ab_admin/orders/new/fetch_amounts',
+				url: '/admin/orders/new/fetch_amounts',
 				data:{
 					isbn: _.uniq($("#isbn13").val().split(","))
 				},
@@ -145,7 +145,7 @@
 
 
 			<li>
-				<label class="label"> User </label>  <b> <%= link_to @ord.user.name , ab_admin_user_path(@ord.user) %> </b>
+				<label class="label"> User </label>  <b> <%= link_to @ord.user.name , admin_user_path(@ord.user) %> </b>
 			</li>
 
 			<%= f.input :bank_id, :as => :select ,:collection => Bank.all , :selected => (@ord.bank.nil?) ? '' :@ord.bank.id  %>

@@ -9,6 +9,13 @@ GIT
       cocaine (~> 0.4.0)
       mime-types
 
+PATH
+  remote: /home/thamizh/book_finder_api
+  specs:
+    book_finder_api (0.0.16)
+      mechanize
+      nokogiri
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -69,9 +76,6 @@ GEM
       activesupport (>= 3.0.0)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
-    book_finder_api (0.0.14)
-      mechanize
-      nokogiri
     bootstrap-sass (2.2.2.0)
       sass (~> 3.2)
     bourbon (3.0.1)
@@ -289,7 +293,7 @@ DEPENDENCIES
   active_merchant_ccavenue
   activeadmin
   activemerchant
-  book_finder_api (~> 0.0.14)
+  book_finder_api!
   capistrano
   coffee-rails (~> 3.2.1)
   daemons

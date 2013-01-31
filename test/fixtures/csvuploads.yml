@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  csv: MyString
+  books_uploaded: 1
+  total_books: 1
+  isbns_not_uploaded: MyString
+
+two:
+  csv: MyString
+  books_uploaded: 1
+  total_books: 1
+  isbns_not_uploaded: MyString

@@ -153,20 +153,3 @@ ActiveAdmin.setup do |config|
 
   
 end
-
-
-
-module ActiveAdmin 
-  module Views 
-    module Pages 
-      class Base < Arbre::HTML::Document 
-
-        def build_footer
-          div :id => "active_admin_footer" do
-            'Active admin for Sociorent.com'.html_safe
-          end
-        end      
-      end
-    end 
-  end 
-end 

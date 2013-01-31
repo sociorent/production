@@ -1,0 +1,114 @@
+<style>
+	.book_single{
+		border: 1px solid #DDD;
+		border-radius: 8px;
+		float: left;
+		width: 113px;
+		padding: 8px;
+		margin: 10px;
+		height: 175px;
+		overflow: hidden;
+	}
+	.book_single img{
+		display: block;
+	}
+	.book_single .name{
+		color: #08C;
+		width: 100%;
+		word-wrap: break-word;
+	}
+	.rented_clear{
+		clear: both;
+	}
+	#show_more{
+		background: #DDD;
+		text-align: center;
+		border-radius: 8px;
+		padding: 5px 0px;
+		cursor: pointer;
+	}
+</style>
+<form>
+	<select id="college_select">
+		<option value="all">Show all</option>
+		<% @colleges.each do |college| %>
+			<option value='<%= college %>'><%= college %></option>
+		<% end %>
+	</select>
+</form>
+<div id="rented_box">
+	
+	<div id="counter">Number of Books rented = <%= @number_of_books %></div>
+
+	<div id="rented">
+		<% @rented_books.each do	|book| %>
+			<div class="book_single">
+				<img src='<%= book.book_image %>' />
+				<div class="name"><%= book.name %></div>
+			</div>
+		<% end %>
+		<div class="rented_clear"></div>
+	</div>
+
+	<div id="show_more">Show more</div>
+
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		window.offset = 1;
+		$("#show_more").click(function(){
+			select = $("#college_select").val();
+			window.offset = window.offset + 1;
+			$.ajax("/orders/rented_show_more", {
+				type:"post",
+				async:true,
+				data: {
+					offset: window.offset,
+					select: select
+				},
+				success: function(msg){
+					if (msg.length > 0){
+						html = "";
+						for(var i in msg){
+							html += "<div class='book_single'>";
+							html += "<img src='"+ msg[i].book_image +"'/>";
+							html += "<div class='name'>" + msg[i].name +"</div>";
+							html += "</div>";
+						}
+						$(html).insertBefore(".rented_clear");
+					} else{
+						$("#show_more").hide();
+					}
+				}
+			});
+		});
+
+		$("#college_select").change(function(){
+			select = $(this).val();
+			$.ajax("/orders/rented_college", {
+				type:"post",
+				async:true,
+				data: {
+					select: select
+				},
+				success: function(msg){
+					$("#counter").html("Number of Books rented in " + select + " = " + msg.number_of_books);
+					window.offset = 1;
+					$("#show_more").show();
+					html = "";
+					for(var i in msg.books){
+						html += "<div class='book_single'>";
+						html += "<img src='"+ msg.books[i].book_image +"'/>";
+						html += "<div class='name'>" + msg.books[i].name +"</div>";
+						html += "</div>";
+					}
+					html += "<div class='rented_clear'></div>"
+					$("#rented").html(html);
+				}
+			});
+		});
+
+	});
+</script>

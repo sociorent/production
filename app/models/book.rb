@@ -26,7 +26,11 @@ class Book < ActiveRecord::Base
   has_many :semesters, :through => :book_semesters
 
   accepts_nested_attributes_for :images, :class_adoptions, :reviews, :book_colleges, :book_streams, :book_semesters, :allow_destroy => true
-
+  
+  validates :isbn13, :uniqueness=>true
+  validates :isbn13, :publisher_id,:presence=>true, :on => :create
+  validates :isbn13, :publisher_id,:presence=>true, :on => :update
+  
   after_create do |book|
     r = Random.new
     rank = r.rand(50..100)

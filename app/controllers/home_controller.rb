@@ -69,7 +69,7 @@ class HomeController < ApplicationController
        @books = intelligent_books(current_user)
        @books += Book.first(6-@books.count) if @books.count < 6
      else
-  	  @books = Book.search params[:query], :star => true
+  	  @books = Book.search "#{params[:query]}", :star => true, :condition => "publisher_id is NOT NULL"
       unless params[:query].=~ /^[0-9]+$/
         resp[:suggestion] = params[:query]
         if @books.suggestion? && @books.count <= 0
@@ -107,8 +107,8 @@ class HomeController < ApplicationController
     load_more_count = params[:load_more_count].to_i * 6
     load_more_limit = load_more_count + 6
     unless params[:query] == ""
-      query = params[:query]
-      @books = Book.search(query)
+      query = "#{params[:query]}"
+      @books = Book.search query, :condition => "publisher_id is NOT NULL"
       resp[:suggestion] = query
       if @books.suggestion? && @books.count <= 0
         resp[:suggestion] = @books.suggestion

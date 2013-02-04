@@ -1,5 +1,5 @@
 require 'csv'
-csvfiles = Csvupload.where("status= NULL or status = 'error'")
+csvfiles = Csvupload.where(:status=>nil)
 csvfiles.each do |csvfile|
   File.open(csvfile.csv.path,"r:iso-8859-1") do |f|
     @csvs = f.read
@@ -35,12 +35,17 @@ csvfiles.each do |csvfile|
         
         if row[16] && book["description"].valid_encoding?
           # book["language"] = row[10]
-          if row[7] !="" && row[7]!="0" && row[7]!=" - "
+          
+        end
+        if row[7] !="" && row[7]!="0" && row[7]!=" - "
             publisher = Publisher.where(:name=>row[7]).first
             if publisher.nil?
               publisher=Publisher.create(:name=>row[7])
             end
-          end
+            book["publisher_id"] = publisher.id
+        else
+            puts "NO publisher...going next"
+            next
         end
 
         # puts book
@@ -74,10 +79,10 @@ csvfiles.each do |csvfile|
         stream=Stream.create(:name=>row[18]) if stream.nil?
         
         book_save.book_streams.create(:stream_id=>stream.id)
-        book_save.publisher=publisher
+        #book_save.publisher=publisher
 
         book_save.save
-        csvfile.update_attributes(:total_books=>total_books, :books_uploaded=>@books_uploaded,:isbns_not_uploaded=>isbns_not_uploaded.join(","))
+        #csvfile.update_attributes(:total_books=>total_books, :books_uploaded=>@books_uploaded,:isbns_not_uploaded=>isbns_not_uploaded.join(","))
         puts "===================="
         puts "Book #{@isbn} saved"
         puts "===================="
@@ -92,7 +97,7 @@ csvfiles.each do |csvfile|
     puts "==========================="
     isbns_not_uploaded << @isbn
     puts isbns_not_uploaded
-    csvfile.update_attributes(:total_books=>total_books, :books_uploaded=>@books_uploaded,:isbns_not_uploaded=>isbns_not_uploaded.join(","),:status=>"error")
+    #csvfile.update_attributes(:total_books=>total_books, :books_uploaded=>@books_uploaded,:isbns_not_uploaded=>isbns_not_uploaded.join(","),:status=>"error")
     attempts += 1
     retry unless attempts > 3
   end

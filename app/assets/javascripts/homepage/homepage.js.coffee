@@ -3,7 +3,17 @@ window.sociorent = window.sociorent || {fn: {}, models: {}, collections: {}, vie
 $(document).ready ->
 	
 	# backbone model
-	sociorent.models.search = Backbone.Model.extend()
+	sociorent.models.search = Backbone.Model.extend
+		initialize: ->
+			publisher = @get("publisher")
+			rental = 0
+			if publisher
+				publisher.rental = publisher.rental || 25
+			else
+				publisher = new Object()
+				publisher.rental = 25
+				@set
+					publisher: publisher
 
 	# backbone collection
 	sociorent.collections.search = Backbone.Collection.extend
@@ -111,7 +121,7 @@ $(document).ready ->
 
 		search_author: (ev)->
 			author = $.trim $(ev.target).html()
-			$("#book_details").isOpen() 
+			$("#book_details").dialog("close")
 			$("#search_books_input").val(author)
 			search()
 			false

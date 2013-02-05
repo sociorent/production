@@ -32,11 +32,7 @@ csvfiles.each do |csvfile|
         book["price"]=row[15]
         book["description"]=row[16].force_encoding("UTF-8") if row[16]
         book["description"].gsub!('<a href="#">top</a>',"") if row[16]
-        
-        if row[16] && book["description"].valid_encoding?
-          # book["language"] = row[10]
-          
-        end
+
         if row[7] !="" && row[7]!="0" && row[7]!=" - "
             publisher = Publisher.where(:name=>row[7]).first
             if publisher.nil?
@@ -44,8 +40,7 @@ csvfiles.each do |csvfile|
             end
             book["publisher_id"] = publisher.id
         else
-            puts "NO publisher...going next"
-            next
+            puts "No publisher.."
         end
 
         # puts book

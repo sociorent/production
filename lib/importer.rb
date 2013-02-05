@@ -18,15 +18,12 @@ CSV.parse(csvfile) do |row|
       book["description"]=row[16].force_encoding("UTF-8") if row[16]
       book["description"].gsub!('<a href="#">top</a>',"") if row[16]
       puts "Saving book #{row[4]}"
-      
-      if row[16] && book["description"].valid_encoding?
-        # book["language"] = row[10]
-        if row[7] !="" && row[7]!="0" && row[7]!=" - "
-          publisher = Publisher.where(:name=>row[7]).first
-          if publisher.nil?
-            publisher=Publisher.create(:name=>row[7])
-          end
+      if row[7] !="" && row[7]!="0" && row[7]!=" - "
+        publisher = Publisher.where(:name=>row[7]).first
+        if publisher.nil?
+          publisher=Publisher.create(:name=>row[7])
         end
+        book["publisher_id"] =  publisher.id
       end
 
       # puts book

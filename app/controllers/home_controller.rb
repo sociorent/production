@@ -70,13 +70,13 @@ class HomeController < ApplicationController
        @books += Book.first(6-@books.count) if @books.count < 6
      else
   	  @books = Book.search "#{params[:query]}", :star => true, :condition => "publisher_id is NOT NULL"
-      unless params[:query].=~ /^[0-9]+$/
-        resp[:suggestion] = params[:query]
-        if @books.suggestion? && @books.count <= 0
-          resp[:suggestion] = @books.suggestion
-          @books = Book.search @books.suggestion, :star => true
-        end
-      end
+      # unless params[:query].=~ /^[0-9]+$/
+      #   resp[:suggestion] = params[:query]
+      #   if @books.suggestion? && @books.count <= 0
+      #     resp[:suggestion] = @books.suggestion
+      #     @books = Book.search @books.suggestion, :star => true
+      #   end
+      # end
 
       # @books.each_with_weighting do |result, weight|
       #   puts "%%%%%%%%%%%%%%%%%%%%%%%%%%"
@@ -110,10 +110,10 @@ class HomeController < ApplicationController
       query = "#{params[:query]}"
       @books = Book.search query, :condition => "publisher_id is NOT NULL"
       resp[:suggestion] = query
-      if @books.suggestion? && @books.count <= 0
-        resp[:suggestion] = @books.suggestion
-        @books = Book.search @books.suggestion, :star => true
-      end
+      # if @books.suggestion? && @books.count <= 0
+      #   resp[:suggestion] = @books.suggestion
+      #   @books = Book.search @books.suggestion, :star => true
+      # end
     else
       @books = intelligent_books(current_user)
     end

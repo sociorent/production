@@ -101,7 +101,7 @@
 				<div class="control-group">
 			    <label class="control-label" for="bank_name">Bank Name</label>
 			    <div class="controls">
-			    	<%= select_tag "name", options_for_select(Bank.all.map {|u| [u.name,u.id]}),:prompt=>"Select Bank" %>
+			    	<%= select_tag "bank_name", options_for_select(Bank.all.map {|u| [u.name,u.id]}),:prompt=>"Select Bank" %>
 			    </div>
 			  </div>
 			  <div class="control-group">

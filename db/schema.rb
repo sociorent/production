@@ -29,10 +29,13 @@ ActiveRecord::Schema.define(:version => 20130131095528) do
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "ambassadors", :force => true do |t|
+    t.integer  "college_id"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
     t.integer  "ambassador_manager_id"
   end
+
+  add_index "ambassadors", ["college_id"], :name => "index_ambassadors_on_college_id"
 
   create_table "ambassadors_colleges", :force => true do |t|
     t.integer "ambassador_id"
@@ -289,40 +292,6 @@ ActiveRecord::Schema.define(:version => 20130131095528) do
     t.string   "status"
   end
 
-  create_table "p2p_attributes", :force => true do |t|
-    t.string   "name"
-    t.integer  "display_type",   :default => 1
-    t.integer  "parent_id"
-    t.integer  "category_id_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-  end
-
-  create_table "p2p_categories", :force => true do |t|
-    t.string   "name"
-    t.integer  "parent_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "p2p_products", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-
-  add_index "p2p_specs", ["category_id"], :name => "index_p2p_specs_on_category_id"
-
-  create_table "p2p_users", :force => true do |t|
-    t.integer  "user_id"
-    t.boolean  "mobileverified", :default => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-  end
-
-  add_index "p2p_users", ["user_id"], :name => "index_p2p_users_on_user_id"
-
   create_table "pincodes", :force => true do |t|
     t.integer  "pincode"
     t.datetime "created_at", :null => false
@@ -330,10 +299,10 @@ ActiveRecord::Schema.define(:version => 20130131095528) do
   end
 
   create_table "publishers", :force => true do |t|
-    t.integer  "rental"
+    t.integer  "rental",     :default => 25
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "rails_admin_histories", :force => true do |t|

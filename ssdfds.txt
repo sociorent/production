@@ -1,2 +1,0 @@
-Req: {"firstName"=>"ADMIN", "lastName"=>"", "address"=>"Demo,demo,demo,Punjab,600001", "addressCity"=>"demo", "addressState"=>"Punjab", "addressZip"=>"600001", "mobile"=>"8951173103", "returnUrl"=>"/", "paymentMode"=>"NET_BANKING"}
- Resp: {"respCode"=>400, "respMsg"=>"Merchant mandatory parameter missing"}

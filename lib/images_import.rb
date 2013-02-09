@@ -30,7 +30,7 @@ class RemoteFile < ::Tempfile
     mime
   end
 end
-@files = Dir.glob("/var/www/sociorent/current/tmp/TMH/*.*")
+@files = Dir.glob("/var/www/sociorent.com/current/tmp/TMH/*.*")
 puts @files
 @files.each do |file|
         puts "#{file}"

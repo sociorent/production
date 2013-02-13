@@ -1,3 +1,72 @@
 // Place all the styles related to the P2p::messages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//*= require dataTables/jquery.dataTables
+//*= require dataTables/jquery.dataTables.bootstrap
+
+
+.table{
+	width:100%;
+}
+.table th,.table td{
+	text-align:center;
+	vertical-align:center;
+}
+
+.table th{
+	background-color:#eee !important;
+	border:none !important;
+}
+
+
+#compose_mail:hover{
+	background: #F65757 !important;
+}
+#compose_mail{
+	background: #F65757 !important;
+	color: #fff;
+	padding: 8px 20px;
+	margin-top: 7px;
+	border-radius: 3px 3px 3px 3px;
+	margin-bottom:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+
+#compose_mail a{
+	color:white;
+}
+
+#compose_form_holder{
+	margin:0 auto;
+	display:table-cell;
+
+}
+
+#compose_form_title{
+	
+}
+
+textarea{
+	width: 500px;
+	height: 150px;	
+}
+
+#message_content{
+	margin-top:10px;
+}
+.nav ul li a{
+	border-left:4px solid #fff  !important;	
+}
+
+
+.nav .active a{
+	background-color:white  !important;
+	border-left:4px solid #08c  !important;
+	color:#333 !important;
+}
+
+#box_content{
+	margin:3px;
+}

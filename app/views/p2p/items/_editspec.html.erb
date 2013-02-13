@@ -1,0 +1,33 @@
+
+	<% spec_done = [] %>
+
+	<code class="edit_hidden"> Clear the value to delete the specification</code>
+
+	<table class="table table-striped table-bordered" id="item_specifications">
+		<% spec.each do |aspec| %>
+			<tr>
+				<% spec_done.push( aspec.spec.id ) %>
+				<td class="span1  item_label"> <%= aspec.spec.name %> </td>
+				<td class="span2 specification"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>"> <%= aspec.value %> </td>
+			</tr>
+
+
+
+		<% end %>
+
+		<% if defined? itemspec %>
+			<% itemspec.each do |spec| %>
+			 <% next if spec_done.include?(spec.id) %>
+
+				<tr class="edit_hidden_spec">
+					<td class="span1  item_label"> <%= spec.name %> </td>
+					<td class="span2 specification"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>"> Enter a value for <%= spec.name %> </td>
+				</tr>
+
+
+
+			<%end %>
+
+		<%end %>
+
+	</table>

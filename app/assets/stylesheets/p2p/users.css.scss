@@ -1,0 +1,28 @@
+// Place all the styles related to the p2p/Users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#dashboard_page{
+	min-height: 440px;
+}
+
+.box{
+	display: block;
+	border: 1px solid #ccc;
+	min-height:100px;
+}
+
+.box_title{
+	background-color: #0f8159;
+	color:white;
+	padding:3px;
+}
+
+.box_element{
+	padding:2px;
+	cursor: default;
+}
+
+.box_element:hover{
+	background-color: #ccc;
+}

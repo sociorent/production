@@ -1,9 +1,4 @@
 //=require jquery
-//=require global/jquery.validate.min
-//=require global/jquery-ui-1.10.0.tabs.min.js
+//= require global/jquery.ui.core
+//= require jquery_ujs
 
-
-$(document).ready(function(){
-
-	$("#body_content").css({"min-height" : ($(window).height()- $("#footer").height() - 60)});
-});

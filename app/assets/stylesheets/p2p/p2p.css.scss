@@ -1,11 +1,14 @@
-//= require global/jquery-ui-1.10.0.tabs.min
-//=require p2p/user_bar
+/*
+*= require global/jquery-ui-1.10.0.tabs.min
+*= require p2p/user_bar
+*= require global/chosen
+*/
+
 
 /* Header  */
 
 #header{
-	background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
-	min-height:2em;
+	height:3em;
 }
 
 #header_container{
@@ -26,19 +29,14 @@
 /* Body */
 body{
 
-	a{
-		text-decoration: none;
+	background: #fff url("/assets/bodyBg.png") repeat-x;
 
+	a,a:visited,a:active,a:focus{
+		text-decoration: none !important;
 	}	
-
 	#body_content{
-		width:90%;
-		margin:auto;
-		border: 1px solid #cccccc;
-		margin-top: 1em;
-		margin-bottom: 1em;
-		border-radius: 10px;
-		padding: 1em;
+		margin-top:30px;
+		min-height: 440px;
 	}
 	
 }
@@ -117,18 +115,38 @@ body{
 
 
 //Search index page
-.product{
-	width:170px;
-	display:block;
-	float:left;
-	margin-left:5px;
-	padding:5px;
-	cursor:pointer;
+
+.acategory{
+	margin-bottom:20px;	
+}
+
+.category_title{
+	border-bottom:3px solid #4f6aa3;
+	font-weight:bold;
+	font-size:1.2em;
+	margin-bottom:15px;
+	padding-bottom:10px;
+
 
 }
 
+.product{
+	width:140px;
+	display:block;
+	float:left;
+	margin-left:5px;
+	padding:10px;
+	background: #fff;
+	border:1px solid #eeeeee;
+	margin-bottom: 10px;
+	border-radius:10px;
+}
+
+.product:hover{
+	border:1px solid #666666;
+}
+
 .product a{
-	color:blue;
 	text-decoration:none;
 	font-weight:bold;
 }
@@ -141,22 +159,42 @@ body{
 	width:100%;
 	margin:2px;
 	border-bottom:1px solid #cccccc;
-	padding-bottom:5px;
 
 }
 
+.product_img {
+	height:135px;
+	width: 135px;
+	//border:1px solid yellow;
+	border-radius:3px;
+	display:table-cell;
+	vertical-align:middle;
+	}
+
+.product_img img{
+	margin:0 auto;
+	display:block;
+	max-width:100%;
+	max-height:100%;
+	border-radius: 10px;
+}
 
 .product_tag{
 	font-weight:bold;
 	margin-top:2px;
 	margin-left:5px;
 	color:maroon;
+	text-align:left;
 }
 
 .product_title{
 	font-weight:bold;
 	margin-bottom:2px;
 	margin-top:15px;	
+	width:140px;
+	height:1.3em;
+	//border:1px solid blue;
+	overflow:hidden;
 }
 
 .p2p_menu_button a{
@@ -171,9 +209,8 @@ body{
 .font_page{
 	width:95%;
 	margin:auto;
-	min-height:340px;
-	margin-top:10px;
-	margin-bottom:10px;
+	margin-bottom:15px;
+	min-height:500px;
 }
 
 
@@ -241,9 +278,77 @@ body{
 
 ////
 
-#content{
+#content,#search_result{
 	background-color:white;
 	border:1px solid #cccccc;
 	border-radius:10px;
-	padding:5px;
+	padding:10px;
+	margin-left:10px;
+}
+
+.search_wrap{
+	margin-top:-30px;
+	border:none;
+}
+
+
+//messages
+#view_message_content{
+	margin-left:30px;
+}
+
+#message_content{
+	margin-left:10px;
+}
+
+
+
+.in_nav{
+	color:white !important;	
+}
+
+.logo
+{
+	background:url('/assets/p2p.png');
+	background-repeat:no-repeat;
+}
+
+.ui-autocomplete-loading {
+    background: white url('/assets/index/loading.gif') right center no-repeat !important;
+  }
+
+
+#index_left{
+	margin:0;
+}
+
+
+
+.delete_item{
+	background: url("/assets/glyphicons-halflings.png");
+	background-position: 1097px 0px;
+	display: block;
+	width: 14px;
+	height: 14px;
+	margin-top: 2px;
+	display:inline-block;
+	opacity: 0.3;
+}
+
+.delete_item:hover{
+	opacity: 1;
+}
+
+
+#body_content{
+	margin-top: 10px;
+}
+
+
+#flash_notice{
+	background-color: lightyellow;
+	top:0;
+	position: absolute;
+	display: inline-block;
+	margin: 0 auto;
 }

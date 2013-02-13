@@ -51,7 +51,8 @@ class ApplicationController < ActionController::Base
     if request.xhr? 
       return false;
     else
-      return 'p2p_layout'
+      return 'p2p_layout1'
+      #return 'p2p_layout'
       #return 'application'
     end
   end
@@ -63,4 +64,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def to_hash(obj)
+    hash = {}; obj.attributes.each { |k,v| hash[k] = v }
+    return hash
+  end
 end

@@ -1,41 +1,46 @@
-<div id="header"> 
-	
-	<%= render 'home/login' %>
+  <%= stylesheet_link_tag '/assets/p2p/index/header' %>
+  
+  
 
-	<div id="header_container">
-
-			<div id="top_logo" class="pull-left">
-				SocioRent P2P
-			</div>
-
-			<div id="top_search_form" class="pull-left">
-					<div class="input-append">
-						<input type="text" class="span4"  id="appendedInputButton" placeholder="What are you looking for?">
-						<button class="btn btn-" type="button"><i class="icon-search"></i> </button>
-					</div>
-			</div>
-
-			<div class="pull-right">
-
-				<% if current_user %>
-
-					<strong class="btn"> <%= current_user.name  %> </strong> 
-					<span class="btn"> 
-						<!-- TODO: Correct Signout -->
-					<%= link_to "SignOut", destroy_user_session_url, :method => :delete %>
-					 </span>
-
-				<% else %>
-
-					<a href="#login_box" role="button" class="btn" data-toggle="modal">Login</a>
-					
-				<% end %>
-
-			</div>
-
-	</div>
-	<div class="clearfix"></div>
+    <div id="header" class="row">
+      <div class="span2"><a href="/p2p"><img src="/assets/p2p/index/p2p_logo.png" alt="Logo" ></a></div>
+      <div class="span4">
+        <div class="input-append">
+          <input id="top_search_input" type="text" class="span4" autocomplete="off">
+          <span class="add-on"><i class="icon-search"></i></span>
+        </div>
+      </div>
+      <div class="span6" id="menuSet">
+        <div class="btn-group">
+          
+          <a class="btn topMenu" href="/p2p/messages">Messages</a>
+          <a class="btn topMenu" href="/p2p/mystore">My Store</a>
+          <a class="btn topMenu" href="/p2p/mystore">List New Item</a>
 
 
-	
-</div>
+          <% if current_user.nil? %>
+             <%= link_to "SignOut", destroy_user_session_url, :method => :delete ,:tabindex => "-1" %><
+          <% else %>
+
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+
+              Marudhu <span class="caret"></span>
+
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                <li><%= link_to "SignOut", destroy_user_session_url, :method => :delete ,:tabindex => "-1" %></li>
+                <li><a tabindex="-1" href="#">Action</a></li>
+                <li><a tabindex="-1" href="#">Another action</a></li>
+                <li><a tabindex="-1" href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a tabindex="-1" href="#">Separated link</a></li>
+              </ul>
+             </a>
+            <% end %>
+            
+        </ul>
+        </div>
+      </div>
+    </div>
+
+  
+<%= javascript_include_tag '/assets/p2p/search'%>

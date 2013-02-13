@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20130205092615) do
-=======
-ActiveRecord::Schema.define(:version => 20130204134311) do
->>>>>>> message
+ActiveRecord::Schema.define(:version => 20130212110251) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -217,19 +213,6 @@ ActiveRecord::Schema.define(:version => 20130204134311) do
   add_index "counters", ["email"], :name => "index_counters_on_email", :unique => true
   add_index "counters", ["reset_password_token"], :name => "index_counters_on_reset_password_token", :unique => true
 
-  create_table "csvuploads", :force => true do |t|
-    t.integer  "books_uploaded"
-    t.integer  "total_books"
-    t.text     "isbns_not_uploaded"
-    t.string   "status"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-    t.string   "csv_file_name"
-    t.string   "csv_content_type"
-    t.integer  "csv_file_size"
-    t.datetime "csv_updated_at"
-  end
-
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -325,6 +308,18 @@ ActiveRecord::Schema.define(:version => 20130204134311) do
 
   add_index "p2p_credits", ["user_id"], :name => "index_p2p_credits_on_user_id"
 
+  create_table "p2p_images", :force => true do |t|
+    t.integer  "item_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "img_file_name"
+    t.string   "img_content_type"
+    t.integer  "img_file_size"
+    t.datetime "img_updated_at"
+  end
+
+  add_index "p2p_images", ["item_id"], :name => "index_p2p_images_on_items_id"
+
   create_table "p2p_item_specs", :force => true do |t|
     t.integer  "spec_id"
     t.string   "value"
@@ -345,14 +340,15 @@ ActiveRecord::Schema.define(:version => 20130204134311) do
     t.datetime "solddate"
     t.datetime "paiddate"
     t.datetime "delivereddate"
-    t.boolean  "approvedflag",  :default => false
+    t.datetime "approveddate"
     t.integer  "viewcount",     :default => 0
     t.integer  "reqCount",      :default => 0
     t.float    "price"
     t.integer  "city_id"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.datetime "deletedate"
+    t.integer  "condition"
   end
 
   add_index "p2p_items", ["city_id"], :name => "index_p2p_items_on_city_id"

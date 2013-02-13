@@ -5,45 +5,104 @@ class P2p::ItemsController < ApplicationController
   layout :p2p_layout
 
   def new
-   @item = P2p::Item.new
+   @item = P2p::User.find(current_user.id).items.new
 
   end
 
 
   def create
-    @v = params["item"]['attribute']
 
-    item = P2p::User.find(current_user.id).items.new({:title => params["title"], :desc => params["desc"], :price => params["price"]})
 
-    item.product = P2p::Product.find(params["item"]["brand"].to_i)
+    item = P2p::User.find(current_user.id).items.new({:title => params["title"], :desc => params["desc"], :price => params["price"] ,:condition => params["condition"]})
+
+    item.product = P2p::Product.find(params["brand"])
 
     #echo params["item"]['attribute'].count
     
-     params["item"]['attribute'].each do |key,value|
-      
+     params["spec"].each do |key,value|
+        next if value == "" 
+
        attr = P2p::ItemSpec.new
        attr.spec = P2p::Spec.find(key.to_i)
        attr.value = value
        item.specs << attr
      end
 
+     data={}
     if item.save 
-      redirect_to "/p2p"
+      data['status'] = 1;
+      data['id'] = URI.encode("#{item.product.category.name}/#{item.product.name}/#{item.title}")
     else
-      flash.now[:notice] = "Cannot Create Item. Try again"
-      render :new
+      data['status'] = 0;
+      data['msg'] = "Fails";
     end
 
+    render :json => data
 
   end
 
-  def update
-  end
+ def update
+
+
+    item = P2p::User.find(current_user.id).items.find(params[:id])
+
+    item.update_attributes({:title => params["title"], :desc => params["desc"], :price => params["price"] ,:condition => params[:condition]});
+
+    item.product = P2p::Product.find(params["brand"])
+
+    #echo params["item"]['attribute'].count
+    #clear all
+    item.specs.clear
+
+     params["spec"].each do |key,value|
+        next if value == "" 
+        
+       attr = P2p::ItemSpec.new
+       attr.spec = P2p::Spec.find(key.to_i)
+       attr.value = value
+       item.specs << attr
+     end
+
+     data={}
+    if item.save 
+      data['status'] = 1;
+      data['id'] = URI.encode("#{item.product.category.name}/#{item.product.name}/#{item.title}")
+    else
+      data['status'] = 0;
+      data['msg'] = "Fails";
+    end
+
+    render :json => data
+
+end
 
   def destroy
-    item = P2p::Item.find(params[:id])
-    item.delete
-    redirect_to '/p2p/mystore'
+
+    begin
+      item = P2p::Item.find(params[:id])
+
+      raise "Cannot Delete" if item.user.id != current_user.id 
+    rescue
+      if request.xhr? 
+        render :json => {:status => 0}
+      else
+        flash[:notice] ="Nothing found for your request"
+        redirect_to "/p2p/mystore"
+        return
+      end
+    end
+    
+
+    item.deletedate = Time.now
+    item.save
+
+    if request.xhr? 
+      render :json => {:status => 1}
+    else
+      flash[:notice] ="Nothing found for your request"
+      redirect_to "/p2p/mystore"
+      return
+    end
   end
 
   def edit
@@ -51,8 +110,16 @@ class P2p::ItemsController < ApplicationController
 
   def get_attributes
     cat = P2p::Category.find(params[:id])
-    @attr = cat.specs.select("id,name,display_type")
+    @attr = cat.specs.select("id,name,display_type").all
 
+  #  render :json => @attr
+  end
+
+  def get_spec
+    items = P2p::Item.find(params[:id])
+    spec = items.specs.select("id,value,spec_id")
+    
+    render :partial => "p2p/items/editspec" , :locals => {:spec => spec}
   #  render :json => @attr
   end
 
@@ -71,8 +138,37 @@ class P2p::ItemsController < ApplicationController
 
   def view
 
+      begin
+        #@item = P2p::Item.find(params[:id])
+        @cat =  P2p::Category.find_by_name(params[:cat])
+        @prod=  @cat.products.find_by_name(params[:prod])
+        @item = @prod.items.find_by_title(params[:item])
 
-      @item = P2p::Item.find(params[:id])
+        raise "Nothing found" if @prod.nil? or  @item.nil? or @cat.nil?
+        
+      rescue
+        flash[:notice] ="Nothing found for your request"
+        redirect_to '/p2p/mystore'
+        return
+      end
+
+      if @item.product.category.category.nil?
+        @category_name = @item.product.category.name 
+        @category_id = @item.product.category.id
+
+        @sub_category_name = "" 
+        @sub_category_id =""
+      else
+        @sub_category_name = @item.product.category.name 
+        @sub_category_id = @item.product.category.id
+        
+        @category_name = @item.product.category.category.name 
+        @category_id = @item.product.category.category.id
+
+      end
+
+      @brand_name = @item.product.name 
+      @brand_id = @item.product.id
 
      @attr = @item.specs(:includes => :attr)
 
@@ -99,16 +195,37 @@ class P2p::ItemsController < ApplicationController
       
     end
     
-    
-
-end
+  end
 
   def sold
       @item = P2p::Item.find(params[:id])
       @item.solddate =Time.now
       @item.save
 
-      redirect_to '/p2p/view/' + @item.id.to_s
+      #render :json => {:status => 1 ,:id => "/p2p/#{@item.product.category.name}/#{@item.product.name}/#{@item.title}"}
+      redirect_to URI.encode("/p2p/#{@item.product.category.name}/#{@item.product.name}/#{@item.title}")
+
+  end
+
+  def add_image
+
+
+    item = P2p::Item.find(params["item_id"])
+    unless params["img"].nil?
+
+
+      params["img"].each do |img|
+
+        i = item.images.new(:img=>img)
+
+        i.save
+
+      end
+
+    end
+    #render :inline => params.inspect
+
+    redirect_to URI.encode("/p2p/#{item.product.category.name}/#{item.product.name}/#{item.title}")
 
   end
 

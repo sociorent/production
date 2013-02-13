@@ -1,59 +1,27 @@
-<%= stylesheet_link_tag "p2p/items" %>
 
-<div id="view_item">
-	<div id="view_item_image">
-		<img src="/assets/nokia1.jpg" id="view_image">
-	</div>
-
-	<div id="item_title"> <%= @item.title %> </div>
-
-	<br/>
-
-	<div id="item_price"> Price:  <%=  @item.price %> </div>
-
-	<br/>
-
-	Description: <br/>
-	<div id="item_description"> <%=  @item.desc %> </div>
-
-	<div class="clearfix"></div>
-</div>
-
-	<% if (current_user.nil? or @item.user.id != current_user.id) %>
-
-		<div id="action-buttons">
-			<div class="btn btn-info"> Buy Now </div>
-			<br/><br/>
-			<div class="btn btn-warning"> View Contact </div>
-		</div>
-
-	<% else %>
-
-		<div id="analytics">
-			<% if @item.solddate.nil? %>
-				<a href="/p2p/sold/<%= @item.id %>" class="btn btn-warning"> Sell Item</a>
-			<% else %>
-				<span class="btn btn-info">Item Sold on <%= @item.solddate.strftime("%d-%b-%C%y") %> </span>
-			<%end %>
-
-			<h4> Analytics </h4>
-			<div id="view_count"> View Count: <%= @item.viewcount %> </div> <br/>
-			<div id="view_req_count"> Request Count : <%= @item.reqCount %> </div> <br/>
-		</div>
-
-	<%end %>
-<div class="clearfix"></div>
-
-<div id="item_attributes">
-	<h3> Specifications: </h3>
-
-
-	<table class="table table-striped table-bordered table-hover"> 
-		<%	@attr.each do |attr| %>
-			<tr>
-				<td class="span2">  <%= attr.spec.name %> </td>
-				<td > <%= attr.value %> </td>
-			</tr>
-		<% end %>
-	</table>
-</div>
+<%= render "/p2p/items/itemform" ,
+           :viewimage => @item.get_image(0,:view) ,
+           :thumbimage => @item.get_image(0,:thumb) ,
+           :fullimage => @item.get_image(0,:full) ,
+           :title => @item.title,
+           :price => @item.price.to_i.to_s,
+           :location => "",
+           :ownerid => @item.user_id.to_s,
+           :userid => (current_user.nil? ) ? "" : current_user.id.to_s,
+           :itemid => @item.id.to_s,
+           :solddate => @item.solddate,
+           :deletedate => @item.deletedate,
+           :viewcount => @item.viewcount,
+           :reqcount => @item.reqCount,
+           :description => @item.desc,
+           :category => @category_name,
+           :subcategory => @sub_category_name,
+           :brand => @brand_name,
+           :spec => @attr,
+           :categoryid => @category_id.to_s,
+           :subcategoryid => @sub_category_id.to_s,
+           :brandid => @brand_id.to_s,
+           :itemspec => @item.product.category.specs,
+           :condition => @item.condition
+           
+%>

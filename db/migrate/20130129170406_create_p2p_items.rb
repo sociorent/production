@@ -9,7 +9,7 @@ class CreateP2pItems < ActiveRecord::Migration
       t.datetime :solddate
       t.datetime :paiddate
       t.datetime :delivereddate
-      t.boolean :approvedflag, :default => false
+      t.boolean :approveddate
       t.integer :viewcount ,:default => 0
       t.integer :reqCount,:default => 0
       t.float :price 

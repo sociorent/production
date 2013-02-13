@@ -1,0 +1,3 @@
+Queries.. select into'sssssss
+
+INSERT INTO `sociorent_development`.`p2p_items` (`id`, `product_id`, `user_id`, `title`, `desc`, `paytype`, `solddate`, `paiddate`, `delivereddate`, `approveddate`, `viewcount`, `reqCount`, `price`, `city_id`, `created_at`, `updated_at`, `deletedate`) select  '',`product_id`, `user_id`, `title`, `desc`, `paytype`, `solddate`, `paiddate`, `delivereddate`, `approveddate`, `viewcount`, `reqCount`, `price`, `city_id`, `created_at`, `updated_at`, `deletedate` from `sociorent_development`.`p2p_items` 

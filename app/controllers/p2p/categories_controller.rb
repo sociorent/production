@@ -1,6 +1,6 @@
 class P2p::CategoriesController < ApplicationController
 
- before_filter :p2p_layout 
+ layout :p2p_layout 
 
    def index
   	list

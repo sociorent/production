@@ -1,65 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Rent Engineering Textbooks | Sociorent.com: A new companion for Engineering Students.</title>
+  <title> Sell and Buy things online | Sociorent.com: A new companion for Engineering Students.</title>
 <meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
 <meta name="Keywords" content="Rent books Online, Rent engineering books, book rental online, engineering books, engineering colleges india, rent books india, easy book rentals, cool book rentals/">
   <title>Sociorent</title>
-  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <%= stylesheet_link_tag    "global/application", :media => "all" %>
-  <%= javascript_include_tag "global/application" %>
-
-
-  <%= stylesheet_link_tag "global/bootstrap.min" %>
-  <%= stylesheet_link_tag "global/bootstrap-responsive.min" %>
-
+  <%= stylesheet_link_tag  "global/bootstrap-responsive.min" %>
+  <%= stylesheet_link_tag "p2p/p2p" %>
   <%= stylesheet_link_tag "p2p/p2p" %>
 
-  <%= javascript_include_tag "global/underscore" %>
-
+  <%= javascript_include_tag "p2p/application" %>
   <%= javascript_include_tag "p2p/p2p" %>
-  <%= javascript_include_tag "global/bootstrap.min" %>
-  <%= javascript_include_tag "global/jstorage.min" %>  
-  <%= javascript_include_tag "global/jquery.ui.dialog" %>
-
   
   <%= stylesheet_link_tag "footer" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
+<div class="container active_content">
+
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
   <%= render :partial => "layouts/header" %>
 
   <div class="font_page">
    <div id="page_not_found"> <%= flash[:warning] %></div>
 
-   <div class="container active_content">
     <%= yield %>
-   </div>
 
     <div class="clearfix"></div>
   </div>
   
 
-  <div id="university_dialog" class="font-dialog">
-    <% logos=General.first.images %>
-    <% if logos%>
-      <ul class="university_logos">
-        <% logos.each do |logo| %>
-          <li><img src="<%= logo.image %>"></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No more logo of universities </p>
-    <% end %>
-
-  </div>
-  <%#= render :partial => "/static_page_dialog" %>
-
-
   <%= render :partial => "layouts/footer" %>
 
+
+    
 	
       <% if ENV["RAILS_ENV"] == "production" %>
       <!-- begin olark code --><script data-cfasync="false" type='text/javascript'>/*{literal}<![CDATA[*/
@@ -104,5 +84,8 @@
     });
     </script>
   <% end %>
+
+</div>
+
 </body>
 </html>

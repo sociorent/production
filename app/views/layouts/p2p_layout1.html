@@ -5,38 +5,73 @@
 <meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
 <meta name="Keywords" content="Rent books Online, Rent engineering books, book rental online, engineering books, engineering colleges india, rent books india, easy book rentals, cool book rentals/">
 
-<!-- TODO: Add bootstrap responsive meta tag-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-  <%= stylesheet_link_tag "global/bootstrap.min" %>
-  <%= stylesheet_link_tag "global/bootstrap-responsive.min" %>
+  <%= stylesheet_link_tag "p2p/p2p" %> 
+  <%= stylesheet_link_tag "global/jquery-ui-1.8.24.custom" %>
+    <%= stylesheet_link_tag '/assets/p2p/index/bootstrap.min' %>
+  <%#= stylesheet_link_tag "global/bootstrap-responsive.min" %>  
+  <%= stylesheet_link_tag "footer" %>
+  
 
-  <%= stylesheet_link_tag "p2p/p2p" %>
 
-  <%= javascript_include_tag "global/underscore" %>
+  <%= stylesheet_link_tag '/assets/p2p/index/common' %>
+  <%= stylesheet_link_tag '/assets/p2p/index/itemList' %>
+
+  
   <%= javascript_include_tag "p2p/p2p" %>
+  <%= javascript_include_tag "global/underscore" %>
   <%= javascript_include_tag "global/bootstrap.min" %>
-  <%= javascript_include_tag "global/jstorage.min" %>  
+  <%= javascript_include_tag "global/jquery.ui.widget" %>
+  <%= javascript_include_tag "global/jquery.ui.menu" %>
+  <%= javascript_include_tag "global/jquery.ui.position" %>
+  <%= javascript_include_tag "global/jquery.ui.autocomplete" %>
+  <%= javascript_include_tag "p2p/jquery.history.js" %>
+
   
-  
+
   <%= csrf_meta_tags %>
   
 </head>
   
 
-<body >
+<body>
 	
-	<%= render "layouts/p2p/header" %>
+  <div class="container">
+
+    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
+  	<%= render "layouts/p2p/header" %>
+
+    
+    <div class="info-warning" id="flash_notice">  </div>
+    
+
+    <%= yield %>
+
+  	<%= render "layouts/footer" %>
+
+    <div class="clearfix"></div>
+
+  </div>
+
+
+
+  <script>
+
+    function showNotifications(content){
+    $("#flash_notice").html(content).fadeIn(1000).delay(500).fadeOut(1000);
+  }
 
   <% unless flash[:notice].nil? %>
-    <div class="info-warning"> <%= flash[:notice] %> </div>
+    showNotifications("<%=flash[:notice]%>");
   <% end %>
 
-	<div id="body_content" class="active_content">
-  		<%= yield %>
-	</div>
 
-	<%= render "layouts/p2p/footer" %>
+  </script>
+
+
 </body>
 
 

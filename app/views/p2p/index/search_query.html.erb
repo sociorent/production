@@ -1,0 +1,63 @@
+
+
+
+ 
+  <!-- List Section --> 
+<div id="Itemlist" class="row">
+
+    <div id="filter" class="span2">
+
+
+      <ul class="nav nav-list">
+
+        <%= render "scat_menu"  %>
+
+      </ul>
+    </div>
+
+
+	<div id="items" class="span10">
+
+
+	<div class="itemsRow">
+				
+		        <div id="listHeader" class="row">
+		          <p class="fleft"> <b>Results for <%= params[:query] %></b></p>
+		          <p class="fright"><a href="/p2p/search/q/<%=params[:query]%>"> View All</a></p>
+		        </div>
+
+
+	                <ul class="thumbnails">
+	                
+	                <% @result.each do |p| %>
+
+	                  <li class="span2">
+	                    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">
+	                      <div class="thumbnail">
+	                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+	                        <div class="caption">
+	                          <b><%= p.title.slice(0,10)  %></b>
+	                          <p>
+
+	                            <ul>
+	                              <li><del>&#2352;</del> <%=p.price %></li>
+	                              <li> <%=p.condition %></li>
+	<!--                              <li>Attribute 2</li>
+	                              <li>Attribute 3</li>
+	-->                              
+	                            </ul>
+	                          </p>
+
+	                        </div>
+	                      </div>
+	                    </a>
+	                  </li>
+	              <% end %>
+
+	              </ul>
+
+	</div>
+
+
+	</div>
+</div>

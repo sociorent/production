@@ -4,20 +4,28 @@
   <div class="product">
     
 
-    <a href="<%= "/p2p/view/" +  p.id.to_s %>" > 
+    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>" > 
       <div class="product_img">
-       <img src="/assets/nokia1.jpg" alt="Picture coming Soon...." width="100px" height="100px"></img>
+       <img src="<%= p.get_image(1,:search)[0][:url] %>" ></img>
       </div>
+    </a>
 
       <div class="product_title">
-        <em><%= p.title  %></em> 
+        <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>" > 
+          <em><%= p.title.slice(0,25)  %></em>
+        </a>
       </div>
-            
+
+                
       <div class="product_tag">
-      <em><del>&#2352;</del> <%=p.price %></em> 
+      <em>Price: <del>&#2352;</del> <%=p.price %></em> 
+      </div>
+
+      <div class="product_tag">
+      <em>Condition: <%=p.condition %></em> 
       </div>
    
-      </a>
+      
       
   </div>
 <% end %>

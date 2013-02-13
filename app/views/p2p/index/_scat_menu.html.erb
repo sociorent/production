@@ -1,0 +1,85 @@
+
+
+		<% if  defined?(dropdown) %>
+			<div class="dropdown">
+			<a class="dropdown-toggle btn-primary btn"  href="#" data-toggle="dropdown" id="browse_button">Browse </a>
+		<% else %>
+			<li class="nav-header">Browse </li>
+		<% end %>
+
+		<% if  defined?(dropdown) %>
+				<ul class="dropdown-menu">
+		<% end %>
+
+
+		<% P2p::Category.where("category_id is null").each do |cat|%>
+
+
+				<% if defined?(active_page) and cat.name == active_page %>
+					<li class="active">
+				<% else %>
+					<li>
+				<% end %>
+
+				<a  href="/p2p/<%= cat.name %>">
+						<%= cat.name %>
+					</a>
+				</li>
+
+
+				<% cat.subcategories.all.each do |scat| %>
+
+					<% if defined?(active_page) and scat.name == active_page %>
+						<li class="active">
+					<% else %>
+						<li>
+					<% end %>
+
+						<a  href="/p2p/<%= scat.name %>">
+							<%= scat.name %>
+						</a>
+						
+					</li>
+				<% end %>
+
+			<% end %>
+
+
+	    
+
+    	<% if  defined?(dropdown) %>
+			</ul>
+			</div>
+		<% end %>
+
+		<li class="divider"></li>
+
+
+
+
+	<script>
+
+		$(document).ready(function(){
+			var browseTop = $('#browse_menu').offset().top; 	
+
+			 $(window).scroll(function(){ // scroll event
+	 
+	 		   var windowTop = $(window).scrollTop(); // returns number
+
+	 		      if (browseTop < windowTop) {
+	      				$('#browse_menu').css({ position: 'fixed', top: 0 });
+	    			}
+	    		else {
+	      			$('#browse_menu').css('position','static');
+	    		}
+	 		});
+
+			 $("#browse_button").mouseenter(function(){
+			 	$(this).trigger('click');
+			 });
+	 
+		});
+	 
+
+	</script>
+

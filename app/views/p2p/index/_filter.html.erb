@@ -1,0 +1,176 @@
+
+<div id="overlay"></div>
+
+	<li class="nav-header">Filters</li>
+
+
+		<li class="nav-header"> Sort </li>
+		<li>
+			<select class="span1" id="filter_sort">
+				<option value="0">Relevance</option>
+				<option value="1">Price Hight to low</option>
+				<option value="2">Price Low to hight</option>
+			</select>
+		</li>
+
+		<% item_condition_res = category.items.select("distinct p2p_items.condition") %>
+
+		<% if item_condition_res.count > 0 %>
+			<li class="nav-header"> Condition </li>
+			<% item_condition_res.each do |itm| %>
+				<li onclick="javascript:filter('condition','<%=itm.condition%>',this)">
+				<i class="icon-remove hide pull-right"></i>
+				 <a href="#"> <%= itm.condition %> </a> 
+
+				</li>
+			<% end %>
+		<% end %>
+
+		<% category.specs.each do |spec|%>
+
+
+			<li class="nav-header"> <%= spec.name %> </li>
+
+				<% spec.itemspecs.select(" distinct value").each do |itemspec| %>
+					<li onclick="javascript:filter('<%=spec.name%>','<%=itemspec.value%>',this)">
+						<i class="icon-remove hide pull-right"></i>
+						<a href="#"> <%= itemspec.value	%> </a>
+						
+					</li>
+				<% end %>
+			
+
+			<% end %>
+
+	    <li class="divider"></li>
+
+	    <script type="template" id="item_template">
+
+		      <div class="itemsRow">
+
+		        <div id="listHeader" class="row">
+		          <p class="fleft"> <b> Results </b></p>
+		        </div>
+
+ 	        <ul class="thumbnails" id="filter_replace">
+
+		    	<%% _.each(data,function(elm){%>
+
+				          <li class="span2">
+				            <a href="<%%=elm.url%>">
+	   			              <div class="thumbnail">
+				                <img src="<%%=elm.img %>" >
+				                <div class="caption">
+				                  <b><%%=elm.title%></b>
+				                  <p>
+
+				                    <ul>
+				                      <li><del>&#2352;</del> <%%=elm.price %></li>
+				                      <li><%%=elm.condition%></li>
+							                    </ul>
+				                  </p>
+
+				                </div>
+
+				              </div>
+
+				            </a>
+				          </li>
+
+					<%% });%>
+
+		    	</ul>
+
+	    </script>
+
+
+	<script>
+
+
+		function filter(spec,val,that){
+
+			console.log($(that));
+			
+			if (spec in filters){
+				if (filters[spec].indexOf(val) == -1){
+					filters[spec].push(val)
+					$(that).addClass('active');
+					$(that).children(".icon-remove").removeClass("hide");
+
+				}else{
+					filters[spec].splice(filters[spec].indexOf(val),1)
+					$(that).removeClass('active');
+					$(that).children(".icon-remove").addClass("hide");
+				}
+			}
+			else{
+				filters[spec]=[]
+				filters[spec].push(val)
+				$(that).addClass('active');
+				$(that).children(".icon-remove").removeClass("hide");
+			}
+
+			call_filter(spec,val,that);
+
+		}
+
+		function call_filter(spec,val,that){
+			
+			showOverlay();
+
+			
+			$.ajax({
+				url:'/p2p/' + category + '/filters',
+				data:{"filter": filters },
+				type:"post",
+				dataType:"json",
+				success:function(data){
+
+					var templ=_.template($("#item_template").html(),{data:data});
+					$("#items").html(templ);
+					$("#overlay").hide(100);
+
+				},
+				error:function(){
+					alert("Some Error Occured Try again");
+					$("#overlay").hide(100);
+					filters[spec].splice(filters[spec].indexOf(val),1)
+					$(that).removeClass('active');
+					$(that).children(".icon-remove").addClass("hide");
+					
+				}
+			});
+
+		}
+
+		$("#filter_sort").change(function(){
+
+			 filters['sort'] = $("#filter_sort").val();
+			 call_filter('sort',$("#filter_sort").val(),$("#filter_sort"));
+			 
+		});
+
+		$(document).ready(function(){
+
+				window.category="<%=category.name%>";
+				window.filters ={};
+	 		
+		});
+
+	showOverlay = function(){
+
+		$("#overlay").css({
+			"width":$("#items").outerWidth(),
+			"height":$("#items").outerHeight(),
+			"top":$("#items").offset().top,
+			"left":$("#items").offset().left,
+		});
+
+		$("#overlay").show();
+
+	}
+
+	</script>
+
+
+

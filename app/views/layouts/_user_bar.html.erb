@@ -6,37 +6,20 @@
     <div class="left">
       <div style="width:100%">Welcome, <%= current_user.name %></div>
     </div>
-    <div class="right">
-      <div class="p2p_menu_button">
+    <div class="right span8">
+      <div class="p2p_menu_button pull-right">
         <%= link_to "SignOut", destroy_user_session_path, :method => :delete %>
       </div>
 
-      <% unless request["PATH_INFO"].to_s.index("p2p").nil? %>
-            <div class="cart">
-            <div class="menu_button" id="compare_button">Compare</div>
-            <div class="menu_button" id="cart_button">
-            	<div class="cart_button_count"></div>
-            	<div class="arrow-down"></div>
-            	<div id="cart_button_total">
-            		<div id="cart_button_total_left">Total: Rs.<span></span></div>
-            		<div id="cart_button_total_right">Place Order</div>
-            		<div class="clear"></div>
-            	</div>
-            </div>
-            <div class="clear"></div>
-          </div>
-
-      <% else %>
-
-          <div id="p2p_links" class="p2p_menu_button">
+          <div id="p2p_links" class="p2p_menu_button span4 pul-right">
 
               <a href="/p2p/mystore">My Store </a>
 
               <a href="/p2p/sellitem"> List Item </a>
 
-          </div>
+              <a href="/p2p/messages"> Messages </a>
 
-      <% end %>
+          </div>
 
     </div>
     <div class="clear"></div>

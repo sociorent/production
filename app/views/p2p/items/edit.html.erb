@@ -1,2 +1,15 @@
-<h1>P2p::Items#edit</h1>
-<p>Find me in app/views/p2p/items/edit.html.erb</p>
+
+<%= render "/p2p/items/itemform" ,
+           :image => @item.get_image(0,:view) ,
+           :title => @item.title,
+           :price => @item.price,
+           :location => @item.location,
+           :ownerid => @item.user_id.to_s,
+           :userid => current_user.id.to_s,
+           :itemid => @item.id,
+           :solddate => @item.solddate,
+           :deletedate => @item.deletedate,
+           :viewcount => @item.viewcount,
+           :reqcount => @item.reqCount,
+           :description => @item.desc
+%>

@@ -1,4 +1,7 @@
 class P2p::CitiesController < ApplicationController
+
+  layout :p2p_layout
+
   def index
   end
 
@@ -9,6 +12,6 @@ class P2p::CitiesController < ApplicationController
   		cities[0] = ['No Result']
   	end
 
-  	render :json => cities 
+  	render :json => cities
   end
 end

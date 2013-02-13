@@ -1,15 +1,6 @@
 Sociorent::Application.routes.draw do
 
 
-
-  get "messages/index"
-
-  get "messages/create"
-
-  get "messages/destroy"
-
-  get "messages/new"
-
   get "cities/index"
 
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
@@ -78,27 +69,43 @@ Sociorent::Application.routes.draw do
 
   ##P2P Routes
   namespace :p2p do
+
+
+      resources :messages, :path_names =>{:index=>"inbox", :new => 'compose', :create=> 'send',  :show =>"show", }
+      resources :items
+      resources :images
+
       get '' => "index#index"
       get 'sellitem' => "items#new"
       get 'getbrand/:id' => "items#get_brands"
       get 'getattributes/:id' => "items#get_attributes"
+      get 'getspec/:id' =>  "items#get_spec"
       get 'getsubcategories/:id' => "items#get_sub_categories"
-      get 'view/:id' => 'items#view'
 
+      get 'delete/:id' => "items#destroy"
+      
+      post 'addimage' => "items#add_image"
 
       get 'sold/:id' => "items#sold"
 
       get 'mystore(/:query)' => 'items#inventory'
 
+      get 'dashboard' => 'users#dashboard'
       
-      match "search(/:id(/*filters))" =>"index#search", :via =>[:get,:post]
+      get 'getmessages(/:id)' => 'messages#getmessages'
 
-      post 'getcity'  => 'cities#list'
-      
-      #post "message/create/:id" => "messages#create"
-      #match "message"=>"messages#index"
-      resources :messages, :path_names =>{:index=>"inbox", :new => 'compose', :create=> 'send',  :show =>"show", }
-      resources :items
+      match 'search/q/:query' => "index#search_query"
+
+      match 'search/c/:cat(/:prod)' => "index#search_cat"
+
+      match "search/:id" =>"index#search"
+
+      match ":cat/filters" =>"index#browse_filter"
+
+
+      get ':cat/:prod/:item' => 'items#view'
+
+      get ':cat(/:prod)' => "index#browse" 
 
   end
 

@@ -1,12 +1,13 @@
 
-	
-	<%@attr.each do |attr| %>
-		<div class="control-group">
-			<%= label_tag attr.name ,attr.name ,:class=>"control-label" %>
 
-			<div class="controls">
-			<%= text_field_tag "item[attribute][" + attr.id.to_s + "]" %>
-			</div>
-		</div>
+	<table class="table table-bordered table-striped " id="item_specifications">
 
-	<% end %>
+		<%@attr.each do |attr| %>
+				<tr>
+					<td class="span1"> <%= attr.name  %></td>
+					<td class="span2 specification"  specname="<%= attr.name %>" specid="<%= attr.id.to_s %>" id="item_<%= attr.id %>" >Enter a <%= attr.name  %></td>
+				</tr>
+
+		<% end %>
+
+	</table>

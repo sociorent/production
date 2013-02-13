@@ -1,0 +1,24 @@
+#header {
+	margin-top: 20px;
+
+}
+
+#top_search_input {
+	height: 25px;
+}
+
+.add-on {
+	height: 25px !important;
+}
+
+.icon-search {
+	margin-top: 5px;
+}
+
+.topMenu {
+	padding: 6px;
+}
+
+#menuSet {
+	text-align: right;
+}

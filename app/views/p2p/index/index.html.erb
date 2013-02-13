@@ -1,125 +1,69 @@
-<%= stylesheet_link_tag "index/application" %>
-<%= stylesheet_link_tag "inner" %>
-<%= stylesheet_link_tag "p2p/p2p" %>
-<%= javascript_include_tag "global/jquery.typewatch" %>
-<%= javascript_include_tag "global/underscore" %>
-<%= javascript_include_tag "global/jquery.isotope.min" %>
-
-<script id='product_template' type='text/template'>
-    
-    
-
-  <div class="product">
-    <a href="/p2p/view/<%%= elm.id  %> ">
-
-      <div class="product_img">
-       <img src="/assets/nokia1.jpg" alt="Picture coming Soon...."  width="100px" height="100px"></img>
-      </div>
-   
-      <div class="product_title">
-        <em>  <%%=elm.title %>  </em> <br/>
-      </div>
-      
-      
-      <div class="product_tag">
-      <em><del>&#2352;</del> <%%= elm.price %></em> 
-      </div>
-     </a>
-  </div>
- 
-</script>
 
 
-<script type="text/javascript">
-
-function search(){ 
-
-    $.ajax({
-        url: '/p2p/search/' + $("#search_books_input").val(),
-        type: 'GET',
-        dataType:"json",
-
-        success: function(data) {
-
-            template=$("#product_template").html();
-            $("#content").html("");
-          _.each(data,function(elm){$("#search_result").append( _.template(template,{elm:elm}));});
-            $("#content").hide();
-            
-            $('#search_result').isotope({
-              itemSelector : '.product'
-
-            });
-
-            $('#search_result').css({"height":"auto" ,"overflow":"auto"}).show();
-
-       }
-
-  });
-}
+  
+  <!-- List Section --> 
+<div id="Itemlist" class="row">
+    <div  class="span2">
 
 
-$(document).ready(function(){
-  $("#search_books_input").typeWatch({
-      callback:search,
-      wait:250,
-      highlight:true,
-      captureLength:2
-  });
-});
+      <ul class="nav nav-list" id="browse_menu">
 
-</script>
+        <%= render "scat_menu" %>
 
+      <div class="clearfix"></div>
 
-
-
-<div class="search_wrap">
-      <h2>What You Wanna Buy ? </h2>
-      <div class="searchbar">
-        <form method="get" action="#" id="search">
-          <input type="text" id="search_books_input" name="q"  placeholder="Enter Title, Mobile Name, Book Name" class="left search">
-          <input id="search_books_input_hidden" type="hidden">
-          <input type="submit" value="Search" class="left searchbutton">
-          <input type="button" value="X" class="left btn" id="searchClose">
-        </form>
-      </div>
     </div>
 
-<div id="content">
+<div id="items" class="span10">
 
-  <% @list.each do |list| %>
-    <% if list.products.size > 0 %>
 
-     <div id='<%= list.name %>'>
-        <h4><%= list.name %></h4>
 
-           <% products = list.products %>
+  <% @category.each do |acategory| %>
 
-           <% products.each do |prod| %>
-              <% if prod.items.size > 0 %>
+    <% if acategory.products.size > 0 and acategory.products[0].items.size > 0 %>
 
-                <div id='<%= prod.name %>' class="abrand">
-                  <h5> <%= prod.name %> </h5>
-                 <%= render :partial => "item",:locals =>{ :items => prod.items }%>
-                 <div class="clearfix"></div>
-                </div>
+      <div class="itemsRow">
 
-             <% end %>
-           <% end %>
+        <div id="listHeader" class="row">
+          <p class="fleft"> <b><%= acategory.name.pluralize.titlecase %> </b></p>
+          <p class="fright"><a href="/p2p/search/c/<%= acategory.name %>"> View All</a></p>
+        </div>
 
-     </div>
 
+               <ul class="thumbnails">
+                
+                <% acategory.items.order("rand()").limit(5).each do |p| %>
+
+                  <li class="span2">
+                    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">
+                      <div class="thumbnail">
+                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                        <div class="caption">
+                          <b><%= p.title.slice(0,10)  %></b>
+                          <p>
+
+                            <ul>
+                              <li><del>&#2352;</del> <%=p.price %></li>
+                              <li><%=p.condition%></li>
+<!--                              <li>Attribute 2</li>
+                              <li>Attribute 3</li>
+-->                              
+                            </ul>
+                          </p>
+
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+              <% end %>
+
+              </ul>
+
+      </div>
     <% end %>
   <% end %>
 
+
 </div>
-
-<div id="search_result">
+  <!-- List Section --> 
 </div>
-
-
-<script>
-
-$(document).ready(function(){
-
-</script>

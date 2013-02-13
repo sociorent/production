@@ -1,5 +1,8 @@
 Sociorent::Application.routes.draw do
 
+
+  get "cities/index"
+
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
 
   ActiveAdmin.routes(self)
@@ -46,6 +49,7 @@ Sociorent::Application.routes.draw do
   match "/get_streams" => "users#get_streams"
 
 
+
   #matches #book/isbn
   get '/book/:isbn' => "home#book_deatils"
 
@@ -62,6 +66,54 @@ Sociorent::Application.routes.draw do
   end
 
   devise_for :counters
+
+  ##P2P Routes
+  namespace :p2p do
+
+
+      resources :messages, :path_names =>{:index=>"inbox", :new => 'compose', :create=> 'send',  :show =>"show", }
+      #resources :credits, :path_names =>{:list=>"list", :decrement => 'delete', :new=> '' }
+      resources :items
+      resources :images
+      resources :credits ,:path_names => {:decrement => 'delete'}
+
+
+      get '' => "index#index"
+      get 'sellitem' => "items#new"
+      get 'getbrand/:id' => "items#get_brands"
+      get 'getattributes/:id' => "items#get_attributes"
+      get 'getspec/:id' =>  "items#get_spec"
+      get 'getsubcategories/:id' => "items#get_sub_categories"
+
+      get 'delete/:id' => "items#destroy"
+      
+      post 'addimage' => "items#add_image"
+
+      get 'sold/:id' => "items#sold"
+
+      get 'mystore(/:query)' => 'items#inventory'
+
+      get 'dashboard' => 'users#dashboard'
+      
+      get 'getmessages(/:id)' => 'messages#getmessages'
+
+      match 'search/q/:query' => "index#search_query"
+
+      match 'search/c/:cat(/:prod)' => "index#search_cat"
+
+      match "search/:id" =>"index#search"
+
+      match ":cat/filters" =>"index#browse_filter"
+
+
+      get ':cat/:prod/:item' => 'items#view'
+
+      get ':cat(/:prod)' => "index#browse" 
+
+
+
+  end
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

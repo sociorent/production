@@ -1,0 +1,115 @@
+<%= stylesheet_link_tag "p2p/messages" %>
+
+
+<%= javascript_include_tag "p2p/messages" %>
+<%= javascript_include_tag "global/jquery.ui.core" %>
+<%= javascript_include_tag "global/jquery.ui.widget" %>
+<%= javascript_include_tag "global/jquery.ui.accordion" %>
+
+
+
+<script type="text/javascript">
+  $(function() {
+    $( "#accordion" ).accordion();
+  });
+  </script>
+
+<div id="message_content" class="span11">
+
+		
+<div class="tabbable " id="message_side_menu">	
+	<div class="row">
+		<div class="span2 pull-left" id="message_left_menu">
+
+		  <ul class="nav nav-list">
+		    <a href="#compose" data-toggle="tab" ><li id="compose_mail" >Compose</li></a>
+	 		
+		    <li class="active"><a href="#inbox" data-toggle="tab">
+		    	<% unreadcount = @inbox.where('flag="unread"').count %>
+		    	Inbox<%= (unreadcount > 0) ?  "(#{unreadcount.to_s})" : "" %>
+		        </a></li>
+	            
+
+		    <li><a href="#sent" data-toggle="tab">Sent</a></li>
+
+		  </ul>
+		</div>
+
+		<div class="span9 pull-left " id="box_content">
+
+			<div class="tab-content">
+			    <div class="tab-pane " id="compose">
+			    	
+			    	<%= render "p2p/messages/compose" ,:message => @message ,:user_id => current_user.id ,:receiver => nil ,:item => "" %>  <div> </div>
+			    </div>
+			    
+			    <div class="tab-pane active" id="inbox">
+			    	<%= render "/p2p/messages/msg_table",:table_name => "inbox" %>
+			     </div>
+					
+				 <div class="tab-pane" id="sent">
+			    	<%= render "/p2p/messages/msg_table" ,:table_name => "sentbox" %> 
+			      </div>
+					
+				<div class="tab-pane " id="deleted">
+					<!--	 -->
+			    </div>
+
+			</div>
+			   <div class="row" id="show_msg">
+				
+			   </div> 
+		</div>
+	</div>
+</div>  
+
+<script>
+
+	$(document).ready(function(){
+		$('#inbox_id').dataTable({
+		  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+       	  "bScrollInfinite": false,
+          "sScrollY": "300px",
+          "sAjaxSource": '/p2p/getmessages/inbox' ,
+          "aaSorting":[],
+          "bScrollCollapse": false,
+          "bFilter":false,
+       	  "bSort": false,
+          "iDisplayLength" : 10,
+          "bAutoWidth": false,
+          "sPaginationType": "bootstrap"
+		});
+
+		$('#sentbox_id').dataTable({
+		  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+       	  "bScrollInfinite": false,
+          "sAjaxSource": '/p2p/getmessages/sentbox' ,
+          "aaSorting":[],
+          "bScrollCollapse": false,
+          "bFilter":false,
+       	  "bSort": false,
+          "iDisplayLength" : 10,
+          "bAutoWidth": false,
+          "sPaginationType": "bootstrap"
+
+		});
+
+
+		
+
+		$('.table tbody td:nth-child(3) ').live('click', function () {
+			$('.table').hide(1000).delay(1000).show(1000);
+    	});
+
+    	$('.table tbody td:nth-child(3)').css({"cursor":"pointer"});
+
+    	$('.master_check').on("click",function(){
+    		var tbl=$("#" + $(this).attr("tbl")+ "_id");
+    		tbl.children("tbody tr td .msg_check").attr("checked","checked");
+
+    	});
+	});
+
+</script>
+
+</div>

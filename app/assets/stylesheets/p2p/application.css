@@ -1,0 +1,12 @@
+/*
+
+*= require global/bootstrap.min
+*= require global/jquery-ui-1.8.24.custom.css
+*= require footer
+*= require p2p/index/common
+*= require p2p/index/itemList
+*= require p2p/inventory
+*= require p2p/p2p
+*= require_tree .
+
+*/

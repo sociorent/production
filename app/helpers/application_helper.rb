@@ -73,5 +73,5 @@ module ApplicationHelper
     state[status];
  end
 
-end
 
+end

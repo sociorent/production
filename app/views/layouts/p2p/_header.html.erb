@@ -1,0 +1,36 @@
+  <%= stylesheet_link_tag '/assets/p2p/header' %>
+<div id="header" class="row">
+  <div class="span2"><a href="/p2p"><img src="/assets/p2p/index/p2p_logo.png" alt="Logo" ></a></div>
+  <div class="span4">
+    <div class="input-append">
+      <input id="top_search_input" type="text" class="span4" autocomplete="off">
+      <span class="add-on"><i class="icon-search"></i></span>
+    </div>
+  </div>
+  <div class="span6" id="menuSet">
+    <div class="span6" id="menuSet">
+      <div class="navbar pull-right">
+        <ul class="nav">
+          <li><a href="/p2p/messages">Messages</a></li>
+          <li><a href="/p2p/mystore">My Store</a></li>
+          <li><a href="/p2p/mystore">List New Item</a></li>
+          <% unless current_user.nil? %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <%=current_user.name%><b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu submenu">
+                <li><a href="#">My Profile</a></li>
+                <li><%= link_to "SignOut", destroy_user_session_url, :method => :delete %></li>
+                
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+<%= javascript_include_tag '/assets/p2p/search'%>

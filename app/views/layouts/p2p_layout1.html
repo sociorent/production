@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>P2P</title>
+<meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
+<meta name="Keywords" content="Rent books Online, Rent engineering books, book rental online, engineering books, engineering colleges india, rent books india, easy book rentals, cool book rentals/">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <%= stylesheet_link_tag  'p2p/application'%>  
+  <%= javascript_include_tag 'p2p/application'%>  
+  <%= csrf_meta_tags %>
+  
+</head>
+  
+
+<body>
+	
+  <div class="container">
+
+    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
+  	<%= render "layouts/p2p/header" %>
+
+    
+    <div class="info-warning" id="flash_notice">  </div>
+    
+
+    <%= yield %>
+
+  	<%= render "layouts/footer" %>
+
+    <div class="clearfix"></div>
+
+  </div>
+
+
+
+  <script>
+
+    function showNotifications(content){
+    $("#flash_notice").html(content).fadeIn(1000).delay(500).fadeOut(1000);
+  }
+
+  <% unless flash[:notice].nil? %>
+    showNotifications("<%=flash[:notice]%>");
+  <% end %>
+
+
+  </script>
+
+
+</body>
+
+
+</html>

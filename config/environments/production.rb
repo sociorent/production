@@ -28,6 +28,11 @@ Sociorent::Application.configure do
   config.assets.precompile += ['global/bootstrap.min.css' ,'footer.css','global/jquery-ui-1.8.24.custom.css', 'home/print_label.css', 'global/jquery-ui-1.9.1.custom.min.js', 'global/jquery.ui.dialog.js']
 
   config.assets.precompile += ['global/underscore.js','global/application.js', 'homepage/homepage.js', 'inner/application.js','get_user_details/get_user_details_manifest.js']
+
+  #assets for p2p2
+  config.assets.precompile += ['p2p/browse_filter.js','p2p/category_menu.js','p2p/search.js','p2p/inventory.js','p2p/application.js']
+  config.assets.precompile += ['p2p/application.css']
+  
   
   # Defaults to nil and saved in location specified by config.assets.prefix
   # config.assets.manifest = YOUR_PATH

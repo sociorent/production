@@ -1,0 +1,40 @@
+
+<div id="compose_form_holder">
+	<div id="compose_form_title">
+
+
+	<%= simple_form_for message ,:validate => true  , :html => {:class => "form-horizontal"}, :remote => !item.to_s.empty?  do |f| %>
+
+
+
+	 	<% if item.to_s.empty?  %>
+
+				<%= f.input :item_id ,:input_html => {:value => ""}  ,:as => :hidden 	%>
+
+
+	 	<% else %>
+
+			<%= f.input :item_id ,:input_html => {:value => item }  ,:as => :hidden %>
+
+	 	<% end %>
+
+	 	<% if receiver.nil?  %>
+
+			<%= f.input :receiver,    :label_method => :email   	%>
+
+
+	 	<% else %>
+
+			<%= f.input :receiver, :label_method => :email ,:input_html => {:readonly => true ,:value => receiver  } %>	 
+	 	<% end %>
+
+	 	<%= f.input :messagetype, 
+	 	collection: [ ["Sell Request",0],["Buy request",1],["Admin",2]]  
+	 	%>
+	 	<%= f.input :sender,:as => :hidden, :input_html => {:value => user_id }
+	 	%>
+	 	<%= f.input :message, input_html: {rows:10,cols:20}%>
+	 	<div class="controls"><%= f.button :submit, value:"Send Message " %></div>
+	 <% end %>
+	</div>
+</div>

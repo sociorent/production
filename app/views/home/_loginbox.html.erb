@@ -1,0 +1,84 @@
+
+
+<div id="login_box" class="font-dialog">
+	<div id="login_box_left">
+		<div id="login_box_left_login" class="boxes">
+			<div class="login_error_msg"></div><br>
+			<%= render :template => "devise/sessions/new" %>
+		</div>
+		<div id="login_box_left_password" class="boxes">
+			<%= render :template => "devise/passwords/new" %>
+		</div>
+		<div id="login_box_left_signup" class="boxes">
+			<%= render :template => "devise/registrations/new" %>
+		</div>
+	</div>
+	<div id="login_box_right">
+				<a class="fb_big_logi" href="/users/auth/facebook"></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<script>
+
+$(document).ready(function(){
+
+
+  $("#login_box").dialog({
+		autoOpen: false,
+		draggable: false,
+		title:'Login',
+		width: 650,
+		resizable: false,
+    modal: true
+  });
+
+	$(".login_error_msg").html("");
+	$("#login_box_left_login form").live("submit",function(){
+		if($(this).valid())
+		{
+			$("#loading_div").fadeIn();
+			$.ajax({
+	      url: "/users/sign_in",
+	      type:"post",
+	      data:$("#login_box_left_login form").serialize(),
+	      complete: function (jqxhr, txt_status) {
+	      	if(jqxhr.status==200){
+	      		location.reload();
+	      	}
+	      	else{
+	      		$("#loading_div").fadeOut();
+	      			$(".login_error_msg").html(jqxhr.responseText);
+
+	      	}
+	      }
+	    });
+	   }
+		return false;
+
+	});
+	$(".forgot_password_form").live("submit",function(){
+		$("#loading_div").fadeIn();
+		$.ajax({
+      url: "/users/password",
+      type:"post",
+      data:$(".forgot_password_form").serialize(),
+      complete: function (jqxhr, txt_status) {
+      	if(jqxhr.status==200){
+      			$(".forgot_error").html("Check the Mail For Password Instructions");
+      	}
+      	else{
+      			$(".forgot_error").html("Error Occured");
+      	}
+
+      	$("#loading_div").fadeOut();
+      }
+    });
+    return false;
+	})
+	
+
+
+});
+
+</script>

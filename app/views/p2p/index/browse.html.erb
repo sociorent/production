@@ -1,0 +1,76 @@
+<div id="Itemlist" class="row">
+    <div id="filters" class="span2 ">
+
+      <ul class="nav nav-list" id="browse_menu">
+
+		
+        <%= render "scat_menu" , :active_page => @cat.name ,:dropdown => true %>
+
+        <%= render "p2p/index/filter" , :category => @cat %>
+
+      </ul>
+    </div>
+
+<div id="items" class="span10">
+		<% prod_count = 0 %>
+
+		<% @products.each do |prod| %>
+
+			<% next if prod.items.count ==0 %>
+			
+
+			<% prod_count = 0 %>
+
+
+
+					      <div class="itemsRow">
+
+					        <div id="listHeader" class="row">
+					          <p class="fleft"> <b><%= prod.name.titlecase %> </b></p>
+
+					          <% if @products.count > 1 %>
+					          	<p class="fright"><a href=<%= URI.encode("/p2p/#{@cat.name}/#{prod.name}") %>> View All</a></p>
+					          <% end %>
+
+					        </div>
+
+			        <ul class="thumbnails" id="filter_replace">
+			        
+			        <% prod.items.order("rand()").limit(5).each do |p| %>
+
+			          <li class="span2">
+			            <a href=<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}") %>>
+			              <div class="thumbnail">
+			                <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+			                <div class="caption">
+			                  <b><%= p.title.slice(0,10)  %></b>
+			                  <p>
+
+			                    <ul>
+			                      <li><del>&#2352;</del> <%=p.price %></li>
+			                      <li><%=p.condition%></li>                             
+			                    </ul>
+			                  </p>
+
+			                </div>
+			              </div>
+			            </a>
+			          </li>
+			      <% end %>
+
+			      </ul>
+			</div>
+	<% end %>
+	<% if prod_count ==0 %>
+		<div class="noitems">No Items found </div>
+	<% end %>
+
+
+  </div>
+
+ </div>
+
+<<<<<<< Updated upstream
+<%= javascript_include_tag "p2p/index"%>
+=======
+>>>>>>> Stashed changes

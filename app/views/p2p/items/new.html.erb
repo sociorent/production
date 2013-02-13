@@ -1,0 +1,23 @@
+
+<%= render "/p2p/items/itemform" ,
+           :thumbimage => @item.get_image(1,:thumb),
+           :viewimage => @item.get_image(1,:view),
+           :image => @item.get_image(0,:view) ,
+           :title => "Enter a New Title",
+           :price => "Enter the Price",
+           :location => "Choose Location",
+           :ownerid => @item.user_id.to_s,
+           :userid => current_user.id.to_s,
+           :itemid => @item.id.to_s,
+           :solddate => @item.solddate,
+           :deletedate => @item.deletedate,
+           :viewcount => 0,
+           :reqcount => 0,
+           :description => "Enter a Description",
+           :category => "Select one",
+           :subcategory => "Select one",
+           :brand => "Select one",
+           :spec => "",
+           :condition => "Enter a condition"
+%>
+

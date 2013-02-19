@@ -1,0 +1,13 @@
+<div id="product_menu" class="dropdown">
+
+	<% prod.each do |aprod| %>
+
+		<li class="product_menu">
+			<a href="/p2p/<%= aprod.category.name %>/<%= aprod.name %>">
+				<%= aprod.name %> <span class="pull-right">(<%= aprod.items.count %>) </span>
+			</a>
+		</li>
+	<% end %>
+
+	
+</div>

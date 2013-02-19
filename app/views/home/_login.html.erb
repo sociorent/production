@@ -1,108 +1,83 @@
+<!-- TODO: fix login -->
 
+<div id="login_box" class="modal hide fade">
 
-<div id="login_box" class="font-dialog">
-	<div id="login_box_left">
-		<div id="login_box_left_login" class="boxes">
-			<div class="login_error_msg"></div><br>
-			<%= render :template => "devise/sessions/new" %>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden=true >&times;</button>
+		<div id="login_tabs">
+			<ul>
+				<li>
+					<a href="#login_content">
+						<h3> Login </h3>
+					</a>
+				</li>
+
+				<li>
+					<a href="#signup_content">
+						<h3> Signup </h3>
+					</a>
+				</li>
+
+				<li>
+					<a href="#password_reset_content">
+						<h3> Password Reset </h3>
+					</a>
+				</li>
+
+			</ul>
+
 		</div>
-		<div id="login_box_left_password" class="boxes">
-			<%= render :template => "devise/passwords/new" %>
-		</div>
-		<div id="login_box_left_signup" class="boxes">
-			<%= render :template => "devise/registrations/new" %>
-		</div>
+
 	</div>
-	<div id="login_box_right">
-				<a class="fb_big_logi" href="/users/auth/facebook"></a>
+
+	<div class="model-body">
+
+		<div id="login_content">
+
+				<div id="login_box_left_login" class="boxes">
+					<div class="login_error_msg"></div><br>
+					<%= render :template => "devise/sessions/new" %>
+
+					<div id="login_box_right">
+						<a class="fb_big_logi" href="/users/auth/facebook"></a>
+					</div>
+
+				</div>
+			</div>
+
+
+		<div id="password_reset_content">		
+								<div id="login_box_left_password" class="boxes">
+									<%= render :template => "devise/passwords/new" %>
+								</div>
+		</div>
+
+		<div id="signup_content">
+								<div id="login_box_left_signup" class="boxes">
+									<%= render :template => "devise/registrations/new" %>
+								</div>
+		</div>
+
+		
 	</div>
 	<div class="clear"></div>
 </div>
+
+
+
+
 
 <script type="text/javascript">
 $("document").ready(function(){
 
 	var width = $(window).width();
-	$("#book_details").dialog({
-		autoOpen: false,
-		draggable: false,
-		height: 700,
-		width: 1050,
-		resizable: false,
-    	modal: true,
-    	close:function(){
-    		window.location.hash ="";
-    	}
-  });
 
-  $("#login_box").dialog({
-		autoOpen: false,
-		draggable: false,
-		title:'Login',
-		width: 650,
-		resizable: false,
-    modal: true
-  });
+  
 
+  	$("#login_tabs").tabs({event:"mouseover"});
 
-  $('#slider').nivoSlider({
-  	directionNav: false,
-  	effect: 'slideInRight',
-  	animSpeed: 0,
-    pauseTime: 3000
-  });
-
-  // Sliding logos //
-  if($("#gallery").length){
-    // Declare variables
-    var totalImages = jQuery("#gallery > li").length, 
-        imageWidth = jQuery("#gallery > li:first").outerWidth(true),
-        totalWidth = imageWidth * totalImages,
-        visibleImages = Math.round(jQuery("#gallery-wrap").width() / imageWidth),
-        visibleWidth = visibleImages * imageWidth,
-        stopPosition = (visibleWidth - totalWidth);
-
-    jQuery("#gallery").width(totalWidth);
-
-    jQuery("#gallery-prev").click(function(){
-        if(jQuery("#gallery").position().left < 0 && !jQuery("#gallery").is(":animated")){
-            jQuery("#gallery").animate({left : "+=" + imageWidth + "px"});
-        }
-        return false;
-    });
-
-    jQuery("#gallery-next").click(function(){
-        if(jQuery("#gallery").position().left > stopPosition && !jQuery("#gallery").is(":animated")){
-            jQuery("#gallery").animate({left : "-=" + imageWidth + "px"});
-        }
-        return false;
-    });
-  }
-  var mouse_is_inside = false;
-
-	$('.search_wrap').hover(function(){ 
-      mouse_is_inside=true; 
-  }, function(){ 
-      mouse_is_inside=false; 
-  });
-
-	$("body").mouseup(function(){ 
-	    if(! mouse_is_inside) {
-	    	$('#search_books').hide();
-	    	$("#searchClose").hide();
-	    }
-	});
-
-	// search backbone object if isbn is provided in params
-	<% unless @search.nil? %>
-		search_object = new sociorent.models.search(<%= raw @search.to_json(:include => :publisher) %>);
-		view = new sociorent.views.book_details({
-			model: search_object
-		});
-		$("#book_details").append(view.render().el);
-		$("#book_details").dialog("open");
-	<% end %>
 	$(".login_error_msg").html("");
+
 	$("#login_box_left_login form").live("submit",function(){
 		if($(this).valid())
 		{
@@ -126,6 +101,7 @@ $("document").ready(function(){
 		return false;
 
 	});
+
 	$(".forgot_password_form").live("submit",function(){
 		$("#loading_div").fadeIn();
 		$.ajax({
@@ -145,22 +121,6 @@ $("document").ready(function(){
     });
     return false;
 	})
-
-
-	$("#book_details_box").dialog({
-		autoOpen: false,
-		draggable: false,
-		height: "auto",
-		title:"Book Details",
-		width: 1050,
-		resizable: false,
-		modal: true,
-
-		close:function(){
-				window.location.hash ="";
-			}
-
-	});
 
 
 

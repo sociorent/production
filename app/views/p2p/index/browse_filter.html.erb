@@ -1,0 +1,121 @@
+
+<div id="Itemlist" class="row">
+    <div id="filters" class="span2 ">
+
+      <ul class="nav nav-list" id="browse_menu">
+
+		
+        <%= render "scat_menu" , :active_page => @cat.name  ,:dropdown => true %>
+
+        <%= render "p2p/index/filter" , :category => @cat %>
+
+      </ul>
+    </div>
+
+
+<div class="span10">
+
+<div class="navbar">
+  <div class="navbar-inner">
+  	<a href="#" id="browse_head">Results</a>
+		<select class="pull-right" id="filter_sort">
+			<option value="0">Relevance</option>
+			<option value="1">Price Hight to low</option>
+			<option value="2">Price Low to high</option>
+		</select>
+  </div>
+</div>
+
+
+<div id="items">
+
+				
+
+		      <div class="itemsRow">
+
+			        <ul class="thumbnails">
+			        
+			        <% @items.each do |itm| %>
+
+			          <li class="span2">
+			            <a href="<%=itm[:url]%>">
+			              <div class="thumbnail">
+			              		<div class="image_holder">
+			                		<img src="<%=itm[:img]%>" >
+			                	</div>
+			                <div class="caption">
+			                  <b><%= itm[:title] %></b>
+			                  <p>
+
+			                    <ul>
+			                      <li><del>&#2352;</del> <%=itm[:price] %></li>
+			                      <li><%=itm[:condition]%></li>
+			<!--                              <li>Attribute 2</li>
+			                      <li>Attribute 3</li>
+			-->                              
+			                    </ul>
+			                  </p>
+
+			                </div>
+			              </div>
+			            </a>
+			          </li>
+			      <% end %>
+
+					<div id="load_more_content"></div>
+			      </ul>
+
+	   		    <div id="load_more">
+			    	<div class="btn btn-primary">Load More.....</div>
+			    </div>
+
+			</div>
+	</div>
+
+ </div>
+ 
+</div>
+
+<div class="remove_onload">
+	<script>
+		//set the filters if we have found it already..
+		var old_filters =<%= raw @view_filter_set.to_json %>;
+
+		$(document).ready(function(){
+
+			//return if no filters
+			if (old_filters == null) return false;
+
+			if ('sort' in old_filters) {
+
+				$("#filter_sort").val(old_filters['sort']);
+				filters['sort']=old_filters['sort'];
+
+			}
+			_.each($('.spec-filter'),function(elm){
+
+
+				if ($(elm).attr('spec-name') in old_filters && ( $.inArray($(elm).attr('spec-value'),  old_filters[$(elm).attr('spec-name')] ) ) !=-1 ){
+
+					spec = $(elm).attr('spec-name');
+					val = old_filters[$(elm).attr('spec-name')][0] ;
+
+					if (!(spec in filters))	filters[spec]=[]
+
+					filters[spec].push(val)
+					$(elm).addClass('active');
+					$(elm).children(".icon-remove").removeClass("hide");
+				}
+
+			});
+
+	
+
+			$(".remove_onload").remove();
+		});
+		
+		
+		
+	</script>
+
+</div>

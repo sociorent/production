@@ -48,7 +48,7 @@ gem 'omniauth'
 gem 'oauth2'
 gem 'omniauth-facebook'
 
-gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+gem "paperclip"
 
 gem 'koala'
 
@@ -72,3 +72,17 @@ gem 'thinking-sphinx-raspell', '1.1.2',
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
 gem 'rails_admin'
+gem 'simple_form'
+
+#jquery datatable
+gem 'jquery-datatables-rails'
+
+
+gem 'will_paginate'
+
+gem "twitter-bootstrap-rails"
+gem 'bootstrap-editable-rails'
+
+
+gem "private_pub"
+gem "thin"

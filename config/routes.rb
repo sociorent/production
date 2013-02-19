@@ -1,5 +1,8 @@
 Sociorent::Application.routes.draw do
 
+
+  get "cities/index"
+
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
 
   ActiveAdmin.routes(self)
@@ -10,8 +13,6 @@ Sociorent::Application.routes.draw do
   get 'contactus' => 'static_pages#contactus'
   get 'privacy_policy' => 'static_pages#privacypolicy'
   get 'terms_of_use' => 'static_pages#termsofuse'
-
-
 
   get "home/index"
   match "/search" => "home#search"
@@ -46,6 +47,7 @@ Sociorent::Application.routes.draw do
   match "/get_streams" => "users#get_streams"
 
 
+
   #matches #book/isbn
   get '/book/:isbn' => "home#book_deatils"
 
@@ -62,6 +64,65 @@ Sociorent::Application.routes.draw do
   end
 
   devise_for :counters
+
+  ##P2P Routes
+  namespace :p2p do
+
+
+    resources :messages
+    resources :items
+    resources :images
+    resources :credits 
+
+      get "/categories/set_category" => "categories#set_category"
+      get "/categories/sub_category" => "categories#sub_category"
+
+      match '/categories' => "categories#index"
+
+
+      post 'users/list' => 'users#list'
+
+
+      get '' => "index#index"
+      get 'sellitem' => "items#new"
+      get 'getbrand/:id' => "items#get_brands"
+      get 'getattributes/:id' => "items#get_attributes"
+      get 'getspec/:id' =>  "items#get_spec"
+      get 'getsubcategories' => "items#get_sub_categories"
+      get 'welcome' => 'users#welcome'
+      post 'welcome' => 'users#user_first_time'
+
+      get 'delete/:id' => "items#destroy"
+      
+      post 'addimage' => "items#add_image"
+
+      get 'sold/:id' => "items#sold"
+
+      get 'mystore(/:query)' => 'items#inventory'
+
+      get 'dashboard' => 'users#dashboard'
+      match 'approve(/:query)' => 'items#approve'
+      match 'disapprove' => 'items#disapprove'
+      match 'waiting' => 'items#waiting'
+      
+      get 'getmessages(/:id)' => 'messages#getmessages'
+
+      match 'search/q/:query' => "index#search_query"
+
+      match 'search/c/:cat(/:prod)' => "index#search_cat"
+
+      match "search/:id" =>"index#search"
+
+      
+
+      match ":cat/filters(/*applied_filters)" =>"index#browse_filter" ,  :applied_filters => /[^\/]*/ 
+      match ":cat/:prod/filters(/*applied_filters)" =>"index#browse_filter"  ,:applied_filters => /[^\/]*/ 
+
+      get ':cat/:prod/:item' => 'items#view' ,:as => :item_url
+      get ':cat(/:prod)' => "index#browse" 
+
+  end
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

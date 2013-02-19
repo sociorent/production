@@ -1,0 +1,28 @@
+
+<div class="row" id="body_content" >
+
+     <div id="filter" class="span2">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+	<div class="span10">
+
+
+          <div id="listHeader" class="row">
+      <p class="fleft"> <b><%= params[:action].titleize %></b></p>
+      </a></p>
+    </div>
+
+      <%= render '/p2p/items/inventory_items_button' %>
+      <%= render "/p2p/items/inventory_items" , :items => @items %>
+
+	</div>
+
+</div>
+

@@ -1,0 +1,50 @@
+<!-- List Section --> 
+<div id="Itemlist" class="row">
+  <div  class="span2">
+    <ul class="nav nav-list" id="browse_menu">
+    <%= render "scat_menu" %>
+    <div class="clearfix"></div>
+  </div>
+
+<div id="items" class="span10">
+  <% @category.each do |acategory| %>
+    <% if acategory.products.size > 0 and acategory.products[0].items.size > 0 %>
+      <div class="itemsRow">
+        <div id="listHeader" class="row">
+          <p class="fleft"> <b><%= acategory.name.titlecase %> </b></p>
+          <p class="fright"><a href="/p2p/<%= acategory.name %>"> View All</a></p>
+        </div>
+        <ul class="thumbnails">
+          <% acategory.items.approved.notsold.order("rand()").limit(5).each do |p| %>
+
+            <li class="span2">
+              <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">
+                <div class="thumbnail">
+                  
+                  <div class="image_holder">
+                    <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                  </div>
+
+                  <div class="caption">
+                    <b><%= p.title.slice(0,10)  %></b>
+                    <p>
+                      <ul>
+                        <li><del>&#2352;</del> <%=p.price %></li>
+                        <li><%=p.condition%></li>
+                      </ul>
+                    </p>
+
+                  </div>
+                </div>
+              </a>
+            </li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
+
+
+</div>
+  <!-- List Section --> 
+</div>

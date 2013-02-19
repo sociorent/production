@@ -58,7 +58,7 @@ class HomeController < ApplicationController
       if params[:isbn]
         @search = Book.where(:isbn10 => params[:isbn]).first
       end
-      @images = General.first.images
+      #@images = General.first.images
   		render "index"
   	end
   end

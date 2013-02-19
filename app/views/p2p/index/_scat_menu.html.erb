@@ -1,0 +1,93 @@
+		<!-- display button if browse and hide the menu -->
+		<% if  defined?(dropdown) %>
+			<div class="dropdown">
+			<a class="dropdown-toggle btn-primary btn"  href="#" data-toggle="dropdown" id="browse_button">Browse</a>
+		<% else %>
+			<li class="nav-header">Browse P2P </li>
+		<% end %>
+
+		<!-- display button if browse and hide the menu -->
+		<% if  defined?(dropdown) %>
+				<ul class="dropdown-menu">
+		<% end %>
+
+
+		<% P2p::Category.where("category_id is null").each do |cat|%>
+
+
+				<!-- mark active element on page -->
+				<% if defined?(active_page) and cat.name == active_page %>
+
+						<!-- submenu if haveing categories -->
+					<% if cat.subcategories.count > 0 %>
+						<li class="active dropdown-submenu" >
+					<%else%>
+						<li class="active">
+					<%end%>
+
+				<% else %>
+						<!-- submenu if haveing categories -->
+					<% if cat.subcategories.count > 0 %>
+						<li class="dropdown-submenu" >
+					<%else%>
+						<li>
+					<%end%>
+					
+
+				<% end %>
+
+				<a  href="/p2p/<%= cat.name %>">
+						<%= cat.name %>
+					</a>
+
+				<% if cat.subcategories.count > 0 %>
+				<% else %>
+					</li>
+				<% end %>
+
+						<!-- submenu if haveing categories -->
+				<% if cat.subcategories.count > 0 %>
+				    <ul class="dropdown-menu">
+				<%end%>
+					
+
+
+				<% cat.subcategories.all.each do |scat| %>
+
+					<!-- mark active element on page -->
+					<% if defined?(active_page) and scat.name == active_page %>
+						<li class="active">
+					<% else %>
+						<li>
+					<% end %>
+
+						<a  href="/p2p/<%= scat.name %>">
+							<%= scat.name %>
+						</a>
+						
+					</li>
+				<% end %>
+
+
+
+				<% if cat.subcategories.count > 0 %>
+				    </ul>
+				<%end%>
+
+				<% if cat.subcategories.count > 0 %>
+					</li>
+				<% else %>
+					
+				<% end %>
+			<% end %>
+	    
+		<!-- display button if browse and hide the menu -->
+    	<% if  defined?(dropdown) %>
+			</ul>
+			</div>
+		<% end %>
+
+		<li class="divider"></li>
+
+<%= javascript_include_tag 'p2p/index_manifest'%>
+

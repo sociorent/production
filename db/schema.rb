@@ -359,7 +359,6 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
     t.integer  "city_id"
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.datetime "deletedate"
     t.string   "condition"
     t.datetime "disapproveddate"
     t.datetime "approveddate"
@@ -370,6 +369,8 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
   add_index "p2p_items", ["user_id"], :name => "index_p2p_items_on_user_id"
 
   create_table "p2p_messages", :force => true do |t|
+    t.integer  "sender"
+    t.integer  "receiver"
     t.string   "item_id"
     t.text     "message"
     t.datetime "readdatetime"
@@ -378,6 +379,7 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
     t.datetime "updated_at",                     :null => false
     t.integer  "sender_id"
     t.integer  "receiver_id"
+    t.string   "flag"
     t.string   "sender_status"
     t.integer  "parent_id"
     t.string   "receiver_status"

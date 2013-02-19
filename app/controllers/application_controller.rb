@@ -5,14 +5,14 @@ class ApplicationController < ActionController::Base
  helper_method  :p2p_current_user
 
 
- if Rails.env.production?
-	 rescue_from Exception, with: :render_404
-	 rescue_from ActionController::RoutingError, with: :render_404
-	 rescue_from ActionController::UnknownController, with: :render_404
+ # if Rails.env.production?
+	#  rescue_from Exception, with: :render_404
+	#  rescue_from ActionController::RoutingError, with: :render_404
+	#  rescue_from ActionController::UnknownController, with: :render_404
 
-	 rescue_from AbstractController::ActionNotFound, with: :render_404 # To prevent Rails 3.2.8 deprecation warnings
-	 rescue_from ActiveRecord::RecordNotFound, with: :render_404
- end
+	#  rescue_from AbstractController::ActionNotFound, with: :render_404 # To prevent Rails 3.2.8 deprecation warnings
+	#  rescue_from ActiveRecord::RecordNotFound, with: :render_404
+ # end
 
   protect_from_forgery
   def send_sms(receipient,msg)

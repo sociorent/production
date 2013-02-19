@@ -96,7 +96,7 @@
 
 				<% if solddate.nil?  %>
 
-					<% if approvedate.to_s !='' %>
+					<% if !approvedate.to_s.nil? %>
 
 				  			<a href="/p2p/sold/<%= itemid %>" class=" action btn"  title="Mark this listing as sold" > <i class="icon icon-shopping-cart"></i>Mark as sold</a>
 					<% else %>
@@ -141,11 +141,11 @@
 
 			  <% if !itemid.empty? and !p2p_current_user.nil? and p2p_current_user.id == 1 %>
 
-			  		<% if approvedate == "" %>
+			  		<% if approvedate.nil?  %>
 	  				  <button class="btn" id="approve" itemid="<%=itemid%>"><i title="Approve this listing" class="action_icon icon-gift"></i></button>
 	  				<% end %>
 
-	  				<% if disapproveddate == "" %>
+	  				<% if disapproveddate.nil? %>
 	  				  <button class="btn" id="disapprove"  itemid="<%=itemid%>"><i title="DisApprove this listing" class="action_icon icon-ban-circle"></i></button>
 	  				<% end %>
 
@@ -280,7 +280,7 @@
 			                  <%= aspec.spec.name %>
 			                </td>
 			                <td>
-			                 <span class="canEdit" data-name="username"  title="Enter <%= spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>"> <%= aspec.value.titleize %> </span>
+			                 <span class="canEdit" data-name="username"  title="Enter <%= spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>"> <%= aspec.value.titleize  unless aspec.value.nil? %> </span>
 			                </td>
 			              </tr>
 			         <% end %>
@@ -392,6 +392,7 @@
 		//initialize
 		window.item_values ={};
 		item_values['spec']={};
+
 
 				<%if !itemid.empty?  and ownerid == p2p_current_user.id.to_s %>
 					item_values['title'] = "<%= title %>";

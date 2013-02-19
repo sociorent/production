@@ -87,6 +87,18 @@ class P2p::Item < ActiveRecord::Base
   def get_image(count = 1, type=:view)
     res=[]
 
+
+    if self.images.nil?
+        if type  == :view
+          res.push({:url => "/assets/p2p/noimage_view.jpg" ,:id => 0})
+        elsif type == :thumb
+          res.push({:url => "/assets/p2p/noimage_thumb.jpg" ,:id => 0})
+        elsif type == :search 
+          res.push({:url => "/assets/p2p/noimage_search.jpg" ,:id => 0})
+        end
+      return res
+    end
+
     if self.images.count == 0 
         if type  == :view
           res.push({:url => "/assets/p2p/noimage_view.jpg" ,:id => 0})

@@ -8,10 +8,9 @@
 *= require p2p/inventory
 *= require p2p/p2p
 *= require p2p/ui.notify
+*= require p2p/header
 *= require_tree .
 */
-
-
 
 
 /*#TODO  REMOVE AFTER ADDIN JQUERY UI FOR AUTOCOMPLETE IMAGE*/

@@ -154,17 +154,17 @@ end
         @cat =  P2p::Category.find_by_name(params[:cat])
         @prod=  @cat.products.find_by_name(params[:prod])
 
-
-        puts @cat.inspect + "sadf"
-        puts @prod.inspect + "sadfsdf"
-
         if !p2p_current_user.nil? and  p2p_current_user.id == 1 
           @item = @prod.items.unscoped.find_by_title(params[:item])
         else
           @item = @prod.items.find_by_title(params[:item])
         end
 
-        puts @item.inspect + "asd"
+        puts @item.inspect + "asf"
+
+        if p2p_current_user.nil? and @item.approveddate.nil?
+            raise "Nothing found" 
+        end
 
         raise "Nothing found" if   @item.nil? 
         

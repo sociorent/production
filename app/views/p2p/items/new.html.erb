@@ -1,8 +1,8 @@
 
 <%= render "/p2p/items/itemform" ,
-           :thumbimage => @item.get_image(1,:thumb),
-           :viewimage => @item.get_image(1,:view),
-           :image => @item.get_image(0,:view) ,
+           :thumbimage => [{:url => "/assets/p2p/noimage_thumb.jpg" ,:id => 0}],
+           :viewimage => [{:url => "/assets/p2p/noimage_view.jpg" ,:id => 0}],
+           :fullimage => "" ,
            :title => "Enter a New Title",
            :price => "Enter the Price",
            :location => "Choose Location",
@@ -19,7 +19,14 @@
            :brand => "Select one",
            :spec => "",
            :condition => "Enter a condition",
-           :requestmessage => @message
+           :categoryid => @category_id.to_s,
+           :subcategoryid => @sub_category_id.to_s,
+           :brandid => @brand_id.to_s,
+           :itemspec => [],
+           :condition => @item.condition.to_s,           
+           :requestmessage => @message,
+           :approvedate =>  @item.approveddate,
+           :disapproveddate => @item.disapproveddate
 
 %>
 

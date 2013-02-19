@@ -99,7 +99,8 @@ $(document).ready(function(){
 
 				$(".specs").remove();
 
-				item_values['spec'] = [];
+				item_values['spec']={};
+				
 
 				//$('#model').removeClass('editable').removeClass('editable-click').removeClass('editable-unsaved');
 				var temp = $('#model').parent().html();

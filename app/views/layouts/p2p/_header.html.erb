@@ -1,4 +1,5 @@
   <%= stylesheet_link_tag '/assets/p2p/header' %>
+
 <div id="header" class="row">
   <div class="span2"><a href="/p2p"><img src="/assets/p2p/index/p2p_logo.png" alt="Logo" ></a></div>
   <div class="span4">
@@ -105,16 +106,9 @@ when the page first loads -->
         <p style="margin:10px;">#{msg}</p>
     </div>
  
+
 </div>
 
-<script>
 
-  $(document).ready(function(){
-      $("#notificationcontainer").notify();
-
-  });
-
-</script>
-  
 <%= javascript_include_tag '/assets/p2p/search'%>
 

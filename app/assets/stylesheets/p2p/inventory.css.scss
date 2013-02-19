@@ -12,3 +12,23 @@
 .delete_item:hover{
 	opacity: 1;
 }
+
+.box{
+	border: 1px solid #ccc;
+	padding:10px;
+}
+
+.box > .box_title{
+	font-weight: bold;
+	text-align: center;
+	background: #ccc;
+	padding: 2px;
+}
+
+.box > ul {
+	margin-top: 3px;
+}
+
+.approved{
+	/*background-color: */
+}

@@ -15,7 +15,7 @@
           <p class="fright"><a href="/p2p/<%= acategory.name %>"> View All</a></p>
         </div>
         <ul class="thumbnails">
-          <% acategory.items.order("rand()").limit(5).each do |p| %>
+          <% acategory.items.approved.notsold.order("rand()").limit(5).each do |p| %>
 
             <li class="span2">
               <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">

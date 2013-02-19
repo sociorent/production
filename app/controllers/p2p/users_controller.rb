@@ -10,6 +10,19 @@ class P2p::UsersController < ApplicationController
   	
   end
 
+  def list
+    users = User.where("email like '%#{params[:q]}%'")
+    resp = []
+
+    users.each do |usr|
+      p2pusr = P2p::User.find_by_user_id(usr.id)
+      resp.push(:value => p2pusr.id , :label => "#{usr.name}(#{usr.email})" )
+    end
+
+    render :json => resp
+
+  end
+
   def welcome
 
   			# check if signed in , purpose fully removed the before filter 
@@ -37,6 +50,16 @@ class P2p::UsersController < ApplicationController
           user = P2p::User.new
           user.user = current_user
           user.save
+
+          P2p::User.find(1).sent_messages.create({:receiver_id => p2p_current_user.id ,
+                                              :message => "Hi #{p2p_current_user.user.name},  <br/> Welcome to Peer2Peer. This is an online platform for you to sell and buy products from other students in any college across india. Make most use of the site. Any queries, just compose a message and send it to me in message section. Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
+                                              :messagetype => 6,
+                                              :sender_id => 1,
+                                              :sender_status => 2,
+                                              :receiver_status => 0,
+                                              :parent_id => 0
+                                              });
+
           redirect_to '/p2p'
           return
         end

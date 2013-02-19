@@ -18,16 +18,20 @@
 	
   <div class="container">
 
-    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+    <div id="body_container">
 
-  	<%= render "layouts/p2p/header" %>
+      <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 
-    
-    <div class="info-warning" id="flash_notice">  </div>
-    
+    	<%= render "layouts/p2p/header" %>
 
-    <%= yield %>
+      
+      <div class="info-warning" id="flash_notice">  </div>
+      
 
+      <%= yield %>
+
+  </div>
+  
   	<!-- footer content  -->
      <div class="footer_cpy">
       <div class="wrapper">
@@ -53,5 +57,9 @@
 
 </body>
 
+<% unless p2p_current_user.nil? %>
+  <% @notification_channel = "/user_#{p2p_current_user.id}"%>
+  <%= subscribe_to @notification_channel %>
+<% end %>
 
 </html>

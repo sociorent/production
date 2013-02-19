@@ -92,6 +92,7 @@ class ApplicationController < ActionController::Base
 
 
 
+
   ###########################
 
   private
@@ -107,6 +108,7 @@ class ApplicationController < ActionController::Base
 			redirect_to root_path 
 		 end
 	  end  
+
 
 
 end

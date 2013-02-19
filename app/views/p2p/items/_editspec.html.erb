@@ -1,18 +1,16 @@
 
 	<% spec_done = [] %>
 
-	<code class="edit_hidden"> Clear the value to delete the specification</code>
-
-	<table class="table table-striped table-bordered" id="item_specifications">
 		<% spec.each do |aspec| %>
-			<tr>
-				<% spec_done.push( aspec.spec.id ) %>
-				<td class="span1  item_label"> <%= aspec.spec.name %> </td>
-				<td class="span2 specification"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>"> <%= aspec.value %> </td>
-			</tr>
-
-
-
+			<% spec_done.push( aspec.spec.id ) %>
+			              <tr>
+			                <td>
+			                  <%= aspec.spec.name %>
+			                </td>
+			                <td>
+			                 <span class="canEdit" data-name="username"  title="Enter <%= spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>"> <%= aspec.value.titleize %> </span>
+			                </td>
+			              </tr>
 		<% end %>
 
 		<% if defined? itemspec %>
@@ -30,4 +28,4 @@
 
 		<%end %>
 
-	</table>
+	<!-- </table> -->

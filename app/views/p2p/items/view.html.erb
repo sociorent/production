@@ -1,4 +1,5 @@
 
+
 <%= render "/p2p/items/itemform" ,
            :viewimage => @item.get_image(0,:view) ,
            :thumbimage => @item.get_image(0,:thumb) ,
@@ -11,7 +12,7 @@
            :itemid => @item.id.to_s,
            :solddate => @item.solddate,
            :deletedate => @item.deletedate,
-           :viewcount => @item.viewcount,
+           :viewcount => @item.viewcount.to_s,
            :reqcount => @item.reqCount,
            :description => @item.desc,
            :category => @category_name,
@@ -23,6 +24,8 @@
            :brandid => @brand_id.to_s,
            :itemspec => @item.product.category.specs,
            :condition => @item.condition,
-           :requestmessage => @message
+           :requestmessage => @message,
+           :approvedate => @item.approveddate.to_s,
+           :disapproveddate => @item.disapproveddate.to_s
            
 %>

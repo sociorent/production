@@ -35,7 +35,7 @@ def search
       if suggested_word == params[:id]
 
 
-      result = P2p::Item.search(suggested_word ,:match_mode => :any ,:star => true)
+      result = P2p::Item.notsold.approved.search(suggested_word ,:match_mode => :any ,:star => true)
 
       result.each do |res|
         response.push({:label=> "#{res.title}" ,:value => URI.encode("/p2p/#{res.product.category.name}/#{res.product.name}/#{res.title}") })
@@ -62,7 +62,7 @@ end
 
 
 def search_query
-  @result = P2p::Item.search(params[:query] ,:match_mode => :any ,:star => true)
+  @result = P2p::Item.notsold.approved.search(params[:query] ,:match_mode => :any ,:star => true)
 end
 
 
@@ -82,7 +82,7 @@ def get_search_suggestions(query)
     response.push({:label=> "#{query} in #{res.category.name} (#{res.items.count})" ,:value => URI.encode("/p2p/#{res.category.name}/#{query}")} ) if res.items.count >0
   end
 
-  result = P2p::Item.search(query ,:match_mode => :any ,:star => true)
+  result = P2p::Item.notsold.approved.search(query ,:match_mode => :any ,:star => true)
 
   result.each do |res|
     response.push({:label=> "#{res.title}" ,:value => URI.encode("/p2p/#{res.product.category.name}/#{res.product.name}/#{res.title}") })
@@ -198,7 +198,7 @@ def search_list
 
     
     #search for items
-    result = P2p::Item.select("title").search(params[:id] ,:star => true ,:match_mode => :any)
+    result = P2p::Item.notsold.approved.select("title").search(params[:id] ,:star => true ,:match_mode => :any)
 
     unless result.empty?
         
@@ -350,10 +350,12 @@ def search_list
 
         if params[:filter].has_key?("sort")
 
+           sortby =  params[:filter][:sort][0].to_s
+            params[:filter].delete(:sort)
 
-          case params[:filter][:sort]
-              when "0"
-                order_result = "priority"
+          case sortby
+              # when "0"
+              #   order_result = "priority"
               when "1"
                 order_result = "price desc"
               when "2"
@@ -361,7 +363,9 @@ def search_list
               else
               order_result = ""
           end
-          params[:filter].delete(:sort)
+
+
+          
 
         end
 
@@ -406,9 +410,9 @@ def search_list
       if filter.empty?
 
         if order_result != ""
-          items = @products.items.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition).order(order_result)
+          items = @products.items.notsold.approved.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition).order(order_result)
         else
-          items = @products.items.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition).order(order_result)
+          items = @products.items.notsold.approved.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition).order(order_result)
         end
 
       else
@@ -418,9 +422,9 @@ def search_list
       filter =  (filter.size > 1) ? filter.join(" or ") : filter[0]
 
           if order_result != ""
-          items = @products.items.where( item_where_condition + " p2p_items.id in ( select item_id from `p2p_item_specs`   where  ( " + filter + " )   group by(item_id) having count(*) = #{filter_size} ) " ).select('p2p_items.id,title,price,p2p_items.condition,product_id').order(order_result)
+          items = @products.items.notsold.approved.where( item_where_condition + " p2p_items.id in ( select item_id from `p2p_item_specs`   where  ( " + filter + " )   group by(item_id) having count(*) = #{filter_size} ) " ).select('p2p_items.id,title,price,p2p_items.condition,product_id').order(order_result)
         else
-          items = @products.items.where( item_where_condition + " p2p_items.id in ( select item_id from `p2p_item_specs`   where  (" + filter + ")   group by(item_id) having count(*) = #{filter_size}  )"  ).select('p2p_items.id,title,price,p2p_items.condition,product_id')
+          items = @products.items.notsold.approved.where( item_where_condition + " p2p_items.id in ( select item_id from `p2p_item_specs`   where  (" + filter + ")   group by(item_id) having count(*) = #{filter_size}  )"  ).select('p2p_items.id,title,price,p2p_items.condition,product_id')
         end
 
       end
@@ -459,9 +463,9 @@ def search_list
       if filter.empty?
 
         if order_result !=""
-          items = @cat.items.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition).order(order_result)
+          items = @cat.items.notsold.approved.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition).order(order_result)
         else
-          items = @cat.items.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition)
+          items = @cat.items.notsold.approved.select('p2p_items.id,title,price,p2p_items.condition,product_id').where(item_where_condition)
         end
 
       else
@@ -471,9 +475,9 @@ def search_list
       filter =  (filter.size > 1) ? filter.join(" or ") : filter[0]
 
       if order_result !=""
-        items = @cat.items.where( item_where_condition + "p2p_items.id in ( select item_id from `p2p_item_specs`  where (" + filter + ")   group by(item_id) having count(*) = #{filter_size} ) " ).select('p2p_items.id,title,price,p2p_items.condition,product_id').order(order_result)
+        items = @cat.items.notsold.approved.where( item_where_condition + "p2p_items.id in ( select item_id from `p2p_item_specs`  where (" + filter + ")   group by(item_id) having count(*) = #{filter_size} ) " ).select('p2p_items.id,title,price,p2p_items.condition,product_id').order(order_result)
       else
-        items = @cat.items.where( item_where_condition + "p2p_items.id in ( select item_id from `p2p_item_specs`  where (" + filter + ")    group by(item_id) having count(*) = #{filter_size}) " ).select('p2p_items.id,title,price,p2p_items.condition,product_id')
+        items = @cat.items.notsold.approved.where( item_where_condition + "p2p_items.id in ( select item_id from `p2p_item_specs`  where (" + filter + ")    group by(item_id) having count(*) = #{filter_size}) " ).select('p2p_items.id,title,price,p2p_items.condition,product_id')
       end
 
       end

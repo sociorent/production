@@ -4,16 +4,21 @@
 	clear:both;
 }
 
+
+
+.head_active{
+	font-weight: bold;
+}
+
 /*//item view page*/
 .delete_item{
-	background: url("/assets/glyphicons-halflings.png");
-	background-position: 1097px 0px;
-	display: block;
+	background: url("/assets/glyphicons-halflings.png") no-repeat -314px -2px;;
 	width: 14px;
 	height: 14px;
 	margin-top: 2px;
 	display:inline-block;
 	opacity: 0.3;
+	margin-left: 5px;
 }
 
 .delete_item:hover{
@@ -56,8 +61,8 @@ li.dropdown:hover > ul.dropdown-menu{
 
 /*messaes*/
 
-#message_container{
-		min-height: 600px;
+#box_content{
+		min-height: 640px;
 
 }
 
@@ -90,13 +95,13 @@ li.dropdown:hover > ul.dropdown-menu{
 
 
 
-.nav-list > .active > a{
+#message_side_menu .nav-list > .active > a{
 	background-color: white;
 	color:blue;
 	border-left: 3px solid blue;
 }
 
-.nav-list > .active > a:hover{
+#message_side_menu .nav-list > .active > a:hover{
 	background-color: #eeeeee;
 	color:blue;
 }
@@ -104,6 +109,60 @@ li.dropdown:hover > ul.dropdown-menu{
 	border-left: 3px solid white;	
 }
 
-#box_content .tab-content{
-	border-left: 1px solid #ccc;
+.search_messages{
+	
+}
+
+.unread, .unread > td {
+	background-color: lightyellow !important; 
+}
+
+td , th{
+	text-align: center !important;
+}
+
+.mydivider{
+	border:1px solid black;
+	width:100%;
+}
+
+.message_message{
+	min-height:50px;
+}
+
+#header_msg_count{
+	color: blue;
+	float: right;
+	display: block;
+	margin-top: -10px;
+}
+
+
+#body_container{
+	min-height: 800px;
+}
+
+
+.search_messages{
+	height:24px !important;
+}
+
+.dataTables_length{
+	display: none;
+}
+
+.sClass{
+	text-align: center;
+}
+
+.message_message_content{
+	text-align: justify;
+	margin:10px;
+}
+
+
+.dataTables_processing{
+	color:maroon;
+	position: fixed;
+	font-size: 1.2em;
 }

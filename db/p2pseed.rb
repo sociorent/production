@@ -81,21 +81,27 @@
 
 
 
-			condition = ['old','new','used']
+		condition = ['old','new','used']
+		approved = [Time.now,'']
 
 		P2p::Category.all.each do |cat|
 
 			cat.products.each do |prod|
 
-					10.times do  |i|
-						p = prod.items.create({:title => prod.name + ' ' + i.to_s ,:price => rand(1000..10000),:desc => "Test description for " + prod.name + ". This description is short and has to be edited for getting a long description. Thank you.",:condition => condition[ rand(0..(condition.size-1) ) ]})
-						p.save
+					20.times do  |i|
+						p = prod.items.create({:title => prod.name + ' ' + i.to_s ,
+												:price => rand(1000..10000),
+												:desc => "Test description for " + prod.name + ". This description is short and has to be edited for getting a long description. Thank you.",
+												:condition => condition[ rand(0..(condition.size-1) )]  ,
+												:approveddate =>  approved[rand(0..(approved.size-1))]
+												 })
 						p.user = user
 						p.save
 
 					end
 				end
 			end
+
 
 
 		def seed_specs(cat,spec,arr)

@@ -1,10 +1,12 @@
 class P2p::Message < ActiveRecord::Base
-  attr_accessible :item_id, :message, :messagetype, :created_at, :updated_at, :sender_id ,:receiver_id, :sender_status ,:receiver_status
+  attr_accessible :item_id, :message, :messagetype, :created_at, :updated_at, :sender_id ,:receiver_id, :sender_status ,:receiver_status,:parent_id
   
   
   # Associations to User
   belongs_to :sender, :class_name=>'P2p::User', :foreign_key=>'sender_id'
   belongs_to :receiver, :class_name=>'P2p::User', :foreign_key=>'receiver_id'
+
+  has_one :parent_msg ,:class_name => 'P2p::Message' , :foreign_key => 'parent_id'
 
   belongs_to :item
   
@@ -14,6 +16,8 @@ class P2p::Message < ActiveRecord::Base
   # 2 sent
   # 3 deleted
   #4 permenantly deleted
+  #5 system generate
+  #6, welcome message
 
   scope :unread, where("receiver_status = 0")
   scope :inbox, where("receiver_status = 0 or receiver_status = 1 ")
@@ -31,6 +35,33 @@ class P2p::Message < ActiveRecord::Base
     where("(sender_id = #{user.id} and sender_status=3) or (receiver_id = #{user.id} and receiver_status=3)")
   } 
 
+  after_create :publish_to_stream
+
+  def publish_to_stream
+
+    message_notification = "
+         $('#notificationcontainer').notify('create', 'new_message_notification', {
+              username: '#{self.sender.user.name}',
+              msg: '#{self.message.slice(0,40)}'
+          });
+      "
+
+    receiver_unreadcount = self.receiver.received_messages.inbox.unread.count
+
+      if receiver_unreadcount > 0 
+            unread_msg = "$('#unread_count').html('(#{receiver_unreadcount})');"
+            header_msg = "$('#header_msg_count').html('(#{receiver_unreadcount})');"
+      else
+            unread_msg = "$('#unread_count').html('');"
+            header_msg = "$('#header_msg_count').html('');"
+      end
+
+      
+
+
+
+    PrivatePub.publish_to("/user_#{self.receiver.id}", header_msg + unread_msg + message_notification )
+  end
 
   	def message_type
 

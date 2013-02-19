@@ -18,10 +18,17 @@
 //= require global/jquery.ui.position
 //= require global/jquery.ui.autocomplete
 //= require global/underscore
+//= require global/bootstrap-wysihtml5-0.0.2.min
+//= require global/wysihtml5-0.3.0.min
+//= require global/wysihtml5
 //= require bootstrap
 //= require bootstrap-editable
 //= require bootstrap-editable-rails
 //= require p2p/jquery.history.js
 //= require p2p/search.js
 //= require p2p/items.js
+//= require private_pub
+//= require p2p/jquery-scrolltofixed-min
+//= require p2p/category_menu
+//= require p2p/jquery.notify
 // require_tree .

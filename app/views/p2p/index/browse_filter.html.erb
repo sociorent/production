@@ -82,10 +82,20 @@
 		var old_filters =<%= raw @view_filter_set.to_json %>;
 
 		$(document).ready(function(){
+
+			//return if no filters
+			if (old_filters == null) return false;
+
+			if ('sort' in old_filters) {
+
+				$("#filter_sort").val(old_filters['sort']);
+				filters['sort']=old_filters['sort'];
+
+			}
 			_.each($('.spec-filter'),function(elm){
 
 
-				if ($(elm).attr('spec-name') in old_filters && ($(elm).attr('spec-value') == old_filters[$(elm).attr('spec-name')] ) ){
+				if ($(elm).attr('spec-name') in old_filters && ( $.inArray($(elm).attr('spec-value'),  old_filters[$(elm).attr('spec-name')] ) ) !=-1 ){
 
 					spec = $(elm).attr('spec-name');
 					val = old_filters[$(elm).attr('spec-name')][0] ;
@@ -99,7 +109,7 @@
 
 			});
 
-			if ("")
+	
 
 			$(".remove_onload").remove();
 		});

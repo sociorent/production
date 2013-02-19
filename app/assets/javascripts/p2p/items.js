@@ -3,24 +3,46 @@ $(document).ready(function(){
 	//set initializing data
 
 	//set tooltip
+
+
+	$("#save").click(function(){
+
+
+		if (!saveItem()){
+			return false;
+		}
+
+
+	});
+
+
+
+
+	$("#cancel").click(function(){
+
+
+			window.location.reload();
+
+	});
+
 	$('#enable').click(function() {
 		$(this).toggleClass('active');
 		if ($('.canEdit').hasClass('editable')){
 
 
-			if (!saveItem()){
-				return false;
-			}
+			$("#add_more_spec").addClass('hide');
+
+			$("#upload_pic").addClass('hide');
 
 			$("#empty_specs").addClass('hide');
 
-			$("#item_title").css({'color':""});
+			$("#title").css({'color':""});
 
 			$('.canEdit').editable('toggleDisabled');
 
-			$("#item_title").editable('toggleDisabled');
+			$("#title").editable('toggleDisabled');
 
-			$("#item_category").editable('toggleDisabled');
+			$("#category").editable('toggleDisabled');
 
 			$(this).children().attr('data-original-title','Edit Item');
 
@@ -30,47 +52,158 @@ $(document).ready(function(){
 			$(".remove_image").css({'display':'block'});
 
 			$(this).removeClass('btn-primary').attr('title','Edit Listing');
+
+			$("#enable i").addClass('icon-pencil');
+			$("#enable i").removeClass('icon-ok');
+			$("#enable i").attr('title','Edit Listing');
 		}
 		else {
 
+			$("#enable").hide();
+			$("#save").show();
+			$("#cancel").show();
+
 			$(this).addClass('btn-primary').attr('title','Save Changes');
 
+			$("#enable i").attr('title','Click here to save your changes');
+			$("#enable i").removeClass('icon-pencil');
+			$("#enable i").addClass('icon-ok');
+			
 			// enable upload form
 			// $("#file_add_image").removeProp("disabled");
 			$("#file_add_image").removeAttr("disabled");
 
 			$(".remove_image").css({'display':'block'});
+			$("#add_more_spec").removeClass('hide');
 
 			//enable the remove image butotn
 
+			$("#upload_pic").removeClass('hide');
+
 			$('.canEdit').editable();
 
-			$("#item_title").css({'color':'blue'});
-			$("#item_title").editable({
+			$("#title").css({'color':'blue'});
+			$("#title").editable({
 				placement:'bottom'
 			});
 
 			$("#empty_specs").removeClass('hide');
 
 
+			window.try = 0;
 			$("#category").on('save',function(e,params){
+				//set_category(params.newValue);
 
-				console.log(params.newValue);
 
-				if (params.newValue != 0){
-					$.ajax({
-						url:'/p2p/getbrand/' + params.newValue,
-						type:"get",
-						async:false,
-						success:function(data){
-								$("#model").attr('data-source',JSON.stringify(data));
-						}
-					});
-				}
+				if (params.newValue == item_values['cat']) return false ;
+
+				$(".specs").remove();
+
+				item_values['spec'] = [];
+
+				//$('#model').removeClass('editable').removeClass('editable-click').removeClass('editable-unsaved');
+				var temp = $('#model').parent().html();
+				var par = $('#model').parent();
+				$(par).html(temp);
+				$("#model").html("Select one");
+				$("#model").attr("data-source",'/p2p/getbrand/' + params.newValue);
+				item_values['brand'] = '';
+
+
+				//$("#model").editable({sourceCache:false});
+				
+				//$("#model").destroy();
+				$("#model").editable();
+
+
+
+										//validate location
+						$('#model').on('save', function(e, params) {
+			   				 //alert('Saved value: ' + params.newValue);
+			   				 //alert('saving');
+							if (params.newValue != "") {
+								item_values['brand'] = params.newValue;
+								$(this).removeClass('error');
+							}
+							else{
+								item_values['brand']="";
+								params.newValue = params.oldValue;
+								$(this).addClass('error');
+							}
+						});
+
+
+
+				
+				showNotifications("Fetching specifications...! Please Wait..");
+
+				$.ajax({
+					url:'/p2p/getattributes/' + params.newValue,
+					type:"get",
+					success:function(data){
+
+						$('#table_specs .cat_spec').remove();
+						$(data).insertAfter($('#table_specs tr:last '));
+						$("[id^=item_]").editable();
+
+						//validate													//validate specification
+							$('[id^=item_]').on('save', function(e, params) {
+				   				 //alert('Saved value: ' + params.newValue);
+				   				 var that = $(this);
+				   				 console.log(that);
+
+				   				if (params.newValue.length > 0) {
+
+									if (params.newValue.length > 2) {
+										item_values['spec'][that.attr('specid')] = params.newValue;
+										$(this).removeClass('error');
+									}
+									else{
+										item_values['spec'][that.attr('specid')]="";
+										params.newValue = params.oldValue;
+										$(this).addClass('error');
+									}
+								}
+								else{
+									item_values['spec'][that.attr('specid')]="";
+								}
+
+							});
+
+
+					},
+					error:function(){
+
+						$('#table_specs .cat_spec').remove();
+						$('<tr class="error cat_spec"><td colspan = 2 >Specifications were not loaded. Something went wrong. Try again</td></tr>').insertAfter($('#table_specs tr:last '));
+
+						showNotifications('Some Error Occured. Please Try again');
+					}
+				});
 			});
 
-			//validate location
-			$('#item_title').on('save', function(e, params) {
+
+
+			// //validate brand
+			// $('#category').on('save', function(e, params) {
+   // 				 //alert('Saved value: ' + params.newValue);
+			// 	if (params.newValue != "") {
+			// 		item_values['title'] = params.newValue;
+
+
+			// 		$(this).removeClass('error');
+			// 	}
+			// 	else{
+			// 		item_values['title']="";
+			// 		params.newValue = params.oldValue;
+			// 		$(this).addClass('error');
+			// 	}
+			// });
+
+
+
+			//validate title
+			$('#title').on('save', function(e, params) {
    				 //alert('Saved value: ' + params.newValue);
 				if (params.newValue.length > 5) {
 					item_values['title'] = params.newValue;
@@ -83,10 +216,15 @@ $(document).ready(function(){
 				}
 			});
 
-
+			// window.url = '/p2p'
+			// $('#model').editable({
+  	// 		selector: 'a',
+  	// 		url: window.url,
+  	// 		pk: 1
+			// });
 
 			//validate price
-			$('#item_price').on('save', function(e, params) {
+			$('#price').on('save', function(e, params) {
    				 //alert('Saved value: ' + params.newValue);
 				if (params.newValue.match(/^\d+$/) != null) {
 					item_values['price'] = params.newValue;
@@ -98,7 +236,7 @@ $(document).ready(function(){
 			});
 
 			//validate location
-			$('#item_location').on('save', function(e, params) {
+			$('#location').on('save', function(e, params) {
    				 //alert('Saved value: ' + params.newValue);
 				if (params.newValue.length > 3) {
 					item_values['location'] = params.newValue;
@@ -130,7 +268,7 @@ $(document).ready(function(){
 
 
 			//validate condition
-			$('#item_condition').on('save', function(e, params) {
+			$('#condition').on('save', function(e, params) {
    				 //alert('Saved value: ' + params.newValue);
    				 params.newValue = $.trim(params.newValue);
 
@@ -144,34 +282,6 @@ $(document).ready(function(){
 					$(this).addClass('error');
 				}
 			});
-
-			//validate specification
-			$('[id^=item_]').on('save', function(e, params) {
-   				 //alert('Saved value: ' + params.newValue);
-   				 var that = $(this);
-   				 console.log(that);
-
-   				if (params.newValue.length > 0) {
-
-					if (params.newValue.length > 3) {
-						item_values['spec'][that.attr('specid')] = params.newValue;
-						$(this).removeClass('error');
-					}
-					else{
-						item_values['spec'][that.attr('specid')]="";
-						params.newValue = params.oldValue;
-						$(this).addClass('error');
-					}
-				}
-				else{
-					item_values['spec'][that.attr('specid')]="";
-				}
-
-			});
-
-
-
-
 
 		}
 
@@ -192,7 +302,7 @@ $(document).ready(function(){
 
 
 	//delete the item
-    $("#item_delete_button").click(function(){
+    $("#delete_button").click(function(){
     	// if user says no stop deleting 
     	if (!confirm("Are you sure you want to delete this listing?")){
     		return true;
@@ -236,6 +346,7 @@ $(document).ready(function(){
 
 			saveItem = function(){
 
+
 				// if (!('cat' in item_values) || item_values['cat'] == "") {
 				// 	$("#item_category").addClass("error");
 				// 	alert("Select a category");
@@ -249,19 +360,25 @@ $(document).ready(function(){
 				// }
 
 				if (!('title' in item_values) || item_values['title'] == ""){
-					$("#item_title").addClass("error");
+					$("#title").addClass("error");
 					alert("Enter item title");
 					return false;
 				}
 
+				if (!('brand' in item_values) || item_values['brand'] == ""){
+					$("#model").addClass("error");
+					alert("Enter item model");
+					return false;
+				}
+
 				if (!('price' in item_values) || item_values['price'] == ""){
-					$("#item_price").addClass("error");
+					$("#price").addClass("error");
 					alert("Enter item price");
 					return false;
 				}
 
 				if (!('condition' in item_values) || item_values['condition'] == ""){
-					$("#item_condition").addClass("error");
+					$("#condition").addClass("error");
 					alert("Enter item condition");
 					return false;
 				}
@@ -290,6 +407,9 @@ $(document).ready(function(){
 				}
 
 
+				//showOverlay();
+				showNotifications('Saving item..! Please wait..!');
+
 				item_values['authenticity_token']= AUTH_TOKEN;
 				$.ajax({
 					url:window.editsaveurl,
@@ -306,5 +426,59 @@ $(document).ready(function(){
 				});
 
 			};
+
+
+	      $('#approve').on('click',function(){
+	          var that  = $(this);
+
+	          $.ajax({
+	            url:'/p2p/approve/approve',
+	            data:{id: that.attr('itemid')},
+	            dateType:'json',
+	            type:'post',
+	            success:function(data){
+	                if (data ==  1) {
+	                  showNotifications('Item Approved');
+	                  that.remove();
+	                }
+	                else{
+	                  showNotifications('Something went wrong');
+	                }
+	            },
+	            error:function(){
+	                showNotifications('Something went wrong');
+	            }
+	          });
+	      });
+
+	      $('#disapprove').on('click',function(){
+	          var that  = $(this);
+
+	          $.ajax({
+	            url:'/p2p/approve/disapprove',
+	            data:{id: that.attr('itemid')},
+	            dateType:'json',
+	            type:'post',
+	            success:function(data){
+	                if (data ==  1) {
+	                  showNotifications('Item Disapproved');
+	                  that.remove();
+	                }
+	                else{
+	                  showNotifications('Something went wrong');
+	                }
+	            },
+	            error:function(){
+	                showNotifications('Something went wrong');
+	            }
+	          });
+	      });	      
+
+
+	      $('.thumbs').click(function(){
+	      		$('#view_image').attr('src',$(this).children('img').attr("viewimage"));
+	      		$('#view_image').attr('imgid',$(this).children('img').attr("imgid"));
+	      });
+
 
 });

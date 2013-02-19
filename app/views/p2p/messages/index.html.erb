@@ -6,7 +6,7 @@
 <div id="overlay"></div>
 
 
-<div id="message_content" class="span11">
+<div id="message_content" class="span12">
 
 		
 <div class="tabbable " id="message_side_menu">	
@@ -15,9 +15,10 @@
 
 		  <ul class="nav nav-list">
 		    
+		    
 		 		<!--message modal  -->
 		 		<!-- Button to trigger modal -->
-					<a href="#compose_newmsg_modal" id="compose_newmsg_button" role="button"  data-toggle="modal" class="btn "  >Compose</a>
+					<a href="#compose_newmsg_modal" id="compose_newmsg_button" role="button"  data-toggle="modal" class="btn"  > Compose</a>
 					</i>
 					 
 					<!-- Modal -->
@@ -28,7 +29,7 @@
 					  </div>
 					  <div class="modal-body">
 					    <p> 			    	
-				    	<%= render "p2p/messages/compose" ,:message => @message ,:user_id => current_user.id ,:receiver => nil ,:item => "" %>
+				    	<%= render "p2p/messages/compose" ,:message => @message ,:user_id => current_user.id ,:receiver => nil ,:item => "" , :toany => true %>
 						</p>
 					  </div>
 					</div>
@@ -37,8 +38,8 @@
 		    <li class="active"><a href="#inbox" data-toggle="tab">
 		    	<% unreadcount = @inbox.unread.count %>
 		    	Inbox
-		    	<span id="inbox_count">
-		    		<%= (unreadcount > 0) ?  "(#{unreadcount.to_s})" : "" %>
+		    	<span id="unread_count">
+		    		<%= (unreadcount > 0) ?  "(#{unreadcount})" : "" %>
 		    	</span>
 		        </a></li>
 	            
@@ -49,7 +50,7 @@
 		  </ul>
 		</div>
 
-		<div class="span9" id="box_content">
+		<div class="span10" id="box_content">
 
 			<div class="tab-content">
 			    
@@ -68,9 +69,11 @@
 			</div>
 
 			   <div class="span9" id="show_msg">
-			   		<button class="btn back_to_table" tbl="">Back</button>
+			   		<button class="btn back_to_table" tbl="">
+			   			<i class="action icon-arrow-left" title="Reply"></i>
+			   			Back</button>
 			   		
-					<a href="#reply_to_modal" id="reply_to_button" role="button"  data-toggle="modal" class="btn "  >Reply</a>
+					<a href="#reply_to_modal" id="reply_to_button" role="button"  data-toggle="modal" class="btn "  ><i class="action icon-envelope" title="Reply"></i> Reply</a>
 
 					<!-- Modal -->
 					<div id="reply_to_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="reply_to_modallLabel" aria-hidden="true">
@@ -85,6 +88,7 @@
 					  </div>
 					</div>
 
+					<br/><br/>
 
 			   		<div id="show_msg_content"></div>
 			   </div> 
@@ -97,32 +101,43 @@
 
 	<script type="script/template" id="view_msg">
 
-						<div id="message_user_name" recevid=<%%=data['receiver']%>> Name:  
-						<span id="message_user_name_content">
-								<%%= data['name']%>
+		<%% _.each(data,function(dt){%>
+
+					<div class="message_datetime pull-right"> 
+					 <i class="action   icon-time" title="Time"></i>	 
+						<span class="message_datetime_content">
+
+								<%%= dt['dte'] %>
 						</span>
 					</div>
 
-					<div id="message_datetime"> Date:  
-						<span id="message_datetime_content">
-								<%%= data['dte'] %>
+
+					<div class="message_user_name" recevid=<%%=dt['receiver']%>> 
+					<i class="action  icon-user" title="User"></i>	
+						<span class="message_user_name_content">
+								<%%= dt['name']%>
 						</span>
 					</div>
 
-					<div id="message_item"> Subject:  
-						<span id="message_item_content">
-								<%%= data['sub'] %>
+
+					<div class="message_item">
+					<i class="action  icon-tag" title="Subject"></i>
+						<span class="message_item_content">
+								<%%= dt['sub'] %>
 						</span>
 					</div>
 
 					<hr>
 
-					<div id="message_message"> Message:  
-						<span id="message_message_content">
-								<%%= data['msg'] %>
+					<div class="message_message">
+						<span class="message_message_content">
+								<%%= dt['msg'] %>
 						</span>
 					</div>
+					
+					<div class="mydivider"></div>					
 
+		<%% }) %>
 	</script>
 
 
@@ -136,13 +151,13 @@
 
 	$(document).ready(function(){
 		oInboxTable = $('#inbox_table').dataTable({
-		  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		  "sDom": "<'row-fluid'<'span6'><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		  'sScrollY':"400px",
           "sAjaxSource": '/p2p/getmessages/inbox' ,
           "aaSorting":[],
           "bScrollCollapse": false,
           "bFilter":false,
-       	  "bSort": false,
+       	  "bSort": true,
           "iDisplayLength" : 10,
           "bAutoWidth": false,
           "sPaginationType": "bootstrap",
@@ -156,6 +171,10 @@
 
 		});
 
+		// oInboxTable.afnSortData['time']=function(){
+		// 		return [{0:"a",1:"b",2:"anme",3:"fsdaf",4:"afsd"}];
+		// }
+
 		oSentBoxTable  = $('#sentbox_table').dataTable({
 		  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		  'sScrollY':"400px",
@@ -163,7 +182,7 @@
           "bScrollCollapse": false,
 		  "sAjaxSource": '/p2p/getmessages/sentbox' ,
           "bFilter":false,
-       	  "bSort": false,
+       	  "bSort": true,
           "iDisplayLength" : 10,
           "bAutoWidth": false,
           "sPaginationType": "bootstrap",
@@ -183,7 +202,7 @@
           "bScrollCollapse": false,
 		  "sAjaxSource": '/p2p/getmessages/deletebox' ,
           "bFilter":false,
-       	  "bSort": false,
+       	  "bSort": true,
           "iDisplayLength" : 10,
           "bAutoWidth": false,
           "sPaginationType": "bootstrap",
@@ -207,6 +226,7 @@
 		$('.showmessage').live('click', function () {
 			var that = $(this);
 
+
 			$.ajax({
 				url: '/p2p/messages/'	 + that.attr('msgid'),
 				type:'get',
@@ -217,23 +237,39 @@
 					var templ = _.template($("#view_msg").html());
 					$("#show_msg_content").html(templ({data:data}));
 
-					$('.back_to_table').attr('tbl','inbox');
+					if (that.parent().parent().hasClass('unread')){
+						that.parent().parent().removeClass('unread');
+						var count = Number($('#header_msg_count').text().replace("(","").replace(")","")) - 1 ;
+
+							console.log(count + 'count');
+
+						if ( count < 1 ){
+							$('#header_msg_count').html('');	
+							$('#unread_count').html('');
+						}
+						else{
+							$('#header_msg_count').html('('+ count + ')');
+							$('#unread_count').html('('+ count + ')');
+						}
+					}
+					
+					$('.back_to_table').attr('tbl',that.closest('table').attr('tbl'));
 					//set reply to user and set the msgid to it
-					$('.reply_to_user').attr('tbl','inbox');
+					$('.reply_to_user').attr('tbl',that.closest('table').attr('tbl'));
 					$('.reply_to_user').attr('msgid',that.attr('msgid'));
 
 					
 					if ($(".back_to_table").attr('tbl') == 'inbox'){
-						$("#inbox").fadeOut(100);
+						$("#inbox").hide();
 					}else if ($(".back_to_table").attr('tbl') == 'sentbox'){
-						$("#sentbox").fadeOut(100);
+						$("#sent").hide();
 					}
 					else if ($(".back_to_table").attr('tbl') == 'deletebox'){
-						$("#deletebox").fadeOut(100);
+						$("#delete").hide();
 					}
 
 
-					$("#show_msg").fadeIn(100);
+					$("#show_msg").show();
 				}
 				// },
 				// error:function(){
@@ -248,7 +284,7 @@
 
 		$(".search_messages").keyup(function(){
 
-			if ( $(this).val().length < 4 && $(this).val().length != 0) return false;
+			if ( $(this).val().length < 3 && $(this).val().length != 0) return false;
 
 			if ($(this).attr('tbl')=='inbox'){
 				oInboxTable.fnDraw();
@@ -263,24 +299,50 @@
 		});
 
 		$('.back_to_table').click(function(){
-			$("#show_msg").fadeOut(100);
+			$("#show_msg").hide();
 			if ($(this).attr('tbl') == 'inbox'){
 				$("#inbox").css({"display":""});
 			}else if ($(this).attr('tbl') == 'sentbox'){
-				$("#sentbox").css({"display":""});
+				$("#sent").css({"display":""});
 			}
 			else if ($(this).attr('tbl') == 'deletebox'){
-				$("#deletebox").css({"display":""});
+				$("#delete").css({"display":""});
 			}
 		});
 
 		$('#reply_to_button').on('click',function(){
 
-			$("#reply_to_modal .reply_to_user #p2p_message_receiver_id").val($("#show_msg #message_user_name").attr('recevid'));
+			$("#reply_to_modal .reply_to_user #p2p_message_receiver_id").val($("#show_msg .message_user_name").attr('recevid'));
+
+			$("#reply_to_user").html($(".message_user_name_content").text());
+
+			$("#reply_to_modal .reply_to_user #p2p_message_parent_id").val($(".reply_to_user").attr('msgid'));
 			console.log($("#reply_to_modal"));
 			//$("#message_user_name").attr("recev")
 		});
 
+
+		$(".refresh_messsage").click(function(){
+			if ($(this).attr('tbl') == 'inbox'){
+				oInboxTable.fnDraw();
+			}
+			else if ($(this).attr('tbl') == 'sentbox'){
+				oSentBoxTable.fnDraw();
+			}
+			else if ($(this).attr('tbl') == 'deletebox'){
+				oDeleteBoxTable.fnDraw();
+			}
+		});
+
+		if (window.location.hash != ' '){
+			$("#search_inbox").val(window.location.hash);
+			$("#search_inbox").trigger('keyup');
+		}
+
+		//redraw tables to avoid the display issuee.. no idea why?
+		oInboxTable.fnAdjustColumnSizing();
+		oSentBoxTable.fnAdjustColumnSizing();
+		oDeleteBoxTable.fnAdjustColumnSizing();
 	});
 
 </script>

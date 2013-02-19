@@ -30,5 +30,10 @@
 
   // display the notification
   function showNotifications(content){
+    hideNotifications();
     $("#flash_notice").html(content).clearQueue().fadeIn(1000).delay(500).fadeOut(1000);
+  }
+
+  function hideNotifications(){
+    $("#flash_notice").hide();
   }

@@ -1,7 +1,10 @@
 li.thumbs {
 	height: 50px;
+	width:50px;
 	margin: 3px 0px 0px 3px;
 	border: 1px solid rgba(0,0,0,0.1);
+	text-align: center;
+	cursor: pointer;
 }
 li.thumbs img{
 	

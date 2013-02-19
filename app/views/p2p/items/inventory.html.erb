@@ -4,15 +4,10 @@
 
       <ul class="nav nav-list">
 
-      <%= render "/p2p/index/scat_menu" ,:dropdown => true %>
+      
+      <%= render "/p2p/users/dashboard_menu.html.erb" %>
+      <%= render "/p2p/index/scat_menu" %>
 
-        <li class="nav-header">Menu</li>
-        <li><a href="/p2p">Home</a></li>
-        <li><a href="/p2p/dashboard">Dashboard</a></li>
-        <li><a href="/p2p/messages">Messages</a></li>
-        <li><a href="/p2p/mystore">My Store</a></li>
-        
-    
 
       </ul>
     </div>
@@ -21,54 +16,16 @@
 
 
     <div id="listHeader" class="row">
-      <p class="fleft"> <b>My Store</b></p>
+      <p class="fleft"> <b> <%= (params.has_key?(:query) ? params[:query].titleize : "My Store" ) %> </b></p>
       </a></p>
     </div>
 
 
-    <% if params[:query] == 'sold' %>
-      <a href="/p2p/mystore/" class="btn btn-primary"> Go Back </a> <br/><br/>  
-    <% else%>
-      <a href="/p2p/mystore/sold" class="btn btn-primary"> View Sold Items </a> <br/><br/>
-    <% end %>
+    <%= render '/p2p/items/inventory_items_button' %>
 
 
-  <div class="itemsRow">
-        <ul class="thumbnails">    
-    <% @items.each do |p|%>
 
-            <li class="span2">
-              <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">
-                <div class="thumbnail">
-                  <span class="delete_item pull-right" itemid="<%=p.id%>"></span>
-                  <img src="<%=p.get_image(1,:search)[0][:url]%>" >
-                  <div class="caption">
-                    <b><%= p.title.slice(0,10)  %></b>
-                    <p>
-
-                      <ul>
-                        <li><del>&#2352;</del> <%=p.price %></li>
-                        <li><del>&#2352;</del> <%=p.condition %></li>
-                        
-  <!--                              <li>Attribute 2</li>
-                        <li>Attribute 3</li>
-  -->                              
-                      </ul>
-                    </p>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-    
-
-        <% end %>
-
-        </ul>
-
-
-  </div>
-
+    <%= render "/p2p/items/inventory_items" , :items => @items %>
   </div>
   
 </div>

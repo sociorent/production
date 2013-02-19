@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212110251) do
+ActiveRecord::Schema.define(:version => 20130217213602) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -353,15 +353,16 @@ ActiveRecord::Schema.define(:version => 20130212110251) do
     t.datetime "solddate"
     t.datetime "paiddate"
     t.datetime "delivereddate"
-    t.boolean  "approveddate"
-    t.integer  "viewcount",     :default => 0
-    t.integer  "reqCount",      :default => 0
+    t.integer  "viewcount",       :default => 0
+    t.integer  "reqCount",        :default => 0
     t.float    "price"
     t.integer  "city_id"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.datetime "deletedate"
     t.string   "condition"
+    t.datetime "disapproveddate"
+    t.datetime "approveddate"
   end
 
   add_index "p2p_items", ["city_id"], :name => "index_p2p_items_on_city_id"
@@ -369,19 +370,22 @@ ActiveRecord::Schema.define(:version => 20130212110251) do
   add_index "p2p_items", ["user_id"], :name => "index_p2p_items_on_user_id"
 
   create_table "p2p_messages", :force => true do |t|
-    t.integer  "sender"
-    t.integer  "receiver"
     t.string   "item_id"
     t.text     "message"
     t.datetime "readdatetime"
-    t.integer  "messagetype",   :default => 0
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.integer  "messagetype",     :default => 0
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "sender_id"
     t.integer  "receiver_id"
-    t.string   "flag"
     t.string   "sender_status"
+    t.integer  "parent_id"
+    t.string   "receiver_status"
   end
+
+  add_index "p2p_messages", ["parent_id"], :name => "index_p2p_messages_on_parent_id"
+  add_index "p2p_messages", ["receiver_id"], :name => "index_p2p_messages_on_receiver_id"
+  add_index "p2p_messages", ["sender_id"], :name => "index_p2p_messages_on_sender_id"
 
   create_table "p2p_products", :force => true do |t|
     t.string   "name"

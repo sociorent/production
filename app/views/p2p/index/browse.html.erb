@@ -1,15 +1,18 @@
 
+
 <div id="Itemlist" class="row">
+
     <div id="filters" class="span2 ">
 
-      <ul class="nav nav-list" id="browse_menu">
 
-		
-        <%= render "scat_menu" , :active_page => @cat.name ,:dropdown => true %>
+	      <ul class="nav nav-list" id="browse_menu">
+			
+	        <%= render "scat_menu" , :active_page => @cat.name ,:dropdown => true %>
 
-        <%= render "p2p/index/filter" , :category => @cat %>
+	        <%= render "p2p/index/filter" , :category => @cat %>
 
-      </ul>
+	      </ul>
+
     </div>
 
 <div class="span10">
@@ -50,7 +53,7 @@
 
 			        <ul class="thumbnails" id="filter_replace">
 			        
-			      <% prod.items.order("rand()").each do |p| %>
+			      <% prod.items.approved.notsold.order("rand()").each do |p| %>
 
 			          <li class="span2">
 			            <a href=<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}") %>>

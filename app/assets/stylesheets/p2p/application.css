@@ -1,12 +1,21 @@
 /*
 *= require global/jquery-ui-1.8.24.custom.css
+*= require global/bootstrap-wysihtml5-0.0.2.css
 *= require footer
 *= require bootstrap
 *= require p2p/index/common
 *= require p2p/index/itemList
 *= require p2p/inventory
 *= require p2p/p2p
+*= require p2p/ui.notify
 *= require_tree .
 */
 
 
+
+
+/*#TODO  REMOVE AFTER ADDIN JQUERY UI FOR AUTOCOMPLETE IMAGE*/
+
+.ui-autocomplete-loading{
+	background:url('/assets/ajax_small.gif') no-repeat right center;
+}

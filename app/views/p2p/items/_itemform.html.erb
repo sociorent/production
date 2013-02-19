@@ -1,6 +1,8 @@
 
 <%= stylesheet_link_tag "items/items_manifest"%>
 
+
+
 <div class="main_wrapper">
 	<div class="row">
 		<div class="span6">
@@ -8,17 +10,23 @@
 			  <li><a href="/p2p">Home</a> <span class="divider">/</span></li>
 			  <li><a href="/p2p/<%=category%>"><%=category.titleize %></a> <span class="divider">/</span></li>
 			  <li><a  href="/p2p/<%=category%>/<%=brand%>"><%=brand.titleize %></a> <span class="divider">/</span></li>			  
-			  <li class="active"  data-name="title"  title="Enter Title"  id="item_title"><%=title.titleize%></li>
+			  <li class="active"  data-name="title"  title="Enter Title"  id="title"><%=title.titleize%></li>
 			</ul>
 		</div>
 		<div class="span6">
 
 			<% if ownerid.empty?  %>
 
+
+	
 			<!-- New Form -->
 		  	<div class="btn-group" id="listing_action">
-			  <button class="btn"><i  title="Remove Listing" class="action_icon icon-remove"></i></button>
-			  <button class="btn" id="enable"><i title="Edit Listing" class="action_icon icon-pencil"></i></button>
+			  <button class="btn"><i  title="Remove Listing" class="action_icon icon-remove"></i></button>`	
+
+			  <button class="btn "   id="enable">
+			  			<i title="Edit Listing" class="action_icon icon-pencil"></i>
+			  </button>
+
       	</div> 
 
 
@@ -29,9 +37,8 @@
 
 			 		<!-- contact seller modal  -->
 			 		<!-- Button to trigger modal -->
-			 		<i class="action_icon" title="You have sent <%=buyerreqcount%>">
-						<a href="#login_to_contactmodal" role="button" class="btn " data-toggle="modal"  >Contact Seller</a>
-					</i>
+
+					<a href="#login_to_contactmodal" role="button" class="btn" data-toggle="modal">Contact Seller</a>
 					 
 					<!-- Modal -->
 					<div id="login_to_contactmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="login_to_contactmodallLabel" aria-hidden="true">
@@ -59,7 +66,9 @@
 
 			 		<!-- contact seller modal  -->
 			 		<!-- Button to trigger modal -->
-					<a href="#contact_seller_modal" role="button" class="btn" data-toggle="modal">Contact Seller</a>
+			 		<i class="action_icon" title="You have sent <%= @buyerreqcount %> requests">
+						<a href="#contact_seller_modal" role="button" class="btn " data-toggle="modal"  >Contact Seller</a>
+					</i>
 					 
 					<!-- Modal -->
 					<div id="contact_seller_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="contact_seller_modallLabel" aria-hidden="true">
@@ -81,45 +90,70 @@
 
 			<% elsif ownerid == p2p_current_user.id.to_s %>
 				  <!-- Seller View -->
-				<div class="btn-group" id="listing_action">
 
+			<div class="btn-group" id="listing_action">
 				<!-- check if the item is sold or not -->
-				<% if solddate.nil? %>
-				  	<a href="/p2p/sold/<%= itemid %>" class="btn">Mark as sold</a>
+
+				<% if solddate.nil?  %>
+
+					<% if approvedate.to_s !='' %>
+
+				  			<a href="/p2p/sold/<%= itemid %>" class=" action btn"  title="Mark this listing as sold" > <i class="icon icon-shopping-cart"></i>Mark as sold</a>
+					<% else %>
+						
+				  			<a href="#" class=" action btn"  title="Listing has not been approved yet" > <i class="icon icon-shopping-cart"></i>Waiting for approval</a>
+			  	
+				  <% end %>
+			  
+
 				<% else %>
-					<span class="btn" class="btn"> <i title="On <%= solddate.strftime("%d-%b-%C%y") %>" class="action_icon">  Listing Sold </i> </span>
+					<span class="btn"> <i title="On <%= solddate.strftime("%d-%b-%C%y") %>" class="action_icon">  Listing Sold </i> </span>
 				<%end %>					
+
 				
+
 				<% if deletedate.nil? %>
-				  <button class="btn"><i  itemid="<%=itemid%>" id="item_delete_button" title="Remove Listing" class="action_icon icon-remove"></i></button>
+				  <button class="btn"><i  itemid="<%=itemid%>" id="delete_button" title="Remove Listing" class="action_icon icon-remove"></i></button>
 				<%end %>
 
+				
 
 				
 				  <button class="btn" id="enable"><i title="Edit Listing" class="action_icon icon-pencil"></i></button>
+				  
+				  <button class="btn btn-success hide" id="save"><i title="Save changes" class="action_icon icon-ok-circle"></i></button>
+
+				  <button class="btn btn-danger hide" id="cancel"><i title="Cancel changes" class="action_icon icon-remove-circle"></i></button>
+
 
 		          	<!-- view Request messages modal  -->
 			 		<!-- Button to trigger modal -->
-					<a href="#request_messages_modal" role="button" class="btn" data-toggle="modal"><i title="View Messages" class="action_icon icon-envelope"></i> <%=reqcount%></a>
-					 
-					<!-- Modal -->
-					<div id="request_messages_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="request_messages_modallLabel" aria-hidden="true">
-					  <div class="modal-header">
-					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					    <h3 id="request_messages_modalLabel">View Requests</h3>
-					  </div>
-					  <div class="modal-body">
+					<a href="/p2p/messages/#<%=title%>" role="button" class="btn" data-toggle="modal"><i title="View Messages for this listing" d="reqcount_<%=itemid%>" class="action_icon icon-envelope"></i> <%=reqcount if reqcount > 0 %> </a>
 
-					    	<% @messages.each do |msg| %>
-					    		<li> <%= msg.message %> </li>
-					    	<% end %>
-					  </div>
-					</div>
+				
+				  <button class="btn" id="viewcount"><i title="Number of view of this listing" class="action_icon icon-eye-open"></i><%= viewcount %></button>
 
 
-	      		</div>
+
+			 </div>	      		
 
 			  <% end %>
+
+			  <% if !itemid.empty? and !p2p_current_user.nil? and p2p_current_user.id == 1 %>
+
+			  		<% if approvedate == "" %>
+	  				  <button class="btn" id="approve" itemid="<%=itemid%>"><i title="Approve this listing" class="action_icon icon-gift"></i></button>
+	  				<% end %>
+
+	  				<% if disapproveddate == "" %>
+	  				  <button class="btn" id="disapprove"  itemid="<%=itemid%>"><i title="DisApprove this listing" class="action_icon icon-ban-circle"></i></button>
+	  				<% end %>
+
+			  <%end %>
+
+
+					 
+
 			</div> <!-- span6 action buttons-->
 
 		</div>
@@ -131,21 +165,26 @@
           <div class="thumbnail">
 
 		<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
-          	<div id="upload_pic" title="Upload more photos" class="pull-right action_icon ">
-          			<!-- image upload form -->
 
-				<%= form_tag "/p2p/addimage" ,:multipart => true , :remote => true , :id => "add_image_form"  do %>
-				<input type="hidden" value="<%= @item.id %>" name="item_id">
-    			<input type="file" name="img[]" id="file_add_image" disabled="disabled" multiple>
-				<% end %>
+			<% unless itemid.empty? %>
+	          	<div id="upload_pic" title="Upload more photos" class="pull-right action_icon hide">
+	          			<!-- image upload form -->
 
-          		<i class="icon-upload"></i>
+					<%= form_tag "/p2p/addimage" ,:multipart => true , :remote => true , :id => "add_image_form"  do %>
+					<input type="hidden" value="<%= @item.id %>" name="item_id">
+	    			<input type="file" name="img[]" id="file_add_image" disabled="disabled" multiple>
+					<% end %>
 
-          		Upload</div>
+	          		<i class="icon-upload"></i>
+
+	          		Upload</div>
+	          <% end %>
 
         <% end %>
 
-            <img src="<%= viewimage[0][:url] %>" imgid="<%= viewimage[0][:id] %>" alt="Item pic">
+        	<div id="view_image_holder">
+            	<img src="<%= viewimage[0][:url] %>" imgid="<%= viewimage[0][:id] %>" alt="Item pic" id="view_image">
+            </div>
             <div class="caption thumb_holder">
               <ul class="thumbnails">
 
@@ -154,7 +193,10 @@
 		
 	              	<li class="thumbs">
 						<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
-	              			<i class="icon-remove pull-right remove_image hide"></i>
+
+							<% unless itemid.empty? %>
+	              				<i class="icon-remove pull-right remove_image hide"></i>
+	              			<% end %>
 
 	              		<% end %>
 
@@ -178,12 +220,12 @@
 
 			<table class="table">
 			<tr>
-				<td>Category: <span class="canEdit" id="category" data-type="select" data-original-title="Select Category" data-source="<%=P2p::Category.select('id as value,name as text').all.to_json%>" ><%=category%></span></td>
-				<td>Model: <span id="model" data-type="select" class="canEdit" data-source='[]'><%=brand%></span></td>
+				<td>Category: <span class="canEdit" id="category" data-type="select" data-original-title="Select Category" data-source="/p2p/categories" ><%=category%></span></td>
+				<td>Model: <span id="model" data-type="select" ><%=brand%></span></td>
 			</tr>
 			</table>
 
-			<table class="table table-bordered table-striped">
+			<table class="table table-bordered table-striped" id="table_specs">
             <colgroup>
               <col class="span1">
               <col class="span7">
@@ -202,7 +244,7 @@
 	              Price:
 	            </td>
 	            <td>Rs.
-	             <span class="canEdit" data-name="username"  title="Enter Price"  specname="price" specid="0" id="item_price"> <%= price %> </span>
+	             <span class="canEdit" data-name="username"  title="Enter Price"  specname="price" specid="0" id="price"> <%= price %> </span>
 	            </td>
 	          </tr>
 
@@ -212,7 +254,7 @@
 	              Condition:
 	            </td>
 	            <td>
-	             <span class="canEdit" data-name="username"  title="Enter Condition"  specname="condition" specid="0" id="item_condition"> <%= condition.titleize %> </span>
+	             <span class="canEdit" data-name="username"  title="Enter Condition"  specname="condition" specid="0" id="condition"> <%= condition.titleize %> </span>
 	            </td>
 	          </tr>
 
@@ -222,9 +264,10 @@
 	              Location:
 	            </td>
 	            <td>
-	             <span class="canEdit" data-name="username"  title="Enter Location"  specname="location" specid="0" id="item_location"> <%= location.titleize %> </span>
+	             <span class="canEdit" data-name="username"  title="Enter Location"  specname="location" specid="0" id="location"> <%= location.titleize %> </span>
 	            </td>
 	          </tr>
+
 
 	          <!-- load all spec -->
 			<% unless spec.empty? %>
@@ -232,7 +275,7 @@
 					<% spec_used = [] %>
 					<% spec.each do |aspec| %>
 						<% spec_used.push(aspec.spec.id)%>
-			              <tr>
+			              <tr class="specs">
 			                <td>
 			                  <%= aspec.spec.name %>
 			                </td>
@@ -258,9 +301,9 @@
 		</div>
 	</div>
 	<div class="row">
-		<div id="item_desc" class="span12">
+		<div id="desc" class="span12">
 			<h4>Description</h4>
-			<span id="desc_content" data-type="textarea" class="canEdit "><%= description %></span>
+			<span id="desc_content" data-type="textarea" class="canEdit"><%= description %></span>
 		</div>
 	</div>
 
@@ -309,25 +352,28 @@
 
 					<% if defined? itemspec and (!current_user.nil? and (ownerid == p2p_current_user.id.to_s) )  %>
 
-						<b>Add More Specification here <br/></b>
-						<table class="table table-bordered table-striped hide" id="empty_specs">
-							<tr>
-								<th>Specification</th>
-								<th>Value</th>
-							</tr>
-						<% itemspec.each do |spec| %>
+						<div id="add_more_spec" class="hide">
+							<b>Add More Specification here <br/></b>
+							<table class="table table-bordered table-striped hide" id="empty_specs">
+								<tr>
+									<th>Specification</th>
+									<th>Value</th>
+								</tr>
 
-						 <% next if spec_used.include?(spec.id) %>
-					              <tr>
-					                <td>
-					                  <%= spec.name %>
-					                </td>
-					                <td>
-					                 <span class="canEdit" data-name="<%=spec.name%>"  title="Enter <%=spec.name%>"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>">  </span>
-					                </td>
-					              </tr>
-						<%end %>
-						</table>
+							<% itemspec.each do |spec| %>
+
+								 <% next if !spec_used.nil?  and spec_used.include?(spec.id) %>
+						              <tr>
+						                <td>
+						                  <%= spec.name %>
+						                </td>
+						                <td>
+						                 <span class="canEdit" data-name="<%=spec.name%>"  title="Enter <%=spec.name%>"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>">  </span>
+						                </td>
+						              </tr>
+							<%end %>
+							</table>
+						</div>
 					<%end %>
 
 
@@ -347,7 +393,7 @@
 		window.item_values ={};
 		item_values['spec']={};
 
-				<%if !itemid.empty?  and ownerid == userid %>
+				<%if !itemid.empty?  and ownerid == p2p_current_user.id.to_s %>
 					item_values['title'] = "<%= title %>";
 					item_values['cat'] = "<%= categoryid %>";
 					item_values['scat'] = "<%= subcategoryid %>";

@@ -1,15 +1,20 @@
  <!--Search filter menu cod -->
 
+
+<div id="pull_here" class="btn btn-info">Pull Filter </div>
+
+<div id="dummy_filter_holder" class="nav nav-list">
+
 <!-- overlay to be displayed during filter request -->
 	<div id="overlay"></div>
 
-		<% item_condition_res = category.items.select("distinct p2p_items.condition") %>
+		<% item_condition_res = category.items.select("distinct p2p_items.condition").order('p2p_items.condition asc') %>
 
 		<% if item_condition_res.count > 0 %>
 			<li class="nav-header"> Condition </li>
 			<% item_condition_res.each do |itm| %>
 				<li class="spec-filter" spec-name="condition" spec-value="<%=itm.condition%>">
-				<i class="icon-remove icon-white hide pull-right"></i>
+				<i class="icon-remove icon-white hide pull_here-right"></i>
 				 <a href="#"> <%= itm.condition %> </a> 
 
 				</li>
@@ -18,14 +23,16 @@
 
 		<% category.specs.each do |spec|%>
 			<li class="nav-header"> <%= spec.name %> </li>
-				<% spec.itemspecs.select(" distinct value").each do |itemspec| %>
+				<% spec.itemspecs.select(" distinct value").order('value asc').sort.each do |itemspec| %>
 					<li class="spec-filter" spec-name="<%=spec.name%>" spec-value="<%=itemspec.value%>">
 						<i class="icon-remove icon-white hide pull-right"></i>
 						<a href="#"> <%= itemspec.value	%> </a>
 					</li>
 				<% end %>
 			<% end %>
+
 	    <li class="divider"></li>
+
 
 
 		<!-- Template for the search results -->
@@ -83,21 +90,22 @@
 
 	    </script>
 
-<script>
-	window.category="<%=category.name%>";
-	<% if params.has_key?(:prod) %>
+	<script>
+		window.category="<%=category.name%>";
+		<% if params.has_key?(:prod) %>
 
-		//@products will not be array for this particular action
-		<% if request[:action] == 'browse_filter' %>
-			window.filterurl= "/p2p/<%=category.name%>/<%=@products.name%>/filters";
+			//@products will not be array for this particular action
+			<% if request[:action] == 'browse_filter' %>
+				window.filterurl= "/p2p/<%=category.name%>/<%=@products.name%>/filters";
+			<% else %>
+				window.filterurl= "/p2p/<%=category.name%>/<%=@products[0].name%>/filters";
+			<% end %>
+
 		<% else %>
-			window.filterurl= "/p2p/<%=category.name%>/<%=@products[0].name%>/filters";
+		window.filterurl= "/p2p/<%=category.name%>/filters";
 		<% end %>
 
-	<% else %>
-	window.filterurl= "/p2p/<%=category.name%>/filters";
-	<% end %>
+	</script>
 
-</script>
-
-<%= javascript_include_tag 'p2p/browse_filter' %>
+	<%= javascript_include_tag 'p2p/browse_filter' %>
+</div>

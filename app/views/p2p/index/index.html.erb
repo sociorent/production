@@ -34,8 +34,8 @@
                         <img src="<%=p.get_image(1,:search)[0][:url]%>" >
                       </div>
 
-                      <div class="caption">
-                        <b><%= p.title.slice(0,10)  %></b>
+                      <div class="caption" title="<%= p.title %>">
+                        <div class="item_title"><%= p.title.slice(0,15)  %></div>
                         <p>
                           <ul>
                             <li><del>&#2352;</del> <%=p.price %></li>

@@ -2,6 +2,9 @@ $(document).ready(function(){
 
       $(".delete_item").live("click",function(){
         var that = this;
+        
+        showNotifications('Deleting item.Please wait..!');
+
         $.ajax({
           url:"/p2p/items/" + $(this).attr("itemid"),
           type:"delete",
@@ -10,7 +13,11 @@ $(document).ready(function(){
           success:function(data){
             console.log(data);
             if (data.status == 1){
-              $(that).parent().remove();
+              showNotifications('Listing deleted');
+              $(that).closest('li').fadeOut(1000);
+            }
+            else{
+              showNotifications('There was an error in deleting');
             }
           }
         });
@@ -30,7 +37,7 @@ $(document).ready(function(){
             type:'post',
             success:function(data){
                 if (data ==  1) {
-                  showNotifications('Item DIsapproved');
+                  showNotifications('Item Disapproved');
                   that.parent().parent().fadeOut(1000);
                 }
                 else{

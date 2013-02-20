@@ -91,11 +91,14 @@ end
 
     begin
       item = P2p::Item.find(params[:id])
+      item.deletedate = Time.now
+      item.save
 
       raise "Cannot Delete" if item.user.id != current_user.id 
     rescue
       if request.xhr? 
         render :json => {:status => 0}
+        return
       else
         flash[:notice] ="Nothing found for your request"
         redirect_to "/p2p/mystore"
@@ -104,11 +107,10 @@ end
     end
     
 
-    item.deletedate = Time.now
-    item.save
 
     if request.xhr? 
       render :json => {:status => 1}
+      return
     else
       flash[:notice] ="Nothing found for your request"
       redirect_to "/p2p/mystore"

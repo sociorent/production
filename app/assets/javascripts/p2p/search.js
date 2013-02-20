@@ -33,7 +33,7 @@
 
 
   function setupunotify(){
-    if ($.notify){
+    if ($.fn.notify){
        $("#notificationcontainer").notify();
     }else{
       setTimeout(setupunotify,3000);

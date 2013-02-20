@@ -166,3 +166,18 @@ td , th{
 	position: fixed;
 	font-size: 1.2em;
 }
+
+
+.search_image{
+	width:120px;
+	height: 120px;
+	display: block;
+	text-align: center;
+}
+
+.item_title{
+	text-align: center;
+	font-weight: bold;
+	width:100%;
+	color:#0088cc;
+}

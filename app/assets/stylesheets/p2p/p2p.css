@@ -1,0 +1,168 @@
+
+
+.clearfix{
+	clear:both;
+}
+
+
+
+.head_active{
+	font-weight: bold;
+}
+
+/*//item view page*/
+.delete_item{
+	background: url("/assets/glyphicons-halflings.png") no-repeat -314px -2px;;
+	width: 14px;
+	height: 14px;
+	margin-top: 2px;
+	display:inline-block;
+	opacity: 0.3;
+	margin-left: 5px;
+}
+
+.delete_item:hover{
+	opacity: 1;
+}
+
+
+#body_content{
+	margin-top: 10px;
+}
+
+/*//item view page*/
+
+#flash_notice{
+	background-color: lightyellow;
+	top:0;
+	position: absolute;
+	display: none;
+	margin: 0 auto;
+}
+
+li.dropdown:hover > ul.dropdown-menu{
+    display: block;    
+}
+
+.center{
+	margin: 0 auto;
+	display: block;
+}
+
+.justified{
+	text-align: justify;
+	word-wrap:normal;
+}
+
+/*adding border to the drop dwon submenu inside the browse menu*/
+#browse_menu ul.dropdown-submenu > ul.dropdown-menu{
+	border-top: 1px solid  rgba(0,0,0,0.2);
+}
+
+/*messaes*/
+
+#box_content{
+		min-height: 640px;
+
+}
+
+#show_msg{
+	display: block;
+	margin-bottom: 25px;
+	padding: 10px;
+	font-size: 13px;
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: #f5f5f5;
+	border: 1px solid rgba(0,0,0,0.15);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	box-sizing: border-box;
+	min-height: 400px;
+	display: none;
+}
+
+
+#compose_newmsg_button{
+	margin-bottom: 15px;
+	display: block;
+	text-align: center;
+	font-weight: bold;
+	margin-top: 5px;
+
+}
+
+
+
+#message_side_menu .nav-list > .active > a{
+	background-color: white;
+	color:blue;
+	border-left: 3px solid blue;
+}
+
+#message_side_menu .nav-list > .active > a:hover{
+	background-color: #eeeeee;
+	color:blue;
+}
+.nav-list >  a{
+	border-left: 3px solid white;	
+}
+
+.search_messages{
+	
+}
+
+.unread, .unread > td {
+	background-color: lightyellow !important; 
+}
+
+td , th{
+	text-align: center !important;
+}
+
+.mydivider{
+	border:1px solid black;
+	width:100%;
+}
+
+.message_message{
+	min-height:50px;
+}
+
+#header_msg_count{
+	color: blue;
+	float: right;
+	display: block;
+	margin-top: -10px;
+}
+
+
+#body_container{
+	min-height: 800px;
+}
+
+
+.search_messages{
+	height:24px !important;
+}
+
+.dataTables_length{
+	display: none;
+}
+
+.sClass{
+	text-align: center;
+}
+
+.message_message_content{
+	text-align: justify;
+	margin:10px;
+}
+
+
+.dataTables_processing{
+	color:maroon;
+	position: fixed;
+	font-size: 1.2em;
+}

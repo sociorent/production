@@ -1,0 +1,21 @@
+/*
+ *= require global/bootstrap-editable
+ *= require_tree .
+ */
+
+ #add_image_form{
+ 	opacity:0;
+ 	position:absolute;
+ 	overflow: hidden;
+ 	width:70px;
+ 	cursor: pointer;
+ }
+
+.error{
+	color:red;
+}
+
+#item_desc{
+	min-height: 300px;
+	margin-bottom: 30px;
+}

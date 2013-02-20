@@ -2,6 +2,7 @@
 /**footer**/
 .footer{
 	background: #242424;
+	margin-top:10px;
 }
 .footer ul li{
 	border-right: 3px solid #303030;
@@ -42,13 +43,17 @@
 }
 .foot_box ul li a:hover{
 	background: url("/assets/home-sprite.png") no-repeat;
+	margin-left:-24px;
 }
 .foot_box ul li .fb:hover{
 	background-position: 0px -350px;
+	margin-left:-24px;
 }
 .foot_box ul li .twit:hover{
 	background-position: -55px -350px;
+	margin-left:-24px;
 }
 .foot_box ul li .blog:hover{
 	background-position: -110px -350px;
+	margin-left:-24px;
 }

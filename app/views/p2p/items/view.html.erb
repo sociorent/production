@@ -1,0 +1,31 @@
+
+
+<%= render "/p2p/items/itemform" ,
+           :viewimage => @item.get_image(0,:view) ,
+           :thumbimage => @item.get_image(0,:thumb) ,
+           :fullimage => @item.get_image(0,:full) ,
+           :title => @item.title,
+           :price => @item.price.to_i.to_s,
+           :location => "",
+           :ownerid => @item.user_id.to_s,
+           :userid => (current_user.nil? ) ? "" : current_user.id.to_s,
+           :itemid => @item.id.to_s,
+           :solddate => @item.solddate,
+           :deletedate => @item.deletedate,
+           :viewcount => @item.viewcount.to_s,
+           :reqcount => @item.reqCount,
+           :description => @item.desc,
+           :category => @category_name,
+           :subcategory => @sub_category_name,
+           :brand => @brand_name,
+           :spec => @attr,
+           :categoryid => @category_id.to_s,
+           :subcategoryid => @sub_category_id.to_s,
+           :brandid => @brand_id.to_s,
+           :itemspec => @item.product.category.specs,
+           :condition => @item.condition,
+           :requestmessage => @message,
+           :approvedate =>  @item.approveddate,
+           :disapproveddate => @item.disapproveddate
+           
+%>

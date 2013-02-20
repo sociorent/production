@@ -1,0 +1,64 @@
+<%= javascript_include_tag 'p2p/inventory' %>
+  <div class="itemsRow">
+      <%= will_paginate(items) unless items.nil? %>
+        <ul class="thumbnails">    
+    <% items.each do |p|%>
+
+        <% approve_class = ['alert-info','alert-error','alert-success' ,'']%>
+
+            <% if !p.solddate.nil? %>
+              <% apprval_class = 3 %>
+            <% elsif !p.approveddate.nil? %>
+                <% apprval_class = 2 %>
+            <%elsif !p.disapproveddate.nil? %>
+              <% apprval_class = 1 %>
+            <% else %>
+              <% apprval_class = 0 %>
+
+            <%end%>
+
+
+          
+            <li class="span2  ">
+              
+
+                <div class="thumbnail alert <%= approve_class[apprval_class] %>">
+
+                  <% if p2p_current_user.id ==1  %>
+                      <div class="disapprove_item pull-right" itemid="<%=p.id%>"><i title="Disapprove listing" class="action icon icon-ban-circle"></i></div>
+                      <div class="approve_item pull-right" itemid="<%=p.id%>"><i title="Approve Listing" class="action icon icon-ok"></i></div>
+                  <% end %>
+                  <div class="delete_item pull-right" itemid="<%=p.id%>"></div>
+                  
+                  <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">                  
+                  <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                  <div class="caption">
+                    <b><%= p.title.slice(0,10)  %></b>
+                    <p>
+
+                      <ul>
+                        <li><del>&#2352;</del> <%=p.price %></li>
+                        <li><del>&#2352;</del> <%=p.condition %></li>
+                        
+  <!--                              <li>Attribute 2</li>
+                        <li>Attribute 3</li>
+  -->                              
+                      </ul>
+
+
+                    </p>
+
+
+
+                  </div>
+                </div>
+              </a>
+            </li>
+    
+
+        <% end %>
+
+        </ul>
+
+
+  </div>

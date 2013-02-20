@@ -1,0 +1,98 @@
+#Itemlist {
+	margin-top: 20px;
+}
+
+#listHeader {
+	height: 20px;
+	background: url(/assets/p2p/index/texture.png) repeat;
+	margin: 0px 0px 15px 0px;
+	padding: 10px 15px;
+}
+
+.thumbnails li a {
+	text-decoration: none;
+}
+
+.thumbnail img{
+	margin: 5px;
+}
+
+#items {
+	min-height: 700px;
+}
+
+#filter i {
+	float: right;
+	margin-top: 3px;
+}
+
+#filter i:hover {
+	background-color: red;
+}
+
+#overlay{
+	background-color: #666;
+	position: fixed;
+	opacity:0.3;
+	display: none;
+}
+
+#items{
+	min-height:800px;
+	margin-bottom: 20px;
+}
+
+.spec-filter .icon-remove{
+	margin-top: 4px;
+	cursor: pointer;
+	float:right;
+	
+}
+
+.spec-filter .icon-remove:hover {
+	border-top: 1px solid red;
+}
+
+#noitems{
+	display: inline-block;
+	text-align: center;
+
+}
+
+.image_holder{
+	width:120px;
+	height:120px;
+	display: block;
+	text-align: center;;
+}
+
+
+.approve_item{
+	opacity: 0.3;
+}
+
+
+.approve_item:hover{
+	opacity: 1;
+}
+
+
+/*//item view page*/
+.disapprove_item{
+	opacity: 0.3;
+}
+
+.disapprove_item:hover{
+	opacity: 1;
+}
+
+
+.approve_item > i ,.disapprove_item > i{
+	margin-top: -2px;
+	margin-left: 2px;
+}
+
+#view_image_holder{
+	display: block;
+	text-align: center;
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>P2P</title>
+<meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
+<meta name="Keywords" content="Rent books Online, Rent engineering books, book rental online, engineering books, engineering colleges india, rent books india, easy book rentals, cool book rentals/">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <%= stylesheet_link_tag  'p2p/application'%>  
+  <%= javascript_include_tag 'p2p/application'%>  
+  <%= csrf_meta_tags %>
+  
+</head>
+  
+
+<body>
+	
+  <div class="container">
+
+    <div id="body_container">
+
+      <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
+    	<%= render "layouts/p2p/header" %>
+
+      
+      <div class="info-warning" id="flash_notice">  </div>
+      
+
+      <%= yield %>
+
+  </div>
+  
+  	<!-- footer content  -->
+     <div class="footer_cpy">
+      <div class="wrapper">
+        <span>&copy; Sociorent. All rights reserved.</span>
+      </div>
+    </div>
+
+   <div class="clearfix"></div>
+
+  </div>
+
+
+
+  <script>
+
+  <% unless flash[:notice].nil? %>
+    showNotifications("<%=flash[:notice]%>");
+  <% end %>
+
+
+  </script>
+
+
+</body>
+
+<% unless p2p_current_user.nil? %>
+  <% @notification_channel = "/user_#{p2p_current_user.id}"%>
+  <%= subscribe_to @notification_channel %>
+<% end %>
+
+</html>

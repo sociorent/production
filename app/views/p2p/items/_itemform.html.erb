@@ -94,29 +94,35 @@
 			<div class="btn-group" id="listing_action">
 				<!-- check if the item is sold or not -->
 
-				<% if solddate.nil?  %>
+				<% unless itemid.empty? %>
 
-					<% if !approvedate.to_s.nil? %>
+					<% if solddate.nil?  %>
 
-				  			<a href="/p2p/sold/<%= itemid %>" class=" action btn"  title="Mark this listing as sold" > <i class="icon icon-shopping-cart"></i>Mark as sold</a>
+						<% if !approvedate.to_s.nil? %>
+
+					  			<a href="/p2p/sold/<%= itemid %>" class=" action btn"  title="Mark this listing as sold" > <i class="icon icon-shopping-cart"></i>Mark as sold</a>
+						<% else %>
+							
+					  			<a href="#" class=" action btn"  title="Listing has not been approved yet" > <i class="icon icon-shopping-cart"></i>Waiting for approval</a>
+				  	
+					  <% end %>
+				  
+
 					<% else %>
-						
-				  			<a href="#" class=" action btn"  title="Listing has not been approved yet" > <i class="icon icon-shopping-cart"></i>Waiting for approval</a>
-			  	
-				  <% end %>
-			  
+						<span class="btn"> <i title="On <%= solddate.strftime("%d-%b-%C%y") %>" class="action_icon">  Listing Sold </i> </span>
+					<%end %>					
+
+					
+
+					<% if deletedate.nil? %>
+					  <button class="btn"><i  itemid="<%=itemid%>" id="delete_button" title="Remove Listing" class="action_icon icon-remove"></i></button>
+					<%end %>
 
 				<% else %>
-					<span class="btn"> <i title="On <%= solddate.strftime("%d-%b-%C%y") %>" class="action_icon">  Listing Sold </i> </span>
-				<%end %>					
 
-				
+					  <button class="btn"><i  title="New Listing" class="action_icon icon-list"></i>New Listing</button>
 
-				<% if deletedate.nil? %>
-				  <button class="btn"><i  itemid="<%=itemid%>" id="delete_button" title="Remove Listing" class="action_icon icon-remove"></i></button>
-				<%end %>
-
-				
+				<% end %>				
 
 				
 				  <button class="btn" id="enable"><i title="Edit Listing" class="action_icon icon-pencil"></i></button>
@@ -221,7 +227,7 @@
 			<table class="table">
 			<tr>
 				<td>Category: <span class="canEdit" id="category" data-type="select" data-original-title="Select Category" data-source="/p2p/categories" ><%=category%></span></td>
-				<td>Model: <span id="model" data-type="select" ><%=brand%></span></td>
+				<td>Model: <span id="model" title="Select Model" data-type="select" ><%=brand%></span></td>
 			</tr>
 			</table>
 
@@ -303,7 +309,7 @@
 	<div class="row">
 		<div id="desc" class="span12">
 			<h4>Description</h4>
-			<span id="desc_content" data-type="textarea" class="canEdit"><%= description %></span>
+			<span id="desc_content" title="Enter Description(More than 20 letters)" data-type="textarea" class="canEdit"><%= description %></span>
 		</div>
 	</div>
 
@@ -350,7 +356,7 @@
 
 
 
-					<% if defined? itemspec and (!current_user.nil? and (ownerid == p2p_current_user.id.to_s) )  %>
+					<% if defined? itemspec and (!current_user.nil? and (ownerid == p2p_current_user.id.to_s) ) and !spec_used.nil? and itemspec.count < spec_used.count %>
 
 						<div id="add_more_spec" class="hide">
 							<b>Add More Specification here <br/></b>
@@ -392,7 +398,7 @@
 		//initialize
 		window.item_values ={};
 		item_values['spec']={};
-
+		window.edit = <%= (itemid.empty?) ? false : true %>;
 
 				<%if !itemid.empty?  and ownerid == p2p_current_user.id.to_s %>
 					item_values['title'] = "<%= title %>";

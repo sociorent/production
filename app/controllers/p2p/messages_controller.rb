@@ -161,19 +161,7 @@ class P2p::MessagesController < ApplicationController
     unreadcount =  p2p_current_user.received_messages.inbox.unread.count 
 
    # private pub section
-
-    # publish to change th read count
-    if unreadcount > 0 
-      header_count = ""
-      message_page_count = " "
-    else
-      header_count = "$('#header_msg_count').html('');"
-      message_page_count = " $('#unread_count').html();"
-    end
-
-    PrivatePub.publish_to("/user_#{p2p_current_user.id}", (header_count + message_page_count).html_safe )
-    
-    
+ 
 
     render :json => {:id =>  deleted_messages , :unreadcount => unreadcount}
 

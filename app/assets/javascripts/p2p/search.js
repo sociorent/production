@@ -1,5 +1,6 @@
 
   $(document).ready(function() {
+
     var cache = {};
     $("#top_search_input").autocomplete({
       minLength: 2,
@@ -26,10 +27,19 @@
       }
     });
 
-    $("#notificationcontainer").notify();
+    setupunotify();
 
   });
 
+
+  function setupunotify(){
+    if ($.notify){
+       $("#notificationcontainer").notify();
+    }else{
+      setTimeout(setupunotify,3000);
+    }
+
+  }
 
   // display the notification
   function showNotifications(content){

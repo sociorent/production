@@ -75,11 +75,15 @@
 					// reset the checkbox
 					$("#" + that.attr('tbl') + " .master_check").removeAttr('checked');
 
+					
 					if (data['unreadcount'] > 0){
-						$('#inbox_count').html("(" + data['unreadcount'] +  ")");
+						$('#unread_count').html("(" + data['unreadcount'] +  ")");
+						$('#header_msg_count').html("(" + data['unreadcount'] +  ")");
+						
 					}
 					else{
-						$('#inbox_count').html("");
+						$('#unread_count').html("");
+						$('#header_msg_count').html("");
 					}
 
 

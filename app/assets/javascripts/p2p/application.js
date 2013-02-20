@@ -12,20 +12,22 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require global/jquery.ui.core.js
-//= require global/jquery.ui.widget.js
-//= require global/jquery.ui.menu.js
-//= require global/jquery.ui.position.js
-//= require global/jquery.ui.autocomplete.js
-//= require global/underscore.js
+//= require global/jquery.ui.core
+//= require global/jquery.ui.widget
+//= require global/jquery.ui.menu
+//= require global/jquery.ui.position
+//= require global/jquery.ui.autocomplete
+//= require p2p/jquery.notify
+//= require global/underscore
 //= require bootstrap
+//= global/wysihtml5-0.3.0.min
 //= require bootstrap-editable
 //= require bootstrap-editable-rails
+//= global/bootstrap-wysihtml5-0.0.2.min
 //= require private_pub
-//= require p2p/jquery.history.js
-//= require p2p/jquery.notify.js
-//= require p2p/jquery-scrolltofixed-min.js
-//= require p2p/search.js
-//= require p2p/category_menu.js
-//= require p2p/items.js
+//= require p2p/jquery.history
+//= require p2p/jquery-scrolltofixed-min
+//= require p2p/search
+//= require p2p/category_menu
+//= require p2p/items
 // require_tree .

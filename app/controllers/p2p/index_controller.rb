@@ -11,7 +11,8 @@ class P2p::IndexController < ApplicationController
   def index
     # @mobiles=P2p::Item.select("title,price").where('product_id=1').limit(4);
     # @electronics=P2p::Item.select("title,price").where('product_id=2').limit(4);
-
+    
+    # load the categories based on their priority
     @category = P2p::Category.order("priority")
 
   end

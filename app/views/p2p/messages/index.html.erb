@@ -154,7 +154,7 @@
 		  "sDom": "<'row-fluid'<'span6'><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		  'sScrollY':"400px",
           "sAjaxSource": '/p2p/getmessages/inbox' ,
-          "aaSorting":[],
+          "aoColumns":[{"bSortable":false},{"bSort":true},{"bSortable":false},null,{"bSort":true}],
           "bScrollCollapse": false,
           "bFilter":false,
        	  "bSort": true,
@@ -182,6 +182,7 @@
           "bScrollCollapse": false,
 		  "sAjaxSource": '/p2p/getmessages/sentbox' ,
           "bFilter":false,
+          "aoColumns":[{"bSortable":false},{"bSort":true},{"bSortable":false},null,{"bSort":true}],
        	  "bSort": true,
           "iDisplayLength" : 10,
           "bAutoWidth": false,
@@ -201,6 +202,7 @@
           "aaSorting":[],
           "bScrollCollapse": false,
 		  "sAjaxSource": '/p2p/getmessages/deletebox' ,
+		  "aoColumns":[{"bSortable":false},{"bSort":true},{"bSortable":false},null,{"bSort":true}],
           "bFilter":false,
        	  "bSort": true,
           "iDisplayLength" : 10,
@@ -343,7 +345,14 @@
 		oInboxTable.fnAdjustColumnSizing();
 		oSentBoxTable.fnAdjustColumnSizing();
 		oDeleteBoxTable.fnAdjustColumnSizing();
+
+		// $('#inbox th:first').unbind();
+		// $("#sentbox th:first").unbind();
+		// $("#deletebox th:first").unbind();
+
+
 	});
+
 
 </script>
 

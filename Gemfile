@@ -16,7 +16,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-
+  gem "jquery-fileupload-rails"
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -86,3 +86,10 @@ gem 'bootstrap-editable-rails'
 
 gem "private_pub"
 gem "thin"
+
+#getting user location
+gem "geocoder"
+
+#nested form
+gem "nested_form"
+

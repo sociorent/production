@@ -147,7 +147,7 @@ class OrdersController < ApplicationController
 		if params[:mobile]
 			code = rand(100000..999999)
 			session[:code] = code
-			sms_text= "Please enter the confirmation code #{session[:code]} to confirm the COD order. Thank you for using Sociorent.com."
+			sms_text= "Thanks for signing-up with Sociorent.com. Your ID is #{temp_id} . You may now login to place your order. Thank you."
 			puts session[:code]
 			result = 1 if send_sms(params[:mobile],sms_text)
 		elsif params[:code]

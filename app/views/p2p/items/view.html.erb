@@ -1,12 +1,18 @@
 
+<% content_for :pagetitle  do %>
+
+  <%=@item.title %> listed under <%= @item.product.name %>, <%=@item.category.name %>
+    
+<%end %>
+
 
 <%= render "/p2p/items/itemform" ,
            :viewimage => @item.get_image(0,:view) ,
            :thumbimage => @item.get_image(0,:thumb) ,
-           :fullimage => @item.get_image(0,:full) ,
+           :fullimage => @item.get_image(0,:view) ,
            :title => @item.title,
            :price => @item.price.to_i.to_s,
-           :location => "",
+           :location => @item.city.name ,
            :ownerid => @item.user_id.to_s,
            :userid => (current_user.nil? ) ? "" : current_user.id.to_s,
            :itemid => @item.id.to_s,
@@ -26,6 +32,9 @@
            :condition => @item.condition,
            :requestmessage => @message,
            :approvedate =>  @item.approveddate,
-           :disapproveddate => @item.disapproveddate
+           :disapproveddate => @item.disapproveddate,
+           :paytype => @item.paytype.to_s,
+           :payinfo => @item.payinfo
+
            
 %>

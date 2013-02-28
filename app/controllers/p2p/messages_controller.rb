@@ -82,8 +82,6 @@ class P2p::MessagesController < ApplicationController
 
     while !@message.nil?
 
-      puts "Recive id : " + @message.receiver_id.to_s
-      puts " My id: " + p2p_current_user.id.to_s
 
       if @message.receiver_id = p2p_current_user.id
         
@@ -315,7 +313,7 @@ class P2p::MessagesController < ApplicationController
 
       response[:aaData].push({
                           "0" => "<input type='checkbox' class='msg_check' msgid='#{msg.id}' >",
-                          "1" => (msg.item.nil?) ?    msgtype + " ---" : msgtype +  msg.item.title,
+                          "1" => (msg.item.nil?) ?    msgtype + " Sociorent" : msgtype +  msg.item.title,
                           "2" => msg.sender.user.name,
                           "3" => "<div class='showmessage' msgid='#{msg.id}' ><a href='#' >#{msg.message.slice(0,15) + '...'}</a></div>",
                           "4" => tme,

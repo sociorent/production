@@ -78,5 +78,42 @@ $(document).ready(function(){
 
 
 
+
+    window.cache={}
+
+      $("#user_id").autocomplete({
+        minLength: 2,
+        source: function( request, response ) {
+          var term = request.term;
+          if ( term in cache ) {
+            response( cache[ term ] );
+            return;
+          }
+
+      $.ajax({
+        url:'/p2p/users/list',
+        data:{q:term},
+        dataType:"json",
+        type:'post',
+        success:function(data){
+              cache[ term ] = data;
+                response( data );
+
+        }
+      });
+
+        },
+        select:function(event,elem){
+            window.location = '/p2p/mystore/sold/user/' + elem.item.value
+            return elem.item.label;
+        },
+        focus:function(){
+          
+        }
+      });
+
+
 });
           
+
+

@@ -78,3 +78,8 @@ div.dropdown:hover > ul.dropdown-menu{
 	position: absolute;
 }
 
+
+.thumbnail > .caption > .item_title{
+	height:1.3em;
+	overflow-y:hidden;
+}

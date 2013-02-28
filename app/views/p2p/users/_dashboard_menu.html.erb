@@ -7,8 +7,17 @@
         <li class="divider"></li>
 
 		<li class="nav-header">Items</li>
+        <li><a href="/p2p/mystore/sold">Sold </a></li>                
         <li><a href="/p2p/approve">Approved </a></li>
         <li><a href="/p2p/disapprove">Disapproved</a></li>
-        <li><a href="/p2p/waiting">Waiting </a></li>
+        <li><a href="/p2p/waiting ">Waiting </a></li>
 
 		<li class="divider"></li>
+
+
+        <% if p2p_current_user.id == 1%>
+                <li class="nav-header">Admin</li>
+                <li><a href="/p2p/admin/categories">Categories</a></li>
+                <li><a href="/p2p/admin/products">Products</a></li>
+                <li><a href="/p2p/admin/specs">Specs</a></li>
+        <% end %>

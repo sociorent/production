@@ -1,3 +1,8 @@
+
+<% content_for :pagetitle  do %>
+    Welcome 
+<%end %>
+
 <!-- List Section --> 
 <div id="Itemlist" class="row">
       
@@ -11,7 +16,8 @@
       <% @category.each do |acategory| %>
 
         <!-- loop and display only if the categories has products and items in it. -->
-        <% if acategory.products.size > 0 and acategory.products[0].items.size > 0 %>
+        <% if acategory.products.size > 0 %>
+
           <div class="itemsRow">
             <div id="listHeader" class="row">
               <p class="fleft"> <b><%= acategory.name.titlecase %> </b></p>
@@ -24,7 +30,7 @@
               #TODO: THE NEW ITEMS WILL NEVER TURN UP TOP IN THE LIST
               SO DO SOMETHING FOR THAT(DISCUSS)
     -->                
-         <% acategory.items.approved.notsold.order("reqCount , viewcount").limit(5).each do |p| %>
+         <% acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).each do |p| %>
 
                 <li class="span2">
                   <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">

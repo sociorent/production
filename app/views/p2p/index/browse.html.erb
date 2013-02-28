@@ -1,3 +1,15 @@
+<% content_for :pagetitle  do %>
+
+	Browsing
+
+	<% if params.has_key?(:prod)  %>
+		<%= @products.first.name %>
+	<% else %>
+		<%= @cat.name %>
+	<% end %>
+
+    
+<%end %>
 
 
 <div id="Itemlist" class="row">
@@ -33,7 +45,7 @@
 
 		<% @products.each do |prod| %>
 
-			<% next if prod.items.count ==0 %>
+			<% next if prod.items.by_location_or_allover(p2p_get_user_location).approved.notsold.count == 0 %>
 			
 
 			<% prod_count = 0 %>
@@ -53,7 +65,13 @@
 
 			        <ul class="thumbnails" id="filter_replace">
 			        
-			      <% prod.items.approved.notsold.order("rand()").each do |p| %>
+			        <% if params.has_key?(:prod) %>
+			        	<% items = prod.items.by_location_or_allover(p2p_get_user_location).approved.notsold.paginate(:page => params[:page] ,:per_page => 20 ) %>
+			        <% else %>
+						<% items = prod.items.by_location_or_allover(p2p_get_user_location).approved.notsold.paginate(:page => params[:page] ,:per_page => 10 ) %>
+			        <% end %>
+
+			      <% items.each do |p| %>
 
 			          <li class="span2">
 			            <a href=<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}") %>>
@@ -81,7 +99,7 @@
 
 			      </ul>
 
-			    <% if params.has_key?(:prod) %>
+			    <% if params.has_key?(:prod) and !items.next_page.nil? %>
 		   		    <div id="load_more">
 				    	<div class="btn btn-primary">Load More.....</div>
 				    </div>
@@ -91,9 +109,7 @@
 		</div>
 		
 	<% end %>
-	<% if prod_count ==0 %>
-		
-	<% end %>
+
 </div>
 
   </div>

@@ -1,3 +1,12 @@
+<% content_for :pagetitle  do %>
+
+	Result for
+
+		<%= @cat.name %>
+
+    
+<%end %>
+
 
 <div id="Itemlist" class="row">
     <div id="filters" class="span2 ">
@@ -44,7 +53,7 @@
 			                		<img src="<%=itm[:img]%>" >
 			                	</div>
 			                <div class="caption">
-			                  <b><%= itm[:title] %></b>
+			                  <div class="item_title"><%= itm[:title] %></div>
 			                  <p>
 
 			                    <ul>

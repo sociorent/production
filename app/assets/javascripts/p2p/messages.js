@@ -3,6 +3,7 @@
 //= require dataTables/jquery.dataTables.bootstrap
 */
 
+
 	$(document).ready(function(){
 
 
@@ -113,9 +114,42 @@
 
 		});
 
+	$("#inbox_link").click(function(){
 
-
+		if ($("#inbox").css('display') == 'none'){
+			$("#inbox").css('display','');
+			$('#show_msg').css('display','none');
+		}
 	});
+
+
+	$("#sentbox_link").click(function(){
+
+		if ( parseInt($("#sent table th :first").css('width'))  < parseInt($("#sentbox_table td:first").css('width'))  ){
+			oSentBoxTable.fnDraw();
+		}
+
+		if ($("#sent").css('display') == 'none'){
+			$("#sent").css('display','');
+			$('#show_msg').css('display','none');
+		}
+	});
+
+	$("#deletebox_link").click(function(){
+
+		if ( parseInt($("#delete table th :first").css('width'))  < parseInt($("#deletebox_table td:first").css('width'))  ){
+			oDeleteBoxTable.fnDraw();
+		}
+
+		if ($("#delete").css('display') == 'none'){
+			$("#delete").css('display','');
+			$('#show_msg').css('display','none');
+		}
+	});
+
+
+
+});
 
 
  	// Showing overlay while fetching contents

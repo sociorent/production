@@ -1,3 +1,13 @@
+<% content_for :pagetitle  do %>
+
+  <% if p2p_current_user.id == 1 %>
+  <%= params[:action].titleize %> listings for <%= @user %>
+  <% else %>
+    <%= params[:action].titleize %> - <%= p2p_current_user.user.name %>
+  <% end %>
+    
+<%end %>
+
 
 <div class="row" id="body_content" >
 
@@ -19,7 +29,17 @@
       </a></p>
     </div>
 
+    <% if p2p_current_user.id == 1%>
+      <div class="pull-right">
+        Search: <input type="text" id="user_id" placeholder="Type email">
+      </div>
+    <% end %>
+
+      Details for: <%= @user %> <br/><br/>  
+
+
       <%= render '/p2p/items/inventory_items_button' %>
+
       <%= render "/p2p/items/inventory_items" , :items => @items %>
 
 	</div>

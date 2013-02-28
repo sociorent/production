@@ -1,0 +1,36 @@
+
+
+
+<% content_for :pagetitle  do %>
+    Specifications  -Admin 
+<%end %>
+
+<h1>Listing p2p_specs</h1>
+
+<%= link_to 'New Spec', new_p2p_spec_path %>
+
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Priority</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @p2p_specs.each do |p2p_spec| %>
+  <tr>
+    <td><%= p2p_spec.name %></td>
+    <td><%= p2p_spec.priority %></td>
+    <td><%= p2p_spec.category.name %></td>
+    <td><%= link_to 'Show', p2p_spec %></td>
+    <td><%= link_to 'Edit', edit_p2p_spec_path(p2p_spec) %></td>
+    <td><%= link_to 'Destroy', p2p_spec, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

@@ -1,0 +1,38 @@
+
+
+<% content_for :pagetitle  do %>
+    Categories  -Admin 
+<%end %>
+
+
+
+<h1>Listing Categories</h1>
+
+
+<%= link_to 'New Category', new_p2p_category_path %>
+
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Priority</th>
+    <th>Parent</th>
+  </tr>
+
+<% @p2p_categories.each do |p2p_category| %>
+
+  <tr>
+
+    <td> <%= p2p_category.name %></td>
+    <td> <%= p2p_category.priority %></td>
+    <td> <%= p2p_category.category.name unless p2p_category.category.nil? %></td>
+
+  <tr>
+    <td><%= link_to 'Show', p2p_category %></td>
+    <td><%= link_to 'Edit', edit_p2p_category_path(p2p_category) %></td>
+    <td><%= link_to 'Destroy', p2p_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />

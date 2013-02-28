@@ -27,31 +27,34 @@
 						</a>
 					</li>
 					
-					<li class="box_element"><a href="/p2p/waiting">
+					<li class="box_element"><a href="/p2p/waiting/user/<%=p2p_current_user.id%>">
 						Waiting for Approval: <span id="total_wapproval_count">  <%= p2p_current_user.items.waiting.count %>  
 						</span>
 						</a>
 					</li>
 
-					<li class="box_element"><a href="/p2p/disapprove">
+					<li class="box_element"><a href="/p2p/disapprove/user/<%=p2p_current_user.id%>">
 						Disapproved: <span id="total_wapproval_count">  <%= p2p_current_user.items.disapproved.count %>  </span>
 						</a>
 					</li>				
 				</ul>
-			</div>
-		
+			</div>			
 
 
-			<div class="box span3 pull-left">
+			<% if p2p_current_user.id == 1%>
+				<div class="box span3 pull-left">
 				<div class="box_title"> P2P Stastics </div>
 
 				<ul>
-					<li class="box_element">Total Items : <span id="total_item_count"> <%= P2p::Item.unscoped.count %> </span></li>
-					<li class="box_element">Sold Items : <span id="total_sold_count">   <%= P2p::Item.sold.count %>  </span> </li>
-					<li class="box_element">Waiting for Approval: <span id="total_wapproval_count">  <%= P2p::Item.unscoped.notapproved.count %>  </span> </li>
-					<li class="box_element">Disapproved: <span id="total_wapproval_count">  <%= P2p::Item.unscoped.disapproved.count %>  </span> </li>				
+				<li class="box_element">Total Items : <span id="total_item_count"> <%= P2p::Item.unscoped.count %> </span></li>
+				<li class="box_element">Sold Items : <span id="total_sold_count"> <%= P2p::Item.sold.count %> </span> </li>
+				<li class="box_element">Waiting for Approval: <span id="total_wapproval_count"> <%= P2p::Item.unscoped.notapproved.count %> </span> </li>
+				<li class="box_element">Disapproved: <span id="total_wapproval_count"> <%= P2p::Item.unscoped.disapproved.count %> </span> </li>	
 				</ul>
-			</div>
+				</div>
+
+			<% end %>
+				</div>
 		</div>
 
 	</div>

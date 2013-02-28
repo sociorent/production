@@ -1,5 +1,5 @@
 class P2p::Category < ActiveRecord::Base
-  attr_accessible :name, :category_id,:priority
+  attr_accessible :name, :category_id,:priority ,:specs_attributes,:products_attributes,:courier_charge
 
   has_many :subcategories ,:class_name => "P2p::Category" ,:foreign_key => "category_id"
   belongs_to :category , :class_name => "P2p::Category"
@@ -7,10 +7,14 @@ class P2p::Category < ActiveRecord::Base
   has_many :products , :class_name => "P2p::Product"
 
   #has_many :subproducts , :class_name => "P2p::Product",:through => :subcategories 
-
-
-
   has_many :specs ,:class_name => "P2p::Spec"
+
+
+  #for nested form
+  accepts_nested_attributes_for :products ,:allow_destroy => true
+  accepts_nested_attributes_for :specs ,:allow_destroy => true
+
+  
 
 
   has_many :items , :through => :products
@@ -23,3 +27,4 @@ class P2p::Category < ActiveRecord::Base
   end
 
 end
+ 

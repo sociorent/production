@@ -1,0 +1,30 @@
+
+
+<%= simple_nested_form_for @p2p_category do |f| %>
+
+
+  	<%= f.input :name%>
+ 	<%= f.input :priority %>
+ 	<%= f.input :courier_charge %>
+	<%= f.association :category %>
+
+
+	<%= f.fields_for :products do |product| %>
+	  <%= product.label  :name ,"Product" %>	
+	  <%= product.text_field  :name %>
+	  <%= product.link_to_remove "Remove this Product" %>
+	<% end %>
+
+	<%= f.fields_for :specs do |spec| %>
+	  <%= spec.label  :name ,"Specification" %>	
+	  <%= spec.text_field  :name %>
+	  <%= spec.link_to_remove "Remove this Spec" %>
+	<% end %>
+
+	<p><%= f.link_to_add "Add a Spec", :specs %></p>
+
+	<p><%= f.link_to_add "Add a Product", :products %></p>
+
+	<%= f.submit :class =>"btn" %>
+
+<% end %>

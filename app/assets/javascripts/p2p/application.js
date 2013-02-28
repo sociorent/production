@@ -17,13 +17,19 @@
 //= require global/jquery.ui.menu
 //= require global/jquery.ui.position
 //= require global/jquery.ui.autocomplete
+//= require jquery_ujs
+//= require jquery_nested_form
+//= require jquery-fileupload
 //= require p2p/jquery.notify
+//= require p2p/jquery.fancybox-1.3.4
 //= require global/underscore
 //= require bootstrap
-//= global/wysihtml5-0.3.0.min
 //= require bootstrap-editable
 //= require bootstrap-editable-rails
-//= global/bootstrap-wysihtml5-0.0.2.min
+//= require global/wysihtml5-0.3.0.min
+//= require global/bootstrap-wysihtml5-0.0.2.min
+//= require global/wysihtml5
+//= require p2p/select2
 //= require private_pub
 //= require p2p/jquery.history
 //= require p2p/jquery-scrolltofixed-min
@@ -31,3 +37,79 @@
 //= require p2p/category_menu
 //= require p2p/items
 // require_tree .
+
+
+$(document).ready(function(){
+//	$(".action_icon").tooltip();
+
+	$("#head_user_location").click(function(){
+		$("#location_modal").modal('show');
+	});
+
+	$("#location_modal_save").click(function(){
+		$("#location_modal").modal('hide');
+
+		$("#head_user_location").css('background-color','');
+		$("#head_user_location i").removeClass('icon-white');
+
+		$.ajax({
+			url:'/p2p/location',
+			type:'post',
+			data:{location:$("#user_location :selected").val()},
+			dataType:'json',
+			success:function(data){
+				if (data.status == 1){
+					window.location.reload();
+					$("#head_user_location i").attr('title',$("#user_location :selected").text())
+											.tooltip('destroy')
+											.tooltip();
+					$("#head_user_location i").attr('cityid',$("#user_location :selected").val());
+				}
+				else if(data.status == 2){
+					$("#head_user_location").css('background-color','red');
+					$("#head_user_location i").addClass('icon-white');
+					$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
+					
+				}
+			},
+			error:function(){
+				$("#head_user_location").css('background-color','red');
+				$("#head_user_location i").addClass('icon-white');
+				$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
+				
+			}
+		});
+		
+		
+		return false;
+	});
+
+
+	//guess location of user if not set
+	if ($("#head_user_location").attr('cityid') == ''){
+		$.ajax({
+			url:'/p2p/guesslocation',
+			type:'post',
+			dataType:'json',
+			success:function(data){
+				if (data.status == 1){
+					window.location.reload();
+					$("#user_location").val(data.location);
+					$("#head_user_location i").attr('title',$("#user_location :selected").text()).tooltip('destroy').tooltip();
+				}
+				else if(data.status == 2){
+					$("#head_user_location").css('background-color','red');
+					$("#head_user_location i").addClass('icon-white');
+					$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
+				}
+			},
+			error:function(){
+				$("#head_user_location").css('background-color','red');
+				$("#head_user_location i").addClass('icon-white');
+				$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
+				
+			}
+		});
+	}
+
+});

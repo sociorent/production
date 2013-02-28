@@ -1,0 +1,38 @@
+
+<% content_for :pagetitle  do %>
+    Products  -Admin 
+<%end %>
+
+<h1>Listing p2p_products</h1>
+
+<%= link_to 'New Product', new_p2p_product_path %>
+
+<table>
+
+  <tr>
+    <th>Name</th>
+
+    <th>Priority</th>
+    <th>Category</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @p2p_products.each do |p2p_product| %>
+  <tr>
+    <td><%= p2p_product.name %></td>
+
+    <td><%= p2p_product.priority %></td>
+    <td><%= p2p_product.category.name %></td>
+
+    <td><%= link_to 'Show', p2p_product %></td>
+    <td><%= link_to 'Edit', edit_p2p_product_path(p2p_product) %></td>
+    <td><%= link_to 'Destroy', p2p_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+

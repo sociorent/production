@@ -1,15 +1,35 @@
   <%= stylesheet_link_tag '/assets/p2p/header' %>
 
+  <%#= request.env["HTTP_REFERER"]  %>
+
 <div id="header" class="row">
   <div class="span2"><a href="/p2p"><img src="/assets/p2p/index/p2p_logo.png" alt="Logo" ></a></div>
   <div class="span4">
-    <div class="input-append">
-      <input id="top_search_input" type="text" class="span4" autocomplete="off">
+    <div class="input-append input-prepend">
+        <span class="add-on " id="head_user_location"  cityid="<%= (session.has_key?(:city_id)) ? session[:city_id] : "" %>" > 
+
+            <i class="icon-globe action_icon " data-placement="bottom" data-title="<%= (session.has_key?(:city)) ? session[:city] : "Choose your location now" %>"></i>
+        </span>
+
+          <div class="modal hide fade" id="location_modal">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h3>Select your Location</h3>
+            </div>
+              <div class="modal-body">
+              <p><%=select_tag "user_location" ,options_for_select( P2p::City.all.collect{|city|  [city.name,city.id]})%></p>
+            </div>
+            <div class="modal-footer">
+              <a href="#" id="location_modal_save" class="btn btn-primary">Save changes</a>
+            </div>
+          </div>
+
+      
+      <input id="top_search_input" type="text" class="span4" autocomplete="off" placeholder="Search Peer to peer">
       <span class="add-on"><i class="icon-search"></i></span>
     </div>
   </div>
   <div class="span6" id="menuSet">
-    <div class="span6" id="menuSet">
       <div class="navbar pull-right">
         <ul class="nav">
 
@@ -69,12 +89,46 @@
             </li>
 
             <% else %>
-              <li><a href="/login">Login</a></li>
+              <li>
+                <!-- Button to trigger modal -->
+                <a href="#head_login_modal" role="button" data-toggle="modal">Login</a>
+                 
+                <!-- Modal -->
+                <div id="head_login_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="head_login_modalLabel" aria-hidden="true">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="head_login_modalLabel">Login to P2P</h3>
+                </div>
+                <div class="modal-body">
+
+
+                  <div id="login_box">
+                    <%= render :template => "devise/sessions/new" %>
+                  </div>
+
+                  <div id="signup_box">
+                    <%= render :template => "devise/sessions/new" %>
+                  </div>
+
+                  <div id="forgot_box">
+                    <%= render :template => "devise/sessions/new" %>
+                  </div>
+
+                </div>
+
+                <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary">Save changes</button>
+                </div>
+                </div>
+
+
+              </li>
           <% end %>
         </ul>
       </div>
     </div>
-  </div>
+
 </div>
 
 
@@ -108,4 +162,3 @@ when the page first loads -->
  
 
 </div>
-

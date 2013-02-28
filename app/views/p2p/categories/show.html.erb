@@ -1,0 +1,12 @@
+
+
+<% content_for :pagetitle  do %>
+    Showing <%= @p2p_category.name %>  category -Admin 
+<%end %>
+
+
+<p id="notice"><%= notice %></p>
+
+
+<%= link_to 'Edit', edit_p2p_category_path(@p2p_category) %> |
+<%= link_to 'Back', p2p_categories_path %>

@@ -1,4 +1,11 @@
 
+<% content_for :pagetitle  do %>
+
+	Result for <%=params[:query]%>
+    
+<%end %>
+
+
 
 
  
@@ -7,17 +14,16 @@
 
     <div id="filter" class="span2">
 
-
       <ul class="nav nav-list">
-
         <%= render "scat_menu"  %>
-
       </ul>
+
     </div>
 
 
 	<div id="items" class="span10">
 
+	
 
 	<div class="itemsRow">
 				
@@ -26,6 +32,7 @@
 		          <p class="fright"><a href="/p2p/search/q/<%=params[:query]%>"> View All</a></p>
 		        </div>
 
+				<%= will_paginate (@result)%>
 
 	                <ul class="thumbnails">
 	                
@@ -58,8 +65,15 @@
 	                  </li>
 	              <% end %>
 
+
 	              </ul>
 
+			    <% unless @result.next_page.nil? %>
+		   		    <div id="load_more">
+				    	<div class="btn btn-primary">Load More.....</div>
+				    </div>
+			    <% end %>
+	              
 	</div>
 
 

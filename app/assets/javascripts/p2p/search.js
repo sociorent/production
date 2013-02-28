@@ -1,7 +1,15 @@
 
+
   $(document).ready(function() {
 
     var cache = {};
+
+        $("#top_search_input").keyup(function(e){
+            if (e.which == 13 && $.trim($(this).val()) !=""){
+                window.location.href = '/p2p/search/q/' + $.trim($(this).val());
+            }
+        });
+
     $("#top_search_input").autocomplete({
       minLength: 2,
       source: function( request, response ) {
@@ -29,6 +37,7 @@
 
     setupunotify();
 
+    $(".action_popover").popover();
   });
 
 

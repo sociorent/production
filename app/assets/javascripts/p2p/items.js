@@ -1,12 +1,53 @@
 $(document).ready(function(){
 
-	//set initializing data
 
-	//set tooltip
 
+	$('#upload_image').click(function(){
+       $('#image_upload').trigger('click');
+	});
+
+	window.cache ={}
+    $("#check_availability").autocomplete({
+      minLength: 6,
+      source: function( request, response ) {
+        console.log(request);
+        var term = request.term;
+        if ( term in cache ) {
+          response( cache[ term ] );
+          return;
+        }
+ 
+        $.getJSON( "/p2p/getserviceavailability/" + $("#check_availability").attr('itemid') + '/'  + request.term,{}, function( data, status, xhr ) {
+          cache[ term ] = data;
+          response( data );
+        });
+      },
+      select:function(event,elem){
+         alert('go to payment');
+      },
+      focus:function(){
+        return false;
+      }
+    });
+
+
+
+	$('#view_image_fancy').fancybox({
+		'speedIn'		:	500, 
+		'speedOut'		:	200,
+		'centerOnScroll': true
+ 	});
+
+	$(".action_icon").tooltip('destroy');
+
+	$("#new_listing_info").popover('show');
+	setTimeout(function(){
+		$("#new_listing_info").popover('hide');
+	},2000);
+	// save the form onclick trigger
 	$("#save").click(function(){
 
-
+		// call the save function if saved not return false
 		if (!saveItem()){
 			return false;
 		}
@@ -16,22 +57,30 @@ $(document).ready(function(){
 
 
 
-
+	// cancel edit function trigger
+	// #TODO: CHECK IF THE FORM IS CHANGED OR NOT AND REDIRECT ACCORDINGLY
 	$("#cancel").click(function(){
-
-
 			window.location.reload();
-
 	});
 
+	// EDIT Button click function..
+	// if edit is pressed for first time then open all editable elements
+	// 	if in edit rather than new dn enable the category and brand for edition
+	// if edit is pressed for second time then try to toggle all the editable elements to normal
 	$('#enable').click(function() {
 		$(this).toggleClass('active');
+
+
+		//close all editable elements
 		if ($('.canEdit').hasClass('editable')){
 
+			$(".action_icon").tooltip('destroy');
 
 			$("#add_more_spec").addClass('hide');
 
-			$("#upload_pic").addClass('hide');
+			
+			$(".edit_shown").addClass('edit_visible').removeClass('edit_shown');
+			//$("#upload_pic").addClass('hide');
 
 			$("#empty_specs").addClass('hide');
 
@@ -46,20 +95,27 @@ $(document).ready(function(){
 			$(this).children().attr('data-original-title','Edit Item');
 
 			// disable upload form
-			$("#file_add_image").attr("disabled","disabled");
+			//$("#file_add_image").attr("disabled","disabled");
 
 			$(".remove_image").css({'display':'block'});
 
 			$(this).removeClass('btn-primary').attr('title','Edit Listing');
 
+			// replace the edit icon
+			// #TODO: REMOVE THIS NOT NEEDED IN FUTURE
 			$("#enable i").addClass('icon-pencil');
 			$("#enable i").removeClass('icon-ok');
 			$("#enable i").attr('title','Edit Listing');
 		}
+		//Enable all the edits here.
 		else {
-			// show all the tooltips
-			$("#title").tooltip('show');
 
+			$(".action_icon").tooltip({"delay":{show:0,hide:100}});
+
+			$(".edit_visible").addClass('edit_shown').removeClass('edit_visible');
+			
+			// show all the tooltips11
+			// hide the edit button and show the save and cancel button
 			$("#enable").hide();
 			$("#save").show();
 			$("#cancel").show();
@@ -72,7 +128,7 @@ $(document).ready(function(){
 			
 			// enable upload form
 			// $("#file_add_image").removeProp("disabled");
-			$("#file_add_image").removeAttr("disabled");
+			$("#upload_pic").removeAttr("disabled");
 
 			$(".remove_image").css({'display':'block'});
 			$("#add_more_spec").removeClass('hide');
@@ -83,15 +139,19 @@ $(document).ready(function(){
 
 			$('.canEdit').editable();
 
+			$("#image_upload").removeAttr('disabled','disabled');
 			if (window.edit){
 				$("#category").editable('toggleDisabled');
 				$('[id^=item_]').on('save',check_specs);
+
 			}
 
 			$("#title").css({'color':'blue'});
 			$("#title").editable({
 				placement:'bottom'
 			});
+			$("#title").tooltip('show');
+
 
 			$("#empty_specs").removeClass('hide');
 
@@ -103,10 +163,11 @@ $(document).ready(function(){
 
 				if (params.newValue == item_values['cat']) return false ;
 
+				item_values['cat'] = params.newValue;
+				
 				$(".specs").remove();
 
 				item_values['spec']={};
-				
 
 				//$('#model').removeClass('editable').removeClass('editable-click').removeClass('editable-unsaved');
 				var temp = $('#model').parent().html();
@@ -218,7 +279,7 @@ $(document).ready(function(){
 			//validate price
 			$('#price').on('save', function(e, params) {
    				 //alert('Saved value: ' + params.newValue);
-				if (params.newValue.match(/^\d+$/) != null) {
+				if (params.newValue.match(/^\d+\.?\d+$/) != null) {
 					item_values['price'] = params.newValue;
 					$(this).removeClass('error');
 					$("#condition").tooltip('show');
@@ -226,6 +287,7 @@ $(document).ready(function(){
 				}else{
 					item_values['price']="";
 					params.newValue = params.oldValue;
+					$(this).addClass('error');
 					$(this).tooltip('show');
 				}
 			});
@@ -233,7 +295,8 @@ $(document).ready(function(){
 			//validate location
 			$('#location').on('save', function(e, params) {
    				 //alert('Saved value: ' + params.newValue);
-				if (params.newValue.length > 3) {
+
+				if (params.newValue.length !=0 ) {
 					item_values['location'] = params.newValue;
 					$(this).removeClass('error');
 					$('[id^=item_] :first').tooltip('show');
@@ -246,6 +309,55 @@ $(document).ready(function(){
 				}
 			});
 
+			$("#image_upload").change(function(){
+
+
+			    var files = $(this)[0].files; // FileList object
+
+
+			    
+			    // Loop through the FileList and render image files as thumbnails.
+			    for (var i = 0, f; f = files[i]; i++) {
+
+			      // Only process image files.
+			      if (!f.type.match('image.*')) {
+			        continue;
+			      }
+
+			      window.image_count += 1;
+
+			      var reader = new FileReader();
+
+			      // Closure to capture the file information.
+			      reader.onload = (function(theFile) {
+			        return function(e) {
+
+						$(".thumb_holder .thumbnails ").append('<li class="thumbs"><i class="icon-remove pull-right hide remove_image "></i>\
+	              			<img src="' + e.target.result + '"  imgid="-1" class="thumb_img pull-left" viewimage="' + e.target.result + '">\
+	              		</li>');
+
+			        };
+			      })(f);
+
+			      // Read in the image file as a data URL.
+			      reader.readAsDataURL(f);
+			    }
+
+				if ((window.image_count  )>3 ){
+					showNotifications("No more than 3 images are allowed. Please delete some");
+					return false;
+				}
+
+				if ($("#image_upload")[0].files.length > 3 ){
+					showNotifications('Image limit is 3. Please add only three files');
+					return false;
+				}else if ( !window.edit && $("#image_upload")[0].files.length == 0){
+					showNotifications('Add atleast one image');			
+					return false;
+				}
+
+				$('#save i').tooltip('show');
+			});
 
 			//validate condition
 			$('#desc_content').on('save', function(e, params) {
@@ -255,7 +367,7 @@ $(document).ready(function(){
 				if (params.newValue.length > 20) {
 					item_values['desc'] = params.newValue;
 					$(this).removeClass('error');
-					$('#save i').tooltip('show');
+					$("#upload_pic").tooltip('show');
 				}
 				else{
 					item_values['desc']="";
@@ -292,14 +404,10 @@ $(document).ready(function(){
    });   
 
 
-	$("#file_add_image").change(function(){
-		$("#add_image_form").submit();
-	});
-
 
 
 	//delete the item
-    $("#delete_button").click(function(){
+    $("#delete_button").on('click',function(){
     	// if user says no stop deleting 
     	if (!confirm("Are you sure you want to delete this listing?")){
     		return true;
@@ -321,6 +429,7 @@ $(document).ready(function(){
 
 	//remove image funciton
 	$(".remove_image").click(function(){
+
 		var that = $(this);
 		$.ajax({
 
@@ -372,7 +481,14 @@ $(document).ready(function(){
 				if (!('desc' in item_values) || item_values['desc'] == ""){
 					$("#item_desc").addClass("error");
 					$("#item_desc").tooltip('show');
-					alert("Enter item description");
+					return false;
+
+				}
+
+				if (!('location' in item_values) || item_values['location'] == ""){
+					$("#location").addClass("error");
+					$("#location").tooltip('show');
+					alert("Enter item location");
 					return false;
 				}
 
@@ -389,29 +505,126 @@ $(document).ready(function(){
 					}
 				});
 
+
 				if (flag){
 					alert(" Enter Specifications" );
 					return false;
 				}
-
+				if ( (window.image_count >3) ){
+					showNotifications("No more than 3 images are allowed. Please delete some.");
+					return false;
+				}else if ((window.image_count == 0)){
+					showNotifications("Atleast one image is required.");
+					return false;
+				}
 
 				//showOverlay();
 				showNotifications('Saving item..! Please wait..!');
 
+				$("#form_temp").html('');
+				$('#form_temp').append($("<input  class='hide' name='price' value='" + item_values['price'] + "'>"));
+				$('#form_temp').append($("<input  class='hide' name='title' value='" + item_values['title'] + "'>"));
+				$('#form_temp').append($("<input  class='hide' name='location' value='" + item_values['location'] + "'>"));
+				$('#form_temp').append($("<input class='hide' name='condition' value='" + item_values['condition'] + "'>"));
+				$('#form_temp').append($("<input class='hide' name='brand' value='" + item_values['brand'] + "'>"));
+				$('#form_temp').append($("<input class='hide' name='desc' value='" + item_values['desc'] + "'>"));
+				$('#form_temp').append($("<input class='hide' name='brand' value='" + item_values['brand'] + "'>"));
+				$('#form_temp').append($("<input  class='hide' name='cat' value='" + item_values['cat'] + "'>"));
+
+				_.each(item_values['spec'],function(value,key){
+					$('#form_temp').append($("<input class='hide' name='spec[" + key + "]' value='" + value + "'>"));					
+				});
+
+				if (window.edit){
+					$("#fileupload").attr({
+						'action':window.editsaveurl						});
+
+				}
+
+				//$("#fileupload").submit();
+
+				//showOverlay();
+				showNotifications('Saving item..! Please wait..!');
+
+			if (!window.edit){
 				item_values['authenticity_token']= AUTH_TOKEN;
 				$.ajax({
 					url:window.editsaveurl,
 					data:item_values,
 					type:window.editsavetype,
 					success:function(data){
-						if (data['status'] == 1){
-							window.location.href = "/p2p/" + data['id']
-						}
-						else{
-							alert(data['status']);
-						}
+
+						$("#sellitem_pricing_modal .modal-body").html(data);
+						$("#sellitem_pricing_modal").modal({
+							'backdrop':'static',
+							'keyboard':false,
+							'show':true
+						}).css({
+						    width: 'auto',
+						    'margin-left': function () {
+						        return -($(this).width() / 2);
+						    }
+						});
+
+
+					    $("#direct_payment_submit").on('click',function(){
+					       
+					       if (!($("#direct_payment_form #terms")[0].checked) ){
+					       		showNotifications('Agree to Terms and conditions');
+					       		return false;
+					       }
+
+					       $('#form_temp').append($("<input  class='hide' name='paytype' value='2'>"));
+					       $('#form_temp').append($("<input  class='hide' name='meet_at' value='" + $("#direct_payment_form #meet_at").val() + "'>"));
+					       
+
+					       $("#fileupload").submit();
+
+					      return false;
+
+					    });
+
+					    $("#courier_payment_submit").on('click',function(){
+					       
+					       if (!($("#courier_payment_form #terms")[0].checked) ){
+					       		showNotifications('Agree to Terms and conditions');
+					       		return false;
+					       }
+
+					       $('#form_temp').append($("<input  class='hide' name='paytype' value='1'>"));
+					       $('#form_temp').append($("<input  class='hide' name='dispatch_day' value='" + $("#dispatch_day").val() + "'>"));
+					       $('#form_temp').append($("<input  class='hide' name='alloverindia' value='" + $("#alloverindia").val() + "'>"));
+					       
+					       
+
+					       $("#fileupload").submit();
+
+					      return false;
+
+					    });
+
+					$("#sociorent_payment_submit").on('click',function(){
+					       
+					       if (!($("#sociorent_payment_form #terms")[0].checked) ){
+					       		showNotifications('Agree to Terms and conditions');
+					       		return false;
+					       }
+
+					       $('#form_temp').append($("<input  class='hide' name='paytype' value='3'>"));
+					       $('#form_temp').append($("<input  class='hide' name='payinfo' value='" + $("#payinfo").val() + "'>"));
+
+
+					       $("#fileupload").submit();
+
+					       return false;
+
+					    });
+
 					}
 				});
+			}
+
+
 
 			};
 
@@ -463,9 +676,33 @@ $(document).ready(function(){
 	      });	      
 
 
-	      $('.thumbs').click(function(){
+	      $('.thumbs').on('click',function(){
 	      		$('#view_image').attr('src',$(this).children('img').attr("viewimage"));
+	      		$('#view_image_fancy').attr('href',$(this).children('img').attr("fancyimg"));
 	      		$('#view_image').attr('imgid',$(this).children('img').attr("imgid"));
+	      });
+
+	      $(".icon-repeat").click(function(){
+	      	$("#image_upload").val("");
+	      });
+
+	      $("#clearuploads").on('click',function(){
+
+	      	if ($("#image_upload")[0].files.length == 0 ){
+	      		window.image_count = 0;
+	      	}else{
+	      		window.image_count -= $("#image_upload")[0].files.length;
+	      		if (window.image_count <0) window.image_count = 0;
+	      	}
+
+	      	$("#image_upload").val('');
+
+			_.each($(".thumb_img"),function(elem){
+	      			if ($(elem).attr('imgid') == -1){
+	      				$(elem).parent().remove();
+	      			}
+	      	});
+
 	      });
 
 
@@ -489,6 +726,7 @@ check_specs =  function(e, params) {
 										else{
 											$(window).scrollTop = $("#desc_content").top;
 											$("#desc_content").tooltip('show');
+											$("#desc_content")[0].scrollIntoView(false);
 										}
 									}
 									else{

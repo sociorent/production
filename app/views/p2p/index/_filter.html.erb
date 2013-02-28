@@ -1,14 +1,14 @@
  <!--Search filter menu cod -->
 
 
-<div id="pull_here" class="btn btn-info">Pull Filter </div>
+<div id="pull_here" class="btn btn-info">Filters </div>
 
 <div id="dummy_filter_holder" class="nav nav-list">
 
 <!-- overlay to be displayed during filter request -->
 	<div id="overlay"></div>
 
-		<% item_condition_res = category.items.select("distinct p2p_items.condition").order('p2p_items.condition asc') %>
+		<% item_condition_res = category.items.by_location_or_allover(p2p_get_user_location).select("distinct p2p_items.condition").order('p2p_items.condition asc') %>
 
 		<% if item_condition_res.count > 0 %>
 			<li class="nav-header"> Condition </li>
@@ -48,7 +48,7 @@
 			
  	        
 
-		    	<%% _.each(data,function(elm){%>
+		    	<%% _.each(data["res"],function(elm){%>
 
 				          <li class="span2">
 				            <a href="<%%=elm.url%>">
@@ -79,7 +79,7 @@
 
 		    	<div id="load_more_content"></div>
 
-			<%% if ( window.page_num == 2 ) { %>
+			<%% if ( (window.page_num == 2  ) && data.next == 1 )  { %>
 				</ul>
 		   		    <div id="load_more">
 				    	<div class="btn btn-primary">Load More.....</div>

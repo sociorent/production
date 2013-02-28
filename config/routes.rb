@@ -1,7 +1,8 @@
 Sociorent::Application.routes.draw do
 
 
-  get "cities/index"
+
+  get "item_history/index"
 
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
 
@@ -74,15 +75,33 @@ Sociorent::Application.routes.draw do
     resources :images
     resources :credits 
 
-      get "/categories/set_category" => "categories#set_category"
-      get "/categories/sub_category" => "categories#sub_category"
+    scope 'admin' do
+      #scaffold controller and view
+      resources :categories ,:products ,:specs ,:service_pincodes
 
-      match '/categories' => "categories#index"
+        root :to => 'categories#index'
+    end
 
+      get "categories/set_category" => "categories#set_category"
+      get "categories/sub_category" => "categories#sub_category"
+
+      match 'getcategories' => "categories#getcategories"
+
+      match 'getcities' => "cities#list"
 
       post 'users/list' => 'users#list'
+      post 'users/verifymobile/code' => 'users#getcode'
+      post 'users/verifymobile/:code' => 'users#verifycode'
 
 
+      post 'location' => 'users#setlocation'
+      post 'guesslocation' => 'users#guesslocation'
+
+      post 'items/:id' => 'items#update'
+
+      match 'getbook_details/:isbn13' => "items#getbook_details"
+
+      get 'getserviceavailability/:itemid/:pincode' => 'service_pincodes#check_availability'
       get '' => "index#index"
       get 'sellitem' => "items#new"
       get 'getbrand/:id' => "items#get_brands"
@@ -92,18 +111,22 @@ Sociorent::Application.routes.draw do
       get 'welcome' => 'users#welcome'
       post 'welcome' => 'users#user_first_time'
 
+      match 'itempayment/:id' => 'items#sellitem_pricing'
       get 'delete/:id' => "items#destroy"
       
-      post 'addimage' => "items#add_image"
+      post 'addimage/:item_id' => "items#add_image"
+      get  'addimage/:form_id/form' => "items#sellitem_pricing"
 
       get 'sold/:id' => "items#sold"
 
-      get 'mystore(/:query)' => 'items#inventory'
+      get 'mystore(/:query(/user/:id))' => 'items#inventory'
 
       get 'dashboard' => 'users#dashboard'
       match 'approve(/:query)' => 'items#approve'
+      match 'approve/user/:id' => 'items#approve'
       match 'disapprove' => 'items#disapprove'
-      match 'waiting' => 'items#waiting'
+      match 'disapprove/user/:id' => 'items#disapprove'
+      match 'waiting(/user/:id)' => 'items#waiting'
       
       get 'getmessages(/:id)' => 'messages#getmessages'
 

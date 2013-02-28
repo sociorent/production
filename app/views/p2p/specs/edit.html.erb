@@ -1,0 +1,12 @@
+
+<% content_for :pagetitle  do %>
+    Edit <%= @p2p_spec.name %> specification -Admin 
+<%end %>
+
+<h1>Editing p2p_spec</h1>
+
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @p2p_spec %> |
+<%= link_to 'Back', p2p_specs_path %>

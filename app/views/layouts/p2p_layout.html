@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>P2P</title>
+  
+  <title><%= content_for?(:pagetitle) ? yield(:pagetitle) + "- Peer2Peer, Sociorent"  : "Welcome to Peer2Peer, Sociorent"%></title>
+
 <meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
 <meta name="Keywords" content="Rent books Online, Rent engineering books, book rental online, engineering books, engineering colleges india, rent books india, easy book rentals, cool book rentals/">
 
@@ -47,11 +49,26 @@
 
   <script>
 
-  <% unless flash[:notice].nil? %>
-    showNotifications("<%=flash[:notice]%>");
-  <% end %>
+  $(document).ready(function(){
+      <% unless flash[:notice].nil? %>
+        showNotifications("<%=flash[:notice]%>");
+      <% end %>
 
 
+
+    // <#% if !p2p_current_user.nil? and  p2p_current_user.received_messages.unread.count > 0 %>
+      
+    //     $('#notificationcontainer').notify('create',{
+    //       title:"Pending Messages",
+    //       text:"You have <#%=p2p_current_user.received_messages.unread.count %> messages unread"
+    //     });
+
+
+
+    // <#% end %>
+
+ });
+  
   </script>
 
 

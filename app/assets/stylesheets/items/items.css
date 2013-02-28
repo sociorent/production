@@ -1,24 +1,8 @@
-li.thumbs {
-	height: 50px;
-	width:50px;
-	margin: 3px 0px 0px 3px;
-	border: 1px solid rgba(0,0,0,0.1);
-	text-align: center;
-	cursor: pointer;
-}
-li.thumbs img{
-	
-	margin: 0px;
-	cursor: pointer;
-}
 
 .thumb_holder {
 	margin-left: 15px;
 }
 
-.thumbnail img{
-	margin: 0px;
-}
 
 #listing_action {
 	margin-top: 3px;
@@ -69,4 +53,16 @@ li.thumbs img{
 
 textarea{
 	resize:none;
+}
+
+.editable-container{
+	width:auto;
+}
+
+#desc_content{
+	display: block;
+}
+
+iframe{
+	width:100% !important;
 }

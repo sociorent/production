@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130217213602) do
+ActiveRecord::Schema.define(:version => 20130226172158) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -295,9 +295,10 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
   create_table "p2p_categories", :force => true do |t|
     t.string   "name"
     t.integer  "category_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
     t.integer  "priority"
+    t.decimal  "courier_charge", :precision => 3, :scale => 2, :default => 0.0
   end
 
   add_index "p2p_categories", ["category_id"], :name => "index_p2p_categories_on_category_id"
@@ -306,8 +307,9 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
     t.string   "name"
     t.string   "latitude"
     t.string   "longitude"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "pickup",     :default => 0
   end
 
   create_table "p2p_credits", :force => true do |t|
@@ -333,6 +335,18 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
 
   add_index "p2p_images", ["item_id"], :name => "index_p2p_images_on_item_id"
 
+  create_table "p2p_item_histories", :force => true do |t|
+    t.integer  "item_id"
+    t.string   "columnname"
+    t.string   "oldvalue"
+    t.string   "newvalue"
+    t.boolean  "approved"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "p2p_item_histories", ["item_id"], :name => "index_p2p_item_histories_on_item_id"
+
   create_table "p2p_item_specs", :force => true do |t|
     t.integer  "spec_id"
     t.string   "value"
@@ -353,15 +367,18 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
     t.datetime "solddate"
     t.datetime "paiddate"
     t.datetime "delivereddate"
-    t.integer  "viewcount",       :default => 0
-    t.integer  "reqCount",        :default => 0
+    t.integer  "viewcount",                                     :default => 0
+    t.integer  "reqCount",                                      :default => 0
     t.float    "price"
     t.integer  "city_id"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
     t.string   "condition"
     t.datetime "disapproveddate"
     t.datetime "approveddate"
+    t.string   "payinfo"
+    t.decimal  "commision",       :precision => 3, :scale => 2
+    t.datetime "deletedate"
   end
 
   add_index "p2p_items", ["city_id"], :name => "index_p2p_items_on_city_id"
@@ -398,6 +415,12 @@ ActiveRecord::Schema.define(:version => 20130217213602) do
   end
 
   add_index "p2p_products", ["category_id"], :name => "index_p2p_products_on_category_id"
+
+  create_table "p2p_service_pincodes", :force => true do |t|
+    t.string   "pincode"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "p2p_specs", :force => true do |t|
     t.string   "name"

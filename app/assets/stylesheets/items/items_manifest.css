@@ -3,19 +3,31 @@
  *= require_tree .
  */
 
- #add_image_form{
- 	opacity:0;
+ #fileupload{
  	position:absolute;
  	overflow: hidden;
  	width:70px;
  	cursor: pointer;
+ 	opacity: 0;
  }
 
 .error{
-	color:red;
+	color:red !important;
 }
+
 
 #item_desc{
 	min-height: 300px;
 	margin-bottom: 30px;
+}
+
+
+#upload_pic{
+	width:80px;
+	float:right;
+	cursor: pointer;
+}
+
+.icon-repeat{
+	margin-left: 5px;
 }

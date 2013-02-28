@@ -1,3 +1,11 @@
+
+<% content_for :pagetitle  do %>
+
+  Mystore for <%=p2p_current_user.user.name %>
+    
+<%end %>
+
+
 <div id="body_content" class="row">
     <div id="filter" class="span2">
 
@@ -20,10 +28,7 @@
       </a></p>
     </div>
 
-
     <%= render '/p2p/items/inventory_items_button' %>
-
-
 
     <%= render "/p2p/items/inventory_items" , :items => @items %>
   </div>

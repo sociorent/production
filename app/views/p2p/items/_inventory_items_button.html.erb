@@ -1,28 +1,34 @@
     <div class="actions pull-left">
 
+        
+        <% if !@user_id.nil? and @user_id != "" %>
+            <% url = "/user/#{@user_id}" %>
+        <% else %>
+            <% url = "" %>
+        <% end %>
 
     	<% if params.has_key?(:query) and params[:query] == 'sold' %>
-    			<a href="/p2p/mystore/sold" class="btn btn-primary span2  pull-left">  Sold Items </a> 
+    			<a href="/p2p/mystore/sold<%=url%>"  class="btn btn-primary span2  pull-left">  Sold Items </a> 
     	<% else %>
-				<a href="/p2p/mystore/sold" class="btn span2  pull-left">  Sold Items </a> 
+				<a href="/p2p/mystore/sold<%=url%>" class="btn span2  pull-left">  Sold Items </a> 
     	<% end %>
 
     	<% if params[:action] == 'approve' and !params.has_key?(:query)%>
-    		<a href="/p2p/approve" class="btn btn-primary span2   pull-left">  Approved Items </a>
+    		<a href="/p2p/approve<%=url%>" class="btn btn-primary span2   pull-left">  Approved Items </a>
     	<% else %>
-    		<a href="/p2p/approve" class="btn span2  alert-success pull-left">  Approved Items </a>
+    		<a href="/p2p/approve<%=url%>" class="btn span2  alert-success pull-left">  Approved Items </a>
     	<% end %>
 
     	<% if params[:action] == 'disapprove' and !params.has_key?(:query)%>
-    		<a href="/p2p/disapprove" class="btn span2 btn-primary pull-left">  Disapproved Items </a>
+    		<a href="/p2p/disapprove<%=url%>" class="btn span2 btn-primary pull-left">  Disapproved Items </a>
         <% else %>
-        	<a href="/p2p/disapprove" class="btn span2  alert-error pull-left">  Disapproved Items </a>
+        	<a href="/p2p/disapprove<%=url%>" class="btn span2  alert-error pull-left">  Disapproved Items </a>
         <% end %>
 
     	<% if params[:action] == 'waiting' and !params.has_key?(:query)%>
-    		<a href="/p2p/waiting" class="btn span2  btn-primary pull-left">  Waiting for approval </a>
+    		<a href="/p2p/waiting<%=url%>" class="btn span2  btn-primary pull-left">  Waiting for approval </a>
         <% else %>
-        	<a href="/p2p/waiting" class="btn span2  alert-info pull-left">  Waiting for approval </a>
+        	<a href="/p2p/waiting<%=url%>" class="btn span2  alert-info pull-left">  Waiting for approval </a>
         <% end %>
         
         

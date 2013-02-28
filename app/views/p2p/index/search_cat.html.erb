@@ -1,4 +1,17 @@
 
+<% content_for :pagetitle  do %>
+
+	Browsing
+
+	<% if params.has_key?(:prod)  %>
+		<% @products.first.name %>
+	<% else %>
+		<% @cat.name %>
+	<% end %>
+
+    
+<%end %>
+
 
 
  
@@ -35,7 +48,7 @@
 	<div class="itemsRow">
 			<% @products.each do |prod| %>
 				
-				<% next if prod.items.count ==0 %>
+				<% next if prod.items.by_location_or_allover(p2p_get_user_location).count ==0 %>
 
 		        <div id="listHeader" class="row">
 		          <p class="fleft"> <b><%= prod.name.titlecase %> in <%=prod.category.name %></b></p>
@@ -45,7 +58,7 @@
 
 	                <ul class="thumbnails">
 	                
-	                <% prod.items.limit(5).each do |p| %>
+	                <% prod.items.by_location_or_allover(p2p_get_user_location).limit(5).each do |p| %>
 
 	                  <li class="span2">
 	                    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">

@@ -1,0 +1,69 @@
+<% content_for :pagetitle  do %>
+    Payments    
+<%end %>
+
+
+<div class="row" id="body_content" >
+
+     <div class="span2">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+<div class="span10">
+            <h1>Payment Details</h1>
+
+            <%= will_paginate(@p2p_item_deliveries) %>
+            <table class="table table-striped table-bordered ">
+              <tr>
+                <th>Item ID</th>
+                <th>User Email</th>
+                <th>TXN ID</th>
+                <th>Courier Name</th>
+                <th>Tracking Num</th>
+                <th>Shipping Date</th>
+                <th>Commission</th>
+                <th>Shipping Charge</th>
+                <th>Deleviry Date</th>
+                <th>Citrus pay ID</th>
+                <th>Citrus Pay reason</th>
+                <th>Citrus Ref no</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+
+            <% @p2p_item_deliveries.each do |p2p_item_delivery| %>
+              <tr>
+                <td><%= p2p_item_delivery.item.id %></td>
+                <td><%= p2p_item_delivery.buyer.user.email %><br/><%=p2p_item_delivery.buyer.user.name%><br/><i class="icon-mobile-phone"></i> <%=p2p_item_delivery.buyer.user.mobile_number%></td>
+                <td><%= p2p_item_delivery.txn_id %></td>
+                <td><%= p2p_item_delivery.courier_name %></td>
+                <td><%= p2p_item_delivery.tracking_no %></td>
+                <td><%= p2p_item_delivery.shipping_date %></td>
+                <td><%= p2p_item_delivery.commission %></td>
+                <td><%= p2p_item_delivery.shipping_charge %></td>
+                <td><%= p2p_item_delivery.delivery_date %></td>
+                <td><%= p2p_item_delivery.citrus_pay_id %></td>
+                <td><%= p2p_item_delivery.citrus_reason %></td>
+                <td><%= p2p_item_delivery.citrus_ref_no %></td>
+
+                <td><%= link_to 'Show', p2p_item_delivery %></td>
+                <td><%= link_to 'Edit', edit_p2p_item_delivery_path(p2p_item_delivery) %></td>
+                <td><%= link_to 'Destroy', p2p_item_delivery, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              </tr>
+            <% end %>
+            </table>
+
+
+            <%= will_paginate(@p2p_item_deliveries) %>
+            <br />
+
+            <%#= link_to 'New Item delivery', new_p2p_item_delivery_path %>
+
+</div>

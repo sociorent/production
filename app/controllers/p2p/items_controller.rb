@@ -61,7 +61,7 @@ class P2p::ItemsController < ApplicationController
               render :json => {:status => 0} and return
             end
 
-            item.category.products.new(:name =>  Publisher.find_by_name(params[:brand]) )
+            item.product = item.category.products.new(:name =>  (Publisher.find_by_name(params[:brand])).name )
 
             # P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
             #                                       :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The publisher #{product.name} was not found in your p2p and hence was taken from sociorent and created automatically for you, when the #{p2p_current_user.user.email} requested on listing a book and was created automatically. Sincerally - Developers",
@@ -79,7 +79,7 @@ class P2p::ItemsController < ApplicationController
 
           item.product = item.category.products.new(:name => params[:brand] )
 
-              item.category.products.new(:name => params[:brand] )
+              #item.category.products.new(:name => params[:brand] )
 
               # P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
               #                                       :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The publisher #{product.name} was not found in either p2p nor in sociorent, when the #{p2p_current_user.user.email} requested on listing a book and was created automatically.  <br/><h4>We request you to verify the same.</h4>Sincerally - Developers",

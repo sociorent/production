@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301044900) do
+ActiveRecord::Schema.define(:version => 20130301163226) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(:version => 20130301044900) do
     t.datetime "updated_at",                                                    :null => false
     t.integer  "priority"
     t.decimal  "courier_charge", :precision => 3, :scale => 2, :default => 0.0
+    t.decimal  "commission",     :precision => 3, :scale => 2, :default => 0.0
   end
 
   add_index "p2p_categories", ["category_id"], :name => "index_p2p_categories_on_category_id"
@@ -327,8 +328,10 @@ ActiveRecord::Schema.define(:version => 20130301044900) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "fav_id"
   end
 
+  add_index "p2p_favourites", ["fav_id"], :name => "index_p2p_favourites_on_fav_id"
   add_index "p2p_favourites", ["user_id"], :name => "index_p2p_favourites_on_user_id"
 
   create_table "p2p_images", :force => true do |t|
@@ -357,8 +360,10 @@ ActiveRecord::Schema.define(:version => 20130301044900) do
     t.string   "txn_id"
     t.string   "citrus_reason"
     t.string   "citrus_ref_no"
+    t.integer  "buyer"
   end
 
+  add_index "p2p_item_deliveries", ["buyer"], :name => "index_p2p_item_deliveries_on_buyer"
   add_index "p2p_item_deliveries", ["p2p_item_id"], :name => "index_p2p_item_deliveries_on_p2p_item_id"
   add_index "p2p_item_deliveries", ["tracking_no"], :name => "index_p2p_item_deliveries_on_tracking_no"
 

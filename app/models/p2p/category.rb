@@ -1,5 +1,5 @@
 class P2p::Category < ActiveRecord::Base
-  attr_accessible :name, :category_id,:priority ,:specs_attributes,:products_attributes,:courier_charge
+  attr_accessible :name, :category_id,:priority ,:specs_attributes,:products_attributes,:courier_charge , :commission
 
   has_many :subcategories ,:class_name => "P2p::Category" ,:foreign_key => "category_id"
   belongs_to :category , :class_name => "P2p::Category"

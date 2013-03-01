@@ -124,7 +124,8 @@ class P2p::UsersController < ApplicationController
   def getcode
 
       session[:verify] = rand(10000..99999)
-
+      msg = "Your Sociorent.com Order 1234 has been shipped through #{session[:verify]} with tracking number . Thank you."
+      sendsms(p2p_current_user.user.mobile_number,msg)
       #todo sendsms
       render :json => {:status => 1}
   end
@@ -157,14 +158,26 @@ class P2p::UsersController < ApplicationController
     
     begin
       fav = p2p_current_user.favouriteusers.new
-      fav.p2puser = P2p::Item.find(params[:id]).id
-      
+      fav.fav_id = P2p::Item.find(params[:itemid].to_i).user.id
+      fav.save
+
       render :json => {:status => 1}
 
-    rescue
+    rescue Exception => ex
       render :json => {:status => 0}      
     end
 
+  end
+
+  def paymentdetails
+      if params.has_key?(:bought)
+        @payments = p2p_current_user.payments.order('updated_at desc').paginate(:page => params[:page],:per_page => 10)
+      else
+        @payments = p2p_current_user.soldpayments.order('updated_at desc').paginate(:page => params[:page],:per_page => 10)
+      end
+
+    #@payments = @payments || []
+    
   end
 
 end

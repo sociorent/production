@@ -91,13 +91,13 @@ class P2p::ServicePincodesController < ApplicationController
       pincode = P2p::ServicePincode.find_by_pincode(params[:pincode])
 
       if !pincode.nil? 
-        render :json => [{:label => "Available in this region." , :value=> "#"}]
+        render :json => [{:label => "Available in this region." , :value=> "1"}]
       else
-        render :json => [{:label => "Not available in this region" , :value => "#"}]
+        render :json => [{:label => "Not available in this region" , :value => "0"}]
       end
 
     else
-      render :json => [{:label => "Not available in this region" , :value => "#"}]
+      render :json => [{:label => "Not available in this region" , :value => "1"}]
     end
 
     return

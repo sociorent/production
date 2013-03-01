@@ -63,6 +63,8 @@
     setupunotify();
 
     $(".action_popover").popover();
+    $('.action-icon').tooltip();
+    
   });
 
 

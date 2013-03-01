@@ -36,23 +36,23 @@
           <% unless current_user.nil? %>
 
           <% if params[:action] == 'index'  and params[:controller]== 'p2p/messages'%>
-              <li class="head_active">
+              <li class="head_active action-icon" title="Messages" data-placement="bottom">
                 <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
 
 
 
                 <a href="/p2p/messages">
                   <div id="header_msg_count"> <%= unread_count if  unread_count > 0  %> </div>
-                  <span class="pull-left" >Messages</span>
+                  <span class="pull-left" ><i class=" dashboard_icon icon-envelope"></i></span>
                 </a>
               </li>
 
           <% else %>
-              <li>
+              <li class="action-icon" title="Messages" data-placement="bottom">
                 <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
-                <a href="/p2p/messages">
+                <a href="/p2p/messages" >
                   <div id="header_msg_count"> <%= unread_count if  unread_count > 0  %> </div>
-                  <span class="pull-left" >Messages</span>
+                  <span class="pull-left" ><i class=" dashboard_icon icon-envelope"></i></span>
                 </a>
               </li>
 
@@ -61,25 +61,25 @@
 
 
           <% if params[:action] == 'dashboard' %>
-            <li class="head_active">
-              <a href="/p2p/dashboard">Dashboard</a></li>
+            <li class="head_active action-icon" title="Dashboard" data-placement="bottom">
+              <a href="/p2p/dashboard"><i class=" dashboard_icon icon-dashboard"></i></a></li>
           <% else %>
-            <li><a href="/p2p/dashboard">Dashboard</a></li>
+            <li class=" action-icon" title="Dashboard" data-placement="bottom"><a href="/p2p/dashboard"><i class=" dashboard_icon icon-dashboard"></i></a></li>
           <% end %>
 
 
           <% if params[:action] == 'new'  and params[:controller]== 'p2p/items'%>
-            <li class="head_active"><a href="/p2p/sellitem">List New Item</a></li>
+            <li class="head_active action-icon" title="List New Item" data-placement="bottom"><a href="/p2p/sellitem"><i class=" dashboard_icon icon-file-alt"></i></a></li>
           <% else %>
-            <li><a href="/p2p/sellitem">List New Item</a></li>
+            <li class=" action-icon" title="List New Item" data-placement="bottom"><a href="/p2p/sellitem"><i class=" dashboard_icon icon-file-alt"></i></a></li>
           <% end %>
 
 
 
 
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <%=current_user.name%><b class="caret"></b>
+            <li class="dropdown  action-icon" title="<%=p2p_current_user.user.name%>" data-placement="right">
+              <a href="#" class="dropdown-toggle">
+                <i class=" dashboard_icon icon-user"></i> <i class="icon-caret-down"></i>
               </a>
               <ul class="dropdown-menu submenu">
                 <li><a href="#">My Profile</a></li>

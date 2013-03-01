@@ -12,6 +12,7 @@
 *= require p2p/ui.notify
 *= require p2p/header
 *= require p2p/jquery.fancybox-1.3.4
+*= require p2p/font-awesome.min
 *= require_tree .
 */
 

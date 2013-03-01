@@ -112,6 +112,28 @@ f#Itemlist {
 	font-size: 1.1em;
 }
 
+#item_top_details{
+	 margin-top:  10px;
+	margin-left: 50px;
+}
+
+.item_top_details_detail{
+	line-height: 1.3em;
+	font-size: 1.3em;
+	margin-top: 15px;
+}
+
+.big{
+	font-size:2em;	
+	line-height: 1.7em;
+}
+
+.big > .highlight{
+	font-size:1.1em;
+	color:maroon;
+	font-weight:bold;
+}
+
 #desc{
     min-height: 200px;
 }
@@ -155,4 +177,14 @@ f#Itemlist {
 
 #citruspay_form{
 	margin:0px !important;
+}
+
+#item_top_buy_button{
+	margin-left: 40px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#clearuploads{
+	cursor: pointer;
 }

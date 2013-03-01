@@ -206,9 +206,16 @@ li.dropdown:hover > ul.dropdown-menu{
 	display: none;
 }
 
-.dashboard_menuicon{
-	width:20px;
-	height:20px;
-	margin-top:-5px;
+.dashboard_icon {
+	font-size: 1.6em;
 }
 
+
+
+#index_browse_menu{
+	font-size: 2em !important;
+}
+
+#menuSet{
+	margin-top: -5px;
+}

@@ -76,8 +76,8 @@ Sociorent::Application.routes.draw do
 
     scope 'admin' do
       #scaffold controller and view
-      resources :categories ,:products ,:specs ,:service_pincodes
-
+      resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries
+ 
         root :to => 'categories#index'
     end
 
@@ -91,6 +91,7 @@ Sociorent::Application.routes.draw do
       post 'users/list' => 'users#list'
       post 'users/verifymobile/code' => 'users#getcode'
       post 'users/verifymobile/:code' => 'users#verifycode'
+      get  'paymentdetails(/:bought)' => 'users#paymentdetails'
 
 
       post 'location' => 'users#setlocation'
@@ -126,7 +127,10 @@ Sociorent::Application.routes.draw do
       match 'disapprove' => 'items#disapprove'
       match 'disapprove/user/:id' => 'items#disapprove'
       match 'waiting(/user/:id)' => 'items#waiting'
-      match 'favourites' => 'users#favouriteusers'
+      get  'favourites' => 'users#favouriteusers'
+      post 'favourites' => 'users#setfavourite'
+
+      #post 'payments' => 'users#userpayments'
 
       get 'getmessages(/:id)' => 'messages#getmessages'
 

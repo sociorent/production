@@ -2,16 +2,50 @@
     Welcome 
 <%end %>
 
+
+      <div  class="row">
+        <div class="span11">
+
+        <ul class="nav nav-pills btn-group" id="index_browse_menu">
+          
+          <%used_cat = [] %>
+           <% P2p::Category.where("category_id is null and priority is not null").order('priority').limit(7).each do |cat|%>
+              <% used_cat.push(cat.id) %>
+                  <li class="btn btn-small" id="welcome_cat_pills">
+                      <a  href="/p2p/<%= cat.name %>" >
+                        <%= cat.name %>
+                      </a>
+                  </li>
+            <% end %>
+
+            <li class="dropdown btn btn-small">
+              
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Others  <b class="caret"></b>
+              </a>
+              
+              <ul class="dropdown-menu">
+                <% P2p::Category.order('priority').where("id not in(#{used_cat.join(',')}) or priority is null").each do |cat|%>
+                    <li>
+                      <a  href="/p2p/<%= cat.name %>">
+                        <%= cat.name %>
+                      </a>
+                    </li>
+                <% end %>
+
+              </ul>
+
+            </li>
+
+           </ul>
+      </ul>
+    </div>
+    </div>
+
 <!-- List Section --> 
 <div id="Itemlist" class="row">
       
-      <div  class="span2">
-        <ul class="nav nav-list" id="browse_menu">
-        <%= render "scat_menu" %>
-        <div class="clearfix"></div>
-      </div>
-
-    <div id="items" class="span10">
+    <div id="items" class="span12">
       <% @category.each do |acategory| %>
 
         <!-- loop and display only if the categories has products and items in it. -->

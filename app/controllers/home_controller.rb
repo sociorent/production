@@ -241,14 +241,20 @@ class HomeController < ApplicationController
     if params[:item_id]
       unique = 0
 
-      item = P2p::Item.where(:id=>params[:item_id]).first
+      item = P2p::Item.find(params[:item_id])
       order_amount = item.price
       until unique == 1
         r = Random.new
         random = r.rand(1000000..9999999)
         if P2p::ItemDelivery.where(:txn_id=>random).count == 0
           unique =1
-          item.item_deliveries.create(:txn_id=>random)
+
+          if item.paytype = 3
+            item.item_deliveries.create(:txn_id=>random,:buyer => p2p_current_user,:commission => item.category.commission ,:shipping_charge => item.category.courier_charge)
+          else
+            item.item_deliveries.create(:txn_id=>random,:buyer => p2p_current_user,:commission => item.category.commission ,:shipping_charge => 0 )
+          end
+
         end
       end
       params[:orderAmount] = order_amount
@@ -261,7 +267,7 @@ class HomeController < ApplicationController
     digest  = OpenSSL::Digest::Digest.new('sha1')
     signature = OpenSSL::HMAC.hexdigest(digest, merchant_secret_key, sign_text)
     if params[:item_id]
-      render :text=> {"signature" =>signature,"txn_id"=>random}.to_json()
+      render :text=> {"signature" =>signature,"txn_id"=>random ,"time" => (Time.now.to_i * 3000)}.to_json()
     else
       render :text=>signature
     end

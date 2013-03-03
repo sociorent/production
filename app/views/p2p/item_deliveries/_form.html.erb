@@ -5,7 +5,7 @@
 
 
 
-<% if p2p_current_user.id ==1  or @p2p_item_delivery.item.user.id == p2p_current_user.id %>
+<% if session[:isadmin]  or @p2p_item_delivery.item.user.id == p2p_current_user.id %>
 
     <div class="control-group">
       
@@ -33,7 +33,7 @@
 
     </div>
 
-  <% if p2p_current_user.id == 1 %>
+  <% if session[:isadmin] %>
 
     <div class="control-group">
 
@@ -48,7 +48,7 @@
 
 <% end %>
 
-<% if p2p_current_user.id ==1  or @p2p_item_delivery.buyer.id == p2p_current_user.id %>
+<% if session[:isadmin]  or @p2p_item_delivery.buyer.id == p2p_current_user.id %>
 
  	<div class="control-group">
   		
@@ -65,7 +65,7 @@
 
 
 
-<% if p2p_current_user.id == 1%>
+<% if session[:isadmin] %>
 
   <div class="control-group">
 

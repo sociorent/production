@@ -1,9 +1,11 @@
 /*
 *= require global/jquery-ui-1.8.24.custom.css
 *= require jquery.fileupload-ui
-*= require global/bootstrap-wysihtml5-0.0.2.css
 *= require footer
+
 *= require bootstrap
+*= require global/bootstrap-wysihtml5-0.0.2.css
+*= require p2p/font-awesome.min
 *= require p2p/select2
 *= require p2p/index/common
 *= require p2p/index/itemList
@@ -11,8 +13,8 @@
 *= require p2p/p2p
 *= require p2p/ui.notify
 *= require p2p/header
+*= require index/user_bar
 *= require p2p/jquery.fancybox-1.3.4
-*= require p2p/font-awesome.min
 *= require_tree .
 */
 

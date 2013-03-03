@@ -6,7 +6,7 @@
 <%end %>
 
 
-<% if p2p_current_user.nil? or (p2p_current_user.id != @item.user.id and p2p_current_user.id != 1) %>
+<% if p2p_current_user.nil? or (p2p_current_user.id != @item.user.id and !session[:isadmin] ) %>
 
     <%= render "/p2p/items/preview_item" ,
                :viewimage => @item.get_image(0,:view) ,

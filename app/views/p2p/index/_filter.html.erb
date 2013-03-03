@@ -14,7 +14,7 @@
 			<li class="nav-header"> Condition </li>
 			<% item_condition_res.each do |itm| %>
 				<li class="spec-filter" spec-name="condition" spec-value="<%=itm.condition%>">
-				<i class="icon-remove icon-white hide pull_here-right"></i>
+				<i class="icon-remove  pull-right hidden"></i>
 				 <a href="#"> <%= itm.condition %> </a> 
 
 				</li>
@@ -25,7 +25,7 @@
 			<li class="nav-header"> <%= spec.name %> </li>
 				<% spec.itemspecs.select(" distinct value").order('value asc').sort.each do |itemspec| %>
 					<li class="spec-filter" spec-name="<%=spec.name%>" spec-value="<%=itemspec.value%>">
-						<i class="icon-remove icon-white hide pull-right"></i>
+						<i class="icon-remove hidden pull-right"></i>
 						<a href="#"> <%= itemspec.value	%> </a>
 					</li>
 				<% end %>
@@ -50,30 +50,46 @@
 
 		    	<%% _.each(data["res"],function(elm){%>
 
-				          <li class="span2">
-				            <a href="<%%=elm.url%>">
+				          <li class="span2 aitem_holder">
+				            
 	   			              <div class="thumbnail">
-	   			              
+
+	   			              <a href="<%%=elm.url%>">
+
+	   			              <div class="aitem_left">
 	   			              	<div class="image_holder">
-				                	<img src="<%%=elm.img %>" >
+				                	<img src="<%%= elm.img %>" >
 				                </div>
-
-				                <div class="caption">
-				                  <b><%%=elm.title%></b>
-				                  <p>
-
-				                    <ul>
-				                      <li><del>&#2352;</del> <%%=elm.price %></li>
-				                      <li><%%=elm.condition%></li>
-							                    </ul>
-				                  </p>
-
-				                </div>
-
 				              </div>
+				              </a>
 
-				            </a>
-				          </li>
+				                <div class="aitem_right">
+				                <a href="<%%=elm.url%>">
+				                  <div>
+                                    <div class="item_title">
+                                    <%%=elm.title%></div>
+                                  </div>
+				                </a>
+
+                                <div class="item_category">
+                                  
+                                  in 
+                                  <a href="<%%= elm.prod_url%>">
+                                    <%%= elm.prod  %>
+                                  </a>
+                                  ,
+                                  <a href="<%%=elm.cat_url%>">
+                                    <%%= elm.cat %>
+                                  </a>
+                                </div>
+
+                                <div class="item_condition"><%%=elm.condition%></div>
+                                      <div class="item_price">Price:<del>&#2352;</del> <%%=elm.price %>
+                                </div>
+
+                              <div class="clearfix"></div>
+                      </div>				      
+                      </li>
 
 					<%% });%>
 

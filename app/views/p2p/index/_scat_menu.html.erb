@@ -1,9 +1,9 @@
 		<!-- display button if browse and hide the menu -->
 		<% if  defined?(dropdown) %>
-			<div class="dropdown">
-			<a class="dropdown-toggle btn-primary btn"  href="#" data-toggle="dropdown" id="browse_button">Browse</a>
+			<div class="browse_top dropdown">
+			<a class="dropdown-toggle "  href="#" data-toggle="dropdown" id="browse_button"><i class="icon-list"></i> Browse P2P</a>
 		<% else %>
-			<li class="nav-header">Browse P2P </li>
+			<li class="nav-header browse_top "><i class="icon-list"></i> Browse P2P </li>
 		<% end %>
 
 		<!-- display button if browse and hide the menu -->
@@ -90,4 +90,3 @@
 		<li class="divider"></li>
 
 <%= javascript_include_tag 'p2p/index_manifest'%>
-

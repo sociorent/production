@@ -90,7 +90,7 @@ class P2p::CategoriesController < ApplicationController
   def getcategories
     @res = []
     P2p::Category.all.each do |c|
-      next if c.name!="Books" and c.products.size == 0 or c.specs.size == 0 
+#      next if c.name!="Books" or c.specs.size == 0 
       @res << {:value => c.id, :text => c.name}
     end
     render :json => @res

@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+
+
+
 	$('#upload_image').click(function(){
        $('#image_upload').trigger('click');
 	});
@@ -31,6 +34,10 @@ $(document).ready(function(){
       focus:function(){
         return false;
       }
+    });
+
+    $("#upload_pic").click(function(){
+    	$("#image_upload").trigger('click');
     });
 
 	$('#view_image_fancy').fancybox({
@@ -73,6 +80,10 @@ $(document).ready(function(){
 
 			$(".action_icon").tooltip('destroy');
 
+			$('#clearuploads').addClass('hidden');
+			$('.remove_image').addClass('hidden');
+			
+
 			$("#add_more_spec").addClass('hide');
 
 			$(".edit_shown").addClass('edit_visible').removeClass('edit_shown');
@@ -109,6 +120,9 @@ $(document).ready(function(){
 			$(".action_icon").tooltip({"delay":{show:0,hide:100}});
 
 			$(".edit_visible").addClass('edit_shown').removeClass('edit_visible');
+
+			$('#clearuploads').removeClass('hidden');
+			$('.remove_image').removeClass('hidden');
 
 			// show all the tooltips11
 			// hide the edit button and show the save and cancel button
@@ -172,6 +186,16 @@ $(document).ready(function(){
 				$("#model").html("Select one");
 				$("#model").attr("data-source",'/p2p/getbrand/' + params.newValue);
 				item_values['brand'] = '';
+
+				
+				//add custom brand
+				$('#add_new_model').on('keyup',function(){
+					if ($.trim ( $(this).val() ) != '' ) {
+						item_values['brand'] = $.trim ( $(this).val() );
+						$("#model").val('');
+					}
+				});
+
 
 				//$("#model").editable({sourceCache:false});
 
@@ -415,6 +439,7 @@ $(document).ready(function(){
 	$(".remove_image").click(function(){
 
 		var that = $(this);
+
 		$.ajax({
 
 			url:"/p2p/images/" + that.siblings('img').attr("imgid"),
@@ -607,6 +632,8 @@ $(document).ready(function(){
 
 					}
 				});
+			}else{
+				$("#fileupload").submit();
 			}
 
 			};

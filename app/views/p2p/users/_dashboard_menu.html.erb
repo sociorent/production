@@ -1,25 +1,25 @@
         <li class="nav-header">Menu</li>
 
-        <li> <a href="/p2p/dashboard"> <i class="icon-dashboard"></i> Dashboard</a></li>
+        <li class="<%= (params[:action] == "dashboard") ? "active" : "" %>"> <a href="/p2p/dashboard"> <i class="icon-dashboard"></i> Dashboard</a></li>
         <li><a href="/p2p/messages">  <i class="icon-envelope"></i>  Messages</a></li>
-        <li><a href="/p2p/mystore"><i class="icon-shopping-cart "></i>My Store</a></li>
-        <li><a href="/p2p/favourites"><i class="icon-star "></i>My Favourites</a></li>
-        <li><a href="/p2p/paymentdetails/bought"><i class="icon-money "></i>Bought Payments</a></li>
-        <li><a href="/p2p/paymentdetails"><i class="icon-money "></i>Sold Payments</a></li>
+        <li class="<%= (params[:action] == "inventory" and !params.has_key?(:query)) ? "active" : "" %>"><a href="/p2p/mystore"><i class="icon-shopping-cart "></i>My Store</a></li>
+        <li class="<%= (params[:action] == "favouriteusers") ? "active" : "" %>"><a href="/p2p/favourites"><i class="icon-star "></i>My Favourites</a></li>
+        <li class="<%= (params[:action] == "paymentdetails" and params.has_key?(:bought)) ? "active" : "" %>"> <a href="/p2p/paymentdetails/bought"><i class="icon-money "></i>Bought Payments</a></li>
+        <li class="<%= (params[:action] == "paymentdetails" and !params.has_key?(:bought)) ? "active" : "" %>"><a href="/p2p/paymentdetails"><i class="icon-money "></i>Sold Payments</a></li>
         
 
         <li class="divider"></li>
 
 		<li class="nav-header">Items</li>
-        <li><a href="/p2p/mystore/sold"><i class="icon-ok-circle"></i>Sold </a></li>                
-        <li><a href="/p2p/approve"> <i class="icon-certificate text-success" style="color:green;"></i> Approved </a></li>
-        <li><a href="/p2p/disapprove"><i class="icon-certificate text-error" ></i>Disapproved</a></li>
-        <li><a href="/p2p/waiting "><i class="icon-certificate info text-info" ></i>Waiting </a></li>
+        <li class="<%= (params[:action] == "inventory" and params.has_key?(:query) and params[:query] == "sold" ) ? "active" : "" %>" ><a href="/p2p/approve"><a href="/p2p/mystore/sold"><i class="icon-ok-circle"></i>Sold </a></li>                
+        <li class="<%= (params[:action] == "approve") ? "active" : "" %>" ><a href="/p2p/approve"> <i class="icon-certificate text-success" style="color:green;"></i> Approved </a></li>
+        <li class="<%= (params[:action] == "disapprove") ? "active" : "" %>" ><a href="/p2p/approve"><a href="/p2p/disapprove"><i class="icon-certificate text-error" ></i>Disapproved</a></li>
+        <li class="<%= (params[:action] == "waiting") ? "active" : "" %>" ><a href="/p2p/approve"><a href="/p2p/waiting "><i class="icon-certificate info text-info" ></i>Waiting </a></li>
 
 		<li class="divider"></li>
 
 
-        <% if p2p_current_user.id == 1%>
+        <% if session[:isadmin] %>
                 <li class="nav-header">Admin</li>
                 <li><a href="/p2p/admin/categories">Categories</a></li>
                 <li><a href="/p2p/admin/products">Products</a></li>

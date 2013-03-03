@@ -19,7 +19,7 @@
 
 	      <ul class="nav nav-tab" id="browse_menu">
 			
-	        <%= render "scat_menu" , :active_page => @cat.name ,:dropdown => true %>
+	        <%#= render "scat_menu" , :active_page => @cat.name ,:dropdown => true %>
 
 	        <%= render "p2p/index/filter" , :category => @cat %>
 
@@ -73,25 +73,43 @@
 
 			      <% items.each do |p| %>
 
-			          <li class="span2">
-			            <a href=<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}") %>>
-			              <div class="thumbnail">
-			              	<div class="image_holder">
-			                	<img src="<%=p.get_image(1,:search)[0][:url]%>" >
-			            	</div>
-			                <div class="caption">
-			                  <div class="item_title"><%= p.title.slice(0,15)  %></div>
-			                  <p>
+			          <li class="span2 aitem_holder">
+                      
+                        <div class="thumbnail">
+                                <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                                  <div class="aitem_left">
+                                      <div class="image_holder">
+                                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                                      </div>
+                                  </div>
+                                </a>
 
-			                    <ul>
-			                      <li><del>&#2352;</del> <%=p.price %></li>
-			                      <li><%=p.condition%></li>                             
-			                    </ul>
-			                  </p>
+                              <div class="aitem_right">
+                                 <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                                  <div  title="<%= p.title %>">
+                                    <div class="item_title"><%= p.title.titleize  %></div>
+                                  </div>
+                                </a>
 
-			                </div>
-			              </div>
-			            </a>
+                                <div class="item_category">
+                                  
+                                  in 
+                                  <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+                                    <%= p.product.name  %>
+                                  </a>
+                                  ,
+                                  <a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+                                    <%= p.category.name  %>
+                                  </a>
+
+
+                                </div>
+                                        <div class="item_condition"><%=p.condition%></div>
+                                      <div class="item_price">Price:<del>&#2352;</del> <%=p.price %>
+                                </div>
+
+                              <div class="clearfix"></div>
+                      </div>
 			          </li>
 			      <% end %>
 

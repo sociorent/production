@@ -9,23 +9,6 @@ f#Itemlist {
 	padding: 10px 15px;
 }
 
-.thumbnails li a {
-	text-decoration: none;
-}
-
-.thumbnails .thumbs{
-	width:50px;
-	height:50px;
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	border: 1px solid #ccc;
-}
-
-.thumbnails .thumbs img{
-	display: block;
-}
-
 #items {
 	min-height: 700px;
 }
@@ -188,3 +171,127 @@ f#Itemlist {
 #clearuploads{
 	cursor: pointer;
 }
+
+
+
+
+/*New item menu	*/
+
+.aitem_holder .thumbnail{
+	display: block;
+	margin-right: 20px;
+	padding: 3px;
+	width: 270px;
+	cursor: pointer;
+	background: white;
+	border-radius: 5px;
+	height: 120px;
+}
+
+.aitem_holder .thumbnail:hover{
+	border:1px solid #666;
+	background-color: lightyellow;
+}
+.aitem_holder .thumbnail:hover a:hover {
+	font-weight: bold;
+	color:#333;
+}
+
+.aitem_holder .thumbnail  a{
+	text-decoration: none;
+
+}
+
+.aitem_holder .thumbnail .item_category{
+	margin-left: 3px;
+	font-style: italic;
+}
+.aitem_holder .thumbnail .image_holder{
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+.aitem_holder .thumbnail .thumbs img{
+	display: block;
+}
+
+.aitem_holder{
+	display:block;
+	width:270px;
+}
+
+.aitem_left{
+	display: block;
+	float: left;
+	width: 120px;
+}
+
+.aitem_right{
+	float: left;
+	width: 120px;
+	text-align: left;
+	height: 120px;
+	position: relative;
+	margin-left: 10px;
+	margin-top: 6px;
+}
+
+.item_title{
+	font-size: 14px;
+	font-weight: 600;
+	color: #696969;
+	max-height: 40px;
+	overflow: hidden;
+}
+
+.item_condition{
+	font-size: 13px;
+	font-weight: 600;
+	color: #0F8159;
+	height: 20px;
+	overflow: hidden;
+}
+
+.item_price{
+	height: 20px;
+	overflow: hidden;			
+}
+
+		.add_to_cart{
+			font-size: 13px;
+			background: #F65757;
+			display: inline-block;
+			padding: 6px 7px 3px;
+			border-radius: 3px;
+			color: white;
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+		}
+
+		.already_rented {
+			font-size: 10px;
+			line-height: 14px;
+			font-weight: 400;
+			margin-left: 7px;
+		}
+
+		.add_to_compare_box{
+			.add_to_compare{
+				float: left;
+				margin-left: 5px
+			}
+			label{
+				float: left;
+				margin-left: 6px;
+			}
+		}
+
+
+		.thumb_img{
+			height:50px;
+			width:50px;
+		}

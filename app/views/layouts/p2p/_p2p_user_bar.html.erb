@@ -1,0 +1,88 @@
+
+
+
+  <div id="user_bar">
+    <div id="user_bar_holder" class="container">
+    <div class="pull-left">
+      <%= render "/p2p/index/scat_menu"  ,:dropdown => true %>
+      <!-- <div style="width:100%">Welcome, <%#= current_user.name %></div> -->
+    </div>
+
+
+              <div class="input-append input-prepend pull-left top_search">
+              <span class="add-on " id="head_user_location"  cityid="<%= (session.has_key?(:city_id)) ? session[:city_id] : "" %>" >
+
+                  <i class="icon-globe action_icon " data-placement="bottom" data-title="<%= (session.has_key?(:city)) ? session[:city] : "Choose your location now" %>"></i>
+              </span>
+
+                <div class="modal hide fade" id="location_modal">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Select your Location</h3>
+                  </div>
+                    <div class="modal-body">
+                    <p><%=select_tag "user_location" ,options_for_select( P2p::City.all.collect{|city|  [city.name,city.id]})%></p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" id="location_modal_save" class="btn btn-primary">Save changes</a>
+                  </div>
+                </div>
+
+
+            <input id="top_search_input" type="text" class="span4" autocomplete="off" placeholder="Search Peer to peer">
+            <span class="add-on"><i class="icon-search"></i></span>
+          </div>
+
+
+    <div class="pull-right span4">
+        <% if p2p_current_user %>
+          <div id="menuSet" class="span4 pull-right">
+
+          <% if params[:action] == 'index'  and params[:controller]== 'p2p/messages'%>
+              <li class="head_active action-icon" title="Messages" data-placement="bottom">
+                <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
+
+                <a href="/p2p/messages">
+                  <span id="header_msg_count"> <%= unread_count if  unread_count > 0  %> </span>
+                  <span class="" ><i class=" dashboard_icon icon-envelope"></i></span>
+                </a>
+              </li>
+
+          <% else %>
+              <li class="action-icon" title="Messages" data-placement="bottom">
+                <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
+                <a href="/p2p/messages" >
+                  <span id="header_msg_count"> <%= unread_count if  unread_count > 0  %> </span>
+                  <span class="" ><i class=" dashboard_icon icon-envelope"></i></span>
+                </a>
+              </li>
+
+          <% end %>
+
+
+
+          <% if params[:action] == 'dashboard' %>
+            <li class="head_active action-icon" title="Dashboard" data-placement="bottom">
+              <a href="/p2p/dashboard"><i class=" dashboard_icon icon-dashboard"></i></a></li>
+          <% else %>
+            <li class=" action-icon" title="Dashboard" data-placement="bottom"><a href="/p2p/dashboard"><i class=" dashboard_icon icon-dashboard"></i></a></li>
+          <% end %>
+
+
+          <% if params[:action] == 'new'  and params[:controller]== 'p2p/items'%>
+            <li class="head_active action-icon" title="List New Item" data-placement="bottom"><a href="/p2p/sellitem"><i class=" dashboard_icon icon-file-alt"></i></a></li>
+          <% else %>
+            <li class=" action-icon" title="List New Item" data-placement="bottom"><a href="/p2p/sellitem"><i class=" dashboard_icon icon-file-alt"></i></a></li>
+          <% end %>
+
+          <li class=" action-icon" title="Sign out" data-placement="bottom">
+            <%= link_to "<i class='signout_icon icon-signout'></i>".html_safe, destroy_user_session_path, :method => :delete %>
+          </li>
+
+
+          </div>
+          <% end %>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>

@@ -17,34 +17,40 @@
   
 
 <body>
-	
+
+  <%= render "layouts/p2p/header" %>
+
   <div class="container">
 
-    <div id="body_container">
 
-      <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 
-    	<%= render "layouts/p2p/header" %>
+          <div id="body_container">
 
-      
-      <div class="info-warning" id="flash_notice">  </div>
-      
+            <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 
-      <%= yield %>
+
+            
+            <div class="info-warning" id="flash_notice">  </div>
+            
+
+            <%= yield %>
+
+        </div>
 
   </div>
-  
-  	<!-- footer content  -->
-     <div class="footer_cpy">
+
+    <%= render "layouts/footer" %>
+
+    <!-- footer content  -->
+<!--     <div class="footer_cpy">
       <div class="wrapper">
         <span>&copy; Sociorent. All rights reserved.</span>
       </div>
     </div>
 
-   <div class="clearfix"></div>
+ -->
 
-  </div>
-
+    <div class="clearfix"></div>
 
 
   <script>

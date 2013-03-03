@@ -450,9 +450,23 @@ def search_list
       items.each do |itm|
         url = itm.get_image(1,:search)[0][:url]
         temp_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}/#{itm.title}")
+        
+        prod_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}")
+        prod = itm.product.name
+
+        cat = itm.product.category.name
+        cat_url = URI.encode("/p2p/#{itm.product.category.name}")
+
         itm = to_hash(itm)
         itm[:url] = temp_url
         itm[:img] = url
+        
+        itm[:prod_url] = prod_url
+        itm[:prod] = prod
+
+        itm[:cat_url] = cat_url
+        itm[:cat] = cat
+
         res.push(itm)
       end
 
@@ -505,12 +519,26 @@ def search_list
       items.each do |itm|
         url = itm.get_image(1,:search)[0][:url]
         temp_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}/#{itm.title}")
+        
+        prod_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}")
+        prod = itm.product.name
+
+        cat = itm.product.category.name
+        cat_url = URI.encode("/p2p/#{itm.product.category.name}")
+
         itm = to_hash(itm)
-        itm[:url] = temp_url 
+        itm[:url] = temp_url
         itm[:img] = url
+        
+        itm[:prod_url] = prod_url
+        itm[:prod] = prod
+
+        itm[:cat_url] = cat_url
+        itm[:cat] = cat
+
         res.push(itm)
       end
-
+      
       if request.xhr?
         temp_result = res.paginate(:page => params[:page], :per_page => 20 )
         render :json => {:res => temp_result , :next => ((temp_result.next_page.nil?) ? 0 : 1) }

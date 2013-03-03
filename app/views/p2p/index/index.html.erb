@@ -3,102 +3,121 @@
 <%end %>
 
 
-      <div  class="row">
-        <div class="span11">
+  <div  class="row">
+    <div class="span11"  id="index_menu_holder">
 
-        <ul class="nav nav-pills btn-group" id="index_browse_menu">
-          
-          <%used_cat = [] %>
-           <% P2p::Category.where("category_id is null and priority is not null").order('priority').limit(7).each do |cat|%>
-              <% used_cat.push(cat.id) %>
-                  <li class="btn btn-small" id="welcome_cat_pills">
-                      <a  href="/p2p/<%= cat.name %>" >
-                        <%= cat.name %>
-                      </a>
-                  </li>
-            <% end %>
+            <div class="btn-group">
+              
+              <%used_cat = [] %>
+              <%used_cat.push(0)%>
 
-            <li class="dropdown btn btn-small">
-              
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                Others  <b class="caret"></b>
-              </a>
-              
-              <ul class="dropdown-menu">
-                <% P2p::Category.order('priority').where("id not in(#{used_cat.join(',')}) or priority is null").each do |cat|%>
-                    <li>
-                      <a  href="/p2p/<%= cat.name %>">
-                        <%= cat.name %>
-                      </a>
-                    </li>
+               <% P2p::Category.where("category_id is null and priority is not null").order('priority').limit(7).each do |cat|%>
+
+                  <% used_cat.push(cat.id) %>
+
+                    <a  href="/p2p/<%= cat.name %>" class="btn" >
+                      <%= cat.name %>
+                    </a>
+
                 <% end %>
 
-              </ul>
+                <% if P2p::Category.order('priority').where("id not in(#{used_cat.join(',')}) or priority is null").count > 0 %>
 
-            </li>
-
-           </ul>
-      </ul>
-    </div>
-    </div>
-
-<!-- List Section --> 
-<div id="Itemlist" class="row">
-      
-    <div id="items" class="span12">
-      <% @category.each do |acategory| %>
-
-        <!-- loop and display only if the categories has products and items in it. -->
-        <% if acategory.products.size > 0  and (acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).count > 0) %>
-
-
-          <div class="itemsRow">
-            <div id="listHeader" class="row">
-              <p class="fleft"> <b><%= acategory.name.titlecase %> </b></p>
-              <p class="fright"><a href="/p2p/<%= acategory.name %>"> View All</a></p>
-            </div>
-            <ul class="thumbnails">
-
-    <!--           order the items by reqcount first, then by view count
-              used to list the most viewed and most wanted items at top
-              #TODO: THE NEW ITEMS WILL NEVER TURN UP TOP IN THE LIST
-            
-              SO DO SOMETHING FOR THAT(DISCUSS)
-    -->     
-
-     
-         <% acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).each do |p| %>
-
-
-
-                <li class="span2">
-                  <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">
-                    <div class="thumbnail">
-                      
-                      <div class="image_holder">
-                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
-                      </div>
-
-                      <div class="caption" title="<%= p.title %>">
-                        <div class="item_title"><%= p.title.slice(0,15)  %></div>
-                        <p>
-                          <ul>
-                            <li><del>&#2352;</del> <%=p.price %></li>
-                            <li><%=p.condition%></li>
-                          </ul>
-                        </p>
-
-                      </div>
-                    </div>
+                  <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    Others  <b class="caret"></b>
                   </a>
-                </li>
-            <% end %>
-            </ul>
-          </div>
-        <% end %>
-      <% end %>
 
-
+                  <ul class="dropdown-menu">
+                    <% P2p::Category.order('priority').where("id not in(#{used_cat.join(',')}) or priority is null").each do |cat|%>
+                        <li>
+                          <a  href="<%= URI.encode("/p2p/#{cat.name}")%>">
+                            <%= cat.name %>
+                          </a>
+                        </li>
+                    <% end %>
+                  </ul>
+                <% end %>
+      </div>
     </div>
-      <!-- List Section --> 
+
+    <!-- List Section --> 
+    <div id="Itemlist" class="row">
+          
+        <div id="items" class="span12">
+          <% @category.each do |acategory| %>
+
+            <!-- loop and display only if the categories has products and items in it. -->
+            <% if acategory.products.size > 0  and (acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).count > 0) %>
+
+
+              <div class="itemsRow">
+                <div id="listHeader" class="row">
+                  <p class="fleft"> <b><%= acategory.name.titlecase %> </b></p>
+                  <p class="fright"><a href="/p2p/<%= acategory.name %>"> View All</a></p>
+                </div>
+                <ul class="thumbnails">
+
+        <!--           order the items by reqcount first, then by view count
+                  used to list the most viewed and most wanted items at top
+                  #TODO: THE NEW ITEMS WILL NEVER TURN UP TOP IN THE LIST
+                
+                  SO DO SOMETHING FOR THAT(DISCUSS)
+        -->     
+
+             <% acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).each do |p| %>
+
+
+
+                    <li class="span2 aitem_holder">
+                      
+                        <div class="thumbnail">
+                                <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                                  <div class="aitem_left">
+                                      <div class="image_holder">
+                                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                                      </div>
+                                  </div>
+                                </a>
+
+                              <div class="aitem_right">
+                                 <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                                  <div  title="<%= p.title %>">
+                                    <div class="item_title"><%= p.title.titleize  %></div>
+                                  </div>
+                                </a>
+
+                                <div class="item_category">
+
+                                  in 
+                                  <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+                                    <%= p.product.name  %>
+                                  </a>
+                                  ,
+                                  <a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+                                    <%= p.category.name  %>
+                                  </a>
+
+
+                                </div>
+                                        <div class="item_condition"><%=p.condition%></div>
+                                      <div class="item_price">Price:<del>&#2352;</del> <%=p.price %>
+                                </div>
+
+                              <div class="clearfix"></div>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
+                <% end %>
+                </ul>
+              </div>
+
+            <% end %>
+
+          <% end %>
+
+
+        </div>
+          <!-- List Section --> 
+    </div>
+
 </div>

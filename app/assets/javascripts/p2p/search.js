@@ -10,7 +10,14 @@
             }
         });
 
+        show_all_session_button = function(){
+          $("#signup_button").show();
+          $("#forgot_pass_button").show();
+          $("#login_button").show();
+        }
     // Login script
+    $('#login_button').hide();
+    
     $("#devise_pages a").live("click",function(){
       var action = $(this).text();
       $("#head_login_modalLabel").html(action);
@@ -19,12 +26,22 @@
       {
         case "Login":
            $("#login_box").fadeIn();
+           show_all_session_button();
+           $('#login_button').hide();
+
+
           break;
         case "Sign Up":
            $("#signup_box").fadeIn();
+           show_all_session_button();
+           $('#signup_button').hide();
+
           break;
         case "Forgot Password?":
            $("#forgot_box").fadeIn();
+           show_all_session_button();
+           $('#forgot_pass_button').hide();
+
           break;
       }
       $("#devise_pages a").css("display","none");
@@ -64,7 +81,7 @@
 
     $(".action_popover").popover();
     $('.action-icon').tooltip();
-    
+
   });
 
 

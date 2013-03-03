@@ -349,6 +349,7 @@ DEPENDENCIES
   omniauth-facebook
   paperclip
   private_pub
+  rack (~> 1.4.1)
   rails (= 3.2.8)
   rails_admin
   ruby-hmac (~> 0.4)

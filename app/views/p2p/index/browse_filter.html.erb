@@ -14,7 +14,7 @@
       <ul class="nav nav-list" id="browse_menu">
 
 		
-        <%= render "scat_menu" , :active_page => @cat.name  ,:dropdown => true %>
+        <%#= render "scat_menu" , :active_page => @cat.name  ,:dropdown => true %>
 
         <%= render "p2p/index/filter" , :category => @cat %>
 
@@ -46,28 +46,46 @@
 			        
 			        <% @items.each do |itm| %>
 
-			          <li class="span2">
-			            <a href="<%=itm[:url]%>">
-			              <div class="thumbnail">
-			              		<div class="image_holder">
-			                		<img src="<%=itm[:img]%>" >
-			                	</div>
-			                <div class="caption">
-			                  <div class="item_title"><%= itm[:title] %></div>
-			                  <p>
+			          <li class="span2 aitem_holder">
+                      
+                        <div class="thumbnail">
+                                <a href="<%= itm[:url] %>">
+                                  <div class="aitem_left">
+                                      <div class="image_holder">
+                                        <img src="<%=itm[:img]%>" >
+                                      </div>
+                                  </div>
+                                </a>
 
-			                    <ul>
-			                      <li><del>&#2352;</del> <%=itm[:price] %></li>
-			                      <li><%=itm[:condition]%></li>
-			<!--                              <li>Attribute 2</li>
-			                      <li>Attribute 3</li>
-			-->                              
-			                    </ul>
-			                  </p>
+                              <div class="aitem_right">
+                                 <a href="<%= itm[:url] %>">
+                                  <div  title="<%= itm[:title] %>">
+                                    <div class="item_title"><%= itm[:title].titleize  %></div>
+                                  </div>
+                                </a>
 
-			                </div>
-			              </div>
-			            </a>
+                                <div class="item_category">
+                                  
+                                  in 
+                                  <a href="<%= itm[:prod_url] %>">
+                                    <%= itm[:prod] %>
+                                  </a>
+                                  ,
+                                  <a href="<%= itm[:cat_url] %>">
+                                    <%= itm[:cat]  %>
+                                  </a>
+
+
+                                </div>
+                                        <div class="item_condition"><%=itm[:condition] %></div>
+                                      <div class="item_price">Price:<del>&#2352;</del> <%=itm[:price] %>
+                                </div>
+
+                              <div class="clearfix"></div>
+                      </div>
+                      
+                      <div class="clearfix"></div>
+
 			          </li>
 			      <% end %>
 
@@ -113,7 +131,7 @@
 
 					filters[spec].push(val)
 					$(elm).addClass('active');
-					$(elm).children(".icon-remove").removeClass("hide");
+					$(elm).children(".icon-remove").removeClass("hidden");
 				}
 
 			});

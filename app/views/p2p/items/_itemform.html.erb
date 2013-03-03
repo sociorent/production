@@ -196,7 +196,7 @@
 
 
 
-					<%if p2p_current_user.id == 1 %>
+					<%if session[:isadmin] %>
 
 							<% unless solddate.nil?  %>
 								<span class="btn "> <i class="action_icon" title="On <%= solddate.strftime("%d-%b-%C%y") %>" >  Listing Sold </i> </span>
@@ -283,7 +283,7 @@
 
 			  <% end %>
 
-			  <% if !itemid.empty? and !p2p_current_user.nil? and p2p_current_user.id == 1 %>
+			  <% if !itemid.empty? and !p2p_current_user.nil? and session[:isadmin] %>
 
 			  		<% if approvedate.nil?  %>
 	  				  <button class="btn alert-info"  id="approve" itemid="<%=itemid%>"><i  class="action_icon icon-thumbs-up" title="Approve this listing"></i></button>
@@ -308,26 +308,19 @@
 
 		<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
 
-
-          	<div id="upload_pic" title="Upload more photos" class="action_icon pull-right hide">
-
-	        <!-- image upload form -->
-
+				<i id="clearuploads" class="icon-trash action_icon pull-right hidden" title="Remove all uploaded pic"></i>
+				
+				<div id="upload_pic" title="Upload more photos" class="action_icon pull-right edit_visible"><i class="icon-upload"></i>Upload</div>
 
 
-	  <%= form_tag  "/p2p/items", :multipart => true, :id => "fileupload"   do %>
-    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 
-    		<div id="form_temp"></div>
-          <%= file_field_tag "img[]" ,:id=> "image_upload" ,:multiple  => 'true' ,:disabled => true  %>
+					  <%= form_tag  "/p2p/items", :multipart => true, :id => "fileupload"   do %>
+				    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 
+				    		<div id="form_temp"></div>
+				          <%= file_field_tag "img[]" ,:id=> "image_upload" ,:multiple  => 'true' ,:disabled => true  %>
 
-  	<% end %>
-
-
-</div>
-
-
+				  	<% end %>
 
         <% end %>
 
@@ -345,7 +338,7 @@
 
             </div>
             <div class="caption thumb_holder">
-            	<i id="clearuploads" class="icon-repeat action_icon pull-right" title="clear"></i> 
+
               <ul class="thumbnails">
 
         		<% unless itemid.empty? %>
@@ -359,7 +352,7 @@
 							<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
 
 								<% unless itemid.empty? %>
-		              				<i class="icon-remove pull-right remove_image hide"></i>
+		              				<i class="icon-remove pull-right remove_image hidden"></i>
 		              			<% end %>
 
 		              		<% end %>
@@ -377,7 +370,6 @@
         </li>
 			</ul>
 		</div>
-
 
 
 		<div class="span6">
@@ -415,7 +407,13 @@
 			<tr>
 				<td>Model </td>
 				<td>
-					<span id="model" class="action_icon"  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=brand%></span>
+					<span id="model" class="action_icon"  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-
+					type="select" ><%=brand%></span> 
+
+					<%if itemid.empty? %>
+						<input type="text" id="add_new_model" placeholder="Other Model" size=10>
+					<% end %>
+					
 				</td>
 
 			</tr>

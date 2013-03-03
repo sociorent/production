@@ -57,9 +57,6 @@ class P2p::ItemsController < ApplicationController
           raise "Product not found" if item.product.nil?
         rescue
           begin
-            if item.category.name != 'Books'
-              render :json => {:status => 0} and return
-            end
 
             item.product = item.category.products.new(:name =>  (Publisher.find_by_name(params[:brand])).name )
 
@@ -207,10 +204,10 @@ class P2p::ItemsController < ApplicationController
 
 
 
-        P2p::User.find(1).sent_messages.create({:receiver_id => 1,
+        P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id],
                                               :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The city  #{params[:location]} was not found in your system and hence is created automatically for you, when the #{p2p_current_user.user.email} requested on listing a item We urge you to check the same. Sincerally - Developers",
                                               :messagetype => 5,
-                                              :sender_id => 1,
+                                              :sender_id => session[:admin_id],
                                               :sender_status => 2,
                                               :receiver_status => 0,
                                               :parent_id => 0,
@@ -239,16 +236,29 @@ class P2p::ItemsController < ApplicationController
            begin
 
               attr = item.specs.find_by_spec_id(key.to_i)
-              attr.updated_at = update_time
 
-              if value == ""
-                attr.save
-                attr.destroy
-                next
-              end
+            attr.updated_at = update_time
+            attr.value = value
+            attr.save
+
+            if value == ""  || value == 'undefined'
+              attr.destroy
+              next
+            end
+
+            
+
+          rescue
+              attr = item.specs.new
+              attr.spec = item.category.specs.find(key.to_i)
+              
+              attr.updated_at = update_time              
 
               attr.value = value
-             end
+
+          end
+
+
          end
 
          data={}
@@ -292,7 +302,7 @@ end
     begin
       item = P2p::Item.find(params[:id])
 
-      raise "Cannot Delete" if item.user.id != current_user.id  and current_user.id != 1
+      raise "Cannot Delete" if item.user.id != current_user.id  and !session[:isadmin]
 
       item.deletedate = Time.now
       item.save
@@ -359,7 +369,7 @@ end
         @cat =  P2p::Category.find_by_name(params[:cat])
         @prod=  @cat.products.find_by_name(params[:prod])
 
-        if !p2p_current_user.nil? and  p2p_current_user.id == 1
+        if !p2p_current_user.nil? and  session[:isadmin]
           @item = @prod.items.unscoped.find_by_title(params[:item])
         else
           @item = @prod.items.find_by_title(params[:item])
@@ -448,7 +458,7 @@ end
 
       if params[:query] == "sold"
 
-        if p2p_current_user.id == 1
+        if session[:isadmin]
              if params.has_key?(:id)
                   @items = P2p::User.find(params[:id]).items.sold.paginate(:page => params[:page] , :per_page => 20)
                   @user = P2p::User.find(params[:id])
@@ -551,7 +561,7 @@ end
 
   def waiting
 
-        if p2p_current_user.id == 1
+        if session[:isadmin]
 
               if params.has_key?(:id)
                   @user = P2p::User.find(params[:id])
@@ -581,7 +591,7 @@ end
 
 
   def disapprove
-        if p2p_current_user.id == 1
+        if session[:isadmin]
 
              if params.has_key?(:id)
                   @items = P2p::User.find(params[:id]).items.disapproved.paginate(:page => params[:page] , :per_page => 20)
@@ -616,7 +626,7 @@ end
         P2p::User.find(1).sent_messages.create({:receiver_id => item.user.id ,
                                               :message => "This is an auto generated system message. Your item #{item.title} has been disapproved due to some reasons . Reply to this message to know the reason.  <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                               :messagetype => 5,
-                                              :sender_id => 1,
+                                              :sender_id => session[:admin_id],
                                               :sender_status => 2,
                                               :receiver_status => 0,
                                               :parent_id => 0,
@@ -624,10 +634,10 @@ end
 
                                                   });
 
-        P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
+        P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id],
                                               :message => "This is an auto generated system message. You have disapproved item no #{item.id} , #{item.title} and this listing will not appear on the site. A automated message is sent to the user.Your can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
                                               :messagetype => 5,
-                                              :sender_id => 1,
+                                              :sender_id => session[:admin_id],
                                               :sender_status => 1,
                                               :receiver_status => 0,
                                               :parent_id => 0,
@@ -661,7 +671,7 @@ end
         P2p::User.find(1).sent_messages.create({:receiver_id => item.user.id ,
                                               :message => "This is an auto generated system message. Your item is verified , approved  and  will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                               :messagetype => 5,
-                                              :sender_id => 1,
+                                              :sender_id => session[:admin_id],
                                               :sender_status => 2,
                                               :receiver_status => 0,
                                               :parent_id => 0,
@@ -669,10 +679,10 @@ end
 
                                                   });
 
-        P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
+        P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id] ,
                                               :message => "This is an auto generated system message. You have approved item no #{item.id} and this listing will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
                                               :messagetype => 5,
-                                              :sender_id => 1,
+                                              :sender_id => session[:admin_id],
                                               :sender_status => 1,
                                               :receiver_status => 0,
                                               :parent_id => 0,
@@ -685,10 +695,10 @@ end
         begin
           send_sms(item.user.user.mobile_number,"Thanks for signing-up with Sociorent.com. Your ID is #{item.title.truncate(110)} . You may now login to place your order. Thank you.")
         rescue
-            P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
+            P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id],
                                                     :message => "This is an auto generated system message. A approval message cant be sent to #{item.user.user.mobile_number } (#{item.user.user.email},  #{item.user.user.name} ).<br/> Thank you.. <br/> Sincerly, <br/> Developers ",
                                                     :messagetype => 5,
-                                                    :sender_id => 1,
+                                                    :sender_id => session[:admin_id],
                                                     :sender_status => 1,
                                                     :receiver_status => 0,
                                                     :parent_id => 0,
@@ -737,7 +747,7 @@ end
 
     else
 
-        if p2p_current_user.id == 1
+        if session[:isadmin]
             if params.has_key?(:id)
                 @items = P2p::User.find(params[:id]).items.approved.notsold.paginate(:page => params[:page] , :per_page => 20)
                   @user = P2p::User.find(params[:id])
@@ -764,15 +774,7 @@ end
     book = Book.select('description,isbn13,isbn10,binding,publisher_id,published,pages,price,author').find_by_isbn13(params[:isbn13])
 
     if book.nil?
-      render :json => {
-          :description => '',
-          :isbn10 => '',
-          :binding => '',
-          :published => '',
-          :pages => '',
-          :price =>'',
-          :publisher_id => '',
-        }
+      render :json => {}
         return
     end
 
@@ -862,15 +864,16 @@ end
       item_delivery = P2p::ItemDelivery.find_by_txn_id(params[:TxId])
       case params[:TxStatus]
         when "CANCELED"
-          item_delivery.item.update_attributes(:solddate=>Time.now)
+          
           flash[:warning]="Transaction Failed. Try again"
         when "SUCCESS"
           flash[:warning] = "Transaction success"
+          item_delivery.item.update_attributes(:solddate=>Time.now)
       end
 
       item_delivery.update_attributes(:citrus_pay_id=>params[:TxStatus],:citrus_reason=>params[:TxMsg],:citrus_ref_no=>params[:TxRefNo])
 
-      redirect_to "/p2p/dashboard"
+      redirect_to "/p2p/paymentdetails/bought"
     end
   end
 end

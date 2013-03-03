@@ -5,11 +5,11 @@ class CreateP2pItems < ActiveRecord::Migration
       t.references :user
       t.string :title 
       t.text :desc
-      t.integer :paytype 
-      t.datetime :solddate
-      t.datetime :paiddate
-      t.datetime :delivereddate
-      t.boolean :approveddate
+      t.integer :paytype  ,:default => null
+      t.datetime :solddate ,:default => null
+      t.datetime :paiddate ,:default => null
+      t.datetime :delivereddate ,:default => null
+      t.boolean :approveddate ,:default => null
       t.integer :viewcount ,:default => 0
       t.integer :reqCount,:default => 0
       t.float :price 

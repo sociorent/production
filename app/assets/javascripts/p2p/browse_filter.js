@@ -22,19 +22,19 @@ $(document).ready(function(){
 			if (filters[spec].indexOf(val) == -1){
 				filters[spec].push(val)
 				$(that).addClass('active');
-				$(that).children(".icon-remove").removeClass("hide");
+				$(that).children(".icon-remove").removeClass("hidden");
 
 			}else{
 				filters[spec].splice(filters[spec].indexOf(val),1)
 				$(that).removeClass('active');
-				$(that).children(".icon-remove").addClass("hide");
+				$(that).children(".icon-remove").addClass("hidden");
 			}
 		}
 		else{
 			filters[spec]=[]
 			filters[spec].push(val)
 			$(that).addClass('active');
-			$(that).children(".icon-remove").removeClass("hide");
+			$(that).children(".icon-remove").removeClass("hidden");
 		}
 		// Ajax Call for selected filter
 		call_filter(spec,val,that);
@@ -112,7 +112,7 @@ $(document).ready(function(){
 				$("#overlay").hide(100);
 				filters[spec].splice(filters[spec].indexOf(val),1)
 				$(that).removeClass('active');
-				$(that).children(".icon-remove").addClass("hide");
+				$(that).children(".icon-remove").addClass("hidden");
 				
 			}
 		});
@@ -148,6 +148,8 @@ $(document).ready(function(){
 		
 		
 				$(window).scroll(function(){
+
+
 
 						if ($("#dummy_filter_holder").length == 0) return false;
 

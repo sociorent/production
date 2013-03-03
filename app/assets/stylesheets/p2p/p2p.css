@@ -1,5 +1,6 @@
 
 
+
 .clearfix{
 	clear:both;
 }
@@ -23,6 +24,11 @@
 
 .delete_item:hover{
 	opacity: 1;
+}
+
+a,a:visited,a:focus { 
+	text-decoration: none;
+	color:inherit;
 }
 
 
@@ -55,6 +61,17 @@ li.dropdown:hover > ul.dropdown-menu{
 }
 
 /*adding border to the drop dwon submenu inside the browse menu*/
+.browse_top {
+	display: block;
+	color: rgb(246, 87, 87);
+	font-weight: bold;
+	margin-top: 7px;
+}
+
+.browse_top i{
+	display:none;
+}
+
 #browse_menu ul.dropdown-submenu > ul.dropdown-menu{
 	border-top: 1px solid  rgba(0,0,0,0.2);
 }
@@ -124,15 +141,18 @@ li.dropdown:hover > ul.dropdown-menu{
 }
 
 #header_msg_count{
-	color: blue;
+	color: rgb(246, 87, 87);
 	float: right;
 	display: block;
 	margin-top: -10px;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 
 #body_container{
 	min-height: 800px;
+	margin: 10px 0 10px 0;
 }
 
 
@@ -170,12 +190,6 @@ li.dropdown:hover > ul.dropdown-menu{
 	text-align: center;
 }
 
-.item_title{
-	text-align: center;
-	font-weight: bold;
-	width:100%;
-	color:#0088cc;
-}
 
 .showmessage{
 	cursor: pointer;
@@ -202,6 +216,7 @@ li.dropdown:hover > ul.dropdown-menu{
 .boxes{
 	padding-left:30px;
 }
+
 .edit_visible{
 	display: none;
 }
@@ -217,5 +232,175 @@ li.dropdown:hover > ul.dropdown-menu{
 }
 
 #menuSet{
+	text-align: right;
+}
+
+#menuSet li{
+	display:inline-block;
+	margin-left: 15px;
+}
+
+#menuSet li:hover ,#menuSet li:focus{
+	color: rgb(246, 87, 87);
+}
+#menuSet li a,#menuSet li a:visited ,#menuSet li a:focus,#menuSet li a:active{
+		color:inherit;
+		text-decoration: none;
+}
+/* new head css*/
+
+/**header**/
+.topbar{
+	border-top: 8px solid #0F8159;
+	background: url("/assets/paper.jpg") repeat;
+}
+.logo{
+	background: url("/assets/Sociorent.png") no-repeat scroll 0 0 transparent;
+  height: 70px;
+  width: 301px;
+	margin: 10px 0 25px;
+}
+.logo h1{
+	text-indent: -999px;
+}
+
+[class*="grid"] {
+    float: left;
+    min-height: 1px;
+	padding:5px;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+.wrapper{
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+.main_nav{
+	margin-top: 25px;
+}
+.main_nav li a{
+	display: block;
+	color: #797979;
+	padding: 15px 20px;
+	font-size: 15px;
+	font-weight: bold;
+}
+.main_nav li a:hover{
+	background: #E9EAEA;
+	color: #0F8159;
+}
+.main_nav li a.selected{
+	background: #F65757;
+	color: #fff;
+	padding: 8px 20px;
+	margin-top:7px;
+	border-radius: 3px 3px 3px 3px;
+}
+.main_nav li{
+	float: left;
+}
+
+.contact_socio{
+	color:#797979;
+	font-size: 14px;
+	padding-top: 10px;
+}
+
+.contact_socio img{
+	height: 16px;
+	padding: 0px 5px;
 	margin-top: -5px;
+}
+
+.contact_socio 	a{
+	color:#797979;
+}
+
+.grid_1{
+	width: 100%;
+}
+
+.cB {
+    clear: both;
+}
+li {
+	list-style: none;
+}
+
+.disc{
+	li{
+		list-style: inside disc;
+	}
+}
+.square{
+	li{
+		list-style: inside square;
+	}
+}
+
+body {
+  background: white;
+  font-size: 13px;
+  font-family: 'PT Sans', sans-serif !important;
+}
+
+
+
+/* agent */
+.fb_big_logi{
+	background: url("/assets/home-sprite.png") no-repeat scroll -1px -79px transparent;
+    display: block;
+    height: 50px;
+    margin: 20px 0 0;
+    width: 239px;
+}
+.signup_link{
+	font-size: 18px;
+	margin-top: 20px;
+	padding: 12px;
+}
+.signup_link:active{
+	color:greep !important;		
+}
+
+.tite_rent {
+	color: #F65757;
+}
+
+.signup_link span{
+	font-size: 12px;
+    border-radius: 5px 5px 5px 5px;
+    padding: 13px;
+}
+
+#head_login_modal{
+	width:600px !important;
+}
+#my_account_button{
+	cursor: pointer;
+	text-decoration: none;
+}
+.top_search{
+	margin-left: 10px;
+	margin-top: -2px;
+}
+
+#index_browse_menu li{
+	border: 1px solid #666;
+	font-size: 0.6em;
+	display: inline-block;
+	border-radius: 3px;
+}
+
+#index_menu_holder{
+	margin-bottom: 10px;
+	display: block;
+}
+
+
+
+.hidden{
+	display:none !important;
 }

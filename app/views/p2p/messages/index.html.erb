@@ -37,7 +37,7 @@
 					  </div>
 					  <div class="modal-body">
 					    <p>
-				    	<%= render "p2p/messages/compose" ,:message => @message ,:user_id => current_user.id ,:receiver => nil ,:item => "" , :toany => ((p2p_current_user.id ==1 ) ? true : false ) %>
+				    	<%= render "p2p/messages/compose" ,:message => @message ,:user_id => current_user.id ,:receiver => nil ,:item => "" , :toany => session[:isadmin] %>
 						</p>
 					  </div>
 					</div>

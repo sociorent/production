@@ -30,15 +30,16 @@
                         <%end%>
 
 
-                      
-                        <li class="span2  pull-left ">
-                          
 
 
 
-                            <div class="thumbnail alert <%= approve_class[apprval_class] %>">
+                      <li class="span2 aitem_holder">
 
-                            <% if p2p_current_user.id ==1  %>
+                      <div class="thumbnail  alert <%= approve_class[apprval_class] %>">
+
+
+                        <div class="inventory_actions pull-right">
+                            <% if session[:isadmin]  %>
                               <% if p.deletedate.nil? %>
                                 
                                 <% if p.disapproveddate.nil? %>
@@ -54,37 +55,44 @@
 
                             <div class="delete_item pull-right" itemid="<%=p.id%>"></div>
 
+                         </div>
 
-                            <div class="clearfix"></div>
 
-                              
-                              <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">                  
-                                <div class="search_image">
+                            <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                            <div class="aitem_left">
+                                <div class="image_holder">
                                   <img src="<%=p.get_image(1,:search)[0][:url]%>" >
                                 </div>
-                              <div class="caption">
-                                <b><%= p.title.slice(0,10)  %></b>
-                                <p>
-
-                                  <ul>
-                                    <li><del>&#2352;</del> <%=p.price %></li>
-                                    <li><del>&#2352;</del> <%=p.condition %></li>
-                                    
-              <!--                              <li>Attribute 2</li>
-                                    <li>Attribute 3</li>
-              -->                              
-                                  </ul>
-
-
-                                </p>
-
-
-
-                              </div>
                             </div>
-                          </a>
-                        </li>
-                
+                            </a>
+
+                            <div class="aitem_right">
+                            <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                            <div  title="<%= p.title %>">
+                              <div class="item_title"><%= p.title.titleize  %></div>
+                            </div>
+                            </a>
+
+                            <div class="item_category">
+
+                            in 
+                            <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+                              <%= p.product.name  %>
+                            </a>
+                            ,
+                            <a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+                              <%= p.category.name  %>
+                            </a>
+
+
+                            </div>
+                                  <div class="item_condition"><%=p.condition%></div>
+                                <div class="item_price">Price:<del>&#2352;</del> <%=p.price %>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            </div>
+                            </li>
 
                     <% end %>
 

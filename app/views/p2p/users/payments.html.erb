@@ -7,15 +7,13 @@
     <th>Courier Name</th>
     <th>Tracking Num</th>
     <th>Shipping Date</th>
+    <th>Deleviry Date</th>
     <th>Commission</th>
     <th>Shipping Charge</th>
-    <th>Deleviry Date</th>
     <th>Citrus pay ID</th>
     <th>Citrus Pay reason</th>
     <th>Citrus Ref no</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>Actions</th>
   </tr>
 
 <% @p2p_item_deliveries.each do |p2p_item_delivery| %>
@@ -25,17 +23,18 @@
     <td><%= p2p_item_delivery.txn_id %></td>
     <td><%= p2p_item_delivery.courier_name %></td>
     <td><%= p2p_item_delivery.tracking_no %></td>
-    <td><%= p2p_item_delivery.shipping_date %></td>
+    <td><%= p2p_item_delivery.shipping_date.strftime("%d-%b-%C%y") unless p2p_item_delivery.shipping_date.nil?  %></td>
+    <td><%=  p2p_item_delivery.delivery_date.strftime("%d-%b-%C%y") unless p2p_item_delivery.delivery_date.nil?  %></td>
     <td><%= p2p_item_delivery.commission %></td>
     <td><%= p2p_item_delivery.shipping_charge %></td>
-    <td><%= p2p_item_delivery.delivery_date %></td>
+    
     <td><%= p2p_item_delivery.citrus_pay_id %></td>
     <td><%= p2p_item_delivery.citrus_reason %></td>
     <td><%= p2p_item_delivery.citrus_ref_no %></td>
 
-    <td><%= link_to 'Show', p2p_item_delivery %></td>
-    <td><%= link_to 'Edit', edit_p2p_item_delivery_path(p2p_item_delivery) %></td>
-    <td><%= link_to 'Destroy', p2p_item_delivery, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%#= link_to 'Show', p2p_item_delivery %>
+    <%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_item_delivery_path(p2p_item_delivery) %>
+    </td>
   </tr>
 <% end %>
 </table>

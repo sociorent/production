@@ -1,24 +1,51 @@
 class P2p::UsersController < ApplicationController
 
-  layout :p2p_layout 
+  layout :p2p_layout
   before_filter :p2p_user_signed_in  ,:except => [:guesslocation ,:setlocation]
 
   #check for user presence inside p2p
   before_filter :check_p2p_user_presence ,:except => [:welcome,:user_first_time]
 
   def dashboard
-    puts p2p_current_user.items
+    
+    @total_items = p2p_current_user.items.count
+
+
     @sold_count = p2p_current_user.items.sold.count
-    @sold_count = 1 if p2p_current_user.items.sold.count == 0
+    
+    if @sold_count == 0 
+      @sold_percentage = 0
+    else
+      @sold_percentage = ((@sold_count/@total_items).ceil) * 100
+    end
+    #@sold_count = 1 if p2p_current_user.items.sold.count == 0
 
     @waiting_count = p2p_current_user.items.waiting.count
-    @waiting_count = 1 if @waiting_count == 0
+    if @waiting_count == 0 
+      @waiting_percentage = 0
+    else
+      @waiting_percentage = ((@waiting_count/@total_items).ceil) * 100
+    end
+    
+    #@waiting_count = 1 if @waiting_count == 0
 
     @disapproved_count = p2p_current_user.items.disapproved.count
-    @disapproved_count = 1 if @disapproved_count == 0
+    if @disapproved_count == 0 
+      @disapproved_percentage = 0
+    else
+      @disapproved_percentage = ((@disapproved_count/@total_items).ceil) *100
+    end
 
-    @total_sold_count = p2p_current_user.items.count
-    @total_sold_count = 1 if p2p_current_user.items.count == 0
+
+    @approved_count = p2p_current_user.items.approved.count
+    if @approved_count == 0 
+      @approved_percentage = 0
+    else
+      @approved_percentage = ((@approved_count/@total_items).ceil) *100
+    end    
+#    @disapproved_count = 1 if @disapproved_count == 0
+
+ #   @total_sold_count = 1 if p2p_current_user.items.count == 0
   end
 
   def dashboard_use
@@ -34,7 +61,7 @@ class P2p::UsersController < ApplicationController
         resp.push(:value => p2pusr.id , :label => "#{usr.name}(#{usr.email})" )
     end
 
-    if resp.count ==0 
+    if resp.count ==0
         resp.push(:value => -1 , :label => "Nothing Found" )
     end
 
@@ -44,10 +71,10 @@ class P2p::UsersController < ApplicationController
 
   def welcome
 
-  			# check if signed in , purpose fully removed the before filter 
+  			# check if signed in , purpose fully removed the before filter
   			# because it would create loop
 
-  			if current_user.nil? 
+  			if current_user.nil?
   				redirect_to '/p2p'
           flash[:notice] = 'Nothing could be found for your request'
   				return
@@ -95,8 +122,8 @@ class P2p::UsersController < ApplicationController
         geocode  = Geocoder.search(request[:REMOTE_ADDR])
         session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
 
-        puts geocode.inspect 
-        
+        puts geocode.inspect
+
         city_id = P2p::City.find_by_name(session[:city])
         session[:city_id] = (city_id.nil? ) ? '' : city_id;
 
@@ -144,7 +171,7 @@ class P2p::UsersController < ApplicationController
 
   def verifycode
       if session.has_key?(:verify) and params[:code] == session[:verify].to_s
-        
+
         session.delete(:verify)
 
         user = P2p::User.find(p2p_current_user.id)
@@ -167,16 +194,26 @@ class P2p::UsersController < ApplicationController
   end
 
   def setfavourite
-    
-    begin
-      fav = p2p_current_user.favouriteusers.new
-      fav.fav_id = P2p::Item.find(params[:itemid].to_i).user.id
-      fav.save
 
-      render :json => {:status => 1}
+    begin
+      fav_id = P2p::Item.find(params[:itemid].to_i).user.id
+
+      fav = p2p_current_user.favouriteusers.find_by_fav_id(fav_id)
+
+      if fav.nil?
+        flag = 1
+        fav = p2p_current_user.favouriteusers.new
+        fav.fav_id = fav_id
+        fav.save
+      else      
+        flag = 0   
+        fav.destroy
+      end
+
+      render :json => {:status => 1 ,:fav => flag }
 
     rescue Exception => ex
-      render :json => {:status => 0}      
+      render :json => {:status => 0}
     end
 
   end
@@ -189,7 +226,7 @@ class P2p::UsersController < ApplicationController
       end
 
     #@payments = @payments || []
-    
+
   end
 
 end

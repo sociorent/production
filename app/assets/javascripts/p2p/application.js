@@ -45,12 +45,11 @@ $(document).ready(function(){
 	$("#head_user_location").click(function(){
 		$("#location_modal").modal('show');
 	});
+	if($("#user_city").val()!=""){
+		$("#user_location").val($("#user_city").val());
+	}
 
-	$("#location_modal_save").click(function(){
-		$("#location_modal").modal('hide');
-
-		$("#head_user_location").css('background-color','');
-		$("#head_user_location i").removeClass('icon-white');
+	$("#user_location").change(function(){
 
 		$.ajax({
 			url:'/p2p/location',
@@ -60,27 +59,17 @@ $(document).ready(function(){
 			success:function(data){
 				if (data.status == 1){
 					window.location.reload();
-					$("#head_user_location i").attr('title',$("#user_location :selected").text())
-											.tooltip('destroy')
-											.tooltip();
-					$("#head_user_location i").attr('cityid',$("#user_location :selected").val());
+					$("#user_location").val(data.location);
+					$("#head_user_location i").attr('title',$("#user_location :selected").text()).tooltip('destroy').tooltip();
 				}
 				else if(data.status == 2){
-					$("#head_user_location").css('background-color','red');
-					$("#head_user_location i").addClass('icon-white');
 					$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
-					
 				}
 			},
 			error:function(){
-				$("#head_user_location").css('background-color','red');
-				$("#head_user_location i").addClass('icon-white');
 				$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
-				
 			}
 		});
-		
-		
 		return false;
 	});
 
@@ -107,7 +96,7 @@ $(document).ready(function(){
 				$("#head_user_location").css('background-color','red');
 				$("#head_user_location i").addClass('icon-white');
 				$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
-				
+
 			}
 		});
 	}

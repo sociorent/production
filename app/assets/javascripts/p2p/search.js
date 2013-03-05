@@ -4,11 +4,11 @@
 
     var cache = {};
 
-        $("#top_search_input").keyup(function(e){
-            if (e.which == 13 && $.trim($(this).val()) !=""){
-                window.location.href = '/p2p/search/q/' + $.trim($(this).val());
-            }
-        });
+        // $("#top_search_input").keyup(function(e){
+        //     if (e.which == 13 && $.trim($(this).val()) !=""){
+        //         window.location.href = '/p2p/search/q/' + $.trim($(this).val());
+        //     }
+        // });
 
         show_all_session_button = function(){
           $("#signup_button").show();
@@ -17,7 +17,7 @@
         }
     // Login script
     $('#login_button').hide();
-    
+
     $("#devise_pages a").live("click",function(){
       var action = $(this).text();
       $("#head_login_modalLabel").html(action);
@@ -41,7 +41,6 @@
            $("#forgot_box").fadeIn();
            show_all_session_button();
            $('#forgot_pass_button').hide();
-
           break;
       }
       $("#devise_pages a").css("display","none");
@@ -52,6 +51,14 @@
       return false;
     });
 
+    //search is now form
+
+    $(".search_btn").click(function(){
+
+      $("#top_search_form").submit();
+    });
+
+    //auto complete for the search
     $("#top_search_input").autocomplete({
       minLength: 2,
       source: function( request, response ) {
@@ -68,9 +75,14 @@
         });
       },
       select:function(event,elem){
-         $("#search_books_input").val("");
-          window.location.href=elem.item.value
-          return false;
+        var category_val = elem.item.label.split(" in ");
+        console.log(category_val);
+        if(category_val[1] != undefined)
+          $("#category option:contains(Mobile)").attr("selected","selected")
+        //after selecting the item from autocomplete submit the form
+        $("#top_search_input").val('');
+        $("#top_search_form").submit();
+        return false;
       },
       focus:function(){
         return false;

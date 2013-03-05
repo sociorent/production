@@ -83,3 +83,51 @@ div.dropdown:hover > ul.dropdown-menu{
 	height:1.3em;
 	overflow-y:hidden;
 }
+
+#browse_sub_cat_menu{
+	margin-bottom: 5px;
+}
+
+#browse_sub_cat_menu a,#browse_sub_cat_menu a:visited,#browse_sub_cat_menu a:hover,#browse_sub_cat_menu a:focus{
+	text-decoration: none;
+	display: block;
+	padding:3px;
+	margin-left: 5px;
+	margin-right: 15px;
+}
+
+#browse_sub_cat_menu .filter_title{
+	margin-top: 3px;
+}
+#browse_sub_cat_menu .level_1{
+	padding-left:4px;
+}
+
+#browse_sub_cat_menu .level_2{
+	padding-left:8px;
+}
+
+#browse_sub_cat_menu .level_3{
+	padding-left:12px;
+}
+
+#browse_sub_cat_menu .level_4{
+	padding-left: 16px;
+}
+
+#browse_sub_cat_menu .level_5{
+	padding-left: 15px;
+}
+
+
+#browse_sub_cat_menu a:hover{
+	background-color:#ccc;
+}
+
+#browse_sub_cat_menu #filter_holder_title{
+	background-color: rgb(246, 87, 87);
+    color: rgb(255, 255, 255);
+    border-radius: 1px ;
+    padding: 3px;
+    font-weight: bold;
+}

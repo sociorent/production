@@ -4,7 +4,7 @@
 
 
 
-				$('#Itemlist .navbar').scrollToFixed();
+//				$('#Itemlist .navbar').scrollToFixed();
 //				$('#filters').scrollToFixed();
 //				$('#browse_menu').scrollToFixed({bottom: -30});
 

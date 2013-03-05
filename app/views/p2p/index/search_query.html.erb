@@ -2,78 +2,70 @@
 <% content_for :pagetitle  do %>
 
 	Result for <%=params[:query]%>
-    
+
 <%end %>
-
-
-
-
- 
-  <!-- List Section --> 
+  <!-- List Section -->
 <div id="Itemlist" class="row">
 
-    <div id="filter" class="span2">
+	<div class="span3">
 
-      <ul class="nav nav-list">
-        <%#= render "scat_menu"  %>
-      </ul>
+			<%= render '/p2p/menu_partial/search_menu'  %>
+	</div>
 
-    </div>
-
-
-	<div id="items" class="span10">
-
-	
+	<div id="items" class="span9">
 
 	<div class="itemsRow">
-				
+
 		        <div id="listHeader" class="row">
 		          <p class="fleft"> <b>Results for <%= params[:query] %></b></p>
 		          <p class="fright"><a href="/p2p/search/q/<%=params[:query]%>"> View All</a></p>
 		        </div>
 
-				<%= will_paginate (@result)%>
+							<%= will_paginate(@result) if @result.count >0 %>
 
 	                <ul class="thumbnails">
-	                
+
 	                <% @result.each do |p| %>
+	                  <li class="span3 aitem_holder">
+                        <div class="thumbnail">
+                                <a href="<%= URI.encode("/p2p/#{p.category.name}/#{p.product.name}/#{p.title}")%>">
+                                  <div class="aitem_left">
+                                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                                  </div>
+                                </a>
 
-	                  <li class="span2">
-	                    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>">
-	                      <div class="thumbnail">
-	                      	
-	                      	<div class="image_holder">
-	                        	<img src="<%=p.get_image(1,:search)[0][:url]%>" >
-	                        </div>
+                              <div class="aitem_right">
+                                 <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                                  <div  title="<%= p.title %>">
+                                    <div class="item_title"><%= p.title.titleize  %></div>
+                                  </div>
+                                </a>
 
-	                        <div class="caption">
-	                          <b><%= p.title.slice(0,10)  %></b>
-	                          <p>
-
-	                            <ul>
-	                              <li><del>&#2352;</del> <%=p.price %></li>
-	                              <li> <%=p.condition %></li>
-	<!--                              <li>Attribute 2</li>
-	                              <li>Attribute 3</li>
-	-->                              
-	                            </ul>
-	                          </p>
-
-	                        </div>
-	                      </div>
-	                    </a>
-	                  </li>
+                                <div class="item_category">
+                                  <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+                                    <%= p.product.name  %>
+                                  </a>
+                                  <a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+                                    <%= p.category.name  %>
+                                  </a>
+                                </div>
+                                        <div class="item_condition"><%=p.condition%></div>
+                                      <div class="item_price">Price:<del>&#2352;</del> <%=p.price %>
+                                </div>
+                                <div class="buy_now"><a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">Buy Now</a></div>
+                              <div class="clearfix"></div>
+                      </div>
+                      <div class="clearfix"></div>
+                    </li>
 	              <% end %>
-
-
 	              </ul>
 
-			    <% unless @result.next_page.nil? %>
+			    <% unless @result.count <= 0 || @result.next_page.nil? %>
 		   		    <div id="load_more">
 				    	<div class="btn btn-primary">Load More.....</div>
 				    </div>
 			    <% end %>
-	              
+
 	</div>
 
 

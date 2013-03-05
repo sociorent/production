@@ -2,27 +2,6 @@
 	margin-top: 20px;
 }
 
-#top_search_input {
-	height: 25px;
-    width: 300px;
-}
-
-#top_search_input:focus {
-    width: 430px;
-}
-
-#top_search_input .add-on{
-    z-index:50;
-}
-
-.add-on {
-	height: 25px !important;
-}
-
-.add-on > i{
-	margin-top: 5px;
-}
-
 .topMenu {
 	padding: 5px;
 	background-color:#F65757;
@@ -35,4 +14,12 @@
  ul.submenu li {
  	text-align: left;
  }
-
+.search_btn{
+	margin-bottom: 12px;
+}
+#user_location{
+	margin-top: 10px;
+	background: none;
+	border: 1px solid #DED;
+	border-bottom: 4px solid #DED;
+}

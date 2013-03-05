@@ -32,7 +32,7 @@
 					<%else%>
 						<li>
 					<%end%>
-					
+
 
 				<% end %>
 
@@ -49,7 +49,7 @@
 				<% if cat.subcategories.count > 0 %>
 				    <ul class="dropdown-menu">
 				<%end%>
-					
+
 
 
 				<% cat.subcategories.all.each do |scat| %>
@@ -64,7 +64,7 @@
 						<a  href="/p2p/<%= scat.name %>">
 							<%= scat.name %>
 						</a>
-						
+
 					</li>
 				<% end %>
 
@@ -77,10 +77,10 @@
 				<% if cat.subcategories.count > 0 %>
 					</li>
 				<% else %>
-					
+
 				<% end %>
 			<% end %>
-	    
+
 		<!-- display button if browse and hide the menu -->
     	<% if  defined?(dropdown) %>
 			</ul>

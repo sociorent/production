@@ -26,7 +26,7 @@
 	opacity: 1;
 }
 
-a,a:visited,a:focus { 
+a,a:visited,a:focus {
 	text-decoration: none;
 	color:inherit;
 }
@@ -151,7 +151,6 @@ li.dropdown:hover > ul.dropdown-menu{
 
 
 #body_container{
-	min-height: 800px;
 	margin: 10px 0 10px 0;
 }
 
@@ -258,7 +257,7 @@ li.dropdown:hover > ul.dropdown-menu{
 	background: url("/assets/Sociorent.png") no-repeat scroll 0 0 transparent;
   height: 70px;
   width: 301px;
-	margin: 10px 0 25px;
+  margin-top:-12px;
 }
 .logo h1{
 	text-indent: -999px;
@@ -278,7 +277,7 @@ li.dropdown:hover > ul.dropdown-menu{
 }
 
 .main_nav{
-	margin-top: 25px;
+	margin-top: 7px;
 }
 .main_nav li a{
 	display: block;
@@ -362,7 +361,7 @@ body {
 	padding: 12px;
 }
 .signup_link:active{
-	color:greep !important;		
+	color:greep !important;
 }
 
 .tite_rent {
@@ -397,10 +396,105 @@ body {
 #index_menu_holder{
 	margin-bottom: 10px;
 	display: block;
+	text-align: center
 }
-
+#index_menu_holder ul li{
+	display: inline-block;
+	padding: 5px 20px;
+	background-color: whiteSmoke;
+background-image: -moz-linear-gradient(top, white, #DED);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(white), to(#DED));
+background-image: -webkit-linear-gradient(top, white, #DED);
+background-image: -o-linear-gradient(top, white, #DED);
+background-image: linear-gradient(to bottom, white, #DED);
+}
+#index_menu_holder ul li:hover{
+	background-position: 0 30px;
+	}
+#index_menu_holder ul li a{
+	text-decoration: none;
+}
 
 
 .hidden{
 	display:none !important;
+}
+.search_bar{
+
+	margin: 0px auto;
+	text-align: center;
+}
+
+#user_bar_holder form{
+	margin:0px !important;
+
+}
+.Location{
+	font-size: 14px;
+font-style: italic;
+padding-right: 8px;
+padding-left: 10px;
+}
+
+
+/* New filter*/
+
+#dummy_filter_holder{
+	border: 1px solid #ccc;
+}
+
+#dummy_filter_holder .filter_title{
+	padding: 3px;
+	font-weight: bold;
+	background-color: #eee;
+}
+
+
+#dummy_filter_holder .spec-filter{
+	font-size: 0.9em;
+	display: block;
+	margin-top: 3px;
+	margin-left: 3px;
+	cursor:pointer;
+	overflow: hidden;
+	width:90%;
+}
+
+#dummy_filter_holder .filters_value{
+	max-height:200px;
+	overflow-y:auto;
+	overflow-x:hidden;
+	margin-bottom: 5px;
+}
+
+#dummy_filter_holder .spec-filter input[type="checkbox"]{
+	margin-top: 2px;
+	float:left;
+	display: block;
+	margin-left:4px;
+}
+
+#filter_holder_title{
+	background-color: rgb(246, 87, 87);
+    color: rgb(255, 255, 255);
+    border-radius: 1px ;
+    padding: 3px;
+    font-weight: bold;
+}
+#filters{
+	margin-left: 0px;
+}
+
+.spec_filter_check_label{
+	float:left;
+	width:85%;
+	padding-left:10px;
+}
+.icon-credit-card{
+text-shadow: 0px 0px 4px yellow;
+color: white;
+}
+.browse_by_cate{
+display: table;
+vertical-align: middle;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  
+
   <title><%= content_for?(:pagetitle) ? yield(:pagetitle) + "- Peer2Peer, Sociorent"  : "Welcome to Peer2Peer, Sociorent"%></title>
 
 <meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
@@ -9,38 +9,25 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <%= stylesheet_link_tag  'p2p/application'%>  
-  <%= javascript_include_tag 'p2p/application'%>  
+  <%= stylesheet_link_tag  'p2p/application'%>
+  <%= javascript_include_tag 'p2p/application'%>
   <%= csrf_meta_tags %>
-  
+
 </head>
-  
+
 
 <body>
 
   <%= render "layouts/p2p/header" %>
 
   <div class="container">
-
-
-
-          <div id="body_container">
-
-            <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
-
-
-            
-            <div class="info-warning" id="flash_notice">  </div>
-            
-
-            <%= yield %>
-
-        </div>
-
-  </div>
-
+    <div id="body_container">
+      <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+      <div class="info-warning" id="flash_notice">  </div>
+         <%= yield %>
+      </div>
+    </div>
     <%= render "layouts/footer" %>
-
     <!-- footer content  -->
 <!--     <div class="footer_cpy">
       <div class="wrapper">
@@ -49,37 +36,26 @@
     </div>
 
  -->
-
     <div class="clearfix"></div>
 
+    <script>
+      $(document).ready(function(){
+          <% unless flash[:notice].nil? %>
+            showNotifications("<%=flash[:notice]%>");
+          <% end %>
 
-  <script>
+       // <#% if !p2p_current_user.nil? and  p2p_current_user.received_messages.unread.count > 0 %>
 
-  $(document).ready(function(){
-      <% unless flash[:notice].nil? %>
-        showNotifications("<%=flash[:notice]%>");
-      <% end %>
-
-
-
-    // <#% if !p2p_current_user.nil? and  p2p_current_user.received_messages.unread.count > 0 %>
-      
-    //     $('#notificationcontainer').notify('create',{
-    //       title:"Pending Messages",
-    //       text:"You have <#%=p2p_current_user.received_messages.unread.count %> messages unread"
-    //     });
-
-
-
-    // <#% end %>
-
- });
-  
-  </script>
-
+        //     $('#notificationcontainer').notify('create',{
+        //       title:"Pending Messages",
+        //       text:"You have <#%=p2p_current_user.received_messages.unread.count %> messages unread"
+        //     });
+       // <#% end %>
+     });
+    </script>
+  </div>
 
 </body>
-
 <% unless p2p_current_user.nil? %>
   <% @notification_channel = "/user_#{p2p_current_user.id}"%>
   <%= subscribe_to @notification_channel %>

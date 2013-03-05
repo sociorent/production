@@ -1,82 +1,47 @@
 <% content_for :pagetitle  do %>
-    Welcome 
+    Welcome
 <%end %>
 
-
-  <div  class="row">
-    <div class="span11"  id="index_menu_holder">
-
-            <div class="btn-group">
-              
-              <%used_cat = [] %>
-              <%used_cat.push(0)%>
-
-               <% P2p::Category.where("category_id is null and priority is not null").order('priority').limit(7).each do |cat|%>
-
-                  <% used_cat.push(cat.id) %>
-
-                    <a  href="/p2p/<%= cat.name %>" class="btn" >
-                      <%= cat.name %>
-                    </a>
-
-                <% end %>
-
-                <% if P2p::Category.order('priority').where("id not in(#{used_cat.join(',')}) or priority is null").count > 0 %>
-
-                  <a class="btn dropdown-toggle" data-toggle="dropdown">
-                    Others  <b class="caret"></b>
-                  </a>
-
-                  <ul class="dropdown-menu">
-                    <% P2p::Category.order('priority').where("id not in(#{used_cat.join(',')}) or priority is null").each do |cat|%>
-                        <li>
-                          <a  href="<%= URI.encode("/p2p/#{cat.name}")%>">
-                            <%= cat.name %>
-                          </a>
-                        </li>
-                    <% end %>
-                  </ul>
-                <% end %>
+  <!-- listing the Categories Browse By category -->
+  <div class="clearfix"></div>
+  <div  class="row" id="index_menu_holder">
+    <div class="span11">
+    <ul class="btn-group">
+      <%used_cat = [] %>
+        <%used_cat.push(0)%>
+        <% @main_categories.each do |cat|%>
+          <% used_cat.push(cat.id) %>
+          <li class="btn">
+            <a href="/p2p/<%= cat.name %>" ><%= cat.name %></a></li>
+        <% end %>
+      </ul>
       </div>
     </div>
 
-    <!-- List Section --> 
+    <!-- List Section -->
     <div id="Itemlist" class="row">
-          
         <div id="items" class="span12">
-          <% @category.each do |acategory| %>
-
+          <% @category_items.each_with_index do |(category_name,items),index| %>
             <!-- loop and display only if the categories has products and items in it. -->
-            <% if acategory.products.size > 0  and (acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).count > 0) %>
-
-
-              <div class="itemsRow">
-                <div id="listHeader" class="row">
-                  <p class="fleft"> <b><%= acategory.name.titlecase %> </b></p>
-                  <p class="fright"><a href="/p2p/<%= acategory.name %>"> View All</a></p>
+               <div class="itemsRow">
+                <div id="listHeader" class="row"><a href="/p2p/<%= category_name %>">
+                  <p class="header_title"> <b><%= category_name %> </b></p>
+                  <p class="header_view_all">View All</p></a>
                 </div>
-                <ul class="thumbnails">
+                <ul class="thumbnails row">
 
         <!--           order the items by reqcount first, then by view count
                   used to list the most viewed and most wanted items at top
                   #TODO: THE NEW ITEMS WILL NEVER TURN UP TOP IN THE LIST
-                
+
                   SO DO SOMETHING FOR THAT(DISCUSS)
-        -->     
-
-             <% acategory.items.by_location_or_allover(p2p_get_user_location).approved.notsold.order("reqCount , viewcount").limit(5).each do |p| %>
-
-
-
-                    <li class="span2 aitem_holder">
-                      
+        -->     <% items.each do |p| %>
+                    <li class="span3 aitem_holder">
                         <div class="thumbnail">
-                                <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                                <a href="<%= URI.encode("/p2p/#{p.category.name}/#{p.product.name}/#{p.title}")%>">
                                   <div class="aitem_left">
-                                      <div class="image_holder">
-                                        <img src="<%=p.get_image(1,:search)[0][:url]%>" >
-                                      </div>
-                                  </div>
+                                       <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+                                 </div>
                                 </a>
 
                               <div class="aitem_right">
@@ -87,22 +52,17 @@
                                 </a>
 
                                 <div class="item_category">
-
-                                  in 
                                   <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
                                     <%= p.product.name  %>
                                   </a>
-                                  ,
                                   <a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
                                     <%= p.category.name  %>
                                   </a>
-
-
                                 </div>
                                         <div class="item_condition"><%=p.condition%></div>
                                       <div class="item_price">Price:<del>&#2352;</del> <%=p.price %>
                                 </div>
-
+                                <div class="buy_now"><a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">Buy Now</a></div>
                               <div class="clearfix"></div>
                       </div>
                       <div class="clearfix"></div>
@@ -110,14 +70,8 @@
                 <% end %>
                 </ul>
               </div>
-
             <% end %>
-
-          <% end %>
-
-
         </div>
-          <!-- List Section --> 
+        <!-- List Section -->
     </div>
-
 </div>

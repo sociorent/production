@@ -1,15 +1,30 @@
   <%= stylesheet_link_tag '/assets/p2p/header' %>
 
-
-
-
-
 <!-- Header -->
   <div class="topbar">
     <div class="wrapper">
       <div class="grid_1">
-        <a class="pull-left logo" href="/p2p/"><h1>sociorent</h1></a>
+        <div class="pull-left">
+          <a class="pull-left logo" href="/p2p/"><h1>sociorent</h1></a><br>
+          <span class="Location">Location</span><%=select_tag "user_location" ,options_for_select( P2p::City.all.collect{|city|  [city.name,city.id]}),:prompt=>"Your Location?"%>
+        </div>
         <div class="topbar_right pull-right">
+          <div>
+
+          <% if p2p_current_user %>
+            <div id="menuSet" class="span6 pull-right">
+              <li class="action-icon" title="Messages" data-placement="bottom">
+                <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
+                <a href="/p2p/messages"><i class="icon-envelope"></i> Messages<%= "(#{unread_count})" if  unread_count > 0  %>
+              </li>
+              <li class=" action-icon" title="Dashboard" data-placement="bottom"><a href="/p2p/dashboard"><i class="icon-dashboard"></i>Dashboard</a></li>
+              <li class=" action-icon" title="List New Item" data-placement="bottom"><a href="/p2p/sellitem"><i class="icon-shopping-cart"></i>Sell Item</a></li>
+              <li class=" action-icon" title="Sign out" data-placement="bottom">
+                <%= link_to "<i class='icon-signout'></i> Sign Out".html_safe, destroy_user_session_path, :method => :delete %>
+              </li>
+            </div>
+          <% end %>
+          </div>
           <nav class="main_nav pull-right">
             <ul>
               <!-- <li><a href="#faq_page" class="static_page_dialog_open">FAQ</a></li>
@@ -25,21 +40,18 @@
             </ul>
           </nav>
           <div class="clearfix"></div>
+
           <div class="contact_socio pull-right">
-            <a href="mailto:care@sociorent.com"><img src="/assets/index/mail_icon.png">care@sociorent.com</a> | <img src="/assets/index/phone.png">+91-73531-12345 
+            <a href="mailto:care@sociorent.com"><img src="/assets/index/mail_icon.png">care@sociorent.com</a> | <img src="/assets/index/phone.png">+91-73531-12345
           </div>
         </div>
       </div>
     </div>
     <div class="cB"></div>
-
-
        <%= render '/layouts/p2p/p2p_user_bar' %>
+    </div>
 
-  </div>
-
-
-<!-- 
+<!--
   <%#= request.env["HTTP_REFERER"]  %>
 
 <div id="header" class="row">
@@ -129,3 +141,4 @@ when the page first loads -->
 
 
 </div>
+

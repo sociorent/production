@@ -77,7 +77,7 @@ Sociorent::Application.routes.draw do
     scope 'admin' do
       #scaffold controller and view
       resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries
- 
+
         root :to => 'categories#index'
     end
 
@@ -134,7 +134,7 @@ Sociorent::Application.routes.draw do
 
       get 'getmessages(/:id)' => 'messages#getmessages'
 
-      match 'search/q/:query' => "index#search_query"
+      match 'search/q' => "index#search_query"
 
       match 'search/c/:cat(/:prod)' => "index#search_cat"
 
@@ -143,9 +143,6 @@ Sociorent::Application.routes.draw do
       #citruspay response catching
       match "getCitursSignature" => "items#get_citrus_signature"
       match "update_citrus" => "items#update_online_payment"
-
-
-
       match ":cat/filters(/*applied_filters)" =>"index#browse_filter" ,  :applied_filters => /[^\/]*/
       match ":cat/:prod/filters(/*applied_filters)" =>"index#browse_filter"  ,:applied_filters => /[^\/]*/
 

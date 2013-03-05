@@ -97,7 +97,7 @@ $(document).ready(function(){
 
 			$("#title").editable('toggleDisabled');
 
-			$("#category").editable('toggleDisabled');
+			$("#category_item").editable('toggleDisabled');
 
 			$(this).children().attr('data-original-title','Edit Item');
 
@@ -151,7 +151,7 @@ $(document).ready(function(){
 
 			$("#image_upload").removeAttr('disabled','disabled');
 			if (window.edit){
-				$("#category").editable('toggleDisabled');
+				$("#category_item").editable('toggleDisabled');
 				$('[id^=item_]').on('save',check_specs);
 
 			}
@@ -167,9 +167,8 @@ $(document).ready(function(){
 
 
 			window.try = 0;
-			$("#category").on('save',function(e,params){
+			$("#category_item").on('save',function(e,params){
 				//set_category(params.newValue);
-
 
 				if (params.newValue == item_values['cat']) return false ;
 
@@ -250,7 +249,7 @@ $(document).ready(function(){
 			});
 
 		// //validate brand
-			// $('#category').on('save', function(e, params) {
+			// $('#category_item').on('save', function(e, params) {
    // 				 //alert('Saved value: ' + params.newValue);
 			// 	if (params.newValue != "") {
 			// 		item_values['title'] = params.newValue;
@@ -271,7 +270,7 @@ $(document).ready(function(){
 				if (params.newValue.length > 5) {
 					item_values['title'] = params.newValue;
 					$(this).removeClass('error');
-					$('#category').tooltip('show');
+					$('#category_item').tooltip('show');
 				}
 				else{
 					item_values['title']="";

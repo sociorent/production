@@ -75,7 +75,7 @@ $(document).ready(function(){
 
 
 	//guess location of user if not set
-	if ($("#head_user_location").attr('cityid') == ''){
+	if ($("#user_location").val() == ''){
 		$.ajax({
 			url:'/p2p/guesslocation',
 			type:'post',
@@ -100,5 +100,6 @@ $(document).ready(function(){
 			}
 		});
 	}
+
 
 });

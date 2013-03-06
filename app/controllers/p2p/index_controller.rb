@@ -16,7 +16,7 @@ class P2p::IndexController < ApplicationController
       @main_categories.each do |main_cate|
         if main_cate.items.listing_items_by_location(p2p_get_user_location).count > 0
           @category_items["#{main_cate.name}"] = []
-          main_cate.items.listing_items_by_location(p2p_get_user_location).limit(3).each do |item|
+          main_cate.items.listing_items_by_location(p2p_get_user_location).limit(4).each do |item|
             @category_items["#{main_cate.name}"] << item
           end
           category_count += 1
@@ -224,6 +224,7 @@ class P2p::IndexController < ApplicationController
   end
 
   def browse_filter
+    sleep(2)
     if params.has_key?(:applied_filters)
       if  request.xhr?
         render :json =>  []

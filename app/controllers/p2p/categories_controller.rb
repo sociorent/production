@@ -47,6 +47,10 @@ class P2p::CategoriesController < ApplicationController
 
     respond_to do |format|
       if @p2p_category.save
+                 
+                 redirect_to p2p_categories_url, notice: 'Category was successfully created.'
+                 return
+
         format.html { redirect_to @p2p_category, notice: 'Category was successfully created.' }
         format.json { render json: @p2p_category, status: :created, location: @p2p_category }
       else
@@ -61,8 +65,13 @@ class P2p::CategoriesController < ApplicationController
   def update
     @p2p_category = P2p::Category.find(params[:id])
 
+
     respond_to do |format|
       if @p2p_category.update_attributes(params[:p2p_category])
+
+        redirect_to p2p_categories_url, notice: 'Category was successfully created.'
+        return
+
         format.html { redirect_to @p2p_category, notice: 'Category was successfully updated.' }
         format.json { head :no_content }
       else

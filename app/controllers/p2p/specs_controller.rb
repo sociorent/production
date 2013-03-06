@@ -28,6 +28,7 @@ class P2p::SpecsController < ApplicationController
   def new
     @p2p_spec = P2p::Spec.new
 
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @p2p_spec }
@@ -44,8 +45,13 @@ class P2p::SpecsController < ApplicationController
   def create
     @p2p_spec = P2p::Spec.new(params[:p2p_spec])
 
+
     respond_to do |format|
       if @p2p_spec.save
+
+         redirect_to p2p_specs_url, notice: 'Specification was successfully created.'
+         return
+
         format.html { redirect_to @p2p_spec, notice: 'Spec was successfully created.' }
         format.json { render json: @p2p_spec, status: :created, location: @p2p_spec }
       else
@@ -60,8 +66,15 @@ class P2p::SpecsController < ApplicationController
   def update
     @p2p_spec = P2p::Spec.find(params[:id])
 
+
     respond_to do |format|
       if @p2p_spec.update_attributes(params[:p2p_spec])
+
+        redirect_to p2p_specs_url, notice: 'Specification was successfully created.'
+
+        return 
+
+        
         format.html { redirect_to @p2p_spec, notice: 'Spec was successfully updated.' }
         format.json { head :no_content }
       else

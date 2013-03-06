@@ -4,7 +4,7 @@ class P2p::Image < ActiveRecord::Base
   # attr_accessible :title, :body
 
   attr_accessible :img
-  has_attached_file :img , :styles => { :view => "320X320", :thumb => "50X50" ,:search => "120X155" ,:full => "640X480" },
+  has_attached_file :img , :styles => { :view => "290X290", :thumb => "50X50#" ,:search => "110X155#" ,:full => "640X480" },
   					:default_url => '/assets/noimage.jpg'
 
   belongs_to :item

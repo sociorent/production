@@ -1,350 +1,334 @@
-f#Itemlist {
-	margin-top: 20px;
+#Itemlist {
+	margin-top:20px
 }
 
 #listHeader {
-	height: 20px;
-	background: url(/assets/p2p/index/texture.png) repeat;
-	margin: 0px 0px 15px 0px;
-	padding: 10px 15px;
+	height:20px;
+	background:url(/assets/p2p/index/texture.png) repeat;
+	margin:0 0 15px;
+	padding:10px 15px
 }
-.header_title{
-	float: left;
-	width: 50%;
+
+.header_title {
+	float:left;
+	width:50%
 }
-.header_view_all{
-	float: right;
-	text-align: right;
-	width: 50%;
+
+.header_view_all {
+	float:right;
+	text-align:right;
+	width:50%
 }
 
 #items {
-	min-height: 700px;
+	min-height:700px
 }
 
 #filter i {
-	float: right;
-	margin-top: 3px;
+	float:right;
+	margin-top:3px
 }
 
 #filter i:hover {
-	background-color: red;
+	background-color:red
 }
 
-#overlay{
-	background-color: #ddd;
-	position: fixed;
-	opacity:0.3;
-	display: none;
-	font-size: 3em;
-	font-weight: bold;
-	vertical-align: middle;
-	text-align: center;
-	padding-top: 20px;
+#overlay {
+	background-color:#ddd;
+	position:fixed;
+	opacity:.3;
+	display:none;
+	font-size:3em;
+	font-weight:700;
+	vertical-align:middle;
+	text-align:center;
+	padding-top:20px
 }
 
-
-#items{
+#items {
 	min-height:800px;
-	margin-bottom: 20px;
+	margin-bottom:20px
 }
 
-.spec-filter .icon-remove{
-	margin-top: 4px;
-	cursor: pointer;
-	float:right;
-
+.spec-filter .icon-remove {
+	margin-top:4px;
+	cursor:pointer;
+	float:right
 }
 
 .spec-filter .icon-remove:hover {
-	border-top: 1px solid red;
+	border-top:1px solid red
 }
 
-#noitems{
-	display: inline-block;
-	text-align: center;
-
+#noitems {
+	display:inline-block;
+	text-align:center
 }
 
-.image_holder{
+.image_holder {
 	width:120px;
 	height:120px;
-	display: block;
-	text-align: center;;
+	display:block;
+	text-align:center
 }
 
-
-.approve_item{
-	opacity: 0.3;
+.approve_item {
+	opacity:.3
 }
 
-
-.approve_item:hover{
-	opacity: 1;
+.approve_item:hover {
+	opacity:1
 }
-
 
 /*//item view page*/
-.disapprove_item{
-	opacity: 0.3;
+.disapprove_item {
+	opacity:.3
 }
 
-.disapprove_item:hover{
-	opacity: 1;
+.disapprove_item:hover {
+	opacity:1
 }
 
-
-.approve_item > i ,.disapprove_item > i{
-	margin-top: -2px;
-	margin-left: 2px;
+.approve_item > i,.disapprove_item > i {
+	margin-top:-2px;
+	margin-left:2px
 }
 
-.highlight_force_color{
-	color: maroon !important;
+.highlight_force_color {
+	color:maroon!important
 }
 
-.highlight{
-    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
-    color: maroon;
-	font-weight: bolder;
-	font-size: 1.1em;
+.highlight {
+	text-shadow:0 -1px 0 rgba(0,0,0,0.25);
+	color:maroon;
+	font-weight:bolder;
+	font-size:1.1em
 }
 
-#item_top_details{
-	 margin-top:  10px;
-	margin-left: 50px;
+#item_top_details {
+	margin-top:10px;
+	margin-left:50px
 }
 
-
-.big{
+.big {
 	font-size:2em;
-	line-height: 1.7em;
+	line-height:1.7em
 }
 
-.big > .highlight{
+.big > .highlight {
 	font-size:1.1em;
 	color:maroon;
-	font-weight:bold;
+	font-weight:700
 }
 
-#desc{
-    min-height: 200px;
+#desc {
+	min-height:200px
 }
 
-#desc_content{
-	word-wrap:break-word;
+#desc_content {
+	word-wrap:break-word
 }
 
-#desc{
+#desc {
 	min-height:100px;
-	margin-bottom: 20px;
+	margin-bottom:20px
 }
+
 /*
 #desc > .editable-container{
 	width:600px;
-}*/
+	}*/
+	.accordion-heading {
+		cursor:pointer;
+		background-color:#f5f5f5
+	}
 
-.accordion-heading{
-	cursor:pointer;
-	background-color: whitesmoke;
+	.accordion-heading:hover {
+		background-color:#ffffe0;
+		font-weight:700
+	}
+
+	.accordion-heading a:hover,a,a:visited,a:focus {
+		text-decoration:none
+	}
+
+	#image_upload {
+		cursor:pointer
+	}
+
+	#upload_image {
+		width:290px;
+		height:300px;
+		background-image:url(/assets/p2p/img/upload.png)
+	}
+
+	#citruspay_form {
+		margin:0!important
+	}
+
+	#item_top_buy_button {
+		display:table-cell;
+		vertical-align:middle
+	}
+
+	#clearuploads {
+		cursor:pointer
+	}
+
+	/*New item menu	*/
+	.aitem_holder .thumbnail {
+		display:block;
+		padding:5px;
+		cursor:pointer;
+		background:#fff;
+		border-radius:5px;
+		height:155px
+	}
+
+	.aitem_holder .thumbnail:hover {
+		border:1px solid #666;
+		background-color:#ffffe0
+	}
+
+	.aitem_holder .thumbnail:hover a:hover {
+		font-weight:700;
+		color:#333
+	}
+
+	.aitem_holder .thumbnail a {
+		text-decoration:none;
+		display:block
+	}
+
+	.aitem_holder .thumbnail .item_category {
+		margin-left:3px;
+		font-style:italic
+	}
+
+	.aitem_holder .thumbnail .image_holder {
+		display:table-cell;
+		vertical-align:middle;
+		text-align:center;
+		border:1px solid #ccc;
+		border-radius:3px
+	}
+
+	.aitem_holder .thumbnail .thumbs img {
+		display:block
+	}
+
+	.aitem_holder {
+		display:block
+	}
+
+	.aitem_left {
+		display:table;
+		float:left;
+		vertical-align:middle;
+
+	}
+
+	.aitem_left img {
+		min-height:100%
+	}
+
+	.aitem_right {
+		float:left;
+		width:88px;
+		text-align:left;
+		height:140px;
+		position:relative;
+		margin-left:10px;
+		margin-top:6px
+	}
+
+	.item_title {
+		font-size:14px;
+		font-weight:600;
+		color:#696969;
+		max-height:40px;
+		overflow:hidden
+	}
+
+	.item_condition {
+		font-size:13px;
+		font-weight:600;
+		color:#0F8159;
+		height:20px;
+		overflow:hidden
+	}
+
+	.item_price {
+		height:20px;
+		overflow:hidden
+	}
+
+.thumb_img {
+	height:50px;
+	width:50px
 }
 
-.accordion-heading:hover{
-	background-color: lightyellow;
-	font-weight: bold;
+.buy_now {
+	font-size:13px;
+	background:#F65757;
+	display:inline-block;
+	padding:3px 10px;
+	border-radius:3px;
+	color:#fff;
+	font-weight:700;
+	position:absolute;
+	bottom:-8px
 }
 
-.accordion-heading a:hover,a,a:visited,a:focus{
-	text-decoration: none;
+.already_fav {
+	color:#ff0
 }
 
-#image_upload{
-	cursor: pointer;
-}
-#upload_image{
-	width:290px;
-	height:300px;
-	background-image: url('/assets/p2p/img/upload.png');
+#view_image_holder {
+	text-align:center;
+	display:table-cell;
+	vertical-align:middle
 }
 
-
-#citruspay_form{
-	margin:0px !important;
+#view_image_holder img {
+	max-width:100%
 }
 
-#item_top_buy_button{
-	display: table-cell;
-	vertical-align: middle;
+#item_top_buy_button .btn {
+	padding:10px 13px;
+	font-weight:700;
+	font-size:21px
 }
 
-#clearuploads{
-	cursor: pointer;
+.table-striped th {
+	background:#F9F9F9
 }
 
-
-
-
-/*New item menu	*/
-
-.aitem_holder .thumbnail{
-	display: block;
-	padding: 5px;
-	cursor: pointer;
-	background: white;
-	border-radius: 5px;
-	height: 155px;
+#item_top_details_buttons {
+	text-align:center
 }
 
-.aitem_holder .thumbnail:hover{
-	border:1px solid #666;
-	background-color: lightyellow;
-}
-.aitem_holder .thumbnail:hover a:hover {
-	font-weight: bold;
-	color:#333;
+.remove_image,.thumbs {
+	cursor:pointer
 }
 
-.aitem_holder .thumbnail  a{
-	text-decoration: none;
-	display: block;
-
+.icon-trash {
+	color:red
 }
 
-.aitem_holder .thumbnail .item_category{
-	margin-left: 3px;
-	font-style: italic;
+.btn-group-vertical .btn {
+	text-align:left
 }
-.aitem_holder .thumbnail .image_holder{
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	border: 1px solid #ccc;
-	border-radius: 3px;
+.picture_upload_preview{
+	position:relative;
 }
+.remove_image{
 
-
-.aitem_holder .thumbnail .thumbs img{
-	display: block;
-}
-
-.aitem_holder{
-	display:block;
-}
-
-.aitem_left{
-	display: table;
-	float: left;
-	width: 110px;
-	vertical-align: middle;
-	height: 100%;
-}
-.aitem_left img{
-	min-height: 100%
-}
-
-.aitem_right{
-	float: left;
-	width: 88px;
-	text-align: left;
-	height: 140px;
-	position: relative;
-	margin-left: 10px;
-	margin-top: 6px;
-}
-
-.item_title{
-	font-size: 14px;
-	font-weight: 600;
-	color: #696969;
-	max-height: 40px;
-	overflow: hidden;
-}
-
-.item_condition{
-	font-size: 13px;
-	font-weight: 600;
-	color: #0F8159;
-	height: 20px;
-	overflow: hidden;
-}
-
-.item_price{
-	height: 20px;
-	overflow: hidden;
-}
-
-		.add_to_cart{
-			font-size: 13px;
-			background: #F65757;
-			display: inline-block;
-			padding: 6px 7px 3px;
-			border-radius: 3px;
-			color: white;
-			position: absolute;
-			bottom: 0px;
-			right: 0px;
-		}
-
-		.already_rented {
-			font-size: 10px;
-			line-height: 14px;
-			font-weight: 400;
-			margin-left: 7px;
-		}
-
-		.add_to_compare_box{
-			.add_to_compare{
-				float: left;
-				margin-left: 5px
-			}
-			label{
-				float: left;
-				margin-left: 6px;
-			}
-		}
-
-
-		.thumb_img{
-			height:50px;
-			width:50px;
-		}
-.buy_now{
-	font-size: 13px;
-	background: #F65757;
-	display: inline-block;
-	padding: 3px 10px;
-	border-radius: 3px;
-	color: white;
-	font-weight: bold;
-	position: absolute;
-
-	bottom: -8px;
-}
-
-.already_fav{
-	color:yellow;
-}
-
-#view_image_holder{
-	text-align: center;
-	display: table-cell;
-	vertical-align: middle;
-}
-
-#view_image_holder img{
-		max-width:100%;
-}
-
-#item_top_buy_button .btn{
-	padding: 10px 13px;
-	font-weight: bold;
-	font-size: 21px;
-}
-
-.table-striped th{
-	background: #F9F9F9;
-}
-
-#item_top_details_buttons{
-	text-align: center;
+	  background: none repeat scroll 0 0 #DDD;
+    border-radius: 10px;
+    color: black;
+    font-size: 8px;
+    position: absolute;
+    right: -4px;
+    top: -5px;
 }

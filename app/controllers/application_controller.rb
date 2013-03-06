@@ -56,8 +56,8 @@ class ApplicationController < ActionController::Base
   	begin
 		session[:isadmin] = false
 
-		socio_admin = User.find_by_email('admin@admin.com')
-		session[:admin_id] = P2p::User.find_by_user_id(socio_admin.id)
+		socio_admin = User.find_by_is_admin(1)
+		session[:admin_id] = (P2p::User.find_by_user_id(socio_admin.id)).id
 
 	  	if current_user.nil?
 	  		return nil

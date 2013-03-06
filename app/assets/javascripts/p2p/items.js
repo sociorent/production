@@ -1,7 +1,11 @@
 $(document).ready(function(){
 
+	$(document).on('click',function(e){
+		if ($(e.target).parents('.tooltip').length == 0) $('[data-original-title]').tooltip('hide');
+	});
 
 
+	$('.action_icon').tooltip({delay:{show:0,hide:100}});
 
 	$('#upload_image').click(function(){
        $('#image_upload').trigger('click');
@@ -145,9 +149,12 @@ $(document).ready(function(){
 
 			//enable the remove image butotn
 
+			$("#category_item").editable();
+
 			$("#upload_pic").removeClass('hide');
 
 			$('.canEdit').editable();
+
 
 			$("#image_upload").removeAttr('disabled','disabled');
 			if (window.edit){
@@ -189,10 +196,13 @@ $(document).ready(function(){
 				
 				//add custom brand
 				$('#add_new_model').on('keyup',function(){
-					if ($.trim ( $(this).val() ) != '' ) {
+					
+
+					if ($.trim($(this).val()) != '' ) {
 						item_values['brand'] = $.trim ( $(this).val() );
-						$("#model").val('');
+						$("#model").editable('setValue','',false);
 					}
+
 				});
 
 
@@ -211,6 +221,7 @@ $(document).ready(function(){
 								$(this).removeClass('error');
 
 								$("#price").tooltip('show');
+								$('#add_new_model').val('');
 							}
 							else{
 								item_values['brand']="";
@@ -297,7 +308,7 @@ $(document).ready(function(){
 
 				}else{
 					item_values['price']="";
-					params.newValue = params.oldValue;
+					$(this).editable('setValue','');
 					$(this).addClass('error');
 					$(this).tooltip('show');
 				}
@@ -343,7 +354,7 @@ $(document).ready(function(){
 			      reader.onload = (function(theFile) {
 			        return function(e) {
 
-						$(".thumb_holder .thumbnails ").append('<li class="thumbs"><i class="icon-remove pull-right hide remove_image "></i>\
+						$(".thumb_holder .thumbnails ").append('<li class="thumbs"><!--<i class="icon-white icon-remove pull-right hide remove_image "></i> -->\
 	              			<img src="' + e.target.result + '"  imgid="-1" class="thumb_img pull-left" viewimage="' + e.target.result + '">\
 	              		</li>');
 
@@ -437,7 +448,13 @@ $(document).ready(function(){
 	//remove image funciton
 	$(".remove_image").click(function(){
 
+		if (window.image_count == 1 ){
+			showNotifications('Add more images to delete this.');
+			return false;
+		}
+		
 		var that = $(this);
+
 
 		$.ajax({
 
@@ -449,6 +466,7 @@ $(document).ready(function(){
 				if (data.status == 1){
 					var imgid = that.siblings('img').attr("imgid");
 					that.parent().remove();
+					widow.image_count -= 1;
 					$(".thumbs :first").trigger("click");
 				}
 			}
@@ -696,6 +714,8 @@ $(document).ready(function(){
 
 	      $("#clearuploads").on('click',function(){
 
+	      	$("#image_upload").val('');
+
 	      	if ($("#image_upload")[0].files.length == 0 ){
 	      		window.image_count = 0;
 	      	}else{
@@ -703,7 +723,7 @@ $(document).ready(function(){
 	      		if (window.image_count <0) window.image_count = 0;
 	      	}
 
-	      	$("#image_upload").val('');
+	      	
 
 			_.each($(".thumb_img"),function(elem){
 	      			if ($(elem).attr('imgid') == -1){

@@ -142,11 +142,6 @@ li.dropdown:hover > ul.dropdown-menu{
 
 #header_msg_count{
 	color: rgb(246, 87, 87);
-	float: right;
-	display: block;
-	margin-top: -10px;
-	font-weight: bold;
-	font-size: 1.2em;
 }
 
 
@@ -497,4 +492,25 @@ color: white;
 .browse_by_cate{
 display: table;
 vertical-align: middle;
+}
+
+.message_message a,.message_message a:visited,.message_message a:hover{
+		font-weight: bold;
+		text-decoration: underline;
+}
+
+.results_top_loading{
+	position: relative;
+
+}
+
+
+#filter_loading_image{
+	top: 13px;
+	position: absolute;
+	left: 39%;
+	font-size: 1.5em;
+	font-style: italic;
+
+
 }

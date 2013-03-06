@@ -27,6 +27,7 @@ class P2p::ServicePincodesController < ApplicationController
   # GET /p2p/service_pincodes/new.json
   def new
     @p2p_service_pincode = P2p::ServicePincode.new
+    
 
     respond_to do |format|
       format.html # new.html.erb
@@ -46,6 +47,11 @@ class P2p::ServicePincodesController < ApplicationController
 
     respond_to do |format|
       if @p2p_service_pincode.save
+
+        redirect_to p2p_service_pincodes_url, notice: 'Service Pincode was successfully created.'
+        return
+
+
         format.html { redirect_to @p2p_service_pincode, notice: 'Service pincode was successfully created.' }
         format.json { render json: @p2p_service_pincode, status: :created, location: @p2p_service_pincode }
       else
@@ -60,8 +66,14 @@ class P2p::ServicePincodesController < ApplicationController
   def update
     @p2p_service_pincode = P2p::ServicePincode.find(params[:id])
 
+    redirect_to :index and return
+    
     respond_to do |format|
       if @p2p_service_pincode.update_attributes(params[:p2p_service_pincode])
+
+        redirect_to p2p_service_pincodes_url, notice: 'Service Pincode was successfully created.'
+        return
+        
         format.html { redirect_to @p2p_service_pincode, notice: 'Service pincode was successfully updated.' }
         format.json { head :no_content }
       else

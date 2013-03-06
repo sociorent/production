@@ -80,11 +80,11 @@ $(document).ready(function(){
 				}else{
 					$("#load_more div").hide();
 				}
-				$("#overlay").hide(100);
+				$("#filter_loading_image").addClass('hide');
 			},
 			error:function(){
 				showNotifications("Something went wrong. Try again");
-				$("#overlay").hide(100);
+				$("#filter_loading_image").addClass('hide');
 				$("#load_more div").html("Load more...");
 			}
 		});
@@ -124,11 +124,11 @@ $(document).ready(function(){
 
 				var templ=_.template($("#item_template").html(),{data:data});
 				$("#items").html(templ);
-				$("#overlay").hide(100);
+				$("#filter_loading_image").removeClass('hide');
 			},
 			error:function(){
 				showNotifications("Something went wrong. Try again");
-				$("#overlay").hide(100);
+				$("#filter_loading_image").addClass('hide');
 				filters[spec].splice(filters[spec].indexOf(val),1)
 				$(that).removeClass('active');
 				$(that).children(".icon-remove").addClass("hidden");
@@ -149,13 +149,17 @@ $(document).ready(function(){
  	// Showing overlay while fetching contents
 	showOverlay = function(){
 
-		$("#overlay").css({
-			"width":$("#items").outerWidth(),
-			"height":$("#items").outerHeight(),
-			"top":$("#items").top,
-			"left":$("#items").offset().left,
-		});
-		$("#overlay").show();
+		$("#filter_loading_image").removeClass('hide');
+
+
+
+		// $("#overlay").css({
+		// 	"width":$("#items").outerWidth(),
+		// 	"height":$("#items").outerHeight(),
+		// 	"top":$("#items").top,
+		// 	"left":$("#items").offset().left,
+		// });
+		// $("#overlay").show();
 	}
 
 

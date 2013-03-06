@@ -32,6 +32,8 @@ class P2p::ProductsController < ApplicationController
       format.html # new.html.erb
       format.json { render json: @p2p_product }
     end
+
+    
   end
 
   # GET /p2p/products/1/edit
@@ -46,6 +48,11 @@ class P2p::ProductsController < ApplicationController
 
     respond_to do |format|
       if @p2p_product.save
+        
+        redirect_to p2p_products_url, notice: 'Product was successfully created.'
+
+        return
+
         format.html { redirect_to @p2p_product, notice: 'Product was successfully created.' }
         format.json { render json: @p2p_product, status: :created, location: @p2p_product }
       else
@@ -60,8 +67,13 @@ class P2p::ProductsController < ApplicationController
   def update
     @p2p_product = P2p::Product.find(params[:id])
 
+
     respond_to do |format|
       if @p2p_product.update_attributes(params[:p2p_product])
+
+        redirect_to p2p_products_url, notice: 'Product was successfully created.'
+        return 
+        
         format.html { redirect_to @p2p_product, notice: 'Product was successfully updated.' }
         format.json { head :no_content }
       else

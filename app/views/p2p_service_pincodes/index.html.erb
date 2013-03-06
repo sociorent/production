@@ -1,21 +1,51 @@
-<h1>Listing p2p_service_pincodes</h1>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
 
-<% @p2p_service_pincodes.each do |p2p_service_pincode| %>
-  <tr>
-    <td><%= link_to 'Show', p2p_service_pincode %></td>
-    <td><%= link_to 'Edit', edit_p2p_service_pincode_path(p2p_service_pincode) %></td>
-    <td><%= link_to 'Destroy', p2p_service_pincode, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
 
-<br />
 
-<%= link_to 'New P2p service pincode', new_p2p_service_pincode_path %>
+
+<% content_for :pagetitle  do %>
+    Service Pincode  -Admin 
+<%end %>
+
+
+<h1>Listing Service Pincodes</h1>
+
+
+<div class="row" id="body_content" >
+
+     <div class="span2">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span10">
+
+
+    <table>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+
+    <% @p2p_service_pincodes.each do |p2p_service_pincode| %>
+      <tr>
+        <td><%= link_to 'Show', p2p_service_pincode %></td>
+        <td><%= link_to 'Edit', edit_p2p_service_pincode_path(p2p_service_pincode) %></td>
+        <td><%= link_to 'Destroy', p2p_service_pincode, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    </table>
+
+    <br />
+
+    <%= link_to 'New P2p service pincode', new_p2p_service_pincode_path %>
+
+
+</div></div>

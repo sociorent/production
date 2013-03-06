@@ -3,36 +3,54 @@
     Products  -Admin 
 <%end %>
 
-<h1>Listing p2p_products</h1>
-
-<%= link_to 'New Product', new_p2p_product_path %>
-
-<table>
-
-  <tr>
-    <th>Name</th>
-
-    <th>Priority</th>
-    <th>Category</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @p2p_products.each do |p2p_product| %>
-  <tr>
-    <td><%= p2p_product.name %></td>
-
-    <td><%= p2p_product.priority %></td>
-    <td><%= p2p_product.category.name %></td>
-
-    <td><%= link_to 'Show', p2p_product %></td>
-    <td><%= link_to 'Edit', edit_p2p_product_path(p2p_product) %></td>
-    <td><%= link_to 'Destroy', p2p_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
 
 
+<div class="row" id="body_content" >
+
+     <div class="span2">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span10">
+
+
+    <h1>Listing Product</h1>
+
+    <%= link_to '<h5><i class="icon-plus-sign-alt"></i> New Product</h5>'.html_safe, new_p2p_product_path %>
+
+    <table class="table table-bordered table-striped">
+
+      <tr>
+        <th>Name</th>
+
+        <th>Priority</th>
+        <th>Category</th>
+        <th>Actions</th>
+        
+      </tr>
+
+    <% @p2p_products.each do |p2p_product| %>
+      <tr>
+        <td><%= p2p_product.name %></td>
+
+        <td><%= p2p_product.priority %></td>
+        <td><%= p2p_product.category.name %></td>
+
+        
+        <td><%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_product_path(p2p_product) %>
+        <%= link_to '<i class="icon-trash"></i>'.html_safe, p2p_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    </table>
+
+    <br />
+
+
+</div></div>

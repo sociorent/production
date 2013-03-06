@@ -241,7 +241,7 @@
       </div>
 
     <div class="span7" id="item_top_details_buttons">
-      <%if !p2p_current_user.nil? and p2p_current_user.id.to_s != ownerid %>
+
 
           <span class="item_top_details_detail" id="itemsharefb">
 
@@ -276,8 +276,17 @@
 
 
           </span>
+      
+      <%if !p2p_current_user.nil? and p2p_current_user.id.to_s != ownerid %>
 
           <span class="item_top_details_detail btn" id="itemfavourite"><%= ((p2p_current_user.favouriteusers.where(:fav_id => @item.user.id)).count == 0 ) ? "<i class='icon-star '></i> #{@item.user.user.name}".html_safe : "<i class='icon-star already_fav'></i> #{@item.user.user.name}".html_safe %></span>
+      <% elsif p2p_current_user.nil?  %>
+
+          <a data-toggle="modal" href="#head_login_modal" class="item_top_details_detail btn" >
+            <i class='icon-star'></i> <%= @item.user.user.name %>
+          </a>
+
+
       <% end %>
   </div>
 

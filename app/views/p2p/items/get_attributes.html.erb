@@ -16,6 +16,15 @@
 				<script>
 					<% if done and attr.name.downcase.starts_with?("isbn")  %>
 
+										
+							$('#model').closest('tr').find('td:first').text('Publisher');
+
+							$('#notificationcontainer').notify('create',{
+								title:'A little to you',
+								text: 'Enter the ISBN 13 and we would fill the details for you if we already have them'
+							});
+
+
 							$("#item_<%=attr.id%>").editable('show');
 
 							$("#item_<%=attr.id%>").on("save",function(e,params){
@@ -54,10 +63,10 @@
 										else{
 											
 
-											$('#notificationcontainer').notify('create',{
-												title:'Helping you out..!',
-												text: 'We have filled out ceratin details for you. If some are missing please fill the others.'
-											});
+											// $('#notificationcontainer').notify('create',{
+											// 	title:'Helping you out..!',
+											// 	text: 'We have filled out ceratin details for you. If some are missing please fill the others.'
+											// });
 
 											// $("#price").text(data['price']).editable('toggleDisabled');
 											// $('#isbn10').text(data['isbn10']).editable('toggleDisabled');

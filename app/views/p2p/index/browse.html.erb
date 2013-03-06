@@ -25,8 +25,11 @@
 <div class="span9">
 
 <div class="navbar">
-  <div class="navbar-inner">
+  <div class="navbar-inner results_top_loading">
   	<a href="/p2p/<%=params["cat"]%>" id="browse_head"><%=params["cat"]%></a>
+
+  	<span id="filter_loading_image" class="hide" > Loading <img src="/assets/loading.gif"> </span>
+
 		<select class="pull-right" id="filter_sort">
 			<option value="0">Relevance</option>
 			<option value="1">Price Hight to low</option>

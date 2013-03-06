@@ -6,36 +6,55 @@
 
 
 
-<h1>Listing Categories</h1>
+<div class="row" id="body_content" >
+
+     <div class="span2">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
 
 
-<%= link_to 'New Category', new_p2p_category_path %>
+<div class="span10">
 
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Priority</th>
-    <th>Parent</th>
-  </tr>
+    <h1>Listing Categories</h1>
 
-<% @p2p_categories.each do |p2p_category| %>
 
-  <tr>
+    <%= link_to '<h5><i class="icon-plus-sign-alt"></i> New Category</h5>'.html_safe, new_p2p_category_path %>
 
-    <td> <%= p2p_category.name %></td>
-    <td> <%= p2p_category.priority %></td>
-    <td> <%= p2p_category.commission %></td>
-    <td> <%= p2p_category.courier_charge %></td>
-    
-    <td> <%= p2p_category.category.name unless p2p_category.category.nil? %></td>
 
-  <tr>
-    <td><%= link_to 'Show', p2p_category %></td>
-    <td><%= link_to 'Edit', edit_p2p_category_path(p2p_category) %></td>
-    <td><%= link_to 'Destroy', p2p_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+    <table class="table table-striped table-bordered">
+      <tr>
+        <th>Name</th>
+        <th>Priority</th>
+        <th>Commission</th>
+        <th>Courier Charge</th>
+        <th>Parent</th>
+        <th>Actions</th>
+      </tr>
 
-<br />
+    <% @p2p_categories.each do |p2p_category| %>
+
+      <tr>
+
+        <td> <%= p2p_category.name %></td>
+        <td> <%= p2p_category.priority %></td>
+        <td> <%= p2p_category.commission %></td>
+        <td> <%= p2p_category.courier_charge %></td>
+        
+        <td> <%= p2p_category.category.name unless p2p_category.category.nil? %></td>
+
+        <td><%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_category_path(p2p_category) %>
+          <%= link_to '<i class="icon-trash"></i>'.html_safe, p2p_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    </table>
+
+    <br />
+
+</div>

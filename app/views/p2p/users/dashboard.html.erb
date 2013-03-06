@@ -17,15 +17,16 @@
 				<h3>Your  Stastics </h3>
 
 
-					Total Items
+					Total Items: 
 				    <div class="progress">
-    					 <div class="bar" style="width: 100%;"><span class="badge"><%= @total_items %></span> </div>
+    					 <div class="bar" style="width: 100%;"> <span class="badge dashboard_count_badge"><%= @total_items %></span></div>
     				</div>
+
 
 					Total Sold
 				    <div class="progress progress-success">
     					
-    					<div class="bar" style="width: <%= @sold_percentage %>%;"> <span class="badge"><%= @sold_count %> </span>  </div>
+    					<div class="bar" style="width: <%= @sold_percentage %>%;"> <span class="badge  dashboard_count_badge"><%= @sold_count %> </span>  </div>
     				</div>
 
 
@@ -34,20 +35,20 @@
 					Approved
 				    <div class="progress progress-success">
     					
-    					<div class="bar" style="width: <%= @approved_percentage %>%;"><span class="badge"> <%= @approved_count %> </span> </div>
+    					<div class="bar" style="width: <%= @approved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @approved_count %> </span> </div>
     				</div>
 
 					Waiting for approval
 				    <div class="progress progress-success">
     					
-    					<div class="bar" style="width: <%= @waiting_percentage %>%;"> <span class="badge" style="text-align:center"> <%= @waiting_count %> </span> </div>
+    					<div class="bar" style="width: <%= @waiting_percentage %>%;"> <span class="badge dashboard_count_badge" style="text-align:center"> <%= @waiting_count %> </span> </div>
     				</div>
 
 
 					Disapproved
 				    <div class="progress progress-success">
     					
-    					<div class="bar" style="width: <%= @disapproved_percentage %>%;"><span class="badge"> <%= @disapproved_count %> </span> </div>
+    					<div class="bar" style="width: <%= @disapproved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @disapproved_count %> </span> </div>
     				</div>
 	</div>
 

@@ -1,5 +1,37 @@
-<h1>New p2p_service_pincode</h1>
 
-<%= render 'form' %>
 
-<%= link_to 'Back', p2p_service_pincodes_path %>
+
+
+
+
+<% content_for :pagetitle  do %>
+    Service Pincode  -Admin 
+<%end %>
+
+
+<h1>New Service Pincode</h1>
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span2">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span10">
+
+
+
+		<%= render 'form' %>
+
+		<%= link_to 'Back', p2p_service_pincodes_path %>
+
+</div></div>

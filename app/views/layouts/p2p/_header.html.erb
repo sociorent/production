@@ -15,7 +15,8 @@
             <div id="menuSet" class="span6 pull-right">
               <li class="action-icon" title="Messages" data-placement="bottom">
                 <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
-                <a href="/p2p/messages"><i class="icon-envelope"></i> Messages<%= "(#{unread_count})" if  unread_count > 0  %>
+                <a href="/p2p/messages"><i class="icon-envelope"></i> Messages
+                  <span id="header_msg_count"><%= "(#{unread_count})" if  unread_count > 0  %><span>
               </li>
               <li class=" action-icon" title="Dashboard" data-placement="bottom"><a href="/p2p/dashboard"><i class="icon-dashboard"></i>Dashboard</a></li>
               <li class=" action-icon" title="List New Item" data-placement="bottom"><a href="/p2p/sellitem"><i class="icon-shopping-cart"></i>Sell Item</a></li>

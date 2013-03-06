@@ -32,3 +32,8 @@
 .approved{
 	/*background-color: */
 }
+
+.dashboard_count_badge{
+	position: absolute;
+	left:49.5%;
+}

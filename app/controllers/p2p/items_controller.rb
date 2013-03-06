@@ -11,6 +11,9 @@ class P2p::ItemsController < ApplicationController
 
   def create
     item = p2p_current_user.items.new({:title => params[:title], :desc => params[:desc], :price => params[:price] ,:condition => params[:condition]})
+   # render :json => item
+
+    
     item.category = P2p::Category.find(params[:cat].to_i)
     begin
       item.city = P2p::City.find_by_name(params[:location])
@@ -36,7 +39,7 @@ class P2p::ItemsController < ApplicationController
       rescue
         begin
           item.product = item.category.products.new(:name =>  (Publisher.find_by_name(params[:brand])).name )
-          # P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
+          # P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => 1 ,
           #                                       :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The publisher #{product.name} was not found in your p2p and hence was taken from sociorent and created automatically for you, when the #{p2p_current_user.user.email} requested on listing a book and was created automatically. Sincerally - Developers",
           #                                       :messagetype => 5,
           #                                       :sender_id => 1,
@@ -49,7 +52,7 @@ class P2p::ItemsController < ApplicationController
           begin
             item.product = item.category.products.new(:name => params[:brand] )
             #item.category.products.new(:name => params[:brand] )
-            # P2p::User.find(1).sent_messages.create({:receiver_id => 1 ,
+            # P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => 1 ,
             #                                       :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The publisher #{product.name} was not found in either p2p nor in sociorent, when the #{p2p_current_user.user.email} requested on listing a book and was created automatically.  <br/><h4>We request you to verify the same.</h4>Sincerally - Developers",
             #                                       :messagetype => 5,
             #                                       :sender_id => 1,
@@ -123,7 +126,7 @@ class P2p::ItemsController < ApplicationController
         city = P2p::City.create(:name => params[:location])
         city.save
         item.city = city
-        P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id],
+        P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id],
                                                 :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The city  #{params[:location]} was not found in your system and hence is created automatically for you, when the #{p2p_current_user.user.email} requested on listing a item We urge you to check the same. Sincerally - Developers",
                                                 :messagetype => 5,
                                                 :sender_id => session[:admin_id],
@@ -412,7 +415,7 @@ class P2p::ItemsController < ApplicationController
       if params[:query] == 'disapprove'
         item = P2p::Item.notsold.find(params[:id])
         item.update_attributes(:disapproveddate => Time.now , :approveddate => nil)
-        P2p::User.find(1).sent_messages.create({:receiver_id => item.user.id ,
+        P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => item.user.id ,
                                                 :message => "This is an auto generated system message. Your item #{item.title} has been disapproved due to some reasons . Reply to this message to know the reason.  <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                                 :messagetype => 5,
                                                 :sender_id => session[:admin_id],
@@ -421,7 +424,7 @@ class P2p::ItemsController < ApplicationController
                                                 :parent_id => 0,
                                                 :item_id => item.id
                                                 });
-        P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id],
+        P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id],
                                                 :message => "This is an auto generated system message. You have disapproved item no #{item.id} , #{item.title} and this listing will not appear on the site. A automated message is sent to the user.Your can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
                                                 :messagetype => 5,
                                                 :sender_id => session[:admin_id],
@@ -431,22 +434,37 @@ class P2p::ItemsController < ApplicationController
                                                 :item_id => item.id
                                                 });
         @message_notification = "
-$('#notificationcontainer').notify('create', {
-title: 'Disapproval of Listing',
-text: 'Your item #{item.title} has been disapproved by admin. Please check messages and reply to correct the issue'
-},{
-expires:false,
-click:function(){
-window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
-}
-});"
+              $('#notificationcontainer').notify('create', {
+              title: 'Disapproval of Listing',
+              text: 'Your item #{item.title} has been disapproved by admin. Please check messages and reply to correct the issue'
+              },{
+              expires:false,
+              click:function(){
+              window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
+              }
+              });
+
+        if (oInboxTable){
+            oInboxTable.fnDraw();
+        }
+        
+        if (oSentBoxTable){
+            oSentBoxTable.fnDraw();
+        }
+          if (oDeleteBoxTable){
+            oDeleteBoxTable.fnDraw();
+        }
+
+
+      "
+
         PrivatePub.publish_to("/user_#{item.user_id}", @message_notification )
         render :json => '1'
         return
       elsif params[:query] == 'approve'
         item = P2p::Item.notsold.find(params[:id])
         item.update_attributes(:approveddate => Time.now ,:disapproveddate => nil)
-        P2p::User.find(1).sent_messages.create({:receiver_id => item.user.id ,
+        P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => item.user.id ,
                                                 :message => "This is an auto generated system message. Your item is verified , approved  and  will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                                 :messagetype => 5,
                                                 :sender_id => session[:admin_id],
@@ -455,7 +473,7 @@ window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.t
                                                 :parent_id => 0,
                                                 :item_id => item.id
                                                 });
-        P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id] ,
+        P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id] ,
                                                 :message => "This is an auto generated system message. You have approved item no #{item.id} and this listing will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
                                                 :messagetype => 5,
                                                 :sender_id => session[:admin_id],
@@ -468,7 +486,7 @@ window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.t
         begin
           send_sms(item.user.user.mobile_number,"Thanks for signing-up with Sociorent.com. Your ID is #{item.title.truncate(110)} . You may now login to place your order. Thank you.")
         rescue
-          P2p::User.find(1).sent_messages.create({:receiver_id => session[:admin_id],
+          P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id],
                                                   :message => "This is an auto generated system message. A approval message cant be sent to #{item.user.user.mobile_number } (#{item.user.user.email},  #{item.user.user.name} ).<br/> Thank you.. <br/> Sincerly, <br/> Developers ",
                                                   :messagetype => 5,
                                                   :sender_id => session[:admin_id],
@@ -491,15 +509,28 @@ window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.t
           message_page_count = " $('#unread_count').html('');"
         end
         @message_notification = "
-$('#notificationcontainer').notify('create', {
-title: 'Approval of Listing',
-text: 'Your item #{item.title} has been approved by admin and will be listed on the site.'
-},{
-expires:false,
-click:function(){
-window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
-}
-});"
+            $('#notificationcontainer').notify('create', {
+            title: 'Approval of Listing',
+            text: 'Your item #{item.title} has been approved by admin and will be listed on the site.'
+            },{
+            expires:false,
+            click:function(){
+            window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
+            }
+            });
+
+        if (oInboxTable){
+            oInboxTable.fnDraw();
+        }
+        
+        if (oSentBoxTable){
+            oSentBoxTable.fnDraw();
+        }
+          if (oDeleteBoxTable){
+            oDeleteBoxTable.fnDraw();
+        }
+
+"
         PrivatePub.publish_to("/user_#{item.user_id}", header_count + message_page_count  + @message_notification)
         render :json => '1'
         return

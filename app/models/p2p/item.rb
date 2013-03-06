@@ -91,7 +91,7 @@ class P2p::Item < ActiveRecord::Base
 
   def update_changed_history
 
-    adminid = 2
+    admin = P2p::User.find_by_user_id(User.find_by_is_admin(1).id)
 
     changed_column =""
 
@@ -117,20 +117,20 @@ class P2p::Item < ActiveRecord::Base
 
 
 
-        P2p::User.find(1).sent_messages.create({:receiver_id => adminid,
+        admin.sent_messages.create({:receiver_id => admin.id,
                                                   :message => "This is an auto generated system message. #{self.user.user.name}  has changed <a href='/p2p/#{self.category.name}/#{self.product.name}/#{self.title}'>#{self.title}</a> listing and is kept under your verification The changes are <br/>#{changed_column} <br/> Please review them. - System",
                                                   :messagetype => 5,
-                                                  :sender_id => adminid,
+                                                  :sender_id => admin.id,
                                                   :sender_status => 2,
                                                   :receiver_status => 0,
                                                   :parent_id => 0
                                                   });
 
 
-        P2p::User.find(1).sent_messages.create({:receiver_id => self.user.id ,
+        admin.sent_messages.create({:receiver_id => self.user.id ,
                                                   :message => "This is an auto generated system message. Your <a href='/p2p/#{self.category.name}/#{self.product.name}/#{self.title}'>#{self.title}</a> listing is kept under verification and will appear on the site with in 2hours. To send a message to admin just click reply and send your message. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                                   :messagetype => 5,
-                                                  :sender_id => adminid,
+                                                  :sender_id => admin.id,
                                                   :sender_status => 2,
                                                   :receiver_status => 0,
                                                   :parent_id => 0
@@ -141,7 +141,7 @@ class P2p::Item < ActiveRecord::Base
   end
 
   def new_item_created
-    adminid = 2
+    admin = P2p::User.find_by_user_id(User.find_by_is_admin(1).id)
 
     message_notification = "
          $('#notificationcontainer').notify('create', 'new_item_notification', {
@@ -151,9 +151,12 @@ class P2p::Item < ActiveRecord::Base
 
         if (oInboxTable){
             oInboxTable.fnDraw();
-          }elseif (oSentBoxTable){
+        }
+        
+        if (oSentBoxTable){
             oSentBoxTable.fnDraw();
-          }elseif (oDeleteBoxTable){
+        }
+          if (oDeleteBoxTable){
             oDeleteBoxTable.fnDraw();
         }
 "
@@ -169,25 +172,42 @@ class P2p::Item < ActiveRecord::Base
     PrivatePub.publish_to("/user_#{self.user.id}", message_notification )
     PrivatePub.publish_to("/user_1", admin_message_notification )
 
-    P2p::User.find(1).sent_messages.create({:receiver_id => self.user.id ,
+    admin.sent_messages.create({:receiver_id => self.user.id ,
                                               :message => 'This is an auto generated system message. Your listing is kept under verification and will appear on the site with in 2hours. To send a message to me just click compose and send your message. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent',
                                               :messagetype => 5,
-                                              :sender_id => adminid,
+                                              :sender_id => admin.id,
                                               :sender_status => 2,
                                               :receiver_status => 0,
                                               :parent_id => 0
                                               });
     prod_url = URI.encode("/p2p/#{self.category.name}/#{self.product.name}/#{self.title}")
 
-    P2p::User.find(1).sent_messages.create({:receiver_id => adminid,
+    admin.sent_messages.create({:receiver_id => admin.id,
                                               :message => "This is an auto generated system message. #{self.user.user.name} (#{self.user.user.email}) has listed a new item and is waiting for your verification. Listing link - <a href='#{prod_url}'>#{self.title}</a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers",
                                               :messagetype => 5,
-                                              :sender_id => adminid,
+                                              :sender_id => admin.id,
                                               :sender_status => 2,
                                               :receiver_status => 0,
                                               :parent_id => 0
                                               });
 
+
+    #send message to all fav users
+
+    fav_users = P2p::Favourite.find_all_by_fav_id(self.user.id) || []
+
+    fav_users.each do |fav|
+
+        admin.sent_messages.create({:receiver_id => fav.p2puser.id,
+                                                  :message => "This is an auto generated system message. Your favourite user #{self.user.user.name} has listed a new item. <a href='#{prod_url}'>#{self.title}</a> Give it a check. <br/> Thank you.. <br/> Sincerly, <br/> Admin",
+                                                  :messagetype => 5,
+                                                  :sender_id => admin.id,
+                                                  :sender_status => 2,
+                                                  :receiver_status => 0,
+                                                  :parent_id => 0
+                                                  });
+
+    end
 
 
   end

@@ -18,8 +18,15 @@
 	<% category.specs.each do |spec|%>
 	<% next if spec.itemspecs.select(" distinct value").where("value !=''").count == 0 %>
 	<div class="filter_title"> <%= spec.name %>  </div>
+	
+	<!-- show only if more than 11..:) -->
+	<% if (spec.itemspecs.select(" distinct value").where("value !=''").count )  > 11 %>
+		<input type="text" class="filter_spec_input" placeholder="Filter <%=spec.name%>">
+	<% end %>
+
 	<div class="filters_value">
-		<% spec.itemspecs.select(" distinct value").where("value !=''").order('value asc').sort.each do |itemspec| %>
+
+		<% spec.itemspecs.select("distinct value").where("value !=''").order('value asc').each do |itemspec| %>
 		<div class="spec-filter" >
 			<input class="spec_filter_check" type="checkbox" spec-name="<%=spec.name%>" spec-value="<%=itemspec.value%>">		<span class="spec_filter_check_label"><%= itemspec.value	%></span>
 		</div>
@@ -80,3 +87,7 @@ window.filterurl= "/p2p/<%=category.name%>/filters";
 </script>
 <%= javascript_include_tag 'p2p/browse_filter' %>
 </div>
+
+
+<a href="#" class="scrollup">Scroll Top</a>
+

@@ -23,11 +23,14 @@
         <li class="span3 aitem_holder">
           <div class="thumbnail  alert <%= approve_class[apprval_class] %>">
             <div class="inventory_actions pull-right">
-              <% if session[:isadmin] && p.deletedate.nil? && p.disapproveddate.nil? %>
+              <% if session[:isadmin] && p.disapproveddate.nil? %>
                  <div class="disapprove_item pull-right" itemid="<%=p.id%>"><i title="Disapprove listing" class="action icon icon-ban-circle"></i></div>
-              <% elsif session[:isadmin] && p.approveddate.nil? %>
+              <% end %>
+              
+              <% if session[:isadmin] && p.approveddate.nil? %>
                 <div class="approve_item pull-right" itemid="<%=p.id%>"><i title="Approve Listing" class="action icon icon-ok"></i></div>
               <% end %>
+
               <div class="delete_item pull-right" itemid="<%=p.id%>"></div>
             </div>
             <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">

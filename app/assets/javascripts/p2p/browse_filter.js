@@ -1,4 +1,54 @@
+filter_spec_by_text = function (val,elem){
+
+			var regexp = new RegExp("" +  val + "",'i');
+			
+			_.each($(elem).find('.spec_filter_check'),function(spec){
+				console.log($(spec).attr('spec-value') + ' al');
+				if (regexp.test($(spec).attr('spec-value'))){
+						$(spec).parent().removeClass('hidden');	
+				}
+				else{
+					
+					$(spec).parent().addClass('hidden');
+				}
+			});
+
+}
+
 $(document).ready(function(){
+
+	$(".filter_spec_input").keyup(function(){
+		var value = $(this).val();
+		
+		$(this).next().css('min-height',($(this).next().css('height') ) );
+
+		filter_spec_by_text(value,$(this).next());
+
+	});
+
+	//scrill up function
+	$(window).scroll(function(){
+        if ($(this).scrollTop() > ($("#filter").height()/2) ) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+  });
+
+	$('.scrollup').click(function(){
+    $("html, body").animate({ scrollTop: 0 }, 600);
+    return false;
+    });
+
+	//end of scroll up
+
+
+
+	$("#Itemlist .navbar-inner").scrollToFixed({
+		'unfixed' : function() {
+			$("#Itemlist .navbar-inner").css('top',0);
+		}
+	});
 
 	// TO Apply filter on all attributes has spec filter class
 	// $(".spec-filter").click(function(){
@@ -15,15 +65,16 @@ $(document).ready(function(){
 			return false;
 	});
 
-	$('.spec-filter').on('click',function(){
+	$('.spec_filter_check_label').on('click',function(){
 
-		if ($(this).children('.spec_filter_check').attr('checked') != undefined ){
-			$(this).children('.spec_filter_check').removeAttr('checked');
+
+		if ($(this).parent().children('.spec_filter_check').attr('checked') != undefined ){
+			$(this).parent().children('.spec_filter_check').removeAttr('checked');
 		}else{
-			$(this).children('.spec_filter_check').attr('checked','checked');
+			$(this).parent().children('.spec_filter_check').attr('checked','checked');
 		}
 
-		$(this).children('.spec_filter_check').trigger('change');
+		$(this).parent().children('.spec_filter_check').trigger('change');
 
 	});
 
@@ -94,9 +145,10 @@ $(document).ready(function(){
 	// Main function working out the filter
 	function call_filter(spec,val,that){
 
-		showNotifications(' <img src="/assets/ajax_small.gif"/> Applying filters Please wait..!');
+		//showNotifications(' <img src="/assets/ajax_small.gif"/> Applying filters Please wait..!');
 
-		showOverlay();
+		$("#filter_loading_image").removeClass('hide');
+
 		$.ajax({
 			url:window.filterurl ,
 			data:{"filter": filters ,page : 1 },
@@ -104,6 +156,7 @@ $(document).ready(function(){
 			dataType:"json",
 			success:function(data){
 
+				$(window).scrollTop(0);
 
 				var fil_url =[];
 				_.each(filters,function(val,key){
@@ -124,7 +177,7 @@ $(document).ready(function(){
 
 				var templ=_.template($("#item_template").html(),{data:data});
 				$("#items").html(templ);
-				$("#filter_loading_image").removeClass('hide');
+				$("#filter_loading_image").addClass('hide');
 			},
 			error:function(){
 				showNotifications("Something went wrong. Try again");
@@ -151,8 +204,7 @@ $(document).ready(function(){
 
 		$("#filter_loading_image").removeClass('hide');
 
-
-
+		
 		// $("#overlay").css({
 		// 	"width":$("#items").outerWidth(),
 		// 	"height":$("#items").outerHeight(),

@@ -262,7 +262,7 @@
                   picture: "http://localhost:3000<%=thumbimage[0][:url]%>",
                   name: "<%=@item.title%> ",
                   caption: "P2P - Sociorent",
-                  description: "<%=description.truncate(100).gsub!(/(<[^>]*>)|\n|\t/s) {" "}%>"
+                  description: "<%=description.encode('UTF-8').truncate(100)%>"
                 };
 
                 function callback(response) {

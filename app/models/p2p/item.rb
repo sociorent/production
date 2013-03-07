@@ -79,6 +79,8 @@ class P2p::Item < ActiveRecord::Base
     where ('deletedate is null and paytype is not null and solddate is null')
     indexes :title
 
+    set_property :delta =>true
+
   end
 
 
@@ -97,7 +99,7 @@ class P2p::Item < ActiveRecord::Base
 
     self.changes.each do |column,value|
 
-      next if column == 'approveddate' or column == 'updated_at' or column =='viewcount' or column == 'reqCount'
+      next if column == 'approveddate' or column == 'disapproveddate'  or column == 'updated_at' or column =='viewcount' or column == 'reqCount'
 
       next if (column == 'paytype' or column =='payinfo' or column=='commision' ) and self.changes.has_key?(:paytype) and self.changes[:paytype][0] == nil
 

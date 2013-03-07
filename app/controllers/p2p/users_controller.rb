@@ -120,12 +120,16 @@ class P2p::UsersController < ApplicationController
 
       if !session.has_key?(:city) or session[:city] == ""
         #todo replace ip from request
-        geocode  = Geocoder.search(request[:REMOTE_ADDR])
+        #geocode  = Geocoder.search(request[:REMOTE_ADDR])
+
+        geocode  = Geocoder.search('106.51.99.160')
+
         session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
 
         puts geocode.inspect
 
-        city_id = P2p::City.find_by_name(session[:city])
+        city_id = P2p::City.find_or_create_by_name(session[:city]).id
+
         session[:city_id] = (city_id.nil? ) ? '' : city_id;
 
         raise 'Location not found' if session[:city] == ""

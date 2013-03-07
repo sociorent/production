@@ -116,8 +116,13 @@
 
 	$("#inbox_link").click(function(){
 
+
 		if ($("#inbox").css('display') == 'none'){
+			
 			$("#inbox").css('display','');
+			$("#sent").css('display','none');
+			$("#delete").css('display','none');
+
 			$('#show_msg').css('display','none');
 		}
 	});
@@ -131,6 +136,10 @@
 
 		if ($("#sent").css('display') == 'none'){
 			$("#sent").css('display','');
+
+			$("#inbox").css('display','none');
+			$("#delete").css('display','none');
+
 			$('#show_msg').css('display','none');
 		}
 	});
@@ -143,6 +152,10 @@
 
 		if ($("#delete").css('display') == 'none'){
 			$("#delete").css('display','');
+
+			$("#sent").css('display','none');
+			$("#inbox").css('display','none');
+
 			$('#show_msg').css('display','none');
 		}
 	});

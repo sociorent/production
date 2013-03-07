@@ -17,9 +17,39 @@
 .search_btn{
 	margin-bottom: 12px;
 }
+
+
+
 #user_location{
-	margin-top: 10px;
-	background: none;
-	border: 1px solid #DED;
-	border-bottom: 4px solid #DED;
+	margin-top: -1px;
+	height: auto;
+	border: none;
+	outline: none;
+	padding-left: 0px;
+	width:auto;
+	background-color: transparent;	
+	font-weight: bold;
+  display: inline-block;
+  -moz-appearance:none;
+  appearance:none;
+  cursor:pointer;
+	-webkit-appearance: none;    
+
+}
+
+.location_li i{
+	margin-top: 13px;
+	float:left;
+}
+
+@-moz-document url-prefix() {
+  #user_location{
+		margin-top: 6px;
+	}
+}
+
+
+.location_li{
+	margin-top: -0.7em;
+	display: inline-block;
 }

@@ -300,6 +300,8 @@ class P2p::MessagesController < ApplicationController
         row_class = ''
       end
 
+      row_class += ' message_show_trigger'
+
       puts "class " + row_class + msg.receiver_status.to_s + "sfs " + params.inspect
 
       

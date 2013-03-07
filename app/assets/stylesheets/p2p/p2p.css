@@ -1,4 +1,4 @@
-
+f
 
 
 .clearfix{
@@ -16,7 +16,7 @@
 	background: url("/assets/glyphicons-halflings.png") no-repeat -314px -2px;;
 	width: 14px;
 	height: 14px;
-	margin-top: 2px;
+	margin-top: 5px;
 	display:inline-block;
 	opacity: 0.3;
 	margin-left: 5px;
@@ -62,18 +62,23 @@ li.dropdown:hover > ul.dropdown-menu{
 
 /*adding border to the drop dwon submenu inside the browse menu*/
 .browse_top {
-	display: block;
-	color: rgb(246, 87, 87);
+	display: inline-block;
 	font-weight: bold;
-	margin-top: 7px;
+	margin-right: 15px;
+	margin-top: -10px;
 }
 
 .browse_top i{
 	display:none;
 }
 
+.browse_top li{
+		text-align: left;
+}
+
 #browse_menu ul.dropdown-submenu > ul.dropdown-menu{
 	border-top: 1px solid  rgba(0,0,0,0.2);
+
 }
 
 /*messaes*/
@@ -185,7 +190,7 @@ li.dropdown:hover > ul.dropdown-menu{
 }
 
 
-.showmessage{
+.message_show_trigger{
 	cursor: pointer;
 }
 
@@ -227,11 +232,13 @@ li.dropdown:hover > ul.dropdown-menu{
 
 #menuSet{
 	text-align: right;
+	margin-bottom: -25px;
 }
 
 #menuSet li{
 	display:inline-block;
-	margin-left: 15px;
+	margin-left: 10px;
+
 }
 
 #menuSet li:hover ,#menuSet li:focus{
@@ -447,12 +454,12 @@ padding-left: 10px;
 
 #dummy_filter_holder .spec-filter{
 	font-size: 0.9em;
-	display: block;
 	margin-top: 3px;
 	margin-left: 3px;
 	cursor:pointer;
 	overflow: hidden;
 	width:90%;
+	display: block;
 }
 
 #dummy_filter_holder .filters_value{
@@ -482,7 +489,6 @@ padding-left: 10px;
 
 .spec_filter_check_label{
 	float:left;
-	width:85%;
 	padding-left:10px;
 }
 .icon-credit-card{
@@ -514,3 +520,44 @@ vertical-align: middle;
 
 
 }
+
+.filter_spec_input{
+	border: 1px solid #ccc;
+	margin: 2px 6px 2px 6px !important;
+	width: 89%;
+	line-height: 15px;
+	height: 10px !important;
+	padding: 1px;
+}
+
+
+
+/*scrioll bar */
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar:window-inactive {
+	display: none;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #666;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: #eee;
+}
+
+/*scroll ar*/

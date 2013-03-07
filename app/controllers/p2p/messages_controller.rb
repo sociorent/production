@@ -288,7 +288,13 @@ class P2p::MessagesController < ApplicationController
       elsif tme >=3600
         tme =  (tme/3600).to_i.to_s + " hr ago"
       else
-        tme = (tme/60).to_i.to_s + "min ago"
+
+        if (tme/60).to_i > 2
+          tme = (tme/60).to_i.to_s + "min ago"
+        else
+            tme =  "about a min ago"
+        end
+
       end
   
       
@@ -299,6 +305,8 @@ class P2p::MessagesController < ApplicationController
       else
         row_class = ''
       end
+
+      row_class += ' message_show_trigger'
 
       puts "class " + row_class + msg.receiver_status.to_s + "sfs " + params.inspect
 

@@ -1,25 +1,25 @@
 <% content_for :pagetitle  do %>
 
   Mystore for <%=p2p_current_user.user.name %>
-    
+
 <%end %>
 
 
 <div id="body_content" class="row">
-    <div  class="span2">
+    <div  class="span3">
 
 
       <ul class="nav nav-list">
 
-      
+
       <%= render "/p2p/users/dashboard_menu.html.erb" %>
-      <%= render "/p2p/index/scat_menu" %>
+      <%#= render "/p2p/index/scat_menu" %>
 
 
       </ul>
     </div>
 
-<div id="items" class="span10">
+<div id="items" class="span9">
 
 
     <div id="listHeader" class="row">
@@ -31,5 +31,5 @@
 
     <%= render "/p2p/items/inventory_items" , :items => @items %>
   </div>
-  
+
 </div>

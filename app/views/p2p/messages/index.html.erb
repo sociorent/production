@@ -157,11 +157,14 @@
 
 <script>
 
-	$("#reply_to_modal").on('shown',function(){
-		$("#reply_to_modal #p2p_message_message").val('');
-	});
 
 	$(document).ready(function(){
+
+			$("#reply_to_modal").on('shown',function(){
+				$("#reply_to_modal #p2p_message_message").val('');
+			});
+
+
 		oInboxTable = $('#inbox_table').dataTable({
 					"sDom": "<r><f>t<i><p>",
 		  		"sAjaxSource": '/p2p/getmessages/inbox' ,
@@ -238,9 +241,17 @@
     	});
 
 		//set css for the clickable column
+
+		$('.message_show_trigger td').live('click',function(){
+			if ($(this).index() == 0) return true;
+
+			$(this).closest('tr').children('td:nth-child(4)').children('.showmessage').trigger('click');
+		});
+
 		$('.showmessage').live('click', function () {
 			var that = $(this);
 
+			showNotifications('Opening message..! Please wait..!');
 
 			$.ajax({
 				url: '/p2p/messages/'	 + that.attr('msgid'),
@@ -355,9 +366,9 @@
 		}
 
 		//redraw tables to avoid the display issuee.. no idea why?
-		oInboxTable.fnAdjustColumnSizing();
-		oSentBoxTable.fnAdjustColumnSizing();
-		oDeleteBoxTable.fnAdjustColumnSizing();
+		// oInboxTable.fnAdjustColumnSizing();
+		// oSentBoxTable.fnAdjustColumnSizing();
+		// oDeleteBoxTable.fnAdjustColumnSizing();
 
 		// $('#inbox th:first').unbind();
 		// $("#sentbox th:first").unbind();

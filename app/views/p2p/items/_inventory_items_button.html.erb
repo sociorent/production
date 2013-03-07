@@ -1,4 +1,4 @@
-    <div class="actions pull-left">
+    <div class="actions btn-group" id="inventory_buttons">
 
         
         <% if !@user_id.nil? and @user_id != "" %>
@@ -8,21 +8,21 @@
         <% end %>
 
     	<% if params.has_key?(:query) and params[:query] == 'sold' %>
-    			<a href="/p2p/mystore/sold<%=url%>"  class="btn btn-primary span2  pull-left">  Sold Items </a> 
+    			<a href="/p2p/mystore/sold<%=url%>"  class="btn btn-primary span2  pull-left">  Sold </a> 
     	<% else %>
-				<a href="/p2p/mystore/sold<%=url%>" class="btn span2  pull-left">  Sold Items </a> 
+				<a href="/p2p/mystore/sold<%=url%>" class="btn span2  pull-left">  Sold </a> 
     	<% end %>
 
     	<% if params[:action] == 'approve' and !params.has_key?(:query)%>
-    		<a href="/p2p/approve<%=url%>" class="btn btn-primary span2   pull-left">  Approved Items </a>
+    		<a href="/p2p/approve<%=url%>" class="btn btn-primary span2   pull-left">  Approved </a>
     	<% else %>
-    		<a href="/p2p/approve<%=url%>" class="btn span2  alert-success pull-left">  Approved Items </a>
+    		<a href="/p2p/approve<%=url%>" class="btn span2  alert-success pull-left">  Approved </a>
     	<% end %>
 
     	<% if params[:action] == 'disapprove' and !params.has_key?(:query)%>
-    		<a href="/p2p/disapprove<%=url%>" class="btn span2 btn-primary pull-left">  Disapproved Items </a>
+    		<a href="/p2p/disapprove<%=url%>" class="btn span2 btn-primary pull-left">  Disapproved </a>
         <% else %>
-        	<a href="/p2p/disapprove<%=url%>" class="btn span2  alert-error pull-left">  Disapproved Items </a>
+        	<a href="/p2p/disapprove<%=url%>" class="btn span2  alert-error pull-left">  Disapproved </a>
         <% end %>
 
     	<% if params[:action] == 'waiting' and !params.has_key?(:query)%>

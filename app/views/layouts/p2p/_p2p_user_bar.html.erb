@@ -12,8 +12,11 @@
     <div class="clearfix"></div>
       <form method="get" id="top_search_form" action="/p2p/search/q/">
         <div class="row search_bar">
+          
+          <%= render '/p2p/index/scat_menu' ,:dropdown => true %>
 
           <input id="top_search_input" type="text" class="span6" name="query" value="<%= params[:query]%>" placeholder="What are you looking for">
+          
           <%=select_tag "category" ,options_for_select( P2p::Category.all.collect{|cate|  [cate.name,cate.id]},params[:category]),:prompt=>"All categories",:class=>"span2"%>
 
           <a class='btn search_btn'><span> Search <i class="icon-search"></i></span></a>

@@ -81,6 +81,8 @@ Sociorent::Application.routes.draw do
         root :to => 'categories#index'
     end
 
+      match 'gettemplate' => 'items#downloadtemplate'
+
       get "categories/set_category" => "categories#set_category"
       get "categories/sub_category" => "categories#sub_category"
 
@@ -122,6 +124,7 @@ Sociorent::Application.routes.draw do
       get 'mystore(/:query(/user/:id))' => 'items#inventory'
 
       get 'dashboard' => 'users#dashboard'
+      match 'upload_csv/'=>'items#upload_csv'
       match 'approve(/:query)' => 'items#approve'
       match 'approve/user/:id' => 'items#approve'
       match 'disapprove' => 'items#disapprove'
@@ -139,7 +142,6 @@ Sociorent::Application.routes.draw do
       match 'search/c/:cat(/:prod)' => "index#search_cat"
 
       match "search/:id" =>"index#search"
-
       #citruspay response catching
       match "getCitursSignature" => "items#get_citrus_signature"
       match "update_citrus" => "items#update_online_payment"

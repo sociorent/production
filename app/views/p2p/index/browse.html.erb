@@ -77,7 +77,7 @@
 									<div class="aitem_right">
 										<a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
 											<div  title="<%= p.title %>">
-												<div class="item_title"><%= p.title.titleize  %></div>
+												<div class="item_title"><%= p.title.truncate(20).titleize  %></div>
 											</div>
 										</a>
 										<div class="item_category">
@@ -89,7 +89,7 @@
 											</a>
 										</div>
 										<div class="item_condition"><%=p.condition%></div>
-										<div class="item_price">Price:<del>&#2352;</del> <%=p.price %>
+										<div class="item_price"><del>&#2352;</del> <%=p.price %>
 									</div>
 
 									<div class="buy_now"><a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">Buy Now</a></div>

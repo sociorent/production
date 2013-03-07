@@ -6,7 +6,12 @@ class P2p::User < ActiveRecord::Base
   has_many :payments ,:class_name => "P2p::ItemDelivery" , :foreign_key => 'buyer'
   has_many :soldpayments ,:class_name => "P2p::ItemDelivery" , :through => :items ,:source => :item_deliveries
   
-  attr_accessible :mobileverified, :user_id
+  attr_accessible :mobileverified, :user_id ,:user_type
+
+  #user_type 
+  # => 0 normal user
+  # => 1 vendor
+  #
 
   
   has_many :credits

@@ -412,7 +412,7 @@
 			</tr>
 
 			<tr>
-				<td>Model </td>
+				<td> <%= (!@item.category.nil? and @item.category.name =="Books") ? 'Publisher' : 'Model'%> </td>
 				<td>
 					<span id="model" class="action_icon "  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=brand%></span>
 

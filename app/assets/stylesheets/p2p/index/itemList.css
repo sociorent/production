@@ -182,7 +182,9 @@
 		cursor:pointer;
 		background:#fff;
 		border-radius:5px;
-		height:155px
+		height:155px;
+				position: relative;
+
 	}
 
 	.aitem_holder .thumbnail:hover {
@@ -218,7 +220,7 @@
 	}
 
 	.aitem_holder {
-		display:block
+		display:block;
 	}
 
 	.aitem_left {
@@ -331,4 +333,54 @@
     position: absolute;
     right: -4px;
     top: -5px;
+}
+
+.scrollup{
+    width:40px;
+    height:40px;
+    opacity:0.3;
+    position:fixed;
+    bottom:200px;
+    right:100px;
+    display:none;
+    text-indent:-9999px;
+    background: url('/assets/p2p/icon_top.png') no-repeat;
+}
+
+.overlay_seller{
+position: absolute;
+bottom: 0px;
+border-radius: 0px 0px 5px 5px;
+background: rgba(0, 0, 0, 0.5);
+overflow: hidden;
+height: 0px;
+width: 100%;
+color:#FFF;
+-khtml-transition: height 0.9s ease;
+-moz-transition: height 0.9s ease;
+-ms-transition: height 0.9s ease;
+-o-transition: height 0.9s ease;
+-webkit-transition: height 0.9s ease;
+transition: height 0.9s ease;
+right: 0px;
+left: 0px;
+text-align: center;
+}
+.thumbnail:hover >.overlay_seller{
+	height: 30px;
+	-khtml-transition: height 0.9s ease;
+-moz-transition: height 0.9s ease;
+-ms-transition: height 0.9s ease;
+-o-transition: height 0.9s ease;
+-webkit-transition: height 0.9s ease;
+transition: height 0.9s ease;
+}
+
+.inventory_actions{
+	position: absolute;
+	right: -8px;
+	top: -7px;
+	border: 1px solid #DDD;
+	background: white;
+	border-radius: 4px;
 }

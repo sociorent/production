@@ -8,44 +8,51 @@ class P2p::UsersController < ApplicationController
 
   def dashboard
     
-    @total_items = p2p_current_user.items.count
+    @total_items = p2p_current_user.items.count.to_f
 
 
-    @sold_count = p2p_current_user.items.sold.count
+    @sold_count = p2p_current_user.items.sold.count.to_f
     
     if @sold_count == 0 
       @sold_percentage = 0
     else
-      @sold_percentage = ((@sold_count/@total_items).ceil) * 100
+      @sold_percentage = ((@sold_count/@total_items) * 100 ).ceil
     end
     #@sold_count = 1 if p2p_current_user.items.sold.count == 0
 
-    @waiting_count = p2p_current_user.items.waiting.count
+    @waiting_count = p2p_current_user.items.waiting.count.to_f
     if @waiting_count == 0 
       @waiting_percentage = 0
     else
-      @waiting_percentage = ((@waiting_count/@total_items).ceil) * 100
+      @waiting_percentage = ((@waiting_count/@total_items) * 100 ).ceil
     end
     
     #@waiting_count = 1 if @waiting_count == 0
 
-    @disapproved_count = p2p_current_user.items.disapproved.count
+    @disapproved_count = p2p_current_user.items.disapproved.count.to_f
     if @disapproved_count == 0 
       @disapproved_percentage = 0
     else
-      @disapproved_percentage = ((@disapproved_count/@total_items).ceil) *100
+      @disapproved_percentage = ((@disapproved_count/@total_items) *100 ).ceil
     end
 
 
-    @approved_count = p2p_current_user.items.approved.count
+    @approved_count = p2p_current_user.items.approved.count.to_f
     if @approved_count == 0 
       @approved_percentage = 0
     else
-      @approved_percentage = ((@approved_count/@total_items).ceil) *100
+      @approved_percentage = ((@approved_count/@total_items) *100 ).ceil
     end    
 #    @disapproved_count = 1 if @disapproved_count == 0
 
  #   @total_sold_count = 1 if p2p_current_user.items.count == 0
+
+ @total_items = @total_items.to_i
+  @sold_count = @sold_count.to_i
+  @disapproved_count= @disapproved_count.to_i
+  @approved_count = @approved_count.to_i
+  @waiting_count =  @waiting_count.to_i
+
   end
 
   def dashboard_use
@@ -120,12 +127,16 @@ class P2p::UsersController < ApplicationController
 
       if !session.has_key?(:city) or session[:city] == ""
         #todo replace ip from request
-        geocode  = Geocoder.search(request[:REMOTE_ADDR])
+        #geocode  = Geocoder.search(request[:REMOTE_ADDR])
+
+        geocode  = Geocoder.search('106.51.99.160')
+
         session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
 
         puts geocode.inspect
 
-        city_id = P2p::City.find_by_name(session[:city])
+        city_id = P2p::City.find_or_create_by_name(session[:city]).id
+
         session[:city_id] = (city_id.nil? ) ? '' : city_id;
 
         raise 'Location not found' if session[:city] == ""

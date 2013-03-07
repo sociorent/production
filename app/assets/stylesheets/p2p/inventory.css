@@ -37,3 +37,40 @@
 	position: absolute;
 	left:49.5%;
 }
+
+.nav-header{
+	color:white;
+	background-color: rgb(246, 87, 87);
+}
+
+.nav-header i{
+	margin-right: 10px;
+}
+
+.nav-header.browse_top {
+	display: block;
+	margin-top: 5px;
+}
+
+.nav-list .active > a{
+	background-color: #eee !important;
+	font-weight: bold;
+	color:#222;
+	-moz-text-shadow:none !important;
+	-webkit-text-shadow:none !important;
+	text-shadow:none !important;
+	text-decoration: none;
+
+}
+
+.nav-list .active > a:hover{
+	color:#222;
+}
+
+.instructions li{
+	list-style-type: disc;
+}
+
+#inventory_buttons a.btn-primary{
+	color:white;
+}

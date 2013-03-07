@@ -34,7 +34,7 @@
 }
 
 div.dropdown:hover > ul.dropdown-menu{
-    display: block;    
+    display: block;
 }
 
 #load_more{
@@ -116,12 +116,11 @@ div.dropdown:hover > ul.dropdown-menu{
 }
 
 #browse_sub_cat_menu .level_5{
-	padding-left: 15px;
+	padding-left: px;
 }
 
-
-#browse_sub_cat_menu a:hover{
-	background-color:#ccc;
+.sub_category:hover{
+	background-color:#EEE;
 }
 
 #browse_sub_cat_menu #filter_holder_title{
@@ -130,4 +129,10 @@ div.dropdown:hover > ul.dropdown-menu{
     border-radius: 1px ;
     padding: 3px;
     font-weight: bold;
+}
+.dropdown-menu{
+	z-index: 10000;
+}
+.sub_category .icon-caret-down{
+	padding-right: 10px;
 }

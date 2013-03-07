@@ -84,7 +84,7 @@ class P2p::IndexController < ApplicationController
   end
 
   def get_search_suggestions(query)
-    response =[{:label => query ,:value => URI.encode("/p2p/search/q/#{query}")}]
+    response =[{:label => query ,:value => URI.encode("#{query}")}]
     result = P2p::Category.search(query ,:match_mode => :any ,:star => true)
     result.each do |res|
       response.push( {:label => "#{query} in #{res.name}" , :value => URI.encode("/p2p/#{res.name}")} )
@@ -324,6 +324,7 @@ class P2p::IndexController < ApplicationController
         itm = to_hash(itm)
         itm[:url] = temp_url
         itm[:img] = url
+        itm[:title] =itm[:title].truncate(20)
         itm[:prod_url] = prod_url
         itm[:prod] = prod
         itm[:cat_url] = cat_url
@@ -372,6 +373,7 @@ class P2p::IndexController < ApplicationController
         itm = to_hash(itm)
         itm[:url] = temp_url
         itm[:img] = url
+        itm[:title] =itm[:title].truncate(20)
         itm[:prod_url] = prod_url
         itm[:prod] = prod
         itm[:cat_url] = cat_url

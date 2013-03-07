@@ -76,15 +76,22 @@
       },
       select:function(event,elem){
         var category_val = elem.item.label.split(" in ");
-        console.log(category_val);
-        if(category_val[1] != undefined)
-          $("#category option:contains(Mobile)").attr("selected","selected")
+
+        if(category_val[1] != undefined){
+          $("#category option:contains("+ category_val[1] +")").attr("selected","selected")
+        }else if ( elem.item.value[0] == '/'){
+          window.location.href = window.location.protocol + '//' + window.location.host + elem.item.value;
+          return false;
+        }
+
+        $("#top_search_input").val(elem.item.label);
         //after selecting the item from autocomplete submit the form
-        $("#top_search_input").val('');
+
         $("#top_search_form").submit();
         return false;
       },
-      focus:function(){
+      focus:function(event,elem){
+        $("#top_search_input").val(elem.item.label);  
         return false;
       }
     });

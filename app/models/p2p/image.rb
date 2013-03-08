@@ -13,7 +13,7 @@ class P2p::Image < ActiveRecord::Base
 
   belongs_to :item
 
-  validates :img, :attachment_presence => true
+  #validates :img, :attachment_presence => true
 
   def image_url_provided?
     !self.image_url.blank?

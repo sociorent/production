@@ -268,16 +268,14 @@ class P2p::Item < ActiveRecord::Base
             elsif type == :search
               res.push({:url => "/assets/p2p/noimage_search.jpg" ,:id => 0})
             end
-
           end
-
           res.push ({:url => img.img.url(type) , :id => img.id.to_s })
         end
       end
-
       res
     end
   end
+
   def is_valid_data?
     condition = ['brand new','like new','used','old']
     result = true
@@ -295,8 +293,4 @@ class P2p::Item < ActiveRecord::Base
     result = false if self.city.nil?
     result
   end
-
-
-
-
 end

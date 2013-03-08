@@ -175,7 +175,7 @@ class P2p::ItemsController < ApplicationController
       item.images.each do |img|
         puts img.errors.full_messages
       end
-      
+
       item.approveddate = nil
 
       if item.save
@@ -617,7 +617,6 @@ class P2p::ItemsController < ApplicationController
       item_delivery = P2p::ItemDelivery.find_by_txn_id(params[:TxId])
       case params[:TxStatus]
       when "CANCELED"
-
         flash[:warning]="Transaction Failed. Try again"
       when "SUCCESS"
         flash[:warning] = "Transaction success"
@@ -629,147 +628,30 @@ class P2p::ItemsController < ApplicationController
   end
 
   def upload_csv
-    category = P2p::Category.find(params[:category].to_i)
-    csvfile = params[:csvfile]
-
-    # checking extensions
-    # case File.extname(csvfile.original_filename)
-    #   when ".csv" then spreadsheet = CSV.open(csvfile.path, 'rb', {:headers => true})
-    #   #when ".xls" then spreadsheet = Excel.new(csvfile.path, nil, :ignore)
-    #   #when ".xlsx" then spreadsheet = Excelx.new(csvfile.path, nil, :ignore)
-    # else
-    #   flash[:warning] = "Unknown File type"
-    #   redirect_to p2p_upload_csv_path and return
-    # end
-    # assigning the headers
-    #allrow = spreadsheet.all
-
-    # parsing the spreadsheet
-    begin
-
-      CSV.foreach(csvfile.path, {:headers => true}) do |row|
-        next if row.header_row?
-        #row = Hash[[header, spreadsheet.row(i)].transpose]
-        row_ar = row.to_a
-        header_count = row.count
-        begin
-
-          item = p2p_current_user.items.new
-
-          item.category = category
-
-          item.product= category.products.find_or_create_by_name(CGI::unescape(row[0]))
-
-          item.title = CGI::unescape(row[1])
-          #saving to database
-          item.price = CGI::unescape(row[2])
-          item.condition = CGI::unescape(row[3])
-          item.desc = CGI::unescape(row[5])
-
-          paytype = [ ['courier',"1"] ]
-
-          paytype.each do |type|
-            if type[0].downcase == CGI::unescape(row[6]).downcase
-              item.paytype = type[1]
-            end
-          end
-
-          payinfo = [['yes',1] ,['no',0] ]
-
-          payinfo.each do |info|
-            if info[0].downcase == CGI::unescape(row[7]).downcase
-              item.payinfo = "1" + ((info[1] == 0 ) ? '' : ',1')
-            end
-          end
-
-          if item.payinfo.nil? or item.paytype.nil?
-            puts 'Failed..!'
-            next
-          end
-
-
-          item.city = P2p::City.find_or_create_by_name(CGI::unescape(row[4]))
-
-
-          image_3 = 10
-          #checking the validation
-          image_valid = true if row_ar[image_3]!= "" || row_ar[image_3-1] || row_ar[image_3-2]!=""
-          spec_valid = false
-          (11..header_count).each do |i|
-
-
-            if (CGI::unescape(row[i]) !="")
-              spec_valid = true
-              break
-            end
-        end
-
-          if spec_valid == true && image_valid == true
-
-            specs= category.specs.pluck('id')
-
-            #saving itemspecs
-            (11..(header_count-1)).each do |i|
-              if !(row[i].nil?) and CGI::unescape(row[i])!=""
-                
-                item.specs.new(:spec_id=>specs[11-i],:value=>CGI::unescape(row[i]))
-              end
-            end
-
-
-            #save images
-            (image_3-2..image_3).each do |i|
-              if !row[i].nil? and (/http:\/\/[^"]+\..*$/i).match(CGI::unescape(row[i]))!= nil
-                a = item.images.new(:image_url => CGI::unescape(row[i]) )
-                a.download_remote_image
-
-              end
-            end
-
-            if item.is_valid_data?
-              item.save
-            end
-
-          end
-        rescue Exception => e
-          puts "caught#{e}"
-          next
-        end
-      end
-    rescue  Exception => e
-      puts "caught#{e}"
-    end
-
-    redirect_to '/p2p/waiting'
+    redirect_to "/p2p/dashboard" and return if p2p_current_user.user_type != 1
+    puts p2p_current_user.inspect
+    vendor_upload = p2p_current_user.vendor_uploads.create(:upload_csv => params[:csvfile],:category_id=>params[:category])
+    flash[:warning] =" Your bulk upload was successful" if vendor_upload
+    redirect_to "/p2p/dashboard"
   end
 
   def downloadtemplate
-
     if params.has_key?(:category_template)
-
         cat = P2p::Category.find(params[:category_template])
-
         require 'csv'
-
-
         item = ['Brand','Title','Price','Condition','Location','Description','Send By','All over India','Image Url','Image Url','Image Url']
-
         if cat.name =="Books"
           item[0] = 'Publisher'
         end
-
         item = item + cat.specs.pluck('name')
-
         csv_string = CSV.generate do |csv|
           csv << item
         end
-
         send_data(csv_string ,:filename => cat.name + ".csv")
         return
-
     else
       @cat = P2p::Category.all
+      @not_processed = p2p_current_user.vendor_uploads.where(:processed=>false)
     end
-
   end
 end

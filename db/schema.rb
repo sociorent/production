@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130307145023) do
+ActiveRecord::Schema.define(:version => 20130308121429) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -325,6 +325,13 @@ ActiveRecord::Schema.define(:version => 20130307145023) do
 
   add_index "p2p_credits", ["user_id"], :name => "index_p2p_credits_on_user_id"
 
+  create_table "p2p_failed_csvs", :force => true do |t|
+    t.text     "csv_data"
+    t.integer  "vendor_upload_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
   create_table "p2p_favourites", :force => true do |t|
     t.integer  "user_id"
     t.datetime "created_at", :null => false
@@ -475,6 +482,21 @@ ActiveRecord::Schema.define(:version => 20130307145023) do
   end
 
   add_index "p2p_users", ["user_id"], :name => "index_p2p_users_on_user_id"
+
+  create_table "p2p_vendor_uploads", :force => true do |t|
+    t.boolean  "processed",               :default => false
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.string   "upload_csv_file_name"
+    t.string   "upload_csv_content_type"
+    t.integer  "upload_csv_file_size"
+    t.datetime "upload_csv_updated_at"
+  end
+
+  add_index "p2p_vendor_uploads", ["category_id"], :name => "index_p2p_vendor_uploads_on_category_id"
+  add_index "p2p_vendor_uploads", ["user_id"], :name => "index_p2p_vendor_uploads_on_user_id"
 
   create_table "pincodes", :force => true do |t|
     t.integer  "pincode"

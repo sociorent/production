@@ -1,55 +1,42 @@
 <% content_for :pagetitle  do %>
-
-  Download Template <%=p2p_current_user.user.name %>
-
+Download Template <%=p2p_current_user.user.name %>
 <%end %>
-
-
 <div id="body_content" class="row">
-    <div  class="span3">
-
-
-      <ul class="nav nav-list">
-
-
-      <%= render "/p2p/users/dashboard_menu.html.erb" %>
-      <%#= render "/p2p/index/scat_menu" %>
-
-
-      </ul>
-    </div>
+	<div  class="span3">
+		<ul class="nav nav-list">
+			<%= render "/p2p/users/dashboard_menu.html.erb" %>
+			<%#= render "/p2p/index/scat_menu" %>
+		</ul>
+	</div>
 
 	<div id="items" class="span9">
-
-
-
+		<%unless  @not_processed.nil? %>
+		<h3> Your pending Approval uploaded Files </h3>
+		<% @not_processed.each do |csv_file| %>
+			<p><%= link_to(csv_file.upload_csv_file_name, csv_file.upload_csv.url)%></p>
+		<% end%>
+		<% end%>
 		<h3> Upload Bulk Listing </h3>
-
 		<%= form_tag "/p2p/upload_csv" ,:method => 'post' ,:multipart => true ,:class => 'form-horizontal' do %>
-		
 			<div class="control-group">
 				<label class="control-label">Category</label>
 				<div class="controls">
-			 		<%= select_tag "category" ,  options_from_collection_for_select(@cat,"id" ,"name") %>
+					<%= select_tag "category" ,  options_from_collection_for_select(@cat,"id" ,"name") %>
 				</div>
 			</div>
-
 
 			<div class="control-group">
 				<label class="control-label">CSV File</label>
 				<div class="controls">
-			 		<input type="file" name="csvfile">
+					<input type="file" name="csvfile">
 				</div>
 			</div>
 
-
 			<div class="control-group">
-
 				<div class="controls">
 					<button type ="submit" id ="upload_template" class="btn " > Upload </button>
 				</div>
 			</div>
-
 		<% end %>
 
 		<hr/>
@@ -57,19 +44,14 @@
 		<h3> Download Template </h3>
 
 		<%= form_tag "/p2p/gettemplate" ,:method => 'post' , :class => 'form-horizontal' do %>
-		
-
 			<div class="control-group">
 				<label class="control-label">Category</label>
 				<div class="controls">
-			 		<%= select_tag "category_template" ,  options_from_collection_for_select(@cat,"id" ,"name") %>
+					<%= select_tag "category_template" ,  options_from_collection_for_select(@cat,"id" ,"name") %>
 				</div>
 			</div>
-
 			<button type ="submit" id ="download_template" class="btn " >Download </button>
-
 		<% end %>
-
 
 		<h5>Template Instructions</h5>
 
@@ -79,7 +61,7 @@
 			<li>  For images provide the url. Atleast one is required. </li>
 			<li>  For "Send By" column the only accepted value is "Courier" without quotes. </li>
 			<li>  For "All over India" column the only accepted values are 'yes' and 'no' without quotes. </li>
-			<li>  For "condition" the accecpted values are 
+			<li>  For "condition" the accecpted values are
 				<ul>
 					<li>Like New</li>
 					<li>Brand New</li>
@@ -87,9 +69,7 @@
 					<li>Old</li>
 				</ul>
 			</li>
-			
 		</ul>
 
 	</div>
-
 </div>

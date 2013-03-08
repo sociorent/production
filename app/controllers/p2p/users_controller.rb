@@ -1,5 +1,4 @@
 class P2p::UsersController < ApplicationController
-
   layout :p2p_layout
   before_filter :p2p_user_signed_in  ,:except => [:guesslocation ,:setlocation]
 
@@ -52,7 +51,8 @@ class P2p::UsersController < ApplicationController
   @disapproved_count= @disapproved_count.to_i
   @approved_count = @approved_count.to_i
   @waiting_count =  @waiting_count.to_i
-
+  
+    
   end
 
   def dashboard_use
@@ -237,8 +237,22 @@ class P2p::UsersController < ApplicationController
         @payments = p2p_current_user.soldpayments.order('updated_at desc').paginate(:page => params[:page],:per_page => 10)
       end
 
-    #@payments = @payments || []
-
+  end
+  
+  # Vendor 
+  def vendorsdetails
+    @vendors=Array.new
+    @users=P2p::User.all.paginate(:page => params[:page],:per_page => 10)
+    @users.each do |user| 
+     @vendors << [user.id,user.user.name,user.user.email,user.user_type]
+    end   
   end
 
+  def togglevendor
+    params[:user].each_with_index do |(user_id,status),index|
+      user = P2p::User.find(user_id.to_i)
+      user.update_attributes(:user_type =>status.to_i)
+    end
+    redirect_to :action => "vendorsdetails"
+  end
 end

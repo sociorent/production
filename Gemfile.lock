@@ -272,7 +272,13 @@ GEM
     responders (0.9.3)
       railties (~> 3.1)
     riddle (1.5.3)
+    roo (1.10.3)
+      nokogiri (>= 1.5.6)
+      rubyzip (>= 0.9.9)
+      spreadsheet (> 0.6.4)
     ruby-hmac (0.4.0)
+    ruby-ole (1.2.11.6)
+    rubyzip (0.9.9)
     sass (3.2.4)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -281,6 +287,8 @@ GEM
     simple_form (2.0.4)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
+    spreadsheet (0.8.2)
+      ruby-ole (>= 1.0)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -352,6 +360,7 @@ DEPENDENCIES
   rack (~> 1.4.1)
   rails (= 3.2.8)
   rails_admin
+  roo
   ruby-hmac (~> 0.4)
   sass-rails (~> 3.2.3)
   simple_form

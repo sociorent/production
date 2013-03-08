@@ -1,0 +1,54 @@
+<% content_for :pagetitle  do %>
+ Vendors Details
+<% end %>
+<div id="body_content" class="row">
+	<div  class="span3">
+		<ul class="nav nav-list">
+			<%#= render "/p2p/users/dashboard_menu.html.erb" %>
+		
+		</ul>
+	</div>
+	<div id="items" class="span9">
+    <div class="row">
+     <%= will_paginate @users %>
+    	<%= form_tag '/p2p/dashboard/setvendors' ,:method => :put  do %>
+
+			   <table class="table table-condensed table-hover">
+			  <thead>
+			    <tr>
+			      <th class="span1">#</th>
+			      <th class="span4">Name</th>
+			      <th class="span4">Email</th>
+			      <th class="span2">Vendor Status</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+
+			  	<%@vendors.each do |usr| %>
+			    <tr>
+	         <td> <%#=usr[0]%>
+	        <i class= '<%=usr[3]==1?"icon-star" : "icon-star-empty" %>'> </i> 
+	        </td>
+			      <td><strong><%=usr[1]%></strong></td>
+			      <td><%=usr[2]%></td>
+
+			      <%status = ((usr[3]==1) ? true : false ) %>
+
+			      <td>
+							<%=hidden_field_tag "user[#{usr[0]}]","0"  %>
+			      	<%=check_box_tag "user[#{usr[0]}]", "1", status, :class => 'vendor'  %>
+			      </td>
+
+			    </tr>
+			    <%end%>
+			    
+			  </tbody>
+			</table>
+
+				<%= submit_tag "Make Vendors", :class=>"btn" %>
+			<% end %>
+
+
+    </div> 
+	</div>
+</div>

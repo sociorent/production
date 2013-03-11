@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   belongs_to :college
   belongs_to :stream
 
+  
   belongs_to :ambassador
   has_one :ambassador_manager, :class_name => "Ambassador", :foreign_key => "ambassador_manager_id"
 

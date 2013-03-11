@@ -1,0 +1,60 @@
+.search_wrap{
+    box-shadow: 0 1px 1px #FFFFFF;
+    margin: 0 auto;
+    width: 100%;
+
+    padding-top:0;
+}
+
+#no_search_result_caption{
+	text-align: center;
+	padding : 20px;
+}
+
+.search_wrap h2{
+	color: #666666;
+  font-size: 21px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.searchbar{
+//	background: none repeat scroll 0 0 #FAFAFA;
+  border: 7px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 2px 2px #AAAAAA inset;
+  height: 21px;
+  margin: 0px auto;
+  padding: 5px;
+  width: 560px;
+}
+.search{
+	background: #fafafa !important;
+	border:none !important;
+  font-size: 18px;
+  width:395px;
+  box-shadow:none !important;
+}
+#search{
+	width: 630px;
+}
+#search_books_input{
+	width: 505px;
+}
+.search:focus{
+	box-shadow:none !important;
+  -webkit-box-shadow:none;
+}
+.searchbutton {
+    background: url("/assets/home-sprite.png") no-repeat scroll -248px -93px #FAFAFA;
+    border: medium none;
+    height: 25px;
+    text-indent: -1000px;
+    width: 40px !important;
+	cursor: pointer;
+}
+.searchbutton:hover {
+	opacity: 0.7;
+}
+
+

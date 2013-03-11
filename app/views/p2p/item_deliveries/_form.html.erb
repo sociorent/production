@@ -1,0 +1,86 @@
+<%= simple_form_for(@p2p_item_delivery) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+
+
+
+<% if session[:isadmin]  or @p2p_item_delivery.item.user.id == p2p_current_user.id %>
+
+    <div class="control-group">
+
+      <div class="controls">
+        <%= f.input :courier_name %>
+      </div>
+
+    </div>
+
+
+    <div class="control-group">
+
+      <div class="controls">
+        <%= f.input :tracking_no %>
+      </div>
+
+    </div>
+
+    <div class="control-group">
+
+      <%= f.label :shipping_date %>
+      <div class="controls">
+        <%= f.input :shipping_date , as: :string, input_html:{ class: 'datepicker' }, :include_blank => true,:label=>false%>
+      </div>
+
+    </div>
+
+  <% if session[:isadmin] %>
+
+    <div class="control-group">
+
+        <%= f.label :shipping_charge %>
+        <div class="controls">
+          <%= f.number_field :shipping_charge %>
+        </div>
+
+    </div>
+
+  <% end %>
+
+<% end %>
+
+<% if session[:isadmin]  or @p2p_item_delivery.buyer.id == p2p_current_user.id %>
+
+ 	<div class="control-group">
+
+      <%= f.label :delivery_date %>
+  		<div class="controls">
+  			<%= f.input :delivery_date ,as: :string, input_html:{ class: 'datepicker' },:include_blank => true,:label=>false %>
+  		</div>
+
+  	</div>
+
+ </div>
+
+<% end %>
+
+
+
+<% if session[:isadmin] %>
+
+  <div class="control-group">
+
+      <%= f.label :commission %>
+      <div class="controls">
+        <%= f.number_field :commission %>
+      </div>
+
+  </div>
+
+<% end %>
+
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+
+<% end %>

@@ -298,6 +298,21 @@ class P2p::ItemsController < ApplicationController
       @buyerreqcount = @item.messages.find_all_by_sender_id(p2p_current_user.id).count
     end
 
+    # decide the paycontne and title for popover
+    if paytype == 1
+      @paytype_content = "You have selected to send this item via courier in #{payinfo.split(',')[0]} business days <br/> Click on the button to change it." 
+      @paytype_title = "Send by Courier"
+    elsif paytype == 2
+      @paytype_content = "You have selected to deal with the buyer directly <br/> Click on the button to change it."
+      @paytype_title = "Pay Directly"
+    elsif paytype == 3
+      @paytype_content = "You have selected sociorent to pickup and safely deliver the item. <br/> Click on the button to change it"
+      @paytype_title = "Send by Sociorent"
+    end
+
+    #random image
+    @rand_image = rand(0..(thumbimage.count-1))
+
   end
 
   def inventory

@@ -29,7 +29,7 @@
             <label class="control-label"> Enter your Pincode: </label>
 
             <div class="controls">
-              <%= f.collection_select :payinfo ,P2p::ServicePincode.all ,:id , :pincode ,:include_blank => "Type your pincode here.."  ,:selected => 0 %>
+              <%= f.collection_select :payinfo ,P2p::ServicePincode.all ,:id , :pincode ,:include_blank => "Select your pincode"  ,:selected => 0 %>
             </div>
           </div>
 

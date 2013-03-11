@@ -35,7 +35,7 @@ saveItem = function(){
 
 				// if some fields are not filled this will return false 
 				// 	so dont save them
-				if (!check_before_save){
+				if (!check_before_save()){
 					return false;
 				}
 
@@ -59,17 +59,16 @@ saveItem = function(){
 					$('#form_temp').append($("<input class='hide' name='spec[" + key + "]' value='" + value + "'>"));
 				});
 
-				// if edit window then set the url appropiately
-				if (window.edit){
-					$("#fileupload").attr({
-						'action':window.editsaveurl
-					});
-				}
 
 			// if new form get the payment details and them save
 			if (!window.edit){
 				save_new_item();
 			}else{
+
+				$("#fileupload").attr({
+					'action':window.editsaveurl
+				});
+
 				//if edit just submit the form
 				$("#fileupload").submit();
 			}
@@ -126,7 +125,7 @@ edit_item =function(){
 
 		$(this).addClass('btn-primary').attr('title','Save Changes');
 
-		$("#enable i").attr('title','Click here to save your changes').removeClass('icon-pencil').addClass('icon-ok');
+		$("#enable i").attr('title','Click here to save your changebefores').removeClass('icon-pencil').addClass('icon-ok');
 
 		// enable upload form
 		// $("#file_add_image").removeProp("disabled");
@@ -135,6 +134,63 @@ edit_item =function(){
 		$("#add_more_spec").removeClass('hide');
 
 		//enable the remove image butotn
+
+
+			$("#image_upload").change(function(){
+
+
+			    var files = $(this)[0].files; // FileList object
+
+
+
+			    // Loop through the FileList and render image files as thumbnails.
+			    for (var i = 0, f; f = files[i]; i++) {
+
+			      // Only process image files.
+			      if (!f.type.match('image.*')) {
+			        continue;
+			      }
+
+			      window.image_count += 1;
+
+			      var reader = new FileReader();
+
+			      // Closure to capture the file information.
+			      reader.onload = (function(theFile) {
+			        return function(e) {
+
+						$(".thumb_holder .thumbnails ").append('<li class="thumbs"><!--<i class="icon-white icon-remove pull-right hide remove_image "></i> -->\
+	              			<img src="' + e.target.result + '"  imgid="-1" class="thumb_img pull-left" viewimage="' + e.target.result + '">\
+	              		</li>');
+
+			        };
+			      })(f);
+
+			      // Read in the image file as a data URL.
+			      reader.readAsDataURL(f);
+			    }
+
+			  // if (($(this)[0].files.length  )>0 ){
+			  // 	$("#clearuploads").attr('disabled','disabled');
+			  // }else{
+			  // 	$("#clearuploads").removeAttr('disabled');
+			  // }
+
+				if ((window.image_count  )>3 ){
+					showNotifications("No more than 3 images are allowed. Please delete some");
+					return false;
+				}
+
+				if ($("#image_upload")[0].files.length > 3 ){
+					showNotifications('Image limit is 3. Please add only three files');
+					return false;
+				}else if ( !window.edit && $("#image_upload")[0].files.length == 0){
+					showNotifications('Add atleast one image');
+					return false;
+				}
+
+				$('#save i').tooltip('show');
+			});
 
 		// enable xeditable
 		$('.canEdit').editable();

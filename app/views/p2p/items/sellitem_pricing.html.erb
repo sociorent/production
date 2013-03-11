@@ -1,0 +1,290 @@
+<h3> Choose Payment Options</h3>
+
+<div class="accordion" id="accordion2">
+
+<% if !@item.city.nil? and @item.city.name == "Bangalore" and @item.category.name !="Books" %>
+
+    <div class="accordion-group">
+
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        <i class="icon icon-star"> </i> Send by Sociorent...........
+      </a>
+    </div>
+
+    <% if @item.paytype == 3 %>
+        <div id="collapseTwo" class="accordion-body collapse in">
+    <% else %>
+        <div id="collapseTwo" class="accordion-body collapse ">
+    <% end %>
+
+
+    <%= form_for @item , :url => "/p2p/itempayment/#{@item.id}",:html => {:id => 'sociorent_payment_form'}  do |f| %>
+        <div class="accordion-inner form-horizontal">
+
+          <%= f.hidden_field :paytype  ,:value => 3%>
+
+
+          <div class="control-group">
+            <label class="control-label"> Enter your Pincode: </label>
+
+            <div class="controls">
+              <%= f.collection_select :payinfo ,P2p::ServicePincode.all ,:id , :pincode ,:include_blank => "Type your pincode here.."  ,:selected => 0 %>
+            </div>
+          </div>
+
+
+
+          <% sociorent_charges = ( @item.category.courier_charge + ( @item.price * (4.to_f/100.00))).ceil   %>
+
+          <div class="control-group">
+            <label class="control-label"> Charges Deducted: </label>
+
+            <div class="controls">
+              <span class="highlight"> Rs. <%= sociorent_charges %> </span> (Courier charges + 4% of list price)  (rounded off to nearest integer)
+              <!--
+ <code class="popover" data-content="Charges are subject to change." data-title="Information" data-html="true" data-delay="{show:0,hide:500}" data-trigger="hover">(subject to change)</code> -->
+
+              <code>(subject to change)</code>
+
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label"> Total amount you get: </label>
+
+            <div class="controls">
+              <%=@item.price%> - <%= sociorent_charges %> = <span class="highlight">Rs. <%= (@item.price - sociorent_charges) %></span>
+
+              <code>(subject to change)</code>
+            </div>
+          </div>
+
+
+
+
+          <div class="control-group">
+            <label class="control-label">  Terms and conditions</label>
+
+            <div class="controls">
+              <%= check_box_tag 'terms'%>  I Agree to the charges deducted by sociorent.<a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+              <code>(subject to change)</code>
+
+            </div>
+          </div>
+
+          <div class="control-group">
+
+            <div class="controls">
+              <% if (@item.price - sociorent_charges ) <=0.0 %>
+                  <span class="btn btn-danger">Create Listing</span> (Amount not accecptable)
+              <% elsif (@item.price - sociorent_charges ) <=40.0 %>
+                  <%= f.submit :class => 'btn btn-warning' %> Amount you receive is quite less.
+              <% else %>
+                  <%= f.submit "Create Listing", :id=>'sociorent_payment_submit',:class => 'btn btn-primary'  %>
+              <% end %>
+
+            </div>
+          </div>
+
+
+
+
+        </div>
+        </div>
+        </div>
+
+    <% end %>
+
+<% end %>
+
+
+<div class="accordion-group">
+
+  <div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+      <i class="icon icon-gift"> </i> Send by Courier...........
+    </a>
+  </div>
+
+  <% if @item.paytype == 1 %>
+      <div id="collapseOne" class="accordion-body collapse  in">
+  <% else %>
+      <div id="collapseOne" class="accordion-body collapse ">
+  <% end %>
+
+  <div class="accordion-inner form-horizontal">
+
+    <%= form_for @item , :url => "/p2p/itempayment/#{@item.id}"  ,:html => {:id=> 'courier_payment_form' }  do |f| %>
+
+        <%= f.hidden_field :paytype  ,:value => 1%>
+
+
+        <div class="control-group">
+          <label class="control-label"> Cities you would courier </label>
+
+          <div class="controls">
+            <%#= f.collection_select :city ,P2p::City.all ,:id , :name  %>
+            <%= @item.city.name %>
+          </div>
+        </div>
+
+
+
+        <div class="control-group">
+          <label class="control-label"> Days to Dispatch </label>
+
+
+
+          <div class="controls">
+            <%= select_tag "dispatch_day" ,options_for_select([ ['1 Business Days',1],['2 Business Days',2],['3 Business Days',3],['4 Business Days',4],['5 Business Days',5] ] , ( (@item.payinfo.nil?) ? 1 : @item.payinfo.split(',')[0].to_i ) ) %>
+
+          </div>
+        </div>
+
+
+        <div class="control-group">
+          <label class="control-label">  All over india :</label>
+
+          <div class="controls">
+            <%= check_box_tag 'alloverindia' %>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"> Charges Deducted: </label>
+
+          
+
+          <% sociorent_charges = ( @item.price * (4.to_f/100.00)).ceil   %>
+
+
+          <div class="controls">
+            <span class="highlight"> Rs. <%= sociorent_charges %> </span> (4% of list price)  (rounded off to nearest integer)
+            <!--
+<code class="popover" data-content="Charges are subject to change." data-title="Information" data-html="true" data-delay="{show:0,hide:500}" data-trigger="hover">(subject to change)</code> -->
+
+            <code>(subject to change)</code>
+
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"> Total amount you Receive: </label>
+
+          <div class="controls">
+                                        <span class="highlight"> <%=@item.price %> - <%= sociorent_charges %>
+                                          = Rs. <%= @item.price -  sociorent_charges %> </span>  <code>(subject to change)</code>
+
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">  Terms and conditions</label>
+
+          <div class="controls">
+            <%= check_box_tag 'terms'%>  I Agree to the charges deducted by sociorent.<a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+            <code>(subject to change)</code>
+
+
+            <a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+
+            <!-- Modal -->
+            <div id="terms_and_conditions_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="terms_and_conditions_modallLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="terms_and_conditions_modalLabel">Terms and conditions</h3>
+              </div>
+              <div class="modal-body">
+                <p>I agree to terms and conditions</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="control-group">
+
+          <div class="controls">
+
+            <%= f.submit "Create Listing",:id => 'courier_payment_submit',:class => 'btn btn-primary' %>
+
+          </div>
+        </div>
+
+    <% end %>
+
+
+
+  </div>
+  </div>
+  </div>
+
+
+  <div class="accordion-group">
+
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+        <i class="icon icon-user"> </i> Direct payment
+      </a>
+    </div>
+
+    <% if @item.paytype == 2 %>
+        <div id="collapseThree" class="accordion-body collapse in">
+    <% else %>
+        <div id="collapseThree" class="accordion-body collapse ">
+    <% end %>
+
+
+    <div class="accordion-inner form-horizontal">
+
+      <%= form_for @item , :url => "/p2p/itempayment/#{@item.id}" ,:html => {:id => 'direct_payment_form' } do |f| %>
+
+          <%= f.hidden_field :paytype  ,:value => 2%>
+
+
+          <div class="control-group">
+            <label class="control-label"> City </label>
+
+            <div class="controls">
+              <%#= f.collection_select :city ,P2p::City.all ,:id , :name  %>
+              <%= @item.city.name %>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+            <label class="control-label"> Where would you exchange ? </label>
+
+            <div class="controls">
+              <%= select_tag "meet_at",options_for_select([["Meet in Common Place",1],["Meet in home",2]]) %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">  Terms and conditions</label>
+
+            <div class="controls">
+              <%= check_box_tag 'terms'%> I Agree to the
+              <a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+
+            <div class="controls">
+              <%=f.submit "Create Listing",:id=>'direct_payment_submit',:class => 'btn btn-primary' %>
+            </div>
+          </div>
+
+      <% end %>
+
+    </div>
+    </div>
+    </div>
+
+  </div>
+
+</div>
+

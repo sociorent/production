@@ -1,0 +1,384 @@
+#Itemlist {
+	margin-top:20px
+}
+
+#listHeader {
+	height:20px;
+	background:url(/assets/p2p/index/texture.png) repeat;
+	margin:0 0 15px;
+	padding:10px 15px
+}
+
+.header_title {
+	float:left;
+	width:50%
+}
+
+.header_view_all {
+	float:right;
+	text-align:right;
+	width:50%
+}
+
+#items {
+	min-height:700px
+}
+
+#filter i {
+	float:right;
+	margin-top:3px
+}
+
+#filter i:hover {
+	background-color:red
+}
+
+#overlay {
+	background-color:#ddd;
+	position:fixed;
+	opacity:.3;
+	display:none;
+	font-size:3em;
+	font-weight:700;
+	vertical-align:middle;
+	text-align:center;
+	padding-top:20px
+}
+
+#items {
+	min-height:800px;
+	margin-bottom:20px
+}
+
+.spec-filter .icon-remove {
+	margin-top:4px;
+	cursor:pointer;
+	float:right
+}
+
+.spec-filter .icon-remove:hover {
+	border-top:1px solid red
+}
+
+#noitems {
+	display:inline-block;
+	text-align:center
+}
+
+.image_holder {
+	width:120px;
+	height:120px;
+	display:block;
+	text-align:center
+}
+
+.approve_item {
+	opacity:.3
+}
+
+.approve_item:hover {
+	opacity:1
+}
+
+/*//item view page*/
+.disapprove_item {
+	opacity:.3
+}
+
+.disapprove_item:hover {
+	opacity:1
+}
+
+.approve_item > i,.disapprove_item > i {
+	margin-top:-2px;
+	margin-left:2px
+}
+
+.highlight_force_color {
+	color:maroon!important
+}
+
+.highlight {
+	text-shadow:0 -1px 0 rgba(0,0,0,0.25);
+	color:maroon;
+	font-weight:bolder;
+	font-size:1.1em
+}
+
+#item_top_details {
+	margin-top:10px;
+	margin-left:50px
+}
+
+.big {
+	font-size:2em;
+	line-height:1.7em
+}
+
+.big > .highlight {
+	font-size:1.1em;
+	color:maroon;
+	font-weight:700
+}
+
+#desc {
+	min-height:200px
+}
+
+#desc_content {
+	word-wrap:break-word
+}
+
+#desc {
+	min-height:100px;
+	margin-bottom:20px
+}
+
+/*
+#desc > .editable-container{
+	width:600px;
+	}*/
+	.accordion-heading {
+		cursor:pointer;
+		background-color:#f5f5f5
+	}
+
+	.accordion-heading:hover {
+		background-color:#ffffe0;
+		font-weight:700
+	}
+
+	.accordion-heading a:hover,a,a:visited,a:focus {
+		text-decoration:none
+	}
+
+	#image_upload {
+		cursor:pointer
+	}
+
+	#upload_image {
+		width:290px;
+		height:300px;
+		background-image:url(/assets/p2p/img/upload.png)
+	}
+
+	#citruspay_form {
+		margin:0!important
+	}
+
+	#item_top_buy_button {
+		display:table-cell;
+		vertical-align:middle
+	}
+
+	#clearuploads {
+		cursor:pointer
+	}
+
+	/*New item menu	*/
+	.aitem_holder .thumbnail {
+		display:block;
+		padding:5px;
+		cursor:pointer;
+		background:#fff;
+		border-radius:5px;
+		height:155px;
+				position: relative;
+
+	}
+
+	.aitem_holder .thumbnail:hover {
+		border:1px solid #666;
+		background-color:#ffffe0
+	}
+
+	.aitem_holder .thumbnail:hover a:hover {
+		font-weight:700;
+		color:#333
+	}
+
+	.aitem_holder .thumbnail a {
+		text-decoration:none;
+		display:block
+	}
+
+	.aitem_holder .thumbnail .item_category {
+		margin-left:3px;
+		font-style:italic
+	}
+
+	.aitem_holder .thumbnail .image_holder {
+		display:table-cell;
+		vertical-align:middle;
+		text-align:center;
+		border:1px solid #ccc;
+		border-radius:3px
+	}
+
+	.aitem_holder .thumbnail .thumbs img {
+		display:block
+	}
+
+	.aitem_holder {
+		display:block;
+	}
+
+	.aitem_left {
+		display:table;
+		float:left;
+		vertical-align:middle;
+
+	}
+
+	.aitem_left img {
+		min-height:100%
+	}
+
+	.aitem_right {
+		float:left;
+		width:88px;
+		text-align:left;
+		height:140px;
+		position:relative;
+		margin-left:10px;
+		margin-top:6px
+	}
+
+	.item_title {
+		font-size:14px;
+		font-weight:600;
+		color:#696969;
+		max-height:40px;
+		overflow:hidden
+	}
+
+	.item_condition {
+		font-size:13px;
+		font-weight:600;
+		color:#0F8159;
+		height:20px;
+		overflow:hidden
+	}
+
+	.item_price {
+		height:20px;
+		overflow:hidden
+	}
+
+.thumb_img {
+	height:50px;
+	width:50px
+}
+
+.buy_now {
+	font-size:13px;
+	background:#F65757;
+	display:inline-block;
+	padding:3px 10px;
+	border-radius:3px;
+	color:#fff;
+	font-weight:700;
+	position:absolute;
+	bottom:-8px
+}
+
+.already_fav {
+	color:#ff0
+}
+
+#view_image_holder {
+	height: 290px;
+	width: 290px;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#item_top_buy_button .btn {
+	padding:10px 13px;
+	font-weight:700;
+	font-size:21px
+}
+
+.table-striped th {
+	background:#F9F9F9
+}
+
+#item_top_details_buttons {
+	text-align:center
+}
+
+.remove_image,.thumbs {
+	cursor:pointer
+}
+
+.icon-trash {
+	color:red
+}
+
+.btn-group-vertical .btn {
+	text-align:left
+}
+.picture_upload_preview{
+	position:relative;
+}
+.remove_image{
+
+	  background: none repeat scroll 0 0 #DDD;
+    border-radius: 10px;
+    color: black;
+    font-size: 8px;
+    position: absolute;
+    right: -4px;
+    top: -5px;
+}
+
+.scrollup{
+    width:40px;
+    height:40px;
+    opacity:0.3;
+    position:fixed;
+    bottom:200px;
+    right:100px;
+    display:none;
+    text-indent:-9999px;
+    background: url('/assets/p2p/icon_top.png') no-repeat;
+}
+
+.overlay_seller{
+position: absolute;
+bottom: 0px;
+border-radius: 0px 0px 5px 5px;
+background: rgba(0, 0, 0, 0.5);
+overflow: hidden;
+height: 0px;
+width: 100%;
+color:#FFF;
+-khtml-transition: height 0.9s ease;
+-moz-transition: height 0.9s ease;
+-ms-transition: height 0.9s ease;
+-o-transition: height 0.9s ease;
+-webkit-transition: height 0.9s ease;
+transition: height 0.9s ease;
+right: 0px;
+left: 0px;
+text-align: center;
+}
+.thumbnail:hover >.overlay_seller{
+	height: 30px;
+	-khtml-transition: height 0.9s ease;
+-moz-transition: height 0.9s ease;
+-ms-transition: height 0.9s ease;
+-o-transition: height 0.9s ease;
+-webkit-transition: height 0.9s ease;
+transition: height 0.9s ease;
+}
+
+.inventory_actions{
+	position: absolute;
+	right: -8px;
+	top: -7px;
+	border: 1px solid #DDD;
+	background: white;
+	border-radius: 4px;
+}

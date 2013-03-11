@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
 		user = current_user
 		cart = user.cart
 		books = cart.books.uniq
-		
+
 		# total price - save this in orders
 		deposit_total = 0
 		rental_total = 0
@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
 		end
 		shipping_charge = deposit_total < 1000 ? 50 : 0
 		total = deposit_total + shipping_charge
-		
+
 		# check the transaction status, if cancelled then store nothing,, and redirect to books page
 		if params[:TxStatus] && params[:TxStatus]=="CANCELED"
 			flash[:warning]="Transaction Failed. Try again"
@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
 
 		unless params[:bank_id].nil?
     	bank=Bank.where(:id=>params[:bank_id]).first
-    	
+
     	unless bank.nil?
     		#adding the bank to order
     		order.bank = bank
@@ -49,11 +49,11 @@ class OrdersController < ApplicationController
     		# send_sms(user.mobile_number,sms_text)
     	end
     end
-	
+
     # adding all the books in the cart to orders
 		order.books = books
 		order.save
-    
+
     # Changing the Current Status all books orders to unshipped
     # TODO : Should be implemented in above line
     order.books.update_all(:status => 2)
@@ -86,7 +86,7 @@ class OrdersController < ApplicationController
     else
     	college = College.where(:name => select).first
     	@orders = college.orders
-    end	  
+    end
     @orders.each do |order|
 	    if @rented_books.count <= offset
 	      @rented_books += order.books
@@ -112,7 +112,7 @@ class OrdersController < ApplicationController
     	college.users.includes(:orders).each do |user|
     		@orders += user.orders
     	end
-    	
+
     end
     @orders.each do |order|
       if @rented_books.count <= count
@@ -147,7 +147,7 @@ class OrdersController < ApplicationController
 		if params[:mobile]
 			code = rand(100000..999999)
 			session[:code] = code
-			sms_text= "Please enter the confirmation code #{session[:code]} to confirm the COD order. Thank you for using Sociorent.com."
+			sms_text= "Thanks for signing-up with Sociorent.com. Your ID is #{temp_id} . You may now login to place your order. Thank you."
 			puts session[:code]
 			result = 1 if send_sms(params[:mobile],sms_text)
 		elsif params[:code]

@@ -1,6 +1,17 @@
 
 $(document).ready(function(){
 
+  // fancy box for view image
+  $('#view_image_fancy').fancybox({
+      'speedIn'   : 500,
+      'speedOut'    : 200,
+      'centerOnScroll': true,
+      'showCloseButton':true,
+      'enableEscapeButton':true,
+      'autoScale':true
+  });
+
+
   // thumbs on clicked must change the image in view
   $('.thumbs').on('click',function(){
       $('#view_image').attr('src',$(this).children('img').attr("viewimage"));
@@ -45,10 +56,6 @@ $(document).ready(function(){
       'speedOut'    : 200,
       'centerOnScroll': true
     });
-
-
-});
-
 
 //delete the item
   $("#delete_button").on('click',function(){
@@ -155,4 +162,70 @@ pay_now_citrus_pay =  function(){
 };
 
 $("#pay_now_citrus_pay").live("click",pay_now_citrus_pay);
+
+
+  $("#send_verify_code").click(function(){
+         $(this).html('Sending verification code').attr('disabled','disabled');
+
+         $.ajax({
+              url:'/p2p/users/verifymobile/code',
+              type:'post',
+              dataType:'json',
+              success:function(data){
+                   if (data.status== 1){
+                        $("#send_verify_code").removeClass('btn-primary').attr('disabled','disable').html('Code Sent');
+
+                        $("#verify_code_submit").addClass('btn-primary');
+
+                   }else{
+                        showNotifications('Some error occured. Try again.');
+                        $("#send_verify_code").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+                   }
+              },
+              error:function(){
+                        showNotifications('Some error occured. Try again.');
+                        $("#send_verify_code").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+
+              }
+
+         });//ajax
+    });//click
+
+
+    $("#verify_code_submit").click(function(){
+
+
+         if ($("#verify_mobile").val().length  <4){
+              alert('Wrong code. Enter the correct code');
+              return false;
+         }
+
+         $(this).html('Verifying code').attr('disabled','disabled');
+
+         $.ajax({
+              url:'/p2p/users/verifymobile/' + $("#verify_mobile").val(),
+              type:'post',
+              dataType:'json',
+              success:function(data){
+                   if (data.status== 1){
+                        $("#mobile_verify_modal").modal('hide');
+                        $("#mobile_verify_modal_button").remove();
+                        $("#contact_seller_modal_button").removeClass('hide');
+                        alert('Sucessfully Verified');
+                        $("#contact_seller_modal_button").trigger('click');
+
+                   }else{
+                        showNotifications('Some error occured. Try again.');
+                        $("#verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+                   }
+              },
+              error:function(){
+                        showNotifications('Some error occured. Try again.');
+                        $("#verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+              }
+         });//ajax
+    });
+
+  $('.action_icon').tooltip('destroy');
+
 });

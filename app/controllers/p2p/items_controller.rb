@@ -279,7 +279,7 @@ class P2p::ItemsController < ApplicationController
     end
 
     if !p2p_current_user.nil?
-      if  p2p_current_user.id != @item.user_id
+      if  p2p_current_user.id != @item.user_id and !session[:isadmin]
         @item.update_attributes(:viewcount => @item.viewcount.to_i + 1 )
       end
     else
@@ -298,20 +298,26 @@ class P2p::ItemsController < ApplicationController
       @buyerreqcount = @item.messages.find_all_by_sender_id(p2p_current_user.id).count
     end
 
+    @fullimage = @item.get_image(0,:view) 
+    @thumbimage = @item.get_image(0,:thumb) 
+    @viewimage = @item.get_image(0,:view) 
+
     # decide the paycontne and title for popover
-    if paytype == 1
-      @paytype_content = "You have selected to send this item via courier in #{payinfo.split(',')[0]} business days <br/> Click on the button to change it." 
+    @item_message_url = "/p2p/messages/#{@item.title}"
+    @payurl = "/p2p/itempayment/#{@item.id}"
+    if @item.paytype == 1
+      @paytype_content = "You have selected to send this item via courier in #{@item.payinfo.split(',')[0]} business days <br/> Click on the button to change it." 
       @paytype_title = "Send by Courier"
-    elsif paytype == 2
+    elsif @item.paytype == 2
       @paytype_content = "You have selected to deal with the buyer directly <br/> Click on the button to change it."
       @paytype_title = "Pay Directly"
-    elsif paytype == 3
+    elsif @item.paytype == 3
       @paytype_content = "You have selected sociorent to pickup and safely deliver the item. <br/> Click on the button to change it"
       @paytype_title = "Send by Sociorent"
     end
 
     #random image
-    @rand_image = rand(0..(thumbimage.count-1))
+    @rand_image = rand(0..(@item.get_image(0,:thumb).count-1))
 
   end
 

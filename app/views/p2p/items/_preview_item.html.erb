@@ -9,9 +9,9 @@
 <div class="span12">
   <ul class="breadcrumb">
     <li><a href="/p2p">Home</a> <span class="divider">/</span></li>
-    <li><a href="/p2p/<%=category%>"><%=category.titleize %></a> <span class="divider">/</span></li>
-    <li><a  href="/p2p/<%=category%>/<%=brand%>"><%=brand.titleize %></a> <span class="divider">/</span></li>
-    <li class="active "> <%=link_to title.titleize ,{:cat => category ,:prod => brand ,:item => title } %> </li>
+    <li><a href="/p2p/<%=@item.category.name%>"><%=@item.category.name.titleize %></a> <span class="divider">/</span></li>
+    <li><a  href="/p2p/<%=@item.category.name%>/<%=@item.product.name%>"><%=@item.product.name.titleize %></a> <span class="divider">/</span></li>
+    <li class="active "> <%=link_to @item.title.titleize ,{:cat => @item.category.name ,:prod => @item.product.name ,:item => @item.title } %> </li>
   </ul>
 </div>
 
@@ -24,28 +24,20 @@
       <div class="thumbnail">
 
 
-        <%r = rand(0..(thumbimage.count-1))%>
+        <%r = rand(0..(@thumbimage.count-1))%>
         <div id="view_image_holder">
 
-          <% unless itemid.empty? %>
-              <a href="<%=fullimage[r][:url]%>" id="view_image_fancy">
-                <img src="<%= viewimage[r][:url] %>" imgid="<%= viewimage[r][:id] %>" alt="Item pic" id="view_image">
+
+              <a href="<%=@fullimage[r][:url]%>" id="view_image_fancy">
+                <img src="<%= @viewimage[r][:url] %>" imgid="<%= @viewimage[r][:id] %>" alt="Item pic" id="view_image">
               </a>
-          <% else %>
-              <div id="upload_image"></div>
-          <% end %>
+
         </div>
 
         <div class="caption thumb_holder">
           <ul class="thumbnails">
-
-            <% unless itemid.empty? %>
-
-
                 <% i = 0 %>
-                <% thumbimage.each do |img| %>
-
-
+                <% @thumbimage.each do |img| %>
                     <li class="thumbs">
                       <% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
 
@@ -55,13 +47,10 @@
 
                       <% end %>
 
-                      <img src="<%= img[:url]%>"  imgid="<%= img[:id] %>" alt="" id="image_<%= img[:id]%>" class="thumb_img" fancyimg="<%=fullimage[i][:url]%>" viewimage="<%= viewimage[i][:url] %>">
+                      <img src="<%= img[:url]%>"  imgid="<%= img[:id] %>" alt="" id="image_<%= img[:id]%>" class="thumb_img" fancyimg="<%=@fullimage[i][:url]%>" viewimage="<%= @viewimage[i][:url] %>">
                     </li>
                     <% i += 1 %>
                 <% end %>
-            <% end %>
-            <!--          <i id="clearuploads" class="icon-repeat action_icon pull-right" title="clear"></i> -->
-
           </ul>
         </div>
       </div>
@@ -73,23 +62,9 @@
 <div class="span7" id="item_top_details">
   <div class="row">
     <div class="span4" id="item_top_details_details">
-      <div class="big"> Condition: <span class="highlight"> <%= condition %> </span></div>
-      <div class="big"> Price: <span class="highlight"> <%= price %> </span></div>
+      <div class="big"> Condition: <span class="highlight"> <%= @item.condition %> </span></div>
+      <div class="big"> Price: <span class="highlight"> <%= @item.price %> </span></div>
     </div>
-
-
-      <!-- <div class="item_top_details_detail"> Available in:  <%= @item.city.name %> </div> -->
-
-    <!--
-      <%#if paytype == "2" %>
-          <div class="item_top_details_detail">Self pickup from Seller Contact Seller for more details</div>
-      <%#elsif paytype == "1" %>
-          <div class="item_top_details_detail">Buy via sociorent, where the seller ships the via item courier</div>
-      <%#elsif paytype == "3" %>
-          <div class="item_top_details_detail">Buy via sociorent, we pickup and deleiver for you</div>
-      <%#end%>
-     -->
-
 
     <div class="span3 pull-right" id="item_top_buy_button">
 
@@ -102,16 +77,16 @@
             <!-- contact seller modal  -->
             <!-- Button to trigger modal -->
 
-            <% if defined?(paytype) and paytype == "2" %>
+            <% if defined?(@paytype) and @paytype == "2" %>
 
                 <a href="#head_login_modal" role="button" class="btn  btn-warning " data-toggle="modal">Contact Seller</a>
 
 
-            <% elsif paytype == "1" %>
+            <% elsif @paytype == "1" %>
 
                 <a class="btn  btn-warning action_icon" href="#head_login_modal" data-toggle="modal" title="Receive by courier"><i class="icon-white icon-envelope"> </i>     Buy this now </a>
 
-            <% elsif paytype == "3" %>
+            <% elsif @paytype == "3" %>
 
                 <a class="btn  btn-warning action_icon" href="#head_login_modal" data-toggle="modal" title="Pay and receive by Sociorent"><i class="icon-white icon-star"> </i>    Buy this now  via Sociorent </a>
 
@@ -121,7 +96,7 @@
       <% elsif p2p_current_user.id.to_s != ownerid %>
 
 
-          <% if defined?(paytype) and paytype == "2" %>
+          <% if defined?(@paytype) and @paytype == "2" %>
 
               <% if p2p_current_user.mobileverified == true %>
                   <a href="#contact_seller_modal" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
@@ -188,7 +163,7 @@
               </div>
 
 
-          <% elsif paytype == "1" %>
+          <% elsif @paytype == "1" %>
 
               <form id="citruspay_form" method="post" action="https://www.citruspay.com/wnw4zo7md1">
                 <input type="hidden" name="merchantAccessKey" value="FFY8AMUA98AR6E1NNHS9">
@@ -202,7 +177,7 @@
 
               <button class="btn btn-warning action_popover" id= "pay_now_citrus_pay"><i class="icon-white icon-credit-card"></i>   Buy this now</button>
 
-          <% elsif paytype == "3" %>
+          <% elsif @paytype == "3" %>
 
               <a href="#check_availability_modal" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-credit-card"></i>    Buy this now</a>
               <form id="citruspay_form" method="post" action="https://www.citruspay.com/wnw4zo7md1">
@@ -259,10 +234,10 @@
                   method: 'feed',
                   redirect_uri: "http://<%=request.host%>:3000/p2p/<%=@item.category.name%>/<%=@item.product.name%>/<%=@item.title%>",
                   link: 'https://developers.facebook.com/docs/reference/dialogs/',
-                  picture: "http://<%=request.host%>:3000<%=thumbimage[0][:url]%>",
+                  picture: "http://<%=request.host%>:3000<%=@thumbimage[0][:url]%>",
                   name: "<%=@item.title%> ",
                   caption: "P2P - Sociorent",
-                  description: "<%=description.encode('UTF-8').truncate(100)%>"
+                  description: "<%=@item.desc.encode('UTF-8').truncate(100)%>"
                 };
 
                 function callback(response) {
@@ -306,38 +281,35 @@
 
           <tr class="edit_visible">
             <td>Title </td>
-            <td> <span class="canEdit action_icon" id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=title.titleize  %></span></td>
+            <td> <span class="canEdit action_icon" id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=@item.title.titleize  %></span></td>
           </tr>
 
 
           <tr>
             <td>Category </td>
-            <td> <span class="canEdit action_icon" id="category" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=category%></span></td>
+            <td> <span class="canEdit action_icon" id="category" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=@item.category.name%></span></td>
           </tr>
 
           <tr>
             <td>Model </td>
             <td>
-              <span id="model" class="action_icon"  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=brand%></span>
+              <span id="model" class="action_icon"  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=@item.product.name%></span>
             </td>
 
           </tr>
 
       <!-- load all spec -->
-      <% unless spec.empty? %>
-          <% unless itemid.empty? %>
-              <% spec.limit(3).each do |aspec| %>
-                  <tr class="specs">
-                    <td>
-                      <%= aspec.spec.name %>
-                    </td>
-                    <td>
-                      <span class="canEdit action_icon" data-name="username"  title="Enter <%= aspec.spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>" data-placement="right"> <%= aspec.value.titleize  unless aspec.value.nil? %> </span>
-                    </td>
-                  </tr>
-              <% end %>
-          <% end %>
-
+      <% unless @attr.empty? %>
+        <% @attr.limit(3).each do |aspec| %>
+            <tr class="specs">
+              <td>
+                <%= aspec.spec.name %>
+              </td>
+              <td>
+                <span class="canEdit action_icon" data-name="username"  title="Enter <%= aspec.spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>" data-placement="right"> <%= aspec.value.titleize  unless aspec.value.nil? %> </span>
+              </td>
+            </tr>
+        <% end %>
       <% end %>
 
 
@@ -353,8 +325,8 @@
 
 
   <div id="desc">
-    <h4> <%= title.titleize %> Description</h4>
-    <span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="canEdit action_icon" inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= description.html_safe %> </span>
+    <h4> <%= @item.title.titleize %> Description</h4>
+    <span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="canEdit action_icon" inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= @item.desc.html_safe %> </span>
   </div>
 
   <div>
@@ -378,19 +350,19 @@
 
       <tr class="edit_visible">
         <td>Title </td>
-        <td> <span class="canEdit action_icon" id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=title.titleize  %></span></td>
+        <td> <span class="canEdit action_icon" id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=@item.title.titleize  %></span></td>
       </tr>
 
 
       <tr>
         <td>Category </td>
-        <td> <span class="canEdit action_icon" id="category" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=category%></span></td>
+        <td> <span class="canEdit action_icon" id="category" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=@item.category.name%></span></td>
       </tr>
 
       <tr>
         <td>Model </td>
         <td>
-          <span id="model" class="action_icon"  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=brand%></span>
+          <span id="model" class="action_icon"  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=@item.product.name%></span>
         </td>
 
       </tr>
@@ -402,7 +374,7 @@
         </td>
         <td>
                 <span > Rs.
-                   <span data-name="username"  title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price"> <%= price  unless price.nil? %> </span>
+                   <span data-name="username"  title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price"> <%= @item.price %></span>
               </span>
 
         </td>
@@ -414,7 +386,7 @@
           <span > Condition</span>
         </td>
         <td>
-          <span  data-name="username" data-type="select" data-source="['Brand New','Like New','Used','Old']" title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" > <%= condition.titleize %> </span>
+          <span  data-name="username" data-type="select" data-source="['Brand New','Like New','Used','Old']" title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" > <%= @item.condition.titleize %> </span>
         </td>
       </tr>
 
@@ -424,15 +396,14 @@
           <span >Location</span>
         </td>
         <td>
-          <span  data-name="username"  data-type="typeahead" data-source="/p2p/getcities"  title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" > <%= location.titleize %> </span>
+          <span  data-name="username"  data-type="typeahead" data-source="/p2p/getcities"  title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" > <%= @item.city.name.titleize %> </span>
         </td>
       </tr>
 
 
       <!-- load all spec -->
-      <% unless spec.empty? %>
-          <% unless itemid.empty? %>
-              <% spec.each do |aspec| %>
+      <% unless @attr.empty? %>
+              <% @attr.each do |aspec| %>
                   <tr class="specs">
                     <td >
                       <%= aspec.spec.name %>
@@ -442,8 +413,6 @@
                     </td>
                   </tr>
               <% end %>
-          <% end %>
-
       <% end %>
 
       </tbody>
@@ -460,13 +429,11 @@
 
     $(document).ready(function(){
 
-
         $('#view_image_fancy').fancybox({
             'speedIn'   : 500,
             'speedOut'    : 200,
             'centerOnScroll': true
         });
-
 
         // $("#item_top_buy_button").animate({
         //     'padding-top': (($("#item_top_details_details").height()/2) -  ($("#item_top_buy_button").height()/2))

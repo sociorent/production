@@ -7,8 +7,7 @@ class P2p::UsersController < ApplicationController
 
   def dashboard
     
-    @total_items = p2p_current_user.items.count.to_f
-
+    @total_items = p2p_current_user.items.unscoped.notdeleted.count.to_f
 
     @sold_count = p2p_current_user.items.sold.count.to_f
     
@@ -19,7 +18,7 @@ class P2p::UsersController < ApplicationController
     end
     #@sold_count = 1 if p2p_current_user.items.sold.count == 0
 
-    @waiting_count = p2p_current_user.items.notsold.waiting.count.to_f
+    @waiting_count = p2p_current_user.items.unscoped.notsold.waiting.count.to_f
     if @waiting_count == 0 
       @waiting_percentage = 0
     else
@@ -28,7 +27,7 @@ class P2p::UsersController < ApplicationController
     
     #@waiting_count = 1 if @waiting_count == 0
 
-    @disapproved_count = p2p_current_user.items.notsold.disapproved.count.to_f
+    @disapproved_count = p2p_current_user.items.unscoped.notsold.disapproved.count.to_f
     if @disapproved_count == 0 
       @disapproved_percentage = 0
     else
@@ -36,7 +35,7 @@ class P2p::UsersController < ApplicationController
     end
 
 
-    @approved_count = p2p_current_user.items.notsold.approved.count.to_f
+    @approved_count = p2p_current_user.items.unscoped.notsold.approved.count.to_f
     if @approved_count == 0 
       @approved_percentage = 0
     else

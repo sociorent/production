@@ -1,0 +1,42 @@
+<h1>Listing  Service Pincodes</h1>
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span9">
+
+
+		<%= link_to '<h5><i class="icon-plus-sign-alt"></i> New Service Pincodes</h5>'.html_safe, new_p2p_service_pincode_path %>
+
+
+		<table class="table table-striped table-bordered">
+		  <tr>
+		    <th>Pincode</th>
+		    <th>Actions</th>
+		   </tr>
+
+		<% @p2p_service_pincodes.each do |p2p_service_pincode| %>
+		  <tr>
+		    <td><%= p2p_service_pincode.pincode %></td>
+		    <td><%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_service_pincode_path(p2p_service_pincode) %>
+		    <%= link_to '<i class="icon-trash"></i>'.html_safe, p2p_service_pincode, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		  </tr>
+		<% end %>
+		</table>
+
+		<br />
+
+
+</div></div>

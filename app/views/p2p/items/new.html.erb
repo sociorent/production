@@ -1,0 +1,39 @@
+<% content_for :pagetitle  do %>
+
+  Create a new listing
+    
+<%end %>
+
+
+<%= render "/p2p/items/itemform" ,
+           :thumbimage => [{:url => "/assets/p2p/noimage_thumb.jpg" ,:id => 0}],
+           :viewimage => [{:url => "/assets/p2p/noimage_view.jpg" ,:id => 0}],
+           :fullimage => [{:url => "/assets/p2p/noimage_view.jpg" ,:id => 0}],
+           :title => "",
+           :price => "",
+           :location => "",
+           :ownerid => @item.user_id.to_s,
+           :userid => current_user.id.to_s,
+           :itemid => @item.id.to_s,
+           :solddate => @item.solddate,
+           :deletedate => @item.deletedate,
+           :viewcount => 0,
+           :reqcount => 0,
+           :description => "",
+           :category => "",
+           :subcategory => "",
+           :brand => "",
+           :spec => "",
+           :condition => "",
+           :categoryid => @category_id.to_s,
+           :subcategoryid => @sub_category_id.to_s,
+           :brandid => @brand_id.to_s,
+           :itemspec => [],
+           :condition => @item.condition.to_s,           
+           :requestmessage => @message,
+           :approvedate =>  @item.approveddate,
+           :disapproveddate => @item.disapproveddate,
+           :paytype => ""
+
+%>
+

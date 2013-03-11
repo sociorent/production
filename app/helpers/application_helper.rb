@@ -73,5 +73,16 @@ module ApplicationHelper
     state[status];
  end
 
-end
 
+  def p2p_current_user
+  	if current_user.nil?
+  		return nil
+  	else
+  		return P2p::User.find_by_user_id(current_user.id)
+  	end
+
+  end
+
+
+
+end

@@ -1,0 +1,42 @@
+
+<div class="row" id="body_content" >
+
+     <div  class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+	<div class="span9">
+
+	<% if @fav.count > 0 %>
+			<table class="table table-striped table-bordered">
+
+				<tr>
+					<th>User</th>
+					<th>Date</th>
+				</tr>	
+				<% @fav.each do |f| %>
+					<tr>
+						<td>
+							<%= f.p2pfav.user.name %>	
+						</td>
+						<td>
+							<%= f.created_at.strftime("%d-%m-%C%y") %>
+						</td>
+
+					</tr>
+				<% end %>
+			</table>
+
+	<% else %>
+		<h3>Oops.., You don have any favourite sellers. Make few now.</h3>
+	<% end %>
+	</div>
+
+</div>
+

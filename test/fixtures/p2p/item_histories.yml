@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  p2p_items: 
+  columnname: MyString
+  oldvalue: MyString
+  newvalue: MyString
+  approved: false
+
+two:
+  p2p_items: 
+  columnname: MyString
+  oldvalue: MyString
+  newvalue: MyString
+  approved: false

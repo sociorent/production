@@ -1,16 +1,19 @@
 Sociorent::Application.routes.draw do
 
+
+
+  get "item_history/index"
+
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
 
   ActiveAdmin.routes(self)
-  
+
   get 'aboutus' => 'static_pages#about_us'
   get 'pricing' => 'static_pages#pricing'
   get 'college_ambassadors' => 'static_pages#colleges'
   get 'contactus' => 'static_pages#contactus'
   get 'privacy_policy' => 'static_pages#privacypolicy'
   get 'terms_of_use' => 'static_pages#termsofuse'
-
 
 
   get "home/index"
@@ -45,7 +48,6 @@ Sociorent::Application.routes.draw do
   match "/get_colleges" =>"users#get_colleges"
   match "/get_streams" => "users#get_streams"
 
-
   #matches #book/isbn
   get '/book/:isbn' => "home#book_deatils"
 
@@ -62,6 +64,97 @@ Sociorent::Application.routes.draw do
   end
 
   devise_for :counters
+
+  ##P2P Routes
+  namespace :p2p do
+
+
+    resources :messages
+    resources :items
+    resources :images
+    resources :credits
+
+    scope 'admin' do
+      #scaffold controller and view
+      resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries
+
+        root :to => 'categories#index'
+    end
+
+      match 'gettemplate' => 'items#downloadtemplate'
+
+      get "categories/set_category" => "categories#set_category"
+      get "categories/sub_category" => "categories#sub_category"
+
+      match 'getcategories' => "categories#getcategories"
+
+      match 'getcities' => "cities#list"
+
+      post 'users/list' => 'users#list'
+      post 'users/verifymobile/code' => 'users#getcode'
+      post 'users/verifymobile/:code' => 'users#verifycode'
+      get  'paymentdetails(/:bought)' => 'users#paymentdetails'
+
+
+      post 'location' => 'users#setlocation'
+      post 'guesslocation' => 'users#guesslocation'
+
+      post 'items/:id' => 'items#update'
+
+      match 'getbook_details/:isbn13' => "items#getbook_details"
+
+      get 'getserviceavailability/:itemid/:pincode' => 'service_pincodes#check_availability'
+      get '' => "index#index"
+      get 'sellitem' => "items#new"
+      get 'getbrand/:id' => "items#get_brands"
+      get 'getattributes/:id' => "items#get_attributes"
+      get 'getspec/:id' =>  "items#get_spec"
+      get 'getsubcategories' => "items#get_sub_categories"
+      get 'welcome' => 'users#welcome'
+      post 'welcome' => 'users#user_first_time'
+
+      match 'itempayment/:id' => 'items#sellitem_pricing'
+      get 'delete/:id' => "items#destroy"
+
+      post 'addimage/:item_id' => "items#add_image"
+      get  'addimage/:form_id/form' => "items#sellitem_pricing"
+
+      get 'sold/:id' => "items#sold"
+
+      get 'mystore(/:query(/user/:id))' => 'items#inventory'
+
+      get 'dashboard' => 'users#dashboard'
+      match 'upload_csv/'=>'items#upload_csv'
+      match 'approve(/:query)' => 'items#approve'
+      match 'approve/user/:id' => 'items#approve'
+      match 'disapprove' => 'items#disapprove'
+      match 'disapprove/user/:id' => 'items#disapprove'
+      match 'waiting(/user/:id)' => 'items#waiting'
+      get  'favourites' => 'users#favouriteusers'
+      post 'favourites' => 'users#setfavourite'
+      match 'vendors(/:cmd)' => 'users#vendorsdetails' 
+      
+
+      #post 'payments' => 'users#userpayments'
+
+      get 'getmessages(/:id)' => 'messages#getmessages'
+
+      match 'search/q' => "index#search_query"
+
+      match 'search/c/:cat(/:prod)' => "index#search_cat"
+
+      match "search/:id" =>"index#search"
+      #citruspay response catching
+      match "getCitursSignature" => "items#get_citrus_signature"
+      match "update_citrus" => "items#update_online_payment"
+      match ":cat/filters(/*applied_filters)" =>"index#browse_filter" ,  :applied_filters => /[^\/]*/
+      match ":cat/:prod/filters(/*applied_filters)" =>"index#browse_filter"  ,:applied_filters => /[^\/]*/
+
+      get ':cat/:prod/:item' => 'items#view' ,:as => :item_url
+      get ':cat(/:prod)' => "index#browse"
+
+  end
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

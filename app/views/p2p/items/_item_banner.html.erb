@@ -1,0 +1,20 @@
+
+
+  <div class="thumbnail">
+    
+      <div class="thumb_img">
+        <img src="<%= item.get_image(0,:thumb)[0][:url] %>" imgid="<%= item.get_image(0,:thumb)[0][:id] %>" alt=""></img>
+      </div>
+      
+      <div class="thumb_content">
+        <%= item.title %>
+        <em><del>&#2352;</del> <%= item.price %></em>
+        <a href="#"><span class="buy_now">Buy Now!</span></a>
+         Location 
+        <a href="#">View Images</a>
+      </div>
+      
+      
+   
+  </div>
+

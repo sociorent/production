@@ -1,6 +1,6 @@
 <h1>Your Payment Details</h1>
 
-<%= will_paginate(@p2p_item_deliveries) %>
+<%= will_paginate(@p2p_item_deliveries , :renderer => BootstrapPagination::Rails) %>
 <table class="table table-striped table-bordered">
   <tr>
     <th>Item ID</th>
@@ -40,7 +40,7 @@
 </table>
 
 
-<%= will_paginate(@p2p_item_deliveries) %>
+<%= will_paginate(@p2p_item_deliveries , :renderer => BootstrapPagination::Rails) %>
 <br />
 
 <%#= link_to 'New Item delivery', new_p2p_item_delivery_path %>

@@ -12,7 +12,7 @@ Result for <%=params[:query]%>
 				<p class="fleft"> <b>Results for <%= params[:query] %></b></p>
 				<p class="fright"><a href="/p2p/search/q/<%=params[:query]%>"> View All</a></p>
 			</div>
-			<%= will_paginate(@result) if @result.count >0 %>
+			<%= will_paginate(@result , :renderer => BootstrapPagination::Rails) if @result.count >0 %>
 			<ul class="thumbnails">
 				<% @result.each do |p| %>
 				<li class="span3 aitem_holder">

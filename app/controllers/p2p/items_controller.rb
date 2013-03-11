@@ -618,11 +618,13 @@ class P2p::ItemsController < ApplicationController
       case params[:TxStatus]
       when "CANCELED"
         flash[:warning]="Transaction Failed. Try again"
+        status = 4
       when "SUCCESS"
         flash[:warning] = "Transaction success"
         item_delivery.item.update_attributes(:solddate=>Time.now)
+        status = 2
       end
-      item_delivery.update_attributes(:citrus_pay_id=>params[:TxStatus],:citrus_reason=>params[:TxMsg],:citrus_ref_no=>params[:TxRefNo])
+      item_delivery.update_attributes(:citrus_pay_id=>params[:TxStatus],:citrus_reason=>params[:TxMsg],:citrus_ref_no=>params[:TxRefNo] ,:p2p_status => status)
       redirect_to "/p2p/paymentdetails/bought"
     end
   end

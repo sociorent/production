@@ -1,8 +1,10 @@
 /*
-*= require global/jquery-ui-1.8.24.custom.css
+*= require jquery.ui.core
+*= require jquery.ui.theme
+*= require jquery.ui.autocomplete
+*= require jquery.ui.datepicker
 *= require jquery.fileupload-ui
 *= require footer
-
 *= require bootstrap
 *= require global/bootstrap-wysihtml5-0.0.2.css
 *= require p2p/font-awesome.min

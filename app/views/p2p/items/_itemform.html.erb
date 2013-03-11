@@ -274,6 +274,7 @@
 				  <button class="btn" id="viewcount" ><i  title="Number of view of this listing" class="action_icon icon-eye-open"></i><%= viewcount %></button>
 				<% end %>
 
+				<% if solddate.nil? %>
 				  	 <% if paytype == "1" %>
 				  	 	<a href="/p2p/itempayment/<%=itemid%>" class="btn action_popover" data-content="You have selected to send this item via courier in <%=payinfo.split(',')[0] %> business days <br/> Click on the button to change it." data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom" >  <i class="action_icon icon icon-gift" title="Send by Courier"></i> Payment</a>
 				  	 <%elsif paytype == "2"%>
@@ -282,7 +283,7 @@
 				  	 	<a href="/p2p/itempayment/<%=itemid%>" class="btn  action_popover" data-content="You have selected sociorent to pickup and safely deliver the item. <br/> Click on the button to change it." data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom"  >  <i class="action_icon icon icon-star" title="Send by sociorent"></i> Payment</a>
 
 				  	 <% end %>
-
+			<% end %>
 
 
 
@@ -292,6 +293,8 @@
 
 			  <% if !itemid.empty? and !p2p_current_user.nil? and session[:isadmin] %>
 
+			  	<% if solddate.nil? %>
+
 			  		<% if approvedate.nil?  %>
 	  				  <button class="btn alert-info"  id="approve" itemid="<%=itemid%>"><i  class="action_icon icon-thumbs-up" title="Approve this listing"></i></button>
 	  				<% end %>
@@ -299,6 +302,8 @@
 	  				<% if disapproveddate.nil? %>
 	  				  <button class="btn alert-info" id="disapprove"   itemid="<%=itemid%>"><i  class="icon-thumbs-down action-icon" title="DisApprove this listing"></i></button>
 	  				<% end %>
+
+	  			<% end %>
 
 			  <%end %>
 
@@ -315,11 +320,11 @@
 
 		<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
 
-				<i id="clearuploads" class="icon-trash action_icon pull-right hidden" title="Remove all uploaded pic"></i>
+				<i id="clearuploads" class="icon-trash action_icon pull-right hidden" title="Clear pics uploaded just now" disabled="disabled"></i>
 
 				<div id="upload_pic" title="Upload more photos" class="action_icon pull-right edit_visible"><i class="icon-upload"></i>Upload</div>
 
-
+				<div class="clearfix"></div>
 
 					  <%= form_tag  "/p2p/items", :multipart => true, :id => "fileupload"   do %>
 				    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->

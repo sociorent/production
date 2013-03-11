@@ -326,6 +326,8 @@ GEM
       rack (>= 1.0)
     webrobots (0.0.13)
     will_paginate (3.0.4)
+    will_paginate-bootstrap (0.2.2)
+      will_paginate (>= 3.0.3)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -347,6 +349,7 @@ DEPENDENCIES
   jquery-datatables-rails
   jquery-fileupload-rails
   jquery-rails
+  jquery-ui-rails
   koala
   mechanize
   meta_search (>= 1.1.0.pre)
@@ -371,3 +374,4 @@ DEPENDENCIES
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
   will_paginate
+  will_paginate-bootstrap

@@ -224,7 +224,6 @@ class P2p::IndexController < ApplicationController
   end
 
   def browse_filter
-    sleep(2)
     if params.has_key?(:applied_filters)
       if  request.xhr?
         render :json =>  []

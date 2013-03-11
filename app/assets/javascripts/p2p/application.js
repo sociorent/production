@@ -12,23 +12,24 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require global/jquery.ui.core
-//= require global/jquery.ui.widget
-//= require global/jquery.ui.menu
-//= require global/jquery.ui.position
-//= require global/jquery.ui.autocomplete
-//= require jquery_ujs
+// TO-DO :: use jquery ui rails gem  to use jquery ui
+//= require jquery.ui.core
+//= require jquery.ui.widget
+//= require jquery.ui.menu
+//= require jquery.ui.position
+//= require jquery.ui.autocomplete
+//= require jquery.ui.datepicker
 //= require jquery_nested_form
 //= require jquery-fileupload
 //= require p2p/jquery.notify
 //= require p2p/jquery.fancybox-1.3.4
 //= require global/underscore
 //= require bootstrap
-//= require bootstrap-editable
-//= require bootstrap-editable-rails
-//= require global/wysihtml5-0.3.0.min
-//= require global/bootstrap-wysihtml5-0.0.2.min
-//= require global/wysihtml5
+// = require bootstrap-editable
+// = require bootstrap-editable-rails
+// = require global/wysihtml5-0.3.0.min
+// = require global/bootstrap-wysihtml5-0.0.2.min
+// = require global/wysihtml5
 //= require p2p/select2
 //= require private_pub
 //= require p2p/jquery.history
@@ -41,7 +42,7 @@
 
 $(document).ready(function(){
 //	$(".action_icon").tooltip();
-
+  $(".datepicker").datepicker();
 	$("#head_user_location").click(function(){
 		$("#location_modal").modal('show');
 	});

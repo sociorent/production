@@ -36,7 +36,7 @@ csvfiles.each do |csvfile_obj|
           end
 
           if item.payinfo.nil? or item.paytype.nil?
-            puts 'Failed..!'
+            puts 'Failed..! wrong paytype or payinfo'
             next
           end
 
@@ -47,8 +47,7 @@ csvfiles.each do |csvfile_obj|
           image_valid = true if row_ar[image_3]!= "" || row_ar[image_3-1] || row_ar[image_3-2]!=""
           spec_valid = false
           (11..header_count).each do |i|
-
-            if (CGI::unescape(row[i]) !="")
+            if (!row[i].nil? and CGI::unescape(row[i]) !="")
               spec_valid = true
               break
             end
@@ -81,13 +80,14 @@ csvfiles.each do |csvfile_obj|
             end
           end
         rescue Exception => e
-          puts "Error Occured for User"
+          puts "Error Occured for User\n" + e.backtrace.join('\n')
+
           csvfile_obj.failed_csvs.create(:csv_data=>row.to_json())
           next
         end
       end
     rescue  Exception => e
-      puts "caught#{e}"
+      puts "caught#{e}\n" + e.backtrace.join('\n')
       csvfile_obj.update_attributes(:processed=>false)
     end
 end

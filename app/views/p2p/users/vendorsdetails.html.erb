@@ -9,44 +9,107 @@
 		</ul>
 	</div>
 	<div class="span9">
-			<h4>Vendors </h4>
-     <%= will_paginate @users %>
-    	<%= form_tag '/p2p/dashboard/setvendors' ,:method => :put  do %>
 
-			   <table class="table table-condensed table-hover">
-			  <thead>
-			    <tr>
-			      <th class="span1">#</th>
-			      <th class="span4">Name</th>
-			      <th class="span4">Email</th>
-			      <th class="span2">Vendor Status</th>
-			    </tr>
-			  </thead>
-			  <tbody>
 
-			  	<%@vendors.each do |usr| %>
-			    <tr>
-	         <td> <%#=usr[0]%>
-	        <i class= '<%=usr[3]==1?"icon-star" : "icon-star-empty" %>'> </i>
-	        </td>
-			      <td><strong><%=usr[1]%></strong></td>
-			      <td><%=usr[2]%></td>
+		<h4>Vendors</h4>
 
-			      <%status = ((usr[3]==1) ? true : false ) %>
+		<div class="tabbable">
+	    
+	    <ul class="nav nav-tabs ">
+	    	 <li class="<%=( ( (!params.has_key?(:visible_type)) or (params.has_key?(:visible_type) and params[:visible_type] == 1) ) ? 'active' : '')%>"><a href="#tab1" data-toggle="tab">Vendors</a></li>
+				 <li class="<%= (( (params.has_key?(:visible_type) and params[:visible_type] == "0") )? 'active' : '')%>"><a href="#tab2" data-toggle="tab">Users</a></li>
+	    </ul>
 
-			      <td>
-							<%=hidden_field_tag "user[#{usr[0]}]","0"  %>
-			      	<%=check_box_tag "user[#{usr[0]}]", "1", status, :class => 'vendor'  %>
-			      </td>
+	    <div class="tab-content">
+	    
+			     <div class="tab-pane <%= (( (!params.has_key?(:visible_type)) or (params.has_key?(:visible_type) and params[:visible_type] == "1")) ? 'active' : '')%>" id="tab1">
+							
+						    	<%= form_tag '/p2p/vendors/remove' ,:method => :put  do %>
 
-			    </tr>
-			    <%end%>
+										   <table class="table table-condensed table-hover">
+										  <thead>
+										    <tr>
+										      <th class="span1"></th>
+										      <th class="span3">Name</th>
+										      <th class="span4">Email</th>
+										      <th class="span1">Status</th>
+										    </tr>
+										  </thead>
+										  <tbody>
 
-			  </tbody>
-			</table>
+										  	<%@vendors.each do |usr| %>
+										    <tr>
+								         <td> <%#=usr[0]%>
+								        <i class= '<%=usr.user_type ==1?"icon-star" : "icon-star-empty" %>'> </i>
+								        </td>
+										      <td><strong><%=usr.user.name%></strong></td>
+										      <td><%=usr.user.email%></td>
 
-				<%= submit_tag "Make Vendors", :class=>"btn" %>
-			<% end %>
+										      <%status = ((usr.user_type==1) ? true : false ) %>
+
+										      <td>
+										      	<%=check_box_tag "user_old[]", "#{usr.id}", status, :class => ' hide'  %>
+										      	<%=check_box_tag "user[]", "#{usr.id}", status, :class => 'vendor'  %>
+										      </td>
+
+										    </tr>
+										    <%end%>
+
+										  </tbody>
+										</table>
+
+										Uncheck to Remove from Vendors <br/>
+										<%= submit_tag "Remove Vendors", :class=>"btn" %>
+										<% end %>
+
+										<%= will_paginate @vendors , :param_name => :vendor_page ,:params => {:visible_type=> 1} , :renderer => BootstrapPagination::Rails %> 
+					</div>
+
+					<div class="tab-pane <%= (( (params.has_key?(:visible_type) and params[:visible_type] == "0") ) ? 'active' : '')%>" id="tab2">
+
+					    	<%= form_tag '/p2p/vendors/set' ,:method => :put  do %>
+										   <table class="table table-condensed table-hover">
+										  <thead>
+										    <tr>
+										      <th class="span1"></th>
+										      <th class="span3">Name</th>
+										      <th class="span4">Email</th>
+										      <th class="span1">Status</th>
+										    </tr>
+										  </thead>
+										  <tbody>
+
+										  	<%@users.each do |usr| %>
+										    <tr>
+								         <td> <%#=usr[0]%>
+								        <i class= '<%=usr.user_type ==1?"icon-star" : "icon-star-empty" %>'> </i>
+								        </td>
+										      <td><strong><%=usr.user.name%></strong></td>
+										      <td><%=usr.user.email%></td>
+
+										      <%status = ((usr.user_type==1) ? true : false ) %>
+
+										      <td>
+										      	<%=check_box_tag "user[]", "#{usr.id}", status, :class => 'vendor'  %>
+										      </td>
+
+										    </tr>
+										    <%end%>
+
+										  </tbody>
+										</table>
+
+										<%= submit_tag "Make Vendors", :class=>"btn" %>
+										<% end %>
+
+										<%= will_paginate @users ,:param_name => :user_page, :params => {:visible_type=> 0} ,:renderer => BootstrapPagination::Rails %> 
+
+					</div>
+
+	    </div>
+
+    </div>
+			
 
 
     </div>

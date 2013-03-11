@@ -365,6 +365,12 @@ $(document).ready(function(){
 			      reader.readAsDataURL(f);
 			    }
 
+			  // if (($(this)[0].files.length  )>0 ){
+			  // 	$("#clearuploads").attr('disabled','disabled');
+			  // }else{
+			  // 	$("#clearuploads").removeAttr('disabled');
+			  // }
+
 				if ((window.image_count  )>3 ){
 					showNotifications("No more than 3 images are allowed. Please delete some");
 					return false;

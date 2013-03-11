@@ -19,7 +19,7 @@ class P2p::UsersController < ApplicationController
     end
     #@sold_count = 1 if p2p_current_user.items.sold.count == 0
 
-    @waiting_count = p2p_current_user.items.waiting.count.to_f
+    @waiting_count = p2p_current_user.items.notsold.waiting.count.to_f
     if @waiting_count == 0 
       @waiting_percentage = 0
     else
@@ -28,7 +28,7 @@ class P2p::UsersController < ApplicationController
     
     #@waiting_count = 1 if @waiting_count == 0
 
-    @disapproved_count = p2p_current_user.items.disapproved.count.to_f
+    @disapproved_count = p2p_current_user.items.notsold.disapproved.count.to_f
     if @disapproved_count == 0 
       @disapproved_percentage = 0
     else
@@ -36,7 +36,7 @@ class P2p::UsersController < ApplicationController
     end
 
 
-    @approved_count = p2p_current_user.items.approved.count.to_f
+    @approved_count = p2p_current_user.items.notsold.approved.count.to_f
     if @approved_count == 0 
       @approved_percentage = 0
     else
@@ -241,18 +241,44 @@ class P2p::UsersController < ApplicationController
   
   # Vendor 
   def vendorsdetails
-    @vendors=Array.new
-    @users=P2p::User.all.paginate(:page => params[:page],:per_page => 10)
-    @users.each do |user| 
-     @vendors << [user.id,user.user.name,user.user.email,user.user_type]
-    end   
+
+    if params.has_key?(:cmd)
+
+      if params[:cmd] == 'set' 
+
+        params[:user].each do |user_id|
+          user = P2p::User.find(user_id.to_i)
+          user.update_attributes(:user_type => 1)
+        end
+
+      elsif params[:cmd] == 'remove'
+          
+          users =  params[:user] - params[:user_old]
+
+          users.each do |user_id|
+            user = P2p::User.find(user_id.to_i)
+            user.update_attributes(:user_type => 0)
+          end
+
+      else
+        redirect_to '/p2p/vendors' ,:notice => 'Nothing found for your request'
+        return
+      end
+
+
+    end
+
+    #get vendors
+    @vendors=P2p::User.where('user_type = 1').paginate(:page => params[:vendor_page],:per_page => 1 )
+    @users=P2p::User.where('user_type = 0').paginate(:page => params[:user_page],:per_page => 1 )
   end
 
-  def togglevendor
-    params[:user].each_with_index do |(user_id,status),index|
-      user = P2p::User.find(user_id.to_i)
-      user.update_attributes(:user_type =>status.to_i)
-    end
-    redirect_to :action => "vendorsdetails"
-  end
+  # def togglevendor
+  #   params[:user].each_with_index do |(user_id,status),index|
+  #     user = P2p::User.find(user_id.to_i)
+  #     user.update_attributes(:user_type =>status.to_i)
+  #   end
+  #   redirect_to :action => "vendorsdetails"
+  # end
+
 end

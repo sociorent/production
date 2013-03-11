@@ -8,7 +8,7 @@
 <% if session[:isadmin]  or @p2p_item_delivery.item.user.id == p2p_current_user.id %>
 
     <div class="control-group">
-      
+
       <div class="controls">
         <%= f.input :courier_name %>
       </div>
@@ -17,7 +17,7 @@
 
 
     <div class="control-group">
-      
+
       <div class="controls">
         <%= f.input :tracking_no %>
       </div>
@@ -26,9 +26,9 @@
 
     <div class="control-group">
 
-      <%= f.label :shipping_date %>     
+      <%= f.label :shipping_date %>
       <div class="controls">
-        <%= f.date_select :shipping_date ,:include_blank => true %>
+        <%= f.input :shipping_date , as: :string, input_html:{ class: 'datepicker' }, :include_blank => true,:label=>false%>
       </div>
 
     </div>
@@ -37,7 +37,7 @@
 
     <div class="control-group">
 
-        <%= f.label :shipping_charge %>     
+        <%= f.label :shipping_charge %>
         <div class="controls">
           <%= f.number_field :shipping_charge %>
         </div>
@@ -51,10 +51,10 @@
 <% if session[:isadmin]  or @p2p_item_delivery.buyer.id == p2p_current_user.id %>
 
  	<div class="control-group">
-  		
-      <%= f.label :delivery_date %> 		
+
+      <%= f.label :delivery_date %>
   		<div class="controls">
-  			<%= f.date_select :delivery_date ,:include_blank => true  %>
+  			<%= f.input :delivery_date ,as: :string, input_html:{ class: 'datepicker' },:include_blank => true,:label=>false %>
   		</div>
 
   	</div>
@@ -69,7 +69,7 @@
 
   <div class="control-group">
 
-      <%= f.label :commission %>     
+      <%= f.label :commission %>
       <div class="controls">
         <%= f.number_field :commission %>
       </div>

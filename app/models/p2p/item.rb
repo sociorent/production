@@ -99,7 +99,9 @@ class P2p::Item < ActiveRecord::Base
 
     self.changes.each do |column,value|
 
-        next if column == 'approveddate' or column == 'disapproveddate'  or column == 'updated_at' or column =='viewcount' or column == 'reqCount'
+        next if ['approveddate','disapproveddate','solddate' , 'updated_at','viewcount','reqCount'].include?(column)
+
+        puts column + ' colun'
 
         next if column =='paytype' and self.changes[:paytype].nil?
 

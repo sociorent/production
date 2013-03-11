@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130308121429) do
+ActiveRecord::Schema.define(:version => 20130309104529) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -363,12 +363,13 @@ ActiveRecord::Schema.define(:version => 20130308121429) do
     t.string   "citrus_pay_id"
     t.decimal  "commission",      :precision => 10, :scale => 2
     t.integer  "p2p_item_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
     t.string   "txn_id"
     t.string   "citrus_reason"
     t.string   "citrus_ref_no"
     t.integer  "buyer"
+    t.integer  "p2p_status",                                     :default => 0
   end
 
   add_index "p2p_item_deliveries", ["buyer"], :name => "index_p2p_item_deliveries_on_buyer"

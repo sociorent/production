@@ -14,7 +14,7 @@
 
 					<!-- give isbn fetch on default -->
 				<script>
-					<% if done and attr.name.downcase.starts_with?("isbn")  %>
+					<% if done and attr.name.downcase.starts_with?("isbn") and attr.name.index('13') != nil  %>
 
 										
 							$('#model').closest('tr').find('td:first').text('Book Type');
@@ -37,26 +37,20 @@
 									dataType:'json',
 									success:function(data){
 
-
+										// reset all values
 										if (data == null || data.length == 0 ){
 
 											$("#price").text('').editable();
-											$('#isbn10').text('').editable();
 											$('#desc_content').text('').editable();
-											$('#item_26').text('').editable();
-											$('#item_27').text('').editable();
-											$('#item_28').text('').editable();
-											$('#item_29').text('').editable();
-											$('#item_30').text('').editable();
-											$('#item_38').text('').editable();
 
 											item_values['price'] = '';
 											item_values['desc'] = '';
-											item_values['spec']['26'] = '';
-											item_values['spec']['27'] = '';
-											item_values['spec']['30'] = '';
-											item_values['spec']['28'] = '';
-											item_values['spec']['29'] = '';
+
+											<% ids = @attr.pluck('id') %>
+											<% ids.each do | id | %>
+												$("#item_<%=id%>").text('').editable();
+												item_values['spec']["<%=id%>"] = '';
+											<% end %>
 
 										}
 										else{
@@ -86,17 +80,23 @@
 
 											$("#price").text(data['price']).editable();
 											$('#desc_content').text(data['description']);
-											$('#item_30').text(data['isbn10']).editable();
-											$('#item_29').text(data['isbn13']);
-											$('#item_26').text(data['author']);
-											$('#item_38').text(data['publisher_id']).tooltip('hide');
-											
 
+
+											
+											$('#item_3').text(data['isbn10']).editable();
+											$('#item_2').text(data['isbn13']);
+											$('#item_5').text(data['author']);
+											$('#item_4').text(data['Page Count']);
+											
+											$('#item_1').text(data['Publisher']).tooltip('hide');
+											
 											item_values['price'] = data['price'];
 											item_values['desc'] = data['description'];
-											item_values['spec']['30'] = data['isbn10'];
-											item_values['spec']['26'] = data['author'];
-											item_values['brand'] = data['publisher_id'];
+											item_values['spec']['3'] = data['isbn10'];
+											item_values['spec']['5'] = data['author'];
+											item_values['spec']['4'] = data['Page Count'];
+											item_values['spec']['1'] = data['Publisher'];
+
 										}
 									},
 									error:function(){

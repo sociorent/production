@@ -2,6 +2,8 @@ class P2p::CategoriesController < ApplicationController
 
  layout :p2p_layout 
 
+   before_filter :p2p_user_signed_in 
+
   # GET /p2p/categories
   # GET /p2p/categories.json
   def index
@@ -95,7 +97,7 @@ class P2p::CategoriesController < ApplicationController
 
 
 
-
+  # get the categories for listing in xeditable
   def getcategories
     @res = []
     P2p::Category.all.each do |c|
@@ -105,18 +107,19 @@ class P2p::CategoriesController < ApplicationController
     render :json => @res
   end
 
-  def set_category
-    session[:cat] = params[:id]
-    render :text => session[:cat]
+  # for new item
+  def get_attributes
+    cat = P2p::Category.find(params[:id])
+    @attr = cat.specs.select("id,name,display_type").all
+    #  render :json => @attr
   end
-  
-  def sub_category
-    @res = []
-    cat = P2p::Category.find(session[:cat])
-    cat.products.each do |c|
-      @res << {:value => c.id, :text => c.name}
-    end
-    render :json => @res
+
+  def get_brands
+    cat =P2p::Category.find(params[:id])
+    brand  = cat.products.select("id as value,name as text")
+    brand << "Other"
+    render :json => brand
+    return
   end
 
 end

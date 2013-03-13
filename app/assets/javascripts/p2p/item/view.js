@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
 
+
   // fancy box for view image
   $('#view_image_fancy').fancybox({
       'speedIn'   : 500,
@@ -226,6 +227,7 @@ $("#pay_now_citrus_pay").live("click",pay_now_citrus_pay);
          });//ajax
     });
 
-  $('.action_icon').tooltip('destroy');
+  $('').tooltip('destroy');
+
 
 });

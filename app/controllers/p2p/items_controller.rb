@@ -5,15 +5,21 @@ class P2p::ItemsController < ApplicationController
   #check for user presence inside p2p
   before_filter :check_p2p_user_presence
   layout :p2p_layout
+
   def new
     @item = p2p_current_user.items.new
   end
-
+  
+  #creates the item..
+  #the trick here is first time we dn save the item..
+  #we simulate the save process
+  #this is to diplay the payment options fot the user
+  #when the user submits from the payment options,
+  #we save it then :)
   def create
+
     item = p2p_current_user.items.new({:title => params[:title], :desc => params[:desc], :price => params[:price] ,:condition => params[:condition]})
-   # render :json => item
-
-
+    # render :json => item
     item.category = P2p::Category.find(params[:cat].to_i)
     begin
       item.city = P2p::City.find_by_name(params[:location])
@@ -65,8 +71,9 @@ class P2p::ItemsController < ApplicationController
         end
       end
     end
-    #todo add image validation in server side
-    #   images = []
+
+    #if paytype is not found , then the save was not triggered in payment and hence
+    #dn save the item.. so skip all these process
     if params.has_key?(:paytype)
       if params[:img].respond_to?('each')
         params[:img].each do |img|
@@ -79,7 +86,7 @@ class P2p::ItemsController < ApplicationController
         params['spec'] = [params['spec']]
       end
       params["spec"].each do |key,value|
-        next if value == ""
+        next if value.length == 0 or value == "null" or value =='undefined'
         begin
           attr = P2p::ItemSpec.new
           attr.spec = P2p::Spec.find(key.to_i)
@@ -100,11 +107,15 @@ class P2p::ItemsController < ApplicationController
         item.payinfo = params[:payinfo]
       end
     end
+
+    #as i said if paytype is not defined
     if !params.has_key?(:paytype)
       @item = item
       render :sellitem_pricing
       return
     end
+
+    #save the item now..
     if item.save
       redirect_to URI.encode("/p2p/#{item.product.category.name}/#{item.product.name}/#{item.title}")
       # redirect_to URI.encode('/p2p/itempayment/' + item.id.to_s)
@@ -114,6 +125,7 @@ class P2p::ItemsController < ApplicationController
     end
   end
 
+  #update the item
   def update
     item = p2p_current_user.items.find(params[:id])
     item.update_attributes({:title => params[:title], :desc => params[:desc], :price => params[:price] ,:condition => params[:condition]});
@@ -127,42 +139,44 @@ class P2p::ItemsController < ApplicationController
         city.save
         item.city = city
         P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id],
-                                                :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The city  #{params[:location]} was not found in your system and hence is created automatically for you, when the #{p2p_current_user.user.email} requested on listing a item We urge you to check the same. Sincerally - Developers",
-                                                :messagetype => 5,
-                                                :sender_id => session[:admin_id],
-                                                :sender_status => 2,
-                                                :receiver_status => 0,
-                                                :parent_id => 0,
-                                                :item_id => item.id
-                                                });
+                                                                 :message => "Auto Generated Message.<br/><h4>Fall back creation</h4>. The city  #{params[:location]} was not found in your system and hence is created automatically for you, when the #{p2p_current_user.user.email} requested on listing a item We urge you to check the same. Sincerally - Developers",
+                                                                 :messagetype => 5,
+                                                                 :sender_id => session[:admin_id],
+                                                                 :sender_status => 2,
+                                                                 :receiver_status => 0,
+                                                                 :parent_id => 0,
+                                                                 :item_id => item.id
+                                                                 });
       rescue
       end
     end
+    #set the item.. this is used to set the time with seconds
+    #same for all the edit..
     update_time = Time.now
-    #echo params["item"]['attribute'].count
-    #clear all
-    #item.specs.clear
+
     ActiveRecord::Base.transaction do
       item.updated_at = update_time
       params[:spec].each do |key,value|
         begin
           attr = item.specs.find_by_spec_id(key.to_i)
           attr.updated_at = update_time
-          attr.value = value
-          attr.save
-          if value == ""  || value == 'undefined'
-            attr.destroy
+
+          if value.strip.length == 0  or value == 'undefined'
+            attr.delete
             next
+          else
+            attr.value = value
+
           end
 
         rescue
           attr = item.specs.new
           attr.spec = item.category.specs.find(key.to_i)
-
           attr.updated_at = update_time
           attr.value = value
         end
       end
+
       data={}
       if params[:img].respond_to?('each')
         params[:img].each do |img|
@@ -175,19 +189,16 @@ class P2p::ItemsController < ApplicationController
       item.images.each do |img|
         puts img.errors.full_messages
       end
-
       item.approveddate = nil
-
       if item.save
         flash[:notice] = "Saved changes"
-        puts "in success"
       else
-        puts "in fail"
         flash[:notice] = "Failed to save"
       end
     end
     redirect_to URI.encode("/p2p/#{item.product.category.name}/#{item.product.name}/#{item.title}")
   end
+
 
   def destroy
     begin
@@ -218,30 +229,16 @@ class P2p::ItemsController < ApplicationController
   def edit
   end
 
-  def get_attributes
-    cat = P2p::Category.find(params[:id])
-    @attr = cat.specs.select("id,name,display_type").all
-    #  render :json => @attr
-  end
-
   def get_spec
     items = P2p::Item.find(params[:id])
     spec = items.specs.select("id,value,spec_id")
     render :partial => "p2p/items/editspec" , :locals => {:spec => spec}
     #  render :json => @attr
   end
-
-  def get_brands
-    cat =P2p::Category.find(params[:id])
-    brand  = cat.products.select("id as value,name as text")
-    render :json => brand
-  end
-
   def get_sub_categories
     cat = P2p::Category.select("id as value ,name as text")
     render :json => cat
   end
-
   def view
     begin
       #@item = P2p::Item.find(params[:id])
@@ -252,7 +249,6 @@ class P2p::ItemsController < ApplicationController
       else
         @item = @prod.items.find_by_title(params[:item])
       end
-
       raise "Nothing found" if   @item.nil?
       if !p2p_current_user.nil? and @item.paytype.nil? and p2p_current_user.id == @item.user.id
         redirect_to "/p2p/itempayment/#{@item.id}"
@@ -265,7 +261,6 @@ class P2p::ItemsController < ApplicationController
       redirect_to '/p2p'
       return
     end
-
     if @item.product.category.category.nil?
       @category_name = @item.product.category.name
       @category_id = @item.product.category.id
@@ -277,7 +272,6 @@ class P2p::ItemsController < ApplicationController
       @category_name = @item.product.category.category.name
       @category_id = @item.product.category.category.id
     end
-
     if !p2p_current_user.nil?
       if  p2p_current_user.id != @item.user_id and !session[:isadmin]
         @item.update_attributes(:viewcount => @item.viewcount.to_i + 1 )
@@ -285,11 +279,9 @@ class P2p::ItemsController < ApplicationController
     else
       @item.update_attributes(:viewcount => @item.viewcount.to_i + 1 )
     end
-
     @brand_name = @item.product.name
     @brand_id = @item.product.id
     @attr = @item.specs(:includes => :attr)
-
     if !p2p_current_user.nil? and p2p_current_user.id == @item.user_id
       @messages = @item.messages.all
     elsif !p2p_current_user.nil?
@@ -297,16 +289,14 @@ class P2p::ItemsController < ApplicationController
       @message = @item.messages.new
       @buyerreqcount = @item.messages.find_all_by_sender_id(p2p_current_user.id).count
     end
-
-    @fullimage = @item.get_image(0,:view) 
-    @thumbimage = @item.get_image(0,:thumb) 
-    @viewimage = @item.get_image(0,:view) 
-
+    @fullimage = @item.get_image(0,:view)
+    @thumbimage = @item.get_image(0,:thumb)
+    @viewimage = @item.get_image(0,:view)
     # decide the paycontne and title for popover
     @item_message_url = "/p2p/messages/#{@item.title}"
     @payurl = "/p2p/itempayment/#{@item.id}"
     if @item.paytype == 1
-      @paytype_content = "You have selected to send this item via courier in #{@item.payinfo.split(',')[0]} business days <br/> Click on the button to change it." 
+      @paytype_content = "You have selected to send this item via courier in #{@item.payinfo.split(',')[0]} business days <br/> Click on the button to change it."
       @paytype_title = "Send by Courier"
     elsif @item.paytype == 2
       @paytype_content = "You have selected to deal with the buyer directly <br/> Click on the button to change it."
@@ -315,12 +305,9 @@ class P2p::ItemsController < ApplicationController
       @paytype_content = "You have selected sociorent to pickup and safely deliver the item. <br/> Click on the button to change it"
       @paytype_title = "Send by Sociorent"
     end
-
     #random image
     @rand_image = rand(0..(@item.get_image(0,:thumb).count-1))
-
   end
-
   def inventory
     user = p2p_current_user
     if params[:query].present?
@@ -348,7 +335,6 @@ class P2p::ItemsController < ApplicationController
       @items = user.items.all.paginate(:page => params[:page] ,:per_page => 20 ,:class=> 'bootstrap pagination' )
     end
   end
-
   def sold
     @item = P2p::Item.find(params[:id])
     @item.solddate =Time.now
@@ -356,7 +342,6 @@ class P2p::ItemsController < ApplicationController
     #render :json => {:status => 1 ,:id => "/p2p/#{@item.product.category.name}/#{@item.product.name}/#{@item.title}"}
     redirect_to URI.encode("/p2p/#{@item.product.category.name}/#{@item.product.name}/#{@item.title}")
   end
-
   def add_image
     if params[:item_id] != ""
       item = P2p::Item.find(params[:item_id])
@@ -390,7 +375,6 @@ class P2p::ItemsController < ApplicationController
     end
     #render :inline => params.inspect
   end
-
   def waiting
     if session[:isadmin]
       if params.has_key?(:id)
@@ -412,7 +396,6 @@ class P2p::ItemsController < ApplicationController
     end
     render :approve
   end
-
   def disapprove
     if session[:isadmin]
       if params.has_key?(:id)
@@ -432,55 +415,49 @@ class P2p::ItemsController < ApplicationController
     end
     render :approve
   end
-
   def approve
     if params.has_key?(:query)
       if params[:query] == 'disapprove'
         item = P2p::Item.notsold.find(params[:id])
         item.update_attributes(:disapproveddate => Time.now , :approveddate => nil)
         P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => item.user.id ,
-                                                :message => "This is an auto generated system message. Your item #{item.title} has been disapproved due to some reasons . Reply to this message to know the reason.  <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
-                                                :messagetype => 5,
-                                                :sender_id => session[:admin_id],
-                                                :sender_status => 2,
-                                                :receiver_status => 0,
-                                                :parent_id => 0,
-                                                :item_id => item.id
-                                                });
+                                                                 :message => "This is an auto generated system message. Your item #{item.title} has been disapproved due to some reasons . Reply to this message to know the reason.  <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
+                                                                 :messagetype => 5,
+                                                                 :sender_id => session[:admin_id],
+                                                                 :sender_status => 2,
+                                                                 :receiver_status => 0,
+                                                                 :parent_id => 0,
+                                                                 :item_id => item.id
+                                                                 });
         P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id],
-                                                :message => "This is an auto generated system message. You have disapproved item no #{item.id} , #{item.title} and this listing will not appear on the site. A automated message is sent to the user.Your can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
-                                                :messagetype => 5,
-                                                :sender_id => session[:admin_id],
-                                                :sender_status => 1,
-                                                :receiver_status => 0,
-                                                :parent_id => 0,
-                                                :item_id => item.id
-                                                });
+                                                                 :message => "This is an auto generated system message. You have disapproved item no #{item.id} , #{item.title} and this listing will not appear on the site. A automated message is sent to the user.Your can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
+                                                                 :messagetype => 5,
+                                                                 :sender_id => session[:admin_id],
+                                                                 :sender_status => 1,
+                                                                 :receiver_status => 0,
+                                                                 :parent_id => 0,
+                                                                 :item_id => item.id
+                                                                 });
         @message_notification = "
-              $('#notificationcontainer').notify('create', {
-              title: 'Disapproval of Listing',
-              text: 'Your item #{item.title} has been disapproved by admin. Please check messages and reply to correct the issue'
-              },{
-              expires:false,
-              click:function(){
-              window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
-              }
-              });
-
-        if (oInboxTable){
-            oInboxTable.fnDraw();
-        }
-
-        if (oSentBoxTable){
-            oSentBoxTable.fnDraw();
-        }
-          if (oDeleteBoxTable){
-            oDeleteBoxTable.fnDraw();
-        }
-
-
-      "
-
+$('#notificationcontainer').notify('create', {
+title: 'Disapproval of Listing',
+text: 'Your item #{item.title} has been disapproved by admin. Please check messages and reply to correct the issue'
+},{
+expires:false,
+click:function(){
+window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
+}
+});
+if (oInboxTable){
+oInboxTable.fnDraw();
+}
+if (oSentBoxTable){
+oSentBoxTable.fnDraw();
+}
+if (oDeleteBoxTable){
+oDeleteBoxTable.fnDraw();
+}
+"
         PrivatePub.publish_to("/user_#{item.user_id}", @message_notification )
         render :json => '1'
         return
@@ -488,36 +465,36 @@ class P2p::ItemsController < ApplicationController
         item = P2p::Item.notsold.find(params[:id])
         item.update_attributes(:approveddate => Time.now ,:disapproveddate => nil)
         P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => item.user.id ,
-                                                :message => "This is an auto generated system message. Your item is verified , approved  and  will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
-                                                :messagetype => 5,
-                                                :sender_id => session[:admin_id],
-                                                :sender_status => 2,
-                                                :receiver_status => 0,
-                                                :parent_id => 0,
-                                                :item_id => item.id
-                                                });
+                                                                 :message => "This is an auto generated system message. Your item is verified , approved  and  will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
+                                                                 :messagetype => 5,
+                                                                 :sender_id => session[:admin_id],
+                                                                 :sender_status => 2,
+                                                                 :receiver_status => 0,
+                                                                 :parent_id => 0,
+                                                                 :item_id => item.id
+                                                                 });
         P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id] ,
-                                                :message => "This is an auto generated system message. You have approved item no #{item.id} and this listing will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
-                                                :messagetype => 5,
-                                                :sender_id => session[:admin_id],
-                                                :sender_status => 1,
-                                                :receiver_status => 0,
-                                                :parent_id => 0,
-                                                :item_id => item.id
-                                                });
+                                                                 :message => "This is an auto generated system message. You have approved item no #{item.id} and this listing will appear on the site. You can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
+                                                                 :messagetype => 5,
+                                                                 :sender_id => session[:admin_id],
+                                                                 :sender_status => 1,
+                                                                 :receiver_status => 0,
+                                                                 :parent_id => 0,
+                                                                 :item_id => item.id
+                                                                 });
         #session[:verifycode] = rand(0..100000)
         begin
           send_sms(item.user.user.mobile_number,"Thanks for signing-up with Sociorent.com. Your ID is #{item.title.truncate(110)} . You may now login to place your order. Thank you.")
         rescue
           P2p::User.find(session[:admin_id]).sent_messages.create({:receiver_id => session[:admin_id],
-                                                  :message => "This is an auto generated system message. A approval message cant be sent to #{item.user.user.mobile_number } (#{item.user.user.email},  #{item.user.user.name} ).<br/> Thank you.. <br/> Sincerly, <br/> Developers ",
-                                                  :messagetype => 5,
-                                                  :sender_id => session[:admin_id],
-                                                  :sender_status => 1,
-                                                  :receiver_status => 0,
-                                                  :parent_id => 0,
-                                                  :item_id => item.id
-                                                  });
+                                                                   :message => "This is an auto generated system message. A approval message cant be sent to #{item.user.user.mobile_number } (#{item.user.user.email},  #{item.user.user.name} ).<br/> Thank you.. <br/> Sincerly, <br/> Developers ",
+                                                                   :messagetype => 5,
+                                                                   :sender_id => session[:admin_id],
+                                                                   :sender_status => 1,
+                                                                   :receiver_status => 0,
+                                                                   :parent_id => 0,
+                                                                   :item_id => item.id
+                                                                   });
         end
         # private pub
         unreadcount = item.user.received_messages.inbox.unread.count
@@ -532,27 +509,24 @@ class P2p::ItemsController < ApplicationController
           message_page_count = " $('#unread_count').html('');"
         end
         @message_notification = "
-            $('#notificationcontainer').notify('create', {
-            title: 'Approval of Listing',
-            text: 'Your item #{item.title} has been approved by admin and will be listed on the site.'
-            },{
-            expires:false,
-            click:function(){
-            window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
-            }
-            });
-
-        if (oInboxTable){
-            oInboxTable.fnDraw();
-        }
-
-        if (oSentBoxTable){
-            oSentBoxTable.fnDraw();
-        }
-          if (oDeleteBoxTable){
-            oDeleteBoxTable.fnDraw();
-        }
-
+$('#notificationcontainer').notify('create', {
+title: 'Approval of Listing',
+text: 'Your item #{item.title} has been approved by admin and will be listed on the site.'
+},{
+expires:false,
+click:function(){
+window.location.href = '/p2p/#{item.category.name}/#{item.product.name}/#{item.title}';
+}
+});
+if (oInboxTable){
+oInboxTable.fnDraw();
+}
+if (oSentBoxTable){
+oSentBoxTable.fnDraw();
+}
+if (oDeleteBoxTable){
+oDeleteBoxTable.fnDraw();
+}
 "
         PrivatePub.publish_to("/user_#{item.user_id}", header_count + message_page_count  + @message_notification)
         render :json => '1'
@@ -579,7 +553,6 @@ class P2p::ItemsController < ApplicationController
       end
     end
   end
-
   def getbook_details
     book = Book.select('description,isbn13,isbn10,binding,publisher_id,published,pages,price,author').find_by_isbn13(params[:isbn13])
     if book.nil?
@@ -591,7 +564,6 @@ class P2p::ItemsController < ApplicationController
     book["publisher_id"] = publisher
     render :json => book
   end
-
   def sellitem_pricing
     if request.xhr?
       layout :false
@@ -631,7 +603,6 @@ class P2p::ItemsController < ApplicationController
     end
     #@item = p2p_current_user.items.unscoped.notfinished.find(params[:id])
   end
-
   def update_online_payment
     # check the transaction status, if cancelled then store nothing,, and redirect to books page
     if params[:TxStatus]
@@ -649,7 +620,6 @@ class P2p::ItemsController < ApplicationController
       redirect_to "/p2p/paymentdetails/bought"
     end
   end
-
   def upload_csv
     redirect_to "/p2p/dashboard" and return if p2p_current_user.user_type != 1
     puts p2p_current_user.inspect
@@ -657,21 +627,20 @@ class P2p::ItemsController < ApplicationController
     flash[:warning] =" Your bulk upload was successful" if vendor_upload
     redirect_to "/p2p/dashboard"
   end
-
   def downloadtemplate
     if params.has_key?(:category_template)
-        cat = P2p::Category.find(params[:category_template])
-        require 'csv'
-        item = ['Brand','Title','Price','Condition','Location','Description','Send By','All over India','Image Url','Image Url','Image Url']
-        if cat.name =="Books"
-          item[0] = 'Publisher'
-        end
-        item = item + cat.specs.pluck('name')
-        csv_string = CSV.generate do |csv|
-          csv << item
-        end
-        send_data(csv_string ,:filename => cat.name + ".csv")
-        return
+      cat = P2p::Category.find(params[:category_template])
+      require 'csv'
+      item = ['Brand','Title','Price','Condition','Location','Description','Send By','All over India','Image Url','Image Url','Image Url']
+      if cat.name =="Books"
+        item[0] = 'Publisher'
+      end
+      item = item + cat.specs.pluck('name')
+      csv_string = CSV.generate do |csv|
+        csv << item
+      end
+      send_data(csv_string ,:filename => cat.name + ".csv")
+      return
     else
       @cat = P2p::Category.all
       @not_processed = p2p_current_user.vendor_uploads.where(:processed=>false)

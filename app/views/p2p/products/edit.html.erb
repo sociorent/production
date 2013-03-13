@@ -3,9 +3,26 @@
     Edit <%= @p2p_product.name %> product -Admin 
 <%end %>
 
-<h1>Editing Product</h1>
 
-<%= render 'form' %>
+<div class="row" id="body_content" >
 
-<%= link_to 'Show', @p2p_product %> |
-<%= link_to 'Back', p2p_products_path %>
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+	<div class="span9">
+
+			<h3>Editing Product</h3>
+
+			<%= render 'form' %>
+
+			<%= link_to 'Back', p2p_products_path %>
+	</div>
+</div>

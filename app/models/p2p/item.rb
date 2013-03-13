@@ -132,7 +132,7 @@ class P2p::Item < ActiveRecord::Base
 
 
         admin.sent_messages.create({:receiver_id => self.user.id ,
-                                                  :message => "This is an auto generated system message. Your <a href='/p2p/#{self.category.name}/#{self.product.name}/#{self.title}'>#{self.title}</a> listing is kept under verification and will appear on the site with in 2hours. To send a message to admin just click reply and send your message. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
+                                                  :message => "This is an auto generated system message. Your <a href='/p2p/#{self.category.name}/#{self.product.name}/#{self.title}'>#{self.title}</a> listing is kept under verification and will appear on the site with in 2hours. To send a message to sociorent just click reply and send your message. <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                                   :messagetype => 5,
                                                   :sender_id => admin.id,
                                                   :sender_status => 2,

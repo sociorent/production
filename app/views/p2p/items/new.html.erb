@@ -17,8 +17,8 @@
     <div class="span6">
     <!-- New Form -->
       <div class="btn-group" id="listing_action">
-        <button class="btn btn-success" id="save"  ><i  class=" action_icon icon-white icon-ok-circle" title="Save changes"></i></button>
-        <button class="btn btn-danger" id="cancel" ><i  class=" icon-white icon-remove-circle action_icon" title="Cancel changes"></i></button>
+        <button class="btn btn-success action-icon"  data-title="Save this listing"  id="save_top"  ><i  class=" action_icon icon-white icon-ok-circle" title="Save changes"></i> Save</button>
+        <button class="btn btn-danger action-icon"  data-title="Cancel the changes"  id="cancel_top" ><i  class=" icon-white icon-remove-circle action_icon" title="Cancel changes"></i> Cancel</button>
       </div>
     </div>
 
@@ -76,7 +76,7 @@
           <td>Model</td>
           <td>
             <span id="model" class="action_icon "  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ></span>
-              <input type="text" id="add_new_model" placeholder="Other Model" size=10>
+              <span id="add_new_model" class="hidden" id="add_new_model" data-title="Enter other Model" size="3">
           </td>
         </tr>
         <tr>
@@ -116,6 +116,13 @@
       <span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="canEdit action_icon" inputclass="desc_content_form" data-wysihtml5="{image:false}"></span>
     </div>
   </div>
+
+<div class="span10">
+  <div class="btn-group pull-right" id="listing_action">
+    <button class="btn btn-success action-icon"  data-title="Save this listing"  id="save_bottom"  ><i  class=" action_icon icon-white icon-ok-circle" title="Save changes"></i> Save</button>
+    <button class="btn btn-danger action-icon"  data-title="Cancel the changes"  id="cancel_bottom" ><i  class=" icon-white icon-remove-circle action_icon" title="Cancel changes"></i> Cancel</button>
+  </div>
+</div>
 
 
   <!-- Modal -->

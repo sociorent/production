@@ -1,6 +1,6 @@
 class P2p::Spec < ActiveRecord::Base
   
-  attr_accessible :display_type, :name ,:category_id ,:priority
+  attr_accessible :display_type, :name ,:category_id ,:priority ,:show_filter
   
   belongs_to :category
 

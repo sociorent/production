@@ -5,8 +5,10 @@ class P2p::CitiesController < ApplicationController
   def index
   end
 
+  # get the city list for xeditable
   def list
     unless params[:query].nil?
+      # if some how we have empty city name empyt in database  ignore it
   	  cities = P2p::City.select('name').where("name like '" + params[:query] + "%' or name is not null")
     else
       cities = P2p::City.select('name')

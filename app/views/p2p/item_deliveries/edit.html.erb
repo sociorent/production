@@ -1,6 +1,26 @@
-<h1>Updating <%= @p2p_item_delivery.item.title %> </h1>
+<% content_for :pagetitle  do %>
+    Payments    
+<%end %>
 
-<%= render 'form' %>
 
-<%= link_to 'Show', @p2p_item_delivery %> |
-<%= link_to 'Back', p2p_item_deliveries_path %>
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+		<div class="span9">
+
+			<h3>Updating <%= @p2p_item_delivery.item.title %> </h3>
+
+			<%= render 'form' %>
+
+			<%= link_to 'Back', p2p_item_deliveries_path %>
+		</div>
+</div>

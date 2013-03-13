@@ -1,5 +1,7 @@
 class P2p::ItemDeliveriesController < ApplicationController
 
+  before_filter :p2p_is_admin
+  
   layout :p2p_layout
   
   # GET /p2p/item_deliveries

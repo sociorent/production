@@ -6,16 +6,52 @@
 	<!-- overlay to be displayed during filter request -->
 	<% item_condition_res = category.items.by_location_or_allover(p2p_get_user_location).select("distinct p2p_items.condition").order('p2p_items.condition asc') %>
 	<% if item_condition_res.count > 0 %>
-	<div class="filter_title"> Condition </div>
-	<div class="filters_value">
-		<% item_condition_res.each do |itm| %>
-		<div class="spec-filter">
-			<input  class="spec_filter_check" type="checkbox"  spec-name="condition" spec-value="<%=itm.condition%>">	<span class="spec_filter_check_label"><%= itm.condition %> </span>
-		</div>
+		<div class="filter_title"> Condition </div>
+		<div class="filters_value">
+			<% item_condition_res.each do |itm| %>
+				<div class="spec-filter">
+					<input  class="spec_filter_check" type="checkbox"  spec-name="condition" spec-value="<%=itm.condition%>">	<span class="spec_filter_check_label"><%= itm.condition %> </span>
+				</div>
 		<% end %>
 	</div>
 	<% end %>
-	<% category.specs.each do |spec|%>
+		<!-- price range -->
+
+	<% item_price_res = (category.items.by_location_or_allover(p2p_get_user_location).select("distinct cast(p2p_items.price as UNSIGNED)").order('p2p_items.price asc')).pluck('price') %>
+
+		<% ranges = item_price_res.inject([]) do |spans, n| %>
+		  <% if spans.empty? || spans.last.last != n - 1 %>
+		    <% spans + [n..n] %>
+		  <% else %>
+		    <% spans[0..-2] + [spans.last.first..n] %>
+		  <% end %>
+		<% end %>
+
+	<% item_model_res = category.products.select("distinct p2p_products.name,p2p_products.id").order('p2p_products.name asc') %>
+	<% if item_model_res.count > 0 %>
+		<div class="filter_title"> <%= (category.name =="Books") ? 'Category' : 'Model'%> </div>
+		<div class="filters_value">
+			<% item_model_res.each do |prod| %>
+				<div class="spec-filter">
+					<input  class="spec_filter_check" type="checkbox"  spec-name="model" spec-value="<%=prod.id%>">	<span class="spec_filter_check_label"><%= prod.name %> </span>
+				</div>
+		<% end %>
+	</div>
+	<% end %>
+
+
+	<% if ranges.count > 0 %>
+		<div class="filter_title"> Price </div>
+		<div class="filters_value">
+			<% ranges.each do |rng| %>
+				<div class="spec-filter">
+					<input  class="spec_filter_check" type="checkbox"  spec-name="price" spec-value="<%=rng%>">	<span class="spec_filter_check_label"><%= rng.to_s.sub('..' , ' to ') %> </span>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
+	
+	<% category.specs.where(:show_filter => 1).each do |spec|%>
 	<% next if spec.itemspecs.select(" distinct value").where("value !=''").count == 0 %>
 	<div class="filter_title"> <%= spec.name %>  </div>
 
@@ -74,20 +110,14 @@
 			</script>
 			<script>
 			window.category="<%=category.name%>";
-			<% if params.has_key?(:prod) %>
-//@products will not be array for this particular action
-<% if request[:action] == 'browse_filter' %>
-window.filterurl= "/p2p/<%=category.name%>/<%=@products.name%>/filters";
-<% else %>
-window.filterurl= "/p2p/<%=category.name%>/<%=@products[0].name%>/filters";
-<% end %>
-<% else %>
-window.filterurl= "/p2p/<%=category.name%>/filters";
-<% end %>
-</script>
-<%= javascript_include_tag 'p2p/browse_filter' %>
+
+			window.filterurl= "/p2p/<%=category.name%>/filters";
+
+			</script>
+
+			<%= javascript_include_tag 'p2p/browse_filter' %>
 </div>
 
 
-<a href="#" class="scrollup">Scroll Top</a>
 
+<a href="#" class="scrollup">Scroll Top</a>

@@ -17,7 +17,7 @@
 					<% if done and attr.name.downcase.starts_with?("isbn")  %>
 
 										
-							$('#model').closest('tr').find('td:first').text('Publisher');
+							$('#model').closest('tr').find('td:first').text('Book Type');
 
 							$('#notificationcontainer').notify('create',{
 								title:'A little to you',
@@ -48,8 +48,7 @@
 											$('#item_28').text('').editable();
 											$('#item_29').text('').editable();
 											$('#item_30').text('').editable();
-											$('#model').text('').editable();
-
+											$('#item_38').text('').editable();
 
 											item_values['price'] = '';
 											item_values['desc'] = '';
@@ -90,7 +89,7 @@
 											$('#item_30').text(data['isbn10']).editable();
 											$('#item_29').text(data['isbn13']);
 											$('#item_26').text(data['author']);
-											$('#model').text(data['publisher_id']).tooltip('hide');
+											$('#item_38').text(data['publisher_id']).tooltip('hide');
 											
 
 											item_values['price'] = data['price'];

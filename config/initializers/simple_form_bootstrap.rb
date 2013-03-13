@@ -11,6 +11,7 @@ SimpleForm.setup do |config|
     end
   end
 
+
   config.wrappers :prepend, :tag => 'div', :class => "control-group", :error_class => 'error' do |b|
     b.use :html5
     b.use :placeholder
@@ -36,6 +37,19 @@ SimpleForm.setup do |config|
       input.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
     end
   end
+
+  #wrapper for admin form
+  config.wrappers :adminform, :tag => 'table', :error_class => 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.wrapper :tag => 'tr' do |component|
+      component.wrapper :tag => 'td' do  |component1|
+        component1.use :input
+        component1.use :checkbox
+      end
+    end
+  end
+
 
   # Wrappers for forms and inputs using the Twitter Bootstrap toolkit.
   # Check the Bootstrap docs (http://twitter.github.com/bootstrap)

@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
 
+
 	//trigger the upload on the file input when click on the div
 	$('#upload_image').click(function(){
      $('#image_upload').trigger('click');
@@ -10,11 +11,15 @@ $(document).ready(function(){
 	// edit new js
 
 	// set the configuration for tooltips
-	$('.action_icon').tooltip('destroy');
+	$('.action-icon').tooltip('destroy');
 
 		// cancel edit function trigger
 	// #TODO: CHECK IF THE FORM IS CHANGED OR NOT AND REDIRECT ACCORDINGLY
-	$("#cancel").on('click',function(){
+	$("#cancel_top").on('click',function(){
+			window.location.reload();
+	});
+
+	$("#cancel_bottom").on('click',function(){
 			window.location.reload();
 	});
 

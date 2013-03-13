@@ -40,9 +40,14 @@ class ApplicationController < ActionController::Base
   ##P2P layout
   # this selects the layout for the p2p namespace
   def p2p_layout
+
+
 	 if request.xhr? 
 		return false;
 	 else
+
+  	# first find the user location
+  	guess_user_location
 
 		return 'p2p_layout'
 		#return 'application'
@@ -94,6 +99,8 @@ class ApplicationController < ActionController::Base
   end
 
   def check_p2p_user_presence
+
+
 	# check for ucrrent user and ignore the user presnce if the user is not logged in
 	if current_user.nil?
 		return true 
@@ -105,6 +112,28 @@ class ApplicationController < ActionController::Base
 	end
 
   end
+
+  def guess_user_location
+  	begin
+  	    if !session.has_key?(:city) or session[:city] == ""
+	        #todo replace ip from request
+	        #geocode  = Geocoder.search(request[:REMOTE_ADDR])
+
+	        geocode  = Geocoder.search(request[:REMOTE_ADDR])
+
+	        session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
+
+	        puts geocode.inspect
+
+	        city_id = P2p::City.find_or_create_by_name(session[:city]).id
+
+	        session[:city_id] = (city_id.nil? ) ? '' : city_id;
+      	end
+    rescue
+    end
+
+  end
+
 
   def to_hash(obj)
      hash = {}; obj.attributes.each { |k,v| hash[k.to_sym] = v }
@@ -118,8 +147,14 @@ class ApplicationController < ActionController::Base
   	else
   		return ''
   	end
+  end
 
-
+  def p2p_is_admin
+  	if !session[:isadmin]
+  		redirect_to '/p2p'
+  		return false
+  	end
+  	return true
   end
 
   def after_sign_in_path_for(resource)

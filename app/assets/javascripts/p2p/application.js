@@ -72,32 +72,30 @@ $(document).ready(function(){
 	});
 
 
-	//guess location of user if not set
-	if ($("#user_location").val() == ''){
-		$.ajax({
-			url:'/p2p/guesslocation',
-			type:'post',
-			dataType:'json',
-			success:function(data){
-				if (data.status == 1){
-					window.location.reload();
-					$("#user_location").val(data.location);
-					$("#head_user_location i").attr('title',$("#user_location :selected").text()).tooltip('destroy').tooltip();
-				}
-				else if(data.status == 2){
-					$("#head_user_location").css('background-color','red');
-					$("#head_user_location i").addClass('icon-white');
-					$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
-				}
-			},
-			error:function(){
-				$("#head_user_location").css('background-color','red');
-				$("#head_user_location i").addClass('icon-white');
-				$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
-
-			}
-		});
-	}
+	// //guess location of user if not set
+	// if ($("#user_location").val() == ''){
+	// 	$.ajax({
+	// 		url:'/p2p/guesslocation',
+	// 		type:'post',
+	// 		dataType:'json',
+	// 		success:function(data){
+	// 			if (data.status == 1){
+	// 				window.location.reload();
+	// 				$("#user_location").val(data.location);
+	// 				$("#head_user_location i").attr('title',$("#user_location :selected").text()).tooltip('destroy').tooltip();
+	// 			}
+	// 			else if(data.status == 2){
+	// 				$("#head_user_location").css('background-color','red');
+	// 				$("#head_user_location i").addClass('icon-white');
+	// 				$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
+	// 			}
+	// 		},
+	// 		error:function(){
+	// 			$("#head_user_location").css('background-color','red');
+	// 			$("#head_user_location i").addClass('icon-white');
+	// 			$("#head_user_location i").attr('title','Error occured in setting your location').tooltip('destroy').tooltip('show');
+	// 		}
+	// 	});
 
 
 });

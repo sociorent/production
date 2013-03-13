@@ -244,7 +244,7 @@
 
 	.item_title {
 		font-size:14px;
-		font-weight:600;
+		font-weight:bold;
 		color:#696969;
 		max-height:40px;
 		overflow:hidden
@@ -252,7 +252,7 @@
 
 	.item_condition {
 		font-size:13px;
-		font-weight:600;
+		font-weight:bold;
 		color:#0F8159;
 		height:20px;
 		overflow:hidden

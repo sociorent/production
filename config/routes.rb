@@ -68,25 +68,27 @@ Sociorent::Application.routes.draw do
   ##P2P Routes
   namespace :p2p do
 
+    root :to => "index#index"
 
     resources :messages
     resources :items
     resources :images
     resources :credits
 
+    #for adimn
     scope 'admin' do
       #scaffold controller and view
       resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries
-
-        root :to => 'categories#index'
+      root :to => 'categories#index'
     end
 
       match 'gettemplate' => 'items#downloadtemplate'
 
-      get "categories/set_category" => "categories#set_category"
-      get "categories/sub_category" => "categories#sub_category"
+#      get "categories/set_category" => "categories#set_category"
+#      get "categories/sub_category" => "categories#sub_category"
 
       match 'getcategories' => "categories#getcategories"
+      get 'getbrand/:id' => "categories#get_brands"
 
       match 'getcities' => "cities#list"
 
@@ -99,15 +101,13 @@ Sociorent::Application.routes.draw do
       post 'location' => 'users#setlocation'
       post 'guesslocation' => 'users#guesslocation'
 
+      get 'sellitem' => "items#new"
       post 'items/:id' => 'items#update'
 
       match 'getbook_details/:isbn13' => "items#getbook_details"
-
       get 'getserviceavailability/:itemid/:pincode' => 'service_pincodes#check_availability'
-      get '' => "index#index"
-      get 'sellitem' => "items#new"
-      get 'getbrand/:id' => "items#get_brands"
-      get 'getattributes/:id' => "items#get_attributes"
+
+      get 'getattributes/:id' => "categories#get_attributes"
       get 'getspec/:id' =>  "items#get_spec"
       get 'getsubcategories' => "items#get_sub_categories"
       get 'welcome' => 'users#welcome'
@@ -132,8 +132,8 @@ Sociorent::Application.routes.draw do
       match 'waiting(/user/:id)' => 'items#waiting'
       get  'favourites' => 'users#favouriteusers'
       post 'favourites' => 'users#setfavourite'
-      match 'vendors(/:cmd)' => 'users#vendorsdetails' 
-      
+      match 'vendors(/:cmd)' => 'users#vendorsdetails'
+
 
       #post 'payments' => 'users#userpayments'
 
@@ -208,6 +208,7 @@ Sociorent::Application.routes.draw do
   root :to => 'home#index'
 
   match '/system/*a', :to => 'errors#ignore_routing'
+    match '/assets/*a', :to => 'errors#ignore_routing'
 
   match '*a', :to => 'errors#routing'
   # See how all your routes lay out with "rake routes"

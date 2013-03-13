@@ -13,13 +13,14 @@
 	<%= f.fields_for :products do |product| %>
 	  <%= product.label  :name ,"Product" %>	
 	  <%= product.text_field  :name %>
-	  <%= product.link_to_remove "Remove this Product" %>
+	  <%= product.link_to_remove '<i class="icon-trash"></i>'.html_safe %>
 	<% end %>
 
-	<%= f.fields_for :specs do |spec| %>
+	<%= f.fields_for  :specs do |spec| %>
 	  <%= spec.label  :name ,"Specification" %>	
 	  <%= spec.text_field  :name %>
-	  <%= spec.link_to_remove "Remove this Spec" %>
+	  <%= spec.input  :show_filter ,inline_label: true ,:label => false %>
+	  <%= spec.link_to_remove '<i class="icon-trash"></i>'.html_safe %>
 	<% end %>
 
 	<p><%= f.link_to_add "Add a Spec", :specs %></p>

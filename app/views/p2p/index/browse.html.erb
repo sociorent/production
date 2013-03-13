@@ -1,0 +1,123 @@
+<% content_for :pagetitle  do %>
+
+	Browsing
+
+	<% if params.has_key?(:prod)  %>
+		<%= @products.first.name %>
+	<% else %>
+		<%= @cat.name %>
+	<% end %>
+
+
+<%end %>
+
+
+<div id="Itemlist" class="row">
+	<div class="span3">
+
+		<%= render '/p2p/menu_partial/browse_menu' , :category => @cat %>
+
+		<div id="filter" class="">
+		    <%= render "p2p/index/filter" , :category => @cat %>
+		</div>
+	</div>
+
+<div class="span9">
+
+<div class="navbar">
+  <div class="navbar-inner results_top_loading">
+  	<a href="/p2p/<%=params["cat"]%>" id="browse_head"><%=params["cat"]%></a>
+
+  	<span id="filter_loading_image" class="hide" > Loading <img src="/assets/loading.gif"> </span>
+
+		<select class="pull-right" id="filter_sort">
+			<option value="0">Relevance</option>
+			<option value="1">Price Hight to low</option>
+			<option value="2">Price Low to high</option>
+		</select>
+  </div>
+</div>
+
+<div id="items">
+		<% prod_count = 0 %>
+
+		<% @products.each do |prod| %>
+
+			<% next if prod.items.by_location_or_allover(p2p_get_user_location).approved.notsold.count == 0 %>
+
+
+			<% prod_count = 0 %>
+
+					      <div class="itemsRow">
+					        <div id="listHeader" class="row"><a href='<%= URI.encode("/p2p/#{@cat.name}/#{prod.name}")%>'>
+					          <p class="header_title"> <b><%= prod.name.titlecase %> </b></p>
+					          <% if @products.count > 1 %>
+					          	<p class="header_view_all">View All</p>
+					          <% end %></a>
+					        </div>
+
+			        <ul class="thumbnails" id="filter_replace">
+
+			        <% if params.has_key?(:prod) %>
+			        	<% items = prod.items.by_location_or_allover(p2p_get_user_location).approved.notsold.paginate(:page => params[:page] ,:per_page => 20 ) %>
+			        <% else %>
+						<% items = prod.items.by_location_or_allover(p2p_get_user_location).approved.notsold.paginate(:page => params[:page] ,:per_page => 10 ) %>
+			        <% end %>
+
+			      <% items.each do |p| %>
+
+							<li class="span3 aitem_holder">
+								<div class="thumbnail">
+									<a href="<%= URI.encode("/p2p/#{p.category.name}/#{p.product.name}/#{p.title}")%>">
+										<div class="aitem_left">
+											<img src="<%=p.get_image(1,:search)[0][:url]%>" >
+										</div>
+									</a>
+
+									<div class="aitem_right">
+										<a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+											<div  title="<%= p.title %>">
+												<div class="item_title"><%= p.title.truncate(20).titleize  %></div>
+											</div>
+										</a>
+										<div class="item_category">
+											<a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+												<%= p.product.name  %>
+											</a>
+											<a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+											<%= p.category.name  %>
+											</a>
+										</div>
+										<div class="item_condition"><%=p.condition%></div>
+										<div class="item_price"><del>&#2352;</del> <%=p.price %>
+									</div>
+
+									<div class="buy_now"><a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">Buy Now</a></div>
+									<div class="clearfix"></div>
+								</div>
+								<div class="clearfix"></div>
+							</li>
+			      <% end %>
+
+			      <div id="load_more_content"></div>
+
+			      </ul>
+
+			    <% if params.has_key?(:prod) and !items.next_page.nil? %>
+		   		    <div id="load_more">
+				    	<div class="btn btn-primary">Load More.....</div>
+				    </div>
+			    <% end %>
+
+
+		</div>
+
+	<% end %>
+
+
+</div>
+
+  </div>
+
+ </div>
+

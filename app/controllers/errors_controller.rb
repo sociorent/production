@@ -5,7 +5,7 @@ class ErrorsController < ApplicationController
   end
 
   def ignore_routing
-  	render "errors/errors"
+  	render :nothing=>true
   end
 
   def index

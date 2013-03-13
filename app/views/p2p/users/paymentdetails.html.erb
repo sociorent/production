@@ -1,0 +1,93 @@
+<% content_for :pagetitle  do %>
+
+  
+  Payments 
+    
+<%end %>
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span9">
+
+            <h3>Payment Details</h3>
+
+            <%= will_paginate(@payments , :renderer => BootstrapPagination::Rails) %>
+            <table class="table table-striped table-bordered">
+              <tr>
+
+                <th>Item Title</th>
+                <th>Courier Name</th>
+                <th>Tracking Num</th>
+                <th>Shipping Date</th>
+                <th>Deleviry Date</th>
+            <%if !params.has_key?(:bought)%>
+                <th>Commission</th>
+                <th>Shipping Charge</th>
+                <th>For you</th>
+            <% end %>
+                
+
+
+                <th>Action</th>
+
+              </tr>
+
+            <% @payments.each do |p2p_item_delivery| %>
+              <tr>
+
+                
+                <td><%= p2p_item_delivery.item.title %></td>
+
+
+                <td><%= p2p_item_delivery.courier_name %></td>
+                <td><%= p2p_item_delivery.tracking_no %></td>
+                <td><%= p2p_item_delivery.shipping_date.strftime("%d-%b-%C%y") unless p2p_item_delivery.shipping_date.nil? %></td>
+
+            <%if !params.has_key?(:bought)%>
+
+                <td>
+
+                    <%= p2p_item_delivery.commission %>
+                </td>
+
+                <td>
+                    <%= p2p_item_delivery.shipping_charge %>
+                    
+                </td>
+
+            <% end %>
+
+            <td><%= p2p_item_delivery.delivery_date.strftime("%d-%b-%C%y") unless p2p_item_delivery.delivery_date.nil?  %></td>
+
+
+            <td><%=  p2p_item_delivery.item.price - ((p2p_item_delivery.item.price *  p2p_item_delivery.commission) + p2p_item_delivery.shipping_charge.to_f)  %></td>
+                <td>
+                    <%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_item_delivery_path(p2p_item_delivery) %>
+
+                </td>
+
+            <% end %>
+
+              </tr>
+
+
+            </table>
+
+
+            <%= will_paginate(@payments , :renderer => BootstrapPagination::Rails) %>
+            <br />
+
+            <%#= link_to 'New Item delivery', new_p2p_item_delivery_path %>
+</div></div>

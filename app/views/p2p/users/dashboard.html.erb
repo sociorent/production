@@ -1,0 +1,76 @@
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/p2p/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+	<div class="span9">
+
+			<div class="span8 pull-left ">
+				<h3>Your  Stastics </h3>
+
+
+					Total Items: 
+				    <div class="progress">
+    					 <div class="bar" style="width: 100%;"> <span class="badge dashboard_count_badge"><%= @total_items %></span></div>
+    				</div>
+
+
+					Total Sold
+				    <div class="progress progress-success">
+    					
+    					<div class="bar" style="width: <%= @sold_percentage %>%;"> <span class="badge  dashboard_count_badge"><%= @sold_count %> </span>  </div>
+    				</div>
+
+
+
+
+					Approved
+				    <div class="progress progress-success">
+    					
+    					<div class="bar" style="width: <%= @approved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @approved_count %> </span> </div>
+    				</div>
+
+					Waiting for approval
+				    <div class="progress progress-success">
+    					
+    					<div class="bar" style="width: <%= @waiting_percentage %>%;"> <span class="badge dashboard_count_badge" style="text-align:center"> <%= @waiting_count %> </span> </div>
+    				</div>
+
+
+					Disapproved
+				    <div class="progress progress-success">
+    					
+    					<div class="bar" style="width: <%= @disapproved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @disapproved_count %> </span> </div>
+    				</div>
+	</div>
+
+	<br/>
+
+			<% if false and session[:isadmin]  %>
+				<div class="box span3 pull-left">
+				<div class="box_title"> P2P Stastics </div>
+
+				<ul>
+				<li class="box_element">Total Items : <span id="total_item_count"> <%= P2p::Item.unscoped.notdeleted.count %> </span></li>
+				<li class="box_element">Sold Items : <span id="total_sold_count"> <%= P2p::Item.sold.count %> </span> </li>
+				<li class="box_element">Waiting for Approval: <span id="total_wapproval_count"> <%= P2p::Item.notdeleted.notapproved.count %> </span> </li>
+				<li class="box_element">Disapproved: <span id="total_wapproval_count"> <%= P2p::Item.unscoped.notdeleted.disapproved.count %> </span> </li>
+				</ul>
+				</div>
+
+			<% end %>
+				</div>
+		</div>
+
+	</div>
+
+</div>
+

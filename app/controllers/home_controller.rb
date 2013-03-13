@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   def index
     @user=current_user
     if @user
-      # check if user has mobile ,college, stream 
+      # check if user has mobile ,college, stream
       if @user.mobile_number.nil? || @user.college.nil? || @user.stream.nil?
         redirect_to "/welcome"
         return
@@ -15,7 +15,7 @@ class HomeController < ApplicationController
         cart.save
         session[:sociorent_cart_books_to_rent] = nil
       end
-      
+
       # list of colleges and stream for my account
       @college_names = College.pluck(:name)
       @streams = Stream.pluck(:name)
@@ -33,13 +33,13 @@ class HomeController < ApplicationController
       end
       # orders made by the user
       @orders = @user.orders
-      #referrals by ambassador 
+      #referrals by ambassador
       unless @user.ambassador_manager.nil?
         @users_of_ambassador = Hash.new
         @ambassador = @user.ambassador_manager
         @ambassador.colleges.includes(:users).each do |college|
           # college ambassador count is one and ambassador should not be included
-          if college.ambassadors.count == 1 
+          if college.ambassadors.count == 1
             @users_of_ambassador[college.name] = college.users.where("id <>?",@user.id)
           elsif college.ambassadors.count > 1
             @users_of_ambassador[college.name] = @ambassador.users
@@ -58,7 +58,7 @@ class HomeController < ApplicationController
       if params[:isbn]
         @search = Book.where(:isbn10 => params[:isbn]).first
       end
-      @images = General.first.images
+      #@images = General.first.images
   		render "index"
   	end
   end
@@ -95,9 +95,9 @@ class HomeController < ApplicationController
     end
 
     @books = @books.first(6)
-    
+
      resp[:books] = @books.to_json(:include => :publisher)
-  	
+
     render :json => resp.to_json()
 
   end
@@ -166,9 +166,9 @@ class HomeController < ApplicationController
      user = current_user
      @book = Book.find(params[:book].to_i)
      resp = []
-    
+
      review_resp = []
-    
+
 
     review_resp = JSON.parse @book.reviews.to_json(:include => {:user => {:only => :name}})
     # check if current user is allowed to make a review for this book
@@ -237,12 +237,40 @@ class HomeController < ApplicationController
   def citrus_signature
     require 'openssl'
     merchant_secret_key="d8d6f0e50ba34b74f5e82e26e9d321531ef6619b"
+    random = 0
+    if params[:item_id]
+      unique = 0
+
+      item = P2p::Item.find(params[:item_id])
+      order_amount = item.price
+      until unique == 1
+        r = Random.new
+        random = r.rand(1000000..9999999)
+        if P2p::ItemDelivery.where(:txn_id=>random).count == 0
+          unique =1
+
+          if item.paytype = 3
+            item.item_deliveries.create(:txn_id=>random,:buyer => p2p_current_user,:commission => item.category.commission ,:shipping_charge => item.category.courier_charge)
+          else
+            item.item_deliveries.create(:txn_id=>random,:buyer => p2p_current_user,:commission => item.category.commission ,:shipping_charge => 0 )
+          end
+
+        end
+      end
+      params[:orderAmount] = order_amount
+      params[:merchantTxnId] = random
+    end
+
     sign_text = "#{params[:merchantId]}#{params[:orderAmount]}#{params[:merchantTxnId]}#{params[:currency]}"
-    
+
     # creating HMAC sha1 signature with secret key
     digest  = OpenSSL::Digest::Digest.new('sha1')
     signature = OpenSSL::HMAC.hexdigest(digest, merchant_secret_key, sign_text)
-    render :text=>signature
+    if params[:item_id]
+      render :text=> {"signature" =>signature,"txn_id"=>random ,"time" => (Time.now.to_i * 3000)}.to_json()
+    else
+      render :text=>signature
+    end
   end
 
   def print_label
@@ -258,26 +286,26 @@ class HomeController < ApplicationController
           @shipping_added = true
         end
       end
-    end 
-    render "print_label", :layout=>false 
+    end
+    render "print_label", :layout=>false
   end
 
 
 
   def book_deatils
 
-    
-    unless params[:isbn].nil? 
-   
+
+    unless params[:isbn].nil?
+
      user = current_user
      book = Book.find_by_isbn13(params[:isbn])
 
 
     book1 = Book.find(book.id)
-        
+
     review_resp = JSON.parse book1.reviews.to_json(:include => {:user => {:only => :name}})
-    
-    
+
+
      resp ={
       :id => book.id,
       :name => book.name,
@@ -329,7 +357,7 @@ class HomeController < ApplicationController
 
     render "print_invoice", :layout=>false
   end
-  
+
   private
 
   def intelligent_books(user)
@@ -346,20 +374,20 @@ class HomeController < ApplicationController
     #     case general.intelligent_book
     #       when "All friends"
     #         @intelligent_books += friend.books
-    #       when "Friends in same College"    
+    #       when "Friends in same College"
     #         @intelligent_books += friend.books if friend.college == user.college
-    #       when "Friends in same College and Stream" 
+    #       when "Friends in same College and Stream"
     #         @intelligent_books += friend.books if friend.college == user.college && friend.stream == user.stream
     #     end
     #   end
     # else
       # get users of same college and stream
-    #   
+    #
 
     # new algo for intelligent books
-    @intelligent_books += user.college.books + user.stream.books 
+    @intelligent_books += user.college.books + user.stream.books
     @intelligent_books += Book.first(6-@intelligent_books.count) if @intelligent_books.count < 6
     return @intelligent_books.uniq
   end
-  
+
 end

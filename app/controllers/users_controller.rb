@@ -13,13 +13,13 @@ class UsersController < ApplicationController
     college = College.find(params[:college])
     stream = Stream.find(params[:stream])
     temp_id="#{params[:college][0..2].downcase}-#{rand(1000..1000000)}"
-    while User.where(:unique_id=>temp_id).count>0 
+    while User.where(:unique_id=>temp_id).count>0
       temp_id="#{params[:college][0..2].downcase}-#{rand(1000..1000000)}"
     end
     user.update_attributes(:mobile_number => params[:mobile], :college_id => college.id, :stream_id => stream.id,:unique_id=>temp_id)
-    
-    #send the sms when the user completes signup    
-    sms_text=Sms.where(:sms_type=>"signup").first.content
+
+    #send the sms when the user completes signup
+   # sms_text=Sms.where(:sms_type=>"signup").first.content
     send_sms(user.mobile_number,"Thanks for signing-up with Sociorent.com. Your ID is #{temp_id} . You may now login to place your order. Thank you.")
     render :text => "1"
   end

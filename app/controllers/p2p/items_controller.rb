@@ -158,7 +158,10 @@ class P2p::ItemsController < ApplicationController
       item.updated_at = update_time
       params[:spec].each do |key,value|
         begin
+
           attr = item.specs.find_by_spec_id(key.to_i)
+          # skip if same value
+          next if attr.value == value 
           attr.updated_at = update_time
 
           if value.strip.length == 0  or value == 'undefined'
@@ -166,7 +169,7 @@ class P2p::ItemsController < ApplicationController
             next
           else
             attr.value = value
-
+            attr.save
           end
 
         rescue

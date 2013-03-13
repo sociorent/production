@@ -77,11 +77,13 @@
       select:function(event,elem){
         var category_val = elem.item.label.split(" in ");
 
-        if(category_val[1] != undefined){
-          $("#category option:contains("+ category_val[1] +")").attr("selected","selected")
-        }else if ( elem.item.value[0] == '/'){
+        if ( elem.item.value[0] == '/'){
           window.location.href = window.location.protocol + '//' + window.location.host + elem.item.value;
           return false;
+        }
+
+        if(category_val[1] != undefined){
+          $("#category option:contains("+ category_val[1] +")").attr("selected","selected")
         }
 
         $("#top_search_input").val(elem.item.label);

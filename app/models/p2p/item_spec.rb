@@ -21,7 +21,7 @@ class P2p::ItemSpec < ActiveRecord::Base
   end
 
    after_update do
-   	self.item.itemhistories.create(:approved => false , :columnname => "#{self.spec.name} (#{self.spec.id})" , :newvalue => self.value ,:oldvalue =>  self.value_was ,:created_at => self.updated_at )  if !(:new_record?)
+   	self.item.itemhistories.create(:approved => false , :columnname => "#{self.spec.name} (#{self.spec.id})" , :newvalue => self.value ,:oldvalue =>  self.value_was ,:created_at => self.updated_at )  if !(self.new_record?)
   end
 
 end

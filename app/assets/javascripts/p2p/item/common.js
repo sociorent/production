@@ -6,6 +6,9 @@ $(document).ready(function(){
 	$('#upload_image').click(function(){
      $('#image_upload').trigger('click');
 	});
+	$('#upload_pic').click(function(){
+     $('#image_upload').trigger('click');
+	});
 
 
 	// edit new js
@@ -44,7 +47,7 @@ $(document).ready(function(){
 				if (data.status == 1){
 					var imgid = that.siblings('img').attr("imgid");
 					that.parent().remove();
-					widow.image_count -= 1;
+					window.image_count -= 1;
 					$(".thumbs :first").trigger("click");
 				}
 			}

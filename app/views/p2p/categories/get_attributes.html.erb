@@ -4,7 +4,7 @@
 
 		<%done = true %>
 
-		<%@attr.each do |attr| %>
+		<%@attributes.each do |attr| %>
 				<tr class="cat_spec">
 					<td > <%= attr.name  %></td>
 					<td > 
@@ -46,7 +46,7 @@
 											item_values['price'] = '';
 											item_values['desc'] = '';
 
-											<% ids = @attr.pluck('id') %>
+											<% ids = @attributes.pluck('id') %>
 											<% ids.each do | id | %>
 												$("#item_<%=id%>").text('').editable();
 												item_values['spec']["<%=id%>"] = '';

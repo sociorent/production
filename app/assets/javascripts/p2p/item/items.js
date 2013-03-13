@@ -121,6 +121,13 @@ check_specs =  function(e, params) {
 // edit item form
 edit_item =function(){
 
+		$('#viewcount').addClass('hidden');
+		$("[id^=reqcount_]").addClass('hidden');
+		$("#owner_item").addClass('hidden');
+		$("#payment_btn").addClass('hidden');
+		
+		
+
 		$(".edit_visible").addClass('edit_shown').removeClass('edit_visible');
 
 		$('#clearuploads').removeClass('hidden');
@@ -425,6 +432,11 @@ edit_item =function(){
 
 function cancel_edit(){
 
+			$('#viewcount').removeClass('hidden');
+			$("[id^=reqcount_]").removeClass('hidden');
+			$("#owner_item").removeClass('hidden');
+			$("#payment_btn").removeClass('hidden');
+		
 			$(".action_icon").tooltip('destroy');
 
 			$('#clearuploads').addClass('hidden');
@@ -462,4 +474,5 @@ function cancel_edit(){
 			$("#enable i").attr('title','Edit Listing');
 
 }
+
 

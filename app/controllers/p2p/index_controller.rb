@@ -59,6 +59,12 @@ class P2p::IndexController < ApplicationController
     if params[:query] !="" && ((params[:category]!="" && item_count > 0 ) || params[:category] =="")
       puts "falled in sphinx"
       @result = item.listing_items_by_location(p2p_get_user_location).search(params[:query] ,:match_mode => :any ,:star => true).paginate(:page => params[:page] ,:per_page => 20)
+
+      # //if 0 results dn depend on sphinx
+      if @result.count == 0 
+          @result = P2p::Item.where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
+      end
+
     elsif params[:category]!="" && params[:query] ==""
       puts "Falled in cate"
       @result = item.paginate(:page => params[:page] ,:per_page => 20)
@@ -69,17 +75,36 @@ class P2p::IndexController < ApplicationController
   end
   def get_search_suggestions(query)
     response =[{:label => query ,:value => URI.encode("#{query}")}]
-    result = P2p::Category.search(query ,:match_mode => :any ,:star => true)
-    result.each do |res|
-      response.push( {:label => "#{query} in #{res.name}" , :value => URI.encode("/p2p/#{res.name}")} )
+
+    item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).group('product_id').notsold.approved.select('product_id').search(query ,:match_mode => :any ,:star => true)
+
+    if item_result.count == 0
+      item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).group('product_id').notsold.approved.select('product_id').where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
     end
-    result = P2p::Product.search(query ,:match_mode => :any ,:star => true)
-    result.each do |res|
-      response.push({:label=> "#{query} in #{res.category.name}",:value => "#{res.name}"}) if res.items.count >0
+
+    used_cat =[]
+    item_result.each do |prod|
+    # cat_result = P2p::Category.search(query ,:match_mode => :any ,:star => true)
+    #   result.each do |res|
+    #     response.push( {:label => "#{query} in #{res.name}" , :value => URI.encode("/p2p/#{res.name}")} )
+    #   end
+
+      res = P2p::Product.find(prod.product_id)
+
+      next if used_cat.include?(res.category.id)
+      used_cat.push(res.category.id)
+
+
+      response.push({:label=> "#{query} in #{res.category.name}",:value => "/p2p/#{res.name}"})
     end
-    result = P2p::Item.by_location_or_allover(p2p_get_user_location).notsold.approved.search(query ,:match_mode => :any ,:star => true)
-    puts result.inspect
-    result.each do |res|
+
+    
+    item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).notsold.approved.search(query ,:match_mode => :any ,:star => true)
+    if item_result.count == 0
+      item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).notsold.approved.where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
+    end
+
+    item_result.each do |res|
       response.push({:label=> "#{res.title}" ,:value => URI.encode("/p2p/#{res.product.category.name}/#{res.product.name}/#{res.title}") }) unless res.nil?
     end
     return response
@@ -209,6 +234,11 @@ class P2p::IndexController < ApplicationController
 
         temp.each do |rng|
           item_price += ((item_price.empty?) ? "" : " or ") + ' p2p_items.price ' + rng + " "
+          
+          if item_condition_filter!=""
+              item_condition_filter   += " and "
+          end
+
         end
 
         item_condition_filter += "(#{item_price})"
@@ -217,9 +247,6 @@ class P2p::IndexController < ApplicationController
       # second from the query
       # by parsing each and every filter
 
-      if item_condition_filter!=""
-              item_condition_filter   += " and "
-      end
 
       if params[:filter].has_key?(:model)
         params[:prod] = params[:filter][:model]

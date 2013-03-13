@@ -47,7 +47,7 @@
 
 	          		<!-- display the author button -->
 	          		<%if session[:isadmin]%>
-	          			<span class="btn action_popover" data-title="<i class='icon-user'></i> Owner" data-content="The owner of this item is <%=@item.user.user.name%>(<%=@item.user.user.email%>)." data-placement="bottom" data-trigger="hover" data-html="true"><i class="icon-user"></i> Owner</span>
+	          			<span class="btn action_popover" id="owner_item" data-title="<i class='icon-user'></i> Owner" data-content="The owner of this item is <%=@item.user.user.name%>(<%=@item.user.user.email%>)." data-placement="bottom" data-trigger="hover" data-html="true"><i class="icon-user"></i> Owner</span>
 	          		<% end %>
 
 		             <% if @item.solddate.nil?  %>
@@ -77,7 +77,7 @@
 			                  </a>
              				<% end %>
              					<% if @item.user.id == p2p_current_user.id %>
-	                  		<a href="<%=@payurl%>" class="btn action_popover" data-content="<%=@paytype_content%>" data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom" >
+	                  		<a href="<%=@payurl%>" id="payment_btn" class="btn action_popover" data-content="<%=@paytype_content%>" data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom" >
 		      	           	<i class="action-icon icon icon-gift" title="<%=@paytype_title%>"></i>
 		    	              	Payment
 	  		                </a>
@@ -112,7 +112,7 @@
 		              	<i  class=" icon-white icon-remove-circle action-icon" title="Cancel changes"></i> Cancel
 		              </button>
 
-		              <a href="<%=@item_message_url%>" role="button" class="btn " data-toggle="modal" ><i  d="reqcount_<%=@item.id%>"  class="action-icon icon-envelope" title="View Messages for this listing">  </i>  <%= @item.reqCount %> </a>
+		              <a href="<%=@item_message_url%>" id="reqcount_<%=@item.id%>" role="button" class="btn " data-toggle="modal" ><i   class="action-icon icon-envelope" title="View Messages for this listing">  </i>  <%= @item.reqCount %> </a>
 		            <% end %>
 
 		            
@@ -235,7 +235,7 @@
 	              <!-- load some specs hree -->
 
 	                <% spec_used = [] %>
-	                <% @attr.each do |aspec| %>
+	                <% @attr.limit(4).each do |aspec| %>
 	                  <% spec_used.push(aspec.spec.id)%>
 	                    <tr class="specs">
 	                      <td>
@@ -254,7 +254,7 @@
 	              <%if spec_used.size < @attr.size %>
 	                <tr>
 	                  <td colspan="2">
-	                    <a href="#more_details">View more</a>
+	                    <a href="#more_details">Click here to view more</a>
 	                  </td>
 	                </tr>
 	              <% end %>
@@ -279,23 +279,20 @@
 	        <div class="row">
 	          <div class="span12" id="more_details">
 	            <table class="table table-bordered table-striped">
-	              <colgroup>
-	                <col class="span1">
-	                <col class="span7">
-	              </colgroup>
 	            <thead>
 	              <tr>
-	            	  <th>Specification</th>
+	            	  <th class="span3">Specification</th>
 	                <th>Value</th>
 	              </tr>
 	            </thead>
 	            <tbody>
 	           <!-- load remaining spec -->
               <% (spec_used.count..((@attr.count)-1)).each do |i| %>
+              		<% spec_used.push(@attr[i].spec.id)%>
 	                <tr>
 	                  <td> <%= @attr[i].spec.name %> </td>
 	                  <td>
-	                    <span class="canEdit" data-name="username"  title="<%=@attr[i].name%>"  specname="<%= @attr[i].spec.name %>" specid="<%= @attr[i].spec.id.to_s %>" id="item_<%= @attr[i].spec.id %>" data-placement="right">
+	                    <span class="canEdit" data-name="username"  title="<%=@attr[i].value%>"  specname="<%= @attr[i].spec.name %>" specid="<%= @attr[i].spec.id.to_s %>" id="item_<%= @attr[i].spec.id %>" data-placement="right">
 	                    	<%= @attr[i].value.titleize %>
 	                    </span>
 	                  </td>

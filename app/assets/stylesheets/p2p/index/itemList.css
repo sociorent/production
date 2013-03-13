@@ -201,8 +201,11 @@
 	}
 
 	.aitem_holder .thumbnail .item_category {
-		margin-left:3px;
-		font-style:italic
+		margin-left: 3px;
+		font-style: italic;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;		
 	}
 
 	.aitem_holder .thumbnail .image_holder {

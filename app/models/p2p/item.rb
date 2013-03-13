@@ -101,8 +101,6 @@ class P2p::Item < ActiveRecord::Base
 
         next if ['approveddate','disapproveddate','solddate' , 'updated_at','viewcount','reqCount'].include?(column)
 
-        puts column + ' colun'
-
         next if column =='paytype' and self.changes[:paytype].nil?
 
         self.itemhistories.create(:approved => false , :columnname => column , :newvalue => value[0] ,:oldvalue =>  value[1] )
@@ -116,7 +114,7 @@ class P2p::Item < ActiveRecord::Base
 
     unless changed_column.empty?
 
-        #PrivatePub.publish_to("/user_#{self.user.id}", 'Your changes have been sent to admin for approval' )
+        PrivatePub.publish_to("/user_#{self.user.id}", 'Your changes have been sent to admin for approval' )
         PrivatePub.publish_to("/user_#{admin.id}", "#{self.user.user.name} has changed the data in <a href='/p2p/#{self.category.name}/#{self.product.name}/#{self.title}'>#{self.title}</a> listing and is waiting for your approval." )
 
 
@@ -141,7 +139,7 @@ class P2p::Item < ActiveRecord::Base
                                                   });
 
     end
-
+    return true
   end
 
   def new_item_created
@@ -213,7 +211,7 @@ class P2p::Item < ActiveRecord::Base
 
     end
 
-
+    return true
   end
 
 

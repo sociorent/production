@@ -37,18 +37,39 @@ class ApplicationController < ActionController::Base
   end
 
 
+
+
+  def guess_user_location
+  	begin
+  	    if !session.has_key?(:city) or session[:city] == ""
+	        #todo replace ip from request
+	        #geocode  = Geocoder.search(request[:REMOTE_ADDR])
+
+	        geocode  = Geocoder.search(request.env['REMOTE_ADDR'])
+
+	        puts session.inspect
+
+	        session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
+
+	        puts geocode.inspect
+
+	        city_id = P2p::City.find_or_create_by_name(session[:city]).id
+
+	        session[:city_id] = (city_id.nil? ) ? '' : city_id;
+      	end
+    rescue Exception => ex
+    end
+  end
+
+
   ##P2P layout
   # this selects the layout for the p2p namespace
   def p2p_layout
 
-
 	 if request.xhr? 
 		return false;
 	 else
-
-  	# first find the user location
-  	guess_user_location
-
+		guess_user_location
 		return 'p2p_layout'
 		#return 'application'
 	 end
@@ -100,6 +121,7 @@ class ApplicationController < ActionController::Base
 
   def check_p2p_user_presence
 
+	guess_user_location
 
 	# check for ucrrent user and ignore the user presnce if the user is not logged in
 	if current_user.nil?
@@ -112,28 +134,6 @@ class ApplicationController < ActionController::Base
 	end
 
   end
-
-  def guess_user_location
-  	begin
-  	    if !session.has_key?(:city) or session[:city] == ""
-	        #todo replace ip from request
-	        #geocode  = Geocoder.search(request[:REMOTE_ADDR])
-
-	        geocode  = Geocoder.search(request[:REMOTE_ADDR])
-
-	        session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
-
-	        puts geocode.inspect
-
-	        city_id = P2p::City.find_or_create_by_name(session[:city]).id
-
-	        session[:city_id] = (city_id.nil? ) ? '' : city_id;
-      	end
-    rescue
-    end
-
-  end
-
 
   def to_hash(obj)
      hash = {}; obj.attributes.each { |k,v| hash[k.to_sym] = v }

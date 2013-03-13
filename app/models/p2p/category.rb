@@ -13,7 +13,7 @@ class P2p::Category < ActiveRecord::Base
   #for nested form
   accepts_nested_attributes_for :products ,:allow_destroy => true
   accepts_nested_attributes_for :specs ,:allow_destroy => true
-  scope :main_categories, where("category_id is null and priority is not null").order(:priority)
+  scope :main_categories, where("category_id is null").order(:priority)
 
 
 

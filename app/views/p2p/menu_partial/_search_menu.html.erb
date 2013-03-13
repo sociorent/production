@@ -1,0 +1,14 @@
+
+	
+
+<div id="browse_sub_cat_menu">
+
+	<div id="filter_holder_title"><i class="icon-caret-down"></i> Browse P2P </div>
+	
+		<% P2p::Category.where('category_id is null').each do |cat| %>
+			<div class="sub_category level_1">
+				<%= link_to "#{cat.name}" , "/p2p/#{cat.name}" %>
+			</div>
+		<% end %>
+
+</div>

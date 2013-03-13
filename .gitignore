@@ -21,3 +21,7 @@ public/assets/
 vendor/bundle/
 log/
 .DS_Store
+
+#ignore rubymine files
+.idea
+.idea/*

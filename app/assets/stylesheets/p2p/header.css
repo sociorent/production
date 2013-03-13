@@ -1,0 +1,55 @@
+#header {
+	margin-top: 20px;
+}
+
+.topMenu {
+	padding: 5px;
+	background-color:#F65757;
+	color:white !important;
+	border-radius: 2px;
+	margin-left:4px;
+	font-weight: bold;
+
+}
+ ul.submenu li {
+ 	text-align: left;
+ }
+.search_btn{
+	margin-bottom: 12px;
+}
+
+
+
+#user_location{
+	margin-top: -1px;
+	height: auto;
+	border: none;
+	outline: none;
+	padding: 0px;
+	width:auto;
+	background-color: transparent;	
+	font-weight: bold;
+  display: inline-block;
+  -moz-appearance:none;
+  appearance:none;
+  cursor:pointer;
+	-webkit-appearance: none;    
+
+}
+
+.location_li i{
+	margin-top: 10px;
+	float:left;
+}
+
+@-moz-document url-prefix() {
+  #user_location{
+		margin-top: 6px;
+	}
+}
+
+
+.location_li{
+	margin-top: -0.7em;
+	display: inline-block;
+}

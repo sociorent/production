@@ -1,0 +1,26 @@
+<% content_for :pagetitle  do %>
+    Showing <%= @p2p_spec.name %>  specification -Admin 
+<%end %>
+
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @p2p_spec.name %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @p2p_spec.category.name %>
+</p>
+
+<p>
+  <b>Priority:</b>
+  <%= @p2p_spec.priority %>
+</p>
+
+
+
+<%= link_to 'Edit', edit_p2p_spec_path(@p2p_spec) %> |
+<%= link_to 'Back', p2p_specs_path %>

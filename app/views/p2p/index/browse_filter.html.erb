@@ -1,0 +1,139 @@
+<% content_for :pagetitle  do %>
+
+	Result for
+
+		<%= @cat.name %>
+
+
+<%end %>
+
+
+<div id="Itemlist" class="row">
+	<div class="span3">
+
+		<%= render '/p2p/menu_partial/browse_menu' , :category => @cat %>
+
+	<div id="filter" class="">
+	    <%= render "p2p/index/filter" , :category => @cat %>
+	</div>
+</div>
+
+<div class="span9">
+
+<div class="navbar">
+  <div class="navbar-inner  results_top_loading">
+  	<a href="#" id="browse_head">Results</a>
+
+  	<span id="filter_loading_image" class="hide" > Loading <img src="/assets/loading.gif"> </span>
+
+		<select class="pull-right" id="filter_sort">
+			<option value="0">Relevance</option>
+			<option value="1">Price Hight to low</option>
+			<option value="2">Price Low to high</option>
+		</select>
+  </div>
+</div>
+
+
+<div id="items">
+
+
+
+		      <div class="itemsRow">
+
+			        <ul class="thumbnails">
+
+			        <% @items.each do |itm| %>
+
+			          <li class="span3 aitem_holder">
+
+                        <div class="thumbnail">
+                              	<a href="<%= itm[:url] %>">
+                                  <div class="aitem_left">
+                                        <img src="<%=itm[:img]%>" >
+                                  </div>
+                                </a>
+                              <div class="aitem_right">
+                                 <a href="<%= itm[:url] %>">
+                                  <div  title="<%= itm[:title] %>">
+                                    <div class="item_title"><%= itm[:title].truncate(20).titleize  %></div>
+                                  </div>
+                                </a>
+
+                                <div class="item_category">
+                                  <a href="<%= itm[:prod_url] %>">
+                                    <%= itm[:prod] %>
+                                  </a>
+                                  <a href="<%= itm[:cat_url] %>">
+                                    <%= itm[:cat]  %>
+                                  </a>
+                                </div>
+                                        <div class="item_condition"><%=itm[:condition] %></div>
+                                      <div class="item_price"><del>&#2352;</del> <%=itm[:price] %>
+                                </div>
+                                <div class="buy_now"><a href="<%= itm[:url] %>">Buy Now</a></div>
+                              <div class="clearfix"></div>
+                      </div>
+
+                      <div class="clearfix"></div>
+
+			          </li>
+			      <% end %>
+
+					<div id="load_more_content"></div>
+			      </ul>
+
+	   		    <div id="load_more">
+			    	<div class="btn btn-primary">Load More.....</div>
+			    </div>
+
+			</div>
+	</div>
+
+ </div>
+
+</div>
+
+<div class="remove_onload">
+	<script>
+		//set the filters if we have found it already..
+		var old_filters =<%= raw @view_filter_set.to_json %>;
+
+		$(document).ready(function(){
+
+			//return if no filters
+			if (old_filters == null) return false;
+
+			if ('sort' in old_filters) {
+
+				$("#filter_sort").val(old_filters['sort']);
+				filters['sort']=old_filters['sort'];
+
+			}
+			_.each($('.spec-filter'),function(elm){
+
+
+				if ($(elm).attr('spec-name') in old_filters && ( $.inArray($(elm).attr('spec-value'),  old_filters[$(elm).attr('spec-name')] ) ) !=-1 ){
+
+					spec = $(elm).attr('spec-name');
+					val = old_filters[$(elm).attr('spec-name')][0] ;
+
+					if (!(spec in filters))	filters[spec]=[]
+
+					filters[spec].push(val)
+					$(elm).addClass('active');
+					$(elm).children(".icon-remove").removeClass("hidden");
+				}
+
+			});
+
+
+
+			$(".remove_onload").remove();
+		});
+
+
+
+	</script>
+
+</div>

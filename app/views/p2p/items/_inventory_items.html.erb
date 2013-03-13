@@ -1,0 +1,67 @@
+<%= javascript_include_tag 'p2p/inventory' %>
+<div class="itemsRow">
+  <%= will_paginate(items , :renderer => BootstrapPagination::Rails) unless items.nil? %>
+  <ul class="thumbnails">
+    <%if items.count == 0 %>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <center class="error"> No Items found..! </center>
+    <% else %>
+      <% items.each do |p|%>
+        <% approve_class = ['alert-info','alert-error','alert-success' ,'']%>
+        <% if !p.solddate.nil? %>
+          <% apprval_class = 3 %>
+        <% elsif !p.approveddate.nil? %>
+          <% apprval_class = 2 %>
+        <%elsif !p.disapproveddate.nil? %>
+          <% apprval_class = 1 %>
+        <% else %>
+          <% apprval_class = 0 %>
+        <%end%>
+        <li class="span3 aitem_holder">
+          <div class="thumbnail  alert <%= approve_class[apprval_class] %>">
+            <div class="inventory_actions pull-right">
+              <% if session[:isadmin] && p.disapproveddate.nil? %>
+                 <div class="disapprove_item pull-right" itemid="<%=p.id%>"><i title="Disapprove listing" class="action icon icon-ban-circle"></i></div>
+              <% end %>
+
+              <% if session[:isadmin] && p.approveddate.nil? %>
+                <div class="approve_item pull-right" itemid="<%=p.id%>"><i title="Approve Listing" class="action icon icon-ok"></i></div>
+              <% end %>
+
+              <div class="delete_item pull-right" itemid="<%=p.id%>"></div>
+            </div>
+            <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+              <div class="aitem_left">
+                  <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+              </div>
+            </a>
+            <div class="aitem_right">
+              <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+                <div  title="<%= p.title %>">
+                  <div class="item_title"><%= p.title.truncate(20).titleize  %></div>
+                </div>
+              </a>
+              <div class="item_category">
+                <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+                  <%= p.product.name  %>
+                </a>
+                <a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+                  <%= p.category.name  %>
+                </a>
+              </div>
+              <div class="item_condition"><%=p.condition%></div>
+              <div class="item_price"><del>&#2352;</del> <%=p.price %>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="overlay_seller"> <%= p.user.user.name + "(" +  p.user.user.email  + ")" %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>

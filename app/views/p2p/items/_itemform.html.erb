@@ -1,0 +1,717 @@
+
+<%= stylesheet_link_tag "items/items_manifest"%>
+
+
+						
+
+<div class="main_wrapper">
+	<div class="row">
+
+
+		<div class="span6">
+
+		<ul class="breadcrumb">
+
+					<% if itemid.empty? %>
+
+						  <li><a href="/p2p">Home</a> <span class="divider">/</span></li>
+						  <li> New Listing <span class="divider">/</span></li>
+						  <li> New Listing <span class="divider">/</span></li>
+						  <li> New Title</li>
+
+					<% else %>
+
+					  <li><a href="/p2p">Home</a> <span class="divider">/</span></li>
+					  <li><a href="/p2p/<%=category%>"><%=category.titleize %></a> <span class="divider">/</span></li>
+					  <li><a  href="/p2p/<%=category%>/<%=brand%>"><%=brand.titleize %></a> <span class="divider">/</span></li>
+					  <li class="active "> <%=link_to title.titleize ,{:cat => category ,:prod => brand ,:item => title } %> </li>
+					<% end %>
+
+			</ul>
+
+
+		</div>
+
+		<div class="span6">
+
+
+
+			<% if ownerid.empty?  %>
+
+
+
+			<!-- New Form -->
+		  	<div class="btn-group" id="listing_action">
+			  <button class="btn action_icon"   title="Remove Listing"><i  class=" icon-trash"></i></button>`
+
+			  <button class="btn action_icon"  title="Edit Listing"   id="enable">
+			  			<i  class=" icon-pencil"></i>
+			  </button>
+
+      	</div>
+
+
+			<% elsif p2p_current_user.nil? %>
+
+					<!-- Buyer View -->
+				 <div class="btn-group" id="listing_action">
+
+			 		<!-- contact seller modal  -->
+			 		<!-- Button to trigger modal -->
+
+			 		<% if defined?(paytype) and paytype == "2" %>
+
+						<a href="#head_login_modal" role="button" class="btn btn-primary " data-toggle="modal">Contact Seller</a>
+
+
+					<% elsif paytype == "1" %>
+
+				 		<a class="btn btn-primary action_icon" href="#head_login_modal" data-toggle="modal" title="Receive by courier"><i class="icon-white icon-envelope"> </i> Buy Now </a>
+
+					<% elsif paytype == "3" %>
+
+				 		<button class="btn btn-primary action_white"  title="Best way"> <i class="icon-white icon-star"></i> Buy via sociorent </button>
+
+					<% end %>
+				</div>
+
+
+
+			<% elsif ownerid != p2p_current_user.id.to_s  %>
+
+					<!-- Buyer View -->
+				 <div class="btn-group" id="listing_action">
+
+			 		<!-- contact seller modal  -->
+			 		<!-- Button to trigger modal -->
+
+			 		<% if defined?(paytype) and paytype == "2" %>
+
+			 			<% if p2p_current_user.mobileverified == true %>
+							<a href="#contact_seller_modal" role="button" class="btn btn-primary" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
+						<% else %>
+							<a href="#contact_seller_modal" role="button" class="btn btn-primary hide" data-toggle="modal"  id="contact_seller_modal_button" ><i class="icon-white icon-user"></i>Contact Seller</a>
+
+							<a href="#mobile_verify_modal" id="mobile_verify_modal_button" role="button" class="btn btn-primary" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
+
+							<!-- Modal -->
+							<div id="mobile_verify_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mobile_verify_modallLabel" aria-hidden="true">
+
+							  <div class="modal-header">
+							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							    <h3 id="mobile_verify_modalLabel">Verify your mobile</h3>
+							  </div>
+
+							  <div class="modal-body form-horizontal">
+							  	Before you send a message to seller, verify your mobile.
+
+							  	<div class="control-group">
+							  		<label class="control-label"> Verification Code:</label>
+							  	<div class="controls">
+								  	<button class="btn btn-primary" id="send_verify_code">
+								  		Send
+								  	</button>
+							  	</div>
+							  </div>
+
+							  	<div class="control-group">
+							  		<label class="control-label"> Enter Code:</label>
+
+								  	<div class="controls">
+										<input type="text" id="verify_mobile" class="input text" >
+								  	</div>
+
+							  	</div>
+
+							  	<div class="control-group">
+							  		<label class="control-label"> </label>
+
+								  	<div class="controls">
+										<button class="btn " id="verify_code_submit">Verify Code</button>
+								  	</div>
+
+							  	</div>
+
+							  </div>
+							</div>
+
+
+						<% end %>
+						<!-- Modal -->
+						<div id="contact_seller_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="contact_seller_modallLabel" aria-hidden="true">
+
+						  <div class="modal-header">
+						    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						    <h3 id="contact_seller_modalLabel">Send a Buy Request to seller</h3>
+						  </div>
+
+						  <div class="modal-body">
+						  	Seller aggres to <%=payinfo if defined?(payinfo)%>
+						    <p><%= render 'p2p/messages/compose' , :ownerid => ownerid ,:itemid => itemid ,:message => requestmessage %></p>
+						  </div>
+
+						</div>
+
+
+					<% elsif paytype == "1" %>
+
+					<form id="citruspay_form" method="post" action="https://www.citruspay.com/wnw4zo7md1">
+				<input type="hidden" name="merchantAccessKey" value="FFY8AMUA98AR6E1NNHS9">
+				<input type="hidden" name="secSignature" id="citruspay_signature">
+				<input type="hidden" name="merchantTxnId">
+				<input type="hidden" name="orderAmount" id="OrderAmount" value= "<%= @item.price%>">
+				<input type="hidden" name="currency" value="INR">
+				<input type="hidden" name="reqtime" value="<%= Time.now.to_i * 1000 %>">
+				<input type="hidden" name="returnUrl" value="<%= root_url%>p2p/update_citrus">
+					</form>
+
+				 		<button class="btn btn-primary action_popover" id= "pay_now_citrus_pay">Buy Now </button>
+
+					<% elsif paytype == "3" %>
+
+						<a href="#check_availability_modal" role="button" id="pay_now_citrus_pay" class="btn btn-primary" data-toggle="modal"  ><i class="icon-white icon-star"></i>Buy Now</a>
+						<form id="citruspay_form" method="post" action="https://www.citruspay.com/wnw4zo7md1">
+				<input type="hidden" name="merchantAccessKey" value="FFY8AMUA98AR6E1NNHS9">
+				<input type="hidden" name="secSignature" id="citruspay_signature">
+				<input type="hidden" name="merchantTxnId">
+				<input type="hidden" name="orderAmount" id="OrderAmount" value= "<%= @item.price%>">
+				<input type="hidden" name="currency" value="INR">
+				<input type="hidden" name="reqtime" value="<%= Time.now.to_i * 1000 %>">
+				<input type="hidden" name="returnUrl" value="<%= root_url%>p2p/update_citrus">
+					</form>
+					<!-- Modal -->
+						<div id="check_availability_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="check_availability_modallLabel" aria-hidden="true">
+
+						  <div class="modal-header">
+						    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						    <h3 id="check_availability_modalLabel">Check availability in your area</h3>
+						  </div>
+
+						  <div class="modal-body">
+						  	<p>
+								Enter your pincode to verify the availablity <input type='text' placeholder='Pincode' itemid='<%=itemid%>' id='check_availability'> <span id='availability_check_msg'>
+							</p>
+						  </div>
+
+						</div>
+
+					<% end %>
+
+
+
+					<%if session[:isadmin] %>
+
+							<% unless solddate.nil?  %>
+								<span class="btn "> <i class="action_icon" title="On <%= solddate.strftime("%d-%b-%C%y") %>" >  Listing Sold </i> </span>
+							<%end %>
+
+
+					<%if  deletedate !="" %>
+					  <button class="btn  "  ><i  class=" action_icon icon-check" title="Deleted Listing"></i></button>
+
+					<%end %>
+
+
+					<% end %>
+
+			      </div>
+
+			<% elsif ownerid == p2p_current_user.id.to_s %>
+				  <!-- Seller View -->
+
+			<div class="btn-group" id="listing_action">
+				<!-- check if the item is sold or not -->
+
+				<% unless itemid.empty? %>
+
+					<% if solddate.nil?  %>
+
+						<% if !approvedate.nil? %>
+
+					  			<a href="/p2p/sold/<%= itemid %>" class=" btn"   > <i class="  action_icon  icon-shopping-cart" title="Mark this listing as sold"></i> Mark as sold</a>
+						
+						<% elsif disapproveddate.nil? %>
+
+					  			<a href="#" class="  btn"  > <i class=" action_icon icon-shopping-cart"  title="Listing has not been approved yet"></i> Waiting for approval</a>
+						
+						<% else %>
+					  			<a href="#" class="  btn"  > <i class=" action_icon icon-ban-circle"  title="Disapproved"></i> Disapproved</a>
+
+					  <% end %>
+
+					<% else %>
+						<span class="btn  "> <i class="action_icon" title="On <%= solddate.strftime("%d-%b-%C%y") %>" >  Listing Sold </i> </span>
+					<%end %>
+
+
+
+
+					<% if deletedate.nil? %>
+					  <button class="btn  "  id="delete_button"  itemid="<%=itemid%>"><i  class=" action_icon icon-trash" title="Remove Listing"></i></button>
+					<%end %>
+
+				<% else %>
+
+					  <button class="btn action_popover"  id="new_listing_info" data-html="true" data-content="Get the feel of previewing the listing while you are creating it. <br/><br/> <b>Just follow the guide and you are good to go</b>."  data-trigger="hover" title="Welcome <b><%= p2p_current_user.user.name %></b>" data-delay="{hide:500,show:0}" ><i   class="action_icon icon-list" title="New Listing"></i>New Listing</button>
+
+				<% end %>
+
+
+				  <button class="btn " id="enable"><i  class="action_icon icon-pencil"  title="Edit Listing"></i></button>
+
+				  <button class="btn btn-success hide " id="save"  ><i  class=" action_icon icon-white icon-ok-circle" title="Save changes"></i></button>
+
+				  <button class="btn btn-danger hide " id="cancel" ><i  class=" icon-white icon-remove-circle action_icon" title="Cancel changes"></i></button>
+
+
+		          	<!-- view Request messages modal  -->
+			 		<!-- Button to trigger modal -->
+			 	<% unless itemid.empty? %>
+					<a href="/p2p/messages/#<%=title%>" role="button" class="btn " data-toggle="modal" ><i  d="reqcount_<%=itemid%>"  class="action_icon icon-envelope" title="View Messages for this listing">  </i>  <%=reqcount if defined?(reqcount) %> </a>
+				<% end %>
+
+				<% unless itemid.empty? %>
+				  <button class="btn" id="viewcount" ><i  title="Number of view of this listing" class="action_icon icon-eye-open"></i><%= viewcount %></button>
+				<% end %>
+
+				<% if solddate.nil? %>
+				  	 <% if paytype == "1" %>
+				  	 	<a href="/p2p/itempayment/<%=itemid%>" class="btn action_popover" data-content="You have selected to send this item via courier in <%=payinfo.split(',')[0] %> business days <br/> Click on the button to change it." data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom" >  <i class="action_icon icon icon-gift" title="Send by Courier"></i> Payment</a>
+				  	 <%elsif paytype == "2"%>
+				  	 	<a href="/p2p/itempayment/<%=itemid%>" class="btn  action_popover" data-content="You have selected to deal with the buyer directly <br/> Click on the button to change it." data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom"  > <i class="action_icon icon icon-user" title="PayDirectly"></i> Payment</a>
+					<%elsif paytype == "3"%>
+				  	 	<a href="/p2p/itempayment/<%=itemid%>" class="btn  action_popover" data-content="You have selected sociorent to pickup and safely deliver the item. <br/> Click on the button to change it." data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom"  >  <i class="action_icon icon icon-star" title="Send by sociorent"></i> Payment</a>
+
+				  	 <% end %>
+			<% end %>
+
+
+
+				 </div>
+
+			  <% end %>
+
+			  <% if !itemid.empty? and !p2p_current_user.nil? and session[:isadmin] %>
+
+			  	<% if solddate.nil? %>
+
+			  		<% if approvedate.nil?  %>
+	  				  <button class="btn alert-info"  id="approve" itemid="<%=itemid%>"><i  class="action_icon icon-thumbs-up" title="Approve this listing"></i></button>
+	  				<% end %>
+
+	  				<% if disapproveddate.nil? %>
+	  				  <button class="btn alert-info" id="disapprove"   itemid="<%=itemid%>"><i  class="icon-thumbs-down action-icon" title="DisApprove this listing"></i></button>
+	  				<% end %>
+
+	  			<% end %>
+
+			  <%end %>
+
+
+			</div> <!-- span6 action buttons-->
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="span4">
+			<ul class="thumbnails">
+			  <li class="span4">
+          <div class="thumbnail">
+
+		<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
+
+				<i id="clearuploads" class="icon-trash action_icon pull-right hidden" title="Clear pics uploaded just now" disabled="disabled"></i>
+
+				<div id="upload_pic" title="Upload more photos" class="action_icon pull-right edit_visible"><i class="icon-upload"></i>Upload</div>
+
+				<div class="clearfix"></div>
+
+					  <%= form_tag  "/p2p/items", :multipart => true, :id => "fileupload"   do %>
+				    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+
+				    		<div id="form_temp"></div>
+				          <%= file_field_tag "img[]" ,:id=> "image_upload" ,:multiple  => 'true' ,:disabled => true  ,:accept => "image/*"  %>
+
+				  	<% end %>
+
+        <% end %>
+
+        	<%r = rand(0..(thumbimage.count-1))%>
+        	<div id="view_image_holder">
+
+        		<% unless itemid.empty? %>
+
+	        		<a href="<%=fullimage[r][:url]%>" id="view_image_fancy">
+	            		<img src="<%= viewimage[r][:url] %>" imgid="<%= viewimage[r][:id] %>" alt="Item pic" id="view_image">
+	            	</a>
+	            <% else %>
+		           	<div id="upload_image"></div>
+	            <% end %>
+
+            </div>
+            <div class="caption thumb_holder">
+
+              <ul class="thumbnails">
+
+        		<% unless itemid.empty? %>
+
+
+	        		<% i = 0 %>
+					<% thumbimage.each do |img| %>
+
+
+		              	<li class="thumbs picture_upload_preview">
+							<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
+
+								<% unless itemid.empty? %>
+		              				<i class="icon-remove pull-right remove_image hidden"></i>
+		              			<% end %>
+
+		              		<% end %>
+
+		              		<img src="<%= img[:url]%>"  imgid="<%= img[:id] %>" alt="" id="image_<%= img[:id]%>" class="thumb_img" fancyimg="<%=fullimage[i][:url]%>" viewimage="<%= viewimage[i][:url] %>">
+		              	</li>
+		              <% i += 1 %>
+					<% end %>
+				<% end %>
+<!-- 					<i id="clearuploads" class="icon-repeat action_icon pull-right" title="clear"></i> -->
+
+	      </ul>
+            </div>
+          </div>
+        </li>
+			</ul>
+		</div>
+
+
+		<div class="span6">
+
+			<!-- category and subcategory container -->
+
+			<center><code class="edit_visible"> All words in <span style="color:blue"> blue</span> are editable.Please click on them to edit</code></center>
+
+			<table class="table table-bordered table-striped" id="table_specs">
+            <colgroup>
+              <col class="span1">
+              <col class="span7">
+            </colgroup>
+
+             <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+			<tr class="edit_visible">
+				<td>Title </td>
+				<td> <span class="canEdit action_icon" id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=title.titleize  %></span></td>
+			</tr>
+
+
+			<tr>
+				<td>Category </td>
+				<td> <span class="canEdit action_icon" id="category_item" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=category%></span></td>
+			</tr>
+
+			<tr>
+				<td> <%= (!@item.category.nil? and @item.category.name =="Books") ? 'Publisher' : 'Model'%> </td>
+				<td>
+					<span id="model" class="action_icon "  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ><%=brand%></span>
+
+					<%if itemid.empty? %>
+						<input type="text" id="add_new_model" placeholder="Other Model" size=10>
+					<% end %>
+
+				</td>
+
+			</tr>
+
+            <!-- Price -->
+	          <tr>
+	            <td>
+	              <span class="highlight">Price</span>
+	            </td>
+	            <td>
+	            	<span class="highlight <%= (itemid.empty? ? '' : 'highlight_force_color')%>"> Rs.
+	            		 <span class="canEdit highlight action_icon  <%= (itemid.empty? ? '' : 'highlight_force_color')%>" data-name="username"  title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price"> <%= price  unless price.nil? %> </span>
+	         		</span>
+
+	            </td>
+	          </tr>
+
+            <!-- Location -->
+	          <tr>
+	            <td>
+	             <span class="highlight"> Condition</span>
+	            </td>
+	            <td>
+	             <span class="canEdit highlight action_icon  <%= (itemid.empty? ? '' : 'highlight_force_color')%>" data-name="username" data-type="select" data-source="['Brand New','Like New','Used','Old']" title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" > <%= condition.titleize %> </span>
+	            </td>
+	          </tr>
+
+            <!-- Location -->
+	          <tr>
+	            <td>
+	              <span class="highlight">Location</span>
+	            </td>
+	            <td>
+	             <span class="highlight canEdit action_icon  <%= (itemid.empty? ? '' : 'highlight_force_color')%>" data-name="username"  data-type="typeahead" data-source="/p2p/getcities"  title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" > <%= location.titleize %> </span>
+	            </td>
+	          </tr>
+
+
+	          <!-- load all spec -->
+			<% unless spec.empty? %>
+				<% unless itemid.empty? %>
+					<% spec_used = [] %>
+					<% spec.each do |aspec| %>
+						<% spec_used.push(aspec.spec.id)%>
+			              <tr class="specs">
+			                <td>
+			                  <%= aspec.spec.name %>
+			                </td>
+			                <td>
+			                 <span class="canEdit action_icon" data-name="username"  title="Enter <%= aspec.spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>" data-placement="right"> <%= aspec.value.titleize  unless aspec.value.nil? %> </span>
+			                </td>
+			              </tr>
+			         <% end %>
+		         <% end %>
+
+		         <%if spec_used.size < spec.size %>
+			          <tr>
+			            <td colspan="2">
+			              <a href="#more_details">View more</a>
+			            </td>
+			          </tr>
+		          <% end %>
+
+	         <% end %>
+
+            </tbody>
+          </table>
+		</div>
+	</div>
+	<div class="row">
+		<div id="desc" class="span10">
+			<h4> <%= title.titleize %> Description</h4>
+			<span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="canEdit action_icon" inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= description.html_safe %> </span>
+		</div>
+	</div>
+
+<% unless spec.empty? %>
+	<% unless itemid.empty? %>
+
+		<% if spec_used.size < spec.size %>
+
+			<div class="row">
+				<div class="span12" id="more_details">
+						<table class="table table-bordered table-striped">
+			            <colgroup>
+			              <col class="span1">
+			              <col class="span7">
+			            </colgroup>
+			            <thead>
+			              <tr>
+			                <th>Specification</th>
+			                <th>Value</th>
+			              </tr>
+			            </thead>
+			            <tbody>
+
+					<!-- load remaining spec -->
+
+						<% (spec_used..((spec.size)-1)).each do |i| %>
+				              <tr>
+				                <td>
+				                  <%= spec[i].spec.name %>
+				                </td>
+				                <td>
+				                 <span class="canEdit" data-name="username"  title="<%=spec[i].name%>"  specname="<%= spec[i].spec.name %>" specid="<%= spec[i].spec.id.to_s %>" id="item_<%= spec[i].spec.id %>" data-placement="right"> <%= spec[i].value.titleize %> </span>
+				                </td>
+				              </tr>
+				         <% end %>
+
+			          </tbody>
+			         </table>
+					</div>
+				</div>
+		<% end %>
+     <% end %>
+ <% end %>
+
+
+							<!-- Modal -->
+							<div id="sellitem_pricing_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="sellitem_pricing_modallLabel" aria-hidden="true">
+
+							  <div class="modal-header">
+							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							    <h3 id="sellitem_pricing_modalLabel">Final Step</h3>
+							  </div>
+
+							  <div class="modal-body form-horizontal">
+
+
+							  </div>
+							</div>
+
+					<% if defined? itemspec and (!current_user.nil? and (ownerid == p2p_current_user.id.to_s) ) and !spec_used.nil? and itemspec.count > spec_used.count %>
+
+						<div id="add_more_spec" class="hide">
+							<b>Add More Specification here <br/></b>
+							<table class="table table-bordered table-striped hide" id="empty_specs">
+								<tr>
+									<th>Specification</th>
+									<th>Value</th>
+								</tr>
+
+							<% itemspec.each do |spec| %>
+
+								 <% next if !spec_used.nil?  and spec_used.include?(spec.id) %>
+						              <tr>
+						                <td>
+						                  <%= spec.name %>
+						                </td>
+						                <td>
+						                 <span class="canEdit" data-name="<%=spec.name%>"  title="Enter <%=spec.name%>"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>" data-placement="right">  </span>
+						                </td>
+						              </tr>
+							<%end %>
+							</table>
+						</div>
+					<%end %>
+
+
+
+
+<script>
+
+
+	window.item_id = '<%= @item.id%>';
+	<% if !current_user.nil? and (ownerid == p2p_current_user.id.to_s) %>
+
+		window.editsaveurl = '<%= (itemid.empty?) ? "/p2p/items": "/p2p/items/" + itemid %>';
+		window.editsavetype = '<%= (itemid.empty?) ? "post": "put"%>';
+
+		$("#image_upload").val("");
+		//initialize
+
+		window.image_count =  <%= (itemid.empty?) ? 0 : viewimage.count %>;
+
+		window.item_values ={};
+		item_values['spec']={};
+		window.edit = <%= (itemid.empty?) ? false : true %>;
+
+				<%if !itemid.empty?  and ownerid == p2p_current_user.id.to_s %>
+					item_values['title'] = "<%= title %>";
+					item_values['cat'] = "<%= categoryid %>";
+					item_values['scat'] = "<%= subcategoryid %>";
+					item_values['brand'] = "<%= brandid %>";
+					item_values['price'] = "<%= price %>";
+					item_values['condition'] = "<%= condition %>";
+					item_values['desc'] = $("#desc_content").html();
+					item_values['location'] = "<%=location%>";
+
+					<% spec.each do |aspec| %>
+						item_values['spec']['<%= aspec.spec.id%>'] = "<%= aspec.value %>";
+					<% end %>
+
+
+				<% end %>
+
+	<% end %>
+
+	<% if itemid.empty? %>
+		$(document).ready(function(){
+
+
+
+			$('#enable').trigger("click");
+			console.log('clicked');
+
+
+		});
+
+	<% end %>
+
+
+
+			// <#% if !p2p_current_user.nil? and p2p_current_user.mobileverified == 0 %>
+
+						$(document).ready(function(){
+
+
+
+							  			$("#send_verify_code").click(function(){
+							  				$(this).html('Sending verification code').attr('disabled','disabled');
+
+							  				$.ajax({
+							  					url:'/p2p/users/verifymobile/code',
+							  					type:'post',
+							  					dataType:'json',
+							  					success:function(data){
+							  						if (data.status== 1){
+							  							$("#send_verify_code").removeClass('btn-primary').attr('disabled','disable').html('Code Sent');
+
+							  							$("#verify_code_submit").addClass('btn-primary');
+
+							  						}else{
+							  							showNotifications('Some error occured. Try again.');
+							  							$("#send_verify_code").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+							  						}
+							  					},
+							  					error:function(){
+							  							showNotifications('Some error occured. Try again.');
+							  							$("#send_verify_code").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+
+							  					}
+
+							  				});//ajax
+							  			});//click
+
+
+							  			$("#verify_code_submit").click(function(){
+
+
+							  				if ($("#verify_mobile").val().length  <4){
+							  					alert('Wrong code. Enter the correct code');
+							  					return false;
+							  				}
+
+							  				$(this).html('Verifying code').attr('disabled','disabled');
+
+							  				$.ajax({
+							  					url:'/p2p/users/verifymobile/' + $("#verify_mobile").val(),
+							  					type:'post',
+							  					dataType:'json',
+							  					success:function(data){
+							  						if (data.status== 1){
+							  							$("#mobile_verify_modal").modal('hide');
+							  							$("#mobile_verify_modal_button").remove();
+							  							$("#contact_seller_modal_button").removeClass('hide');
+							  							alert('Sucessfully Verified');
+							  							$("#contact_seller_modal_button").trigger('click');
+
+							  						}else{
+							  							showNotifications('Some error occured. Try again.');
+							  							$("#verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+							  						}
+							  					},
+							  					error:function(){
+							  							showNotifications('Some error occured. Try again.');
+							  							$("#verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+
+							  					}
+
+							  				});//ajax
+							  			});
+
+							  		});
+
+			// <#% end %>
+
+
+</script>
+

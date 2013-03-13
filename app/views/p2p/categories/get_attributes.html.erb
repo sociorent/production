@@ -1,0 +1,120 @@
+
+
+	<tr id="new_spec_holder"></tr>
+
+		<%done = true %>
+
+		<%@attr.each do |attr| %>
+				<tr class="cat_spec">
+					<td > <%= attr.name  %></td>
+					<td > 
+						<span class="specification canEdit" title="Enter <%= attr.name %>" specname="<%= attr.name %>" specid="<%= attr.id.to_s %>"  data-placement="right" data-placeholder="Enter <%= attr.name %>"  id="item_<%= attr.id %>" >
+					</span>
+
+
+					<!-- give isbn fetch on default -->
+				<script>
+					<% if done and attr.name.downcase.starts_with?("isbn")  %>
+
+										
+							$('#model').closest('tr').find('td:first').text('Book Type');
+
+							$('#notificationcontainer').notify('create',{
+								title:'A little to you',
+								text: 'Enter the ISBN 13 and we would fill the details for you if we already have them'
+							});
+
+
+							$("#item_<%=attr.id%>").editable('show');
+
+							$("#item_<%=attr.id%>").on("save",function(e,params){
+								// load books
+								showNotifications('Fetching book deatils');
+								
+								$.ajax({
+									url:'/p2p/getbook_details/' + params.newValue,
+									type:"post",
+									dataType:'json',
+									success:function(data){
+
+
+										if (data == null || data.length == 0 ){
+
+											$("#price").text('').editable();
+											$('#isbn10').text('').editable();
+											$('#desc_content').text('').editable();
+											$('#item_26').text('').editable();
+											$('#item_27').text('').editable();
+											$('#item_28').text('').editable();
+											$('#item_29').text('').editable();
+											$('#item_30').text('').editable();
+											$('#item_38').text('').editable();
+
+											item_values['price'] = '';
+											item_values['desc'] = '';
+											item_values['spec']['26'] = '';
+											item_values['spec']['27'] = '';
+											item_values['spec']['30'] = '';
+											item_values['spec']['28'] = '';
+											item_values['spec']['29'] = '';
+
+										}
+										else{
+											
+
+											// $('#notificationcontainer').notify('create',{
+											// 	title:'Helping you out..!',
+											// 	text: 'We have filled out ceratin details for you. If some are missing please fill the others.'
+											// });
+
+											// $("#price").text(data['price']).editable('toggleDisabled');
+											// $('#isbn10').text(data['isbn10']).editable('toggleDisabled');
+											// $('#desc_content').text(data['description']).editable('toggleDisabled');
+											// $('#item_2').text(data['isbn10']).editable('toggleDisabled');
+											// $('#item_3').text(data['author']).editable('toggleDisabled');
+											// $('#item_4').text(data['publisher_id']).editable('toggleDisabled');
+
+											// $('#model').text(data['publisher_id']).editable('toggleDisabled');
+
+											_.each(data,function(elm){
+												if ($.trim(elm) == ''){
+													elm = '' 
+												}
+											});
+
+											console.log(data);
+
+											$("#price").text(data['price']).editable();
+											$('#desc_content').text(data['description']);
+											$('#item_30').text(data['isbn10']).editable();
+											$('#item_29').text(data['isbn13']);
+											$('#item_26').text(data['author']);
+											$('#item_38').text(data['publisher_id']).tooltip('hide');
+											
+
+											item_values['price'] = data['price'];
+											item_values['desc'] = data['description'];
+											item_values['spec']['30'] = data['isbn10'];
+											item_values['spec']['26'] = data['author'];
+											item_values['brand'] = data['publisher_id'];
+										}
+									},
+									error:function(){
+										showNotifications('Some error occured Try again');
+									}
+								});
+
+							 });//item save
+
+							<% done = false %>
+					<% end %>
+
+				</script>
+
+					</td>
+				</tr>
+
+		<% end %>
+
+
+

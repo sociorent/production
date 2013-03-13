@@ -1,0 +1,123 @@
+<!--Search filter menu cod -->
+<div id="pull_here" class="btn btn-info">Filters </div>
+<div id="overlay"> <img src="/assets/ajax_small.gif" /> Loading..!</div>
+<div id="dummy_filter_holder">
+	<div id="filter_holder_title">Filters</div>
+	<!-- overlay to be displayed during filter request -->
+	<% item_condition_res = category.items.by_location_or_allover(p2p_get_user_location).select("distinct p2p_items.condition").order('p2p_items.condition asc') %>
+	<% if item_condition_res.count > 0 %>
+		<div class="filter_title"> Condition </div>
+		<div class="filters_value">
+			<% item_condition_res.each do |itm| %>
+				<div class="spec-filter">
+					<input  class="spec_filter_check" type="checkbox"  spec-name="condition" spec-value="<%=itm.condition%>">	<span class="spec_filter_check_label"><%= itm.condition %> </span>
+				</div>
+		<% end %>
+	</div>
+	<% end %>
+		<!-- price range -->
+
+	<% item_price_res = (category.items.by_location_or_allover(p2p_get_user_location).select("distinct cast(p2p_items.price as UNSIGNED)").order('p2p_items.price asc')).pluck('price') %>
+
+		<% ranges = item_price_res.inject([]) do |spans, n| %>
+		  <% if spans.empty? || spans.last.last != n - 1 %>
+		    <% spans + [n..n] %>
+		  <% else %>
+		    <% spans[0..-2] + [spans.last.first..n] %>
+		  <% end %>
+		<% end %>
+
+	<% item_model_res = category.products.select("distinct p2p_products.name,p2p_products.id").order('p2p_products.name asc') %>
+	<% if item_model_res.count > 0 %>
+		<div class="filter_title"> <%= (category.name =="Books") ? 'Category' : 'Model'%> </div>
+		<div class="filters_value">
+			<% item_model_res.each do |prod| %>
+				<div class="spec-filter">
+					<input  class="spec_filter_check" type="checkbox"  spec-name="model" spec-value="<%=prod.id%>">	<span class="spec_filter_check_label"><%= prod.name %> </span>
+				</div>
+		<% end %>
+	</div>
+	<% end %>
+
+
+	<% if ranges.count > 0 %>
+		<div class="filter_title"> Price </div>
+		<div class="filters_value">
+			<% ranges.each do |rng| %>
+				<div class="spec-filter">
+					<input  class="spec_filter_check" type="checkbox"  spec-name="price" spec-value="<%=rng%>">	<span class="spec_filter_check_label"><%= rng.to_s.sub('..' , ' to ') %> </span>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
+	
+	<% category.specs.where(:show_filter => 1).each do |spec|%>
+	<% next if spec.itemspecs.select(" distinct value").where("value !=''").count == 0 %>
+	<div class="filter_title"> <%= spec.name %>  </div>
+
+	<!-- show only if more than 11..:) -->
+	<% if (spec.itemspecs.select(" distinct value").where("value !=''").count )  > 11 %>
+		<input type="text" class="filter_spec_input" placeholder="Filter <%=spec.name%>">
+	<% end %>
+
+	<div class="filters_value">
+
+		<% spec.itemspecs.select("distinct value").where("value !=''").order('value asc').each do |itemspec| %>
+		<div class="spec-filter" >
+			<input class="spec_filter_check" type="checkbox" spec-name="<%=spec.name%>" spec-value="<%=itemspec.value%>">		<span class="spec_filter_check_label"><%= itemspec.value	%></span>
+		</div>
+		<% end %>
+	</div>
+	<% end %>
+	<li class="divider"></li>
+	<!-- Template for the search results -->
+	<!-- load only for inital request and not for load more-->
+	<script type="template" id="item_template">
+	<%% if ( window.page_num == 2 ) { %>
+		<ul class="thumbnails" id="filter_replace">
+		<%% } %>
+		<%% _.each(data["res"],function(elm){%>
+			<li class="span3 aitem_holder">
+				<div class="thumbnail">
+				<a href="<%%=elm.url%>">
+					<div class="aitem_left">
+					<img src="<%%= elm.img %>" >
+					</div>
+				</a>
+				<div class="aitem_right">
+				<a href="<%%=elm.url%>">
+					<div>
+						<div class="item_title"><%%=elm.title%></div>
+					</div>
+				</a>
+				<div class="item_category"><a href="<%%= elm.prod_url%>"><%%= elm.prod  %></a><a href="<%%=elm.cat_url%>"><%%= elm.cat %></a>
+				</div>
+				<div class="item_condition"><%%=elm.condition%></div>
+				<div class="item_price"><del>&#2352;</del> <%%=elm.price %>
+				</div>
+				<div class="buy_now"><a href="<%%=elm.url%>">Buy Now</a></div>
+				<div class="clearfix"></div>
+				</div>
+			</li>
+			<%% });%>
+		<div id="load_more_content"></div>
+		<%% if ( (window.page_num == 2  ) && data.next == 1 )  { %>
+			</ul>
+			<div id="load_more">
+			<div class="btn btn-primary">Load More.....</div>
+			</div>
+			<%% }%>
+			</script>
+			<script>
+			window.category="<%=category.name%>";
+
+			window.filterurl= "/p2p/<%=category.name%>/filters";
+
+			</script>
+
+			<%= javascript_include_tag 'p2p/browse_filter' %>
+</div>
+
+
+
+<a href="#" class="scrollup">Scroll Top</a>

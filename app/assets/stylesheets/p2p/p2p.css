@@ -573,3 +573,10 @@ vertical-align: middle;
 #inbox_table_wrapper,#sentbox_table_wrapper,#deletebox_table_wrapper{
 	margin-top: 15px;
 }
+
+#items_status{
+	width: 300px;
+	height: 300px;
+	position: relative;
+	margin: 40px auto;
+}

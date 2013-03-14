@@ -17,6 +17,7 @@
 *= require p2p/header
 *= require index/user_bar
 *= require p2p/jquery.fancybox-1.3.4
+*= require global/chosen
 *= require_tree .
 */
 

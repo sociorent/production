@@ -7,26 +7,26 @@ class P2p::UsersController < ApplicationController
   def dashboard
     #find the total items and convert them to the
     #% based on the totalitem count
-    @total_items = p2p_current_user.items.unscoped.notdeleted.count.to_f
+    @total_items = p2p_current_user.items.count.to_f
     @sold_count = p2p_current_user.items.sold.count.to_f
     if @sold_count == 0
       @sold_percentage = 0
     else
       @sold_percentage = ((@sold_count/@total_items) * 100 ).ceil
     end
-    @waiting_count = p2p_current_user.items.unscoped.notsold.waiting.count.to_f
+    @waiting_count = p2p_current_user.items.waiting.count.to_f
     if @waiting_count == 0
       @waiting_percentage = 0
     else
       @waiting_percentage = ((@waiting_count/@total_items) * 100 ).ceil
     end
-    @disapproved_count = p2p_current_user.items.unscoped.notsold.disapproved.count.to_f
+    @disapproved_count = p2p_current_user.items.disapproved.count.to_f
     if @disapproved_count == 0
       @disapproved_percentage = 0
     else
       @disapproved_percentage = ((@disapproved_count/@total_items) *100 ).ceil
     end
-    @approved_count = p2p_current_user.items.unscoped.notsold.approved.count.to_f
+    @approved_count = p2p_current_user.items.notsold.approved.count.to_f
     if @approved_count == 0
       @approved_percentage = 0
     else
@@ -39,6 +39,11 @@ class P2p::UsersController < ApplicationController
     @disapproved_count= @disapproved_count.to_i
     @approved_count = @approved_count.to_i
     @waiting_count =  @waiting_count.to_i
+    @view_counts = p2p_current_user.items.notsold.select("title,viewcount").order("viewcount desc").limit(10)
+    @count_items =[]
+    @view_counts.each do |item|
+      @count_items << "['#{item.title}',#{item.viewcount}]"
+    end
   end
 
   def list
@@ -67,7 +72,7 @@ class P2p::UsersController < ApplicationController
       return
     end
     #get image
-    unless p2p_current_user.nil?
+    unless session[:userid].nil?
       user=p2p_current_user
       redirect_to '/p2p'
       return
@@ -77,11 +82,11 @@ class P2p::UsersController < ApplicationController
   #send the first time initializing messages..
   def user_first_time
     admin =P2p::User.find_by_user_id(session[:admin_id])
-    if p2p_current_user.nil?
+    if session[:userid].nil?
       user = P2p::User.new
       user.user = current_user
       user.save
-      admin.sent_messages.create({:receiver_id => p2p_current_user.id ,
+      admin.sent_messages.create({:receiver_id => session[:userid] ,
                                   :message => "Hi #{p2p_current_user.user.name},  <br/> Welcome to Peer2Peer. This is an online platform for you to sell and buy products from other students in any college across india. Make most use of the site. Any queries, just compose a message and send it to me in message section. Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                   :messagetype => 6,
                                   :sender_id => admin.id,
@@ -147,7 +152,7 @@ class P2p::UsersController < ApplicationController
   def verifycode
     if session.has_key?(:verify) and params[:code] == session[:verify].to_s
       session.delete(:verify)
-      user = P2p::User.find(p2p_current_user.id)
+      user = P2p::User.find(session[:userid])
       puts user.inspect + 'user'
       user.update_attributes(:mobileverified => 1)
       puts user.inspect + 'user1'
@@ -193,6 +198,78 @@ class P2p::UsersController < ApplicationController
     end
   end
 
+  def getusers
+
+
+    
+    response={:aaData => []}
+    #where to start
+    if params.has_key?("iDisplayStart")
+      start = (params[:iDisplayStart].to_i / params[:iDisplayLength].to_i) + 1
+    else
+      start = 1
+    end
+    #order by the time by default
+    order = "updated_at desc"
+
+    #if sort is explicitly sennt from the client
+    if params.has_key?(:iSortCol_0)
+      case params[:iSortCol_0]
+      when "4" #based on time column
+        order = "updated_at " + params[:sSortDir_0]
+      when "1" #based on sender column
+        #check the table and sent the order by 
+          order = "id " + params[:sSortDir_0]
+        #based on item
+      end
+    end
+
+    #find for which items is the request came for 
+    # and get messages appropiatly
+    if params[:query] == 'vendors'
+      usertype = 1
+    elsif params[:query] == 'users'
+      usertype = 0
+    end
+
+    if params[:searchq]
+      users = User.where("email like '%#{params[:searchq]}%'")
+      users = users.pluck('id') 
+      users << 0
+      vendors = P2p::User.where("id in (#{users.join(',')}) and user_type = #{usertype}").paginate(:page => start,:per_page =>  params[:iDisplayLength] )
+    else
+      vendors = P2p::User.where("user_type = #{usertype}").paginate(:page => start,:per_page => params[:iDisplayLength] )
+    end
+
+    # form the response for the datatable
+    response[:iTotalRecords] =  vendors.count
+    response[:iTotalDisplayRecords] = vendors.count
+    #form the time to be displayed
+    vendors.each do |vendor|
+      tme =Time.now - vendor.created_at
+      if tme >= 86400
+        tme =  (tme/86400).to_i.to_s + " days ago"
+      elsif tme >=3600
+        tme =  (tme/3600).to_i.to_s + " hr ago"
+      else
+        if (tme/60).to_i > 2
+          tme = (tme/60).to_i.to_s + "min ago"
+        else
+          tme =  "about a min ago"
+        end
+      end
+
+      response[:aaData].push({
+                               "0" => "<input type='checkbox' class='vendor_check' userid='#{vendor.id}' >",
+                               "1" => vendor.user.name,
+                               "2" => vendor.user.email,
+                               "3" => tme
+
+      })
+    end
+    render :json => response
+end
+
   # Vendor
   #toggle vendors based on the params
   #set set the vendor,
@@ -200,14 +277,12 @@ class P2p::UsersController < ApplicationController
   def vendorsdetails
     if params.has_key?(:cmd)
       if params[:cmd] == 'set'
-        params[:user].each do |user_id|
+        params[:userid].each do |user_id|
           user = P2p::User.find(user_id.to_i)
           user.update_attributes(:user_type => 1)
         end
       elsif params[:cmd] == 'remove'
-
-        users =  params[:user] - params[:user_old]
-        users.each do |user_id|
+        params[:userid].each do |user_id|
           user = P2p::User.find(user_id.to_i)
           user.update_attributes(:user_type => 0)
         end
@@ -215,9 +290,45 @@ class P2p::UsersController < ApplicationController
         redirect_to '/p2p/vendors' ,:notice => 'Nothing found for your request'
         return
       end
+
+      if request.xhr?
+        render :json => {:success => 1}
+      end
     end
+
+
     #get vendors
     @vendors=P2p::User.where('user_type = 1').paginate(:page => params[:vendor_page],:per_page => 20 )
     @users=P2p::User.where('user_type = 0').paginate(:page => params[:user_page],:per_page => 20 )
   end
+
+  def show_jobs
+    
+    if  params.has_key?(:job)
+
+      case params[:job]
+      
+        when 'bulk'
+          if params[:cmd] ='start'
+            Kernel.spawn("bundle exec rails runner '#{Rails.root.join('lib/update_vendor_items.rb')}'")
+          end
+      end
+
+      redirect_to '/p2p/admin/jobs'
+      return
+    end
+
+
+    if File.exist?(Rails.root.join('log/update_bulk_vendor.lock'))
+        @vendor_upload = "Vendor Bulk uploads is currently running"
+        @icon_class = 'icon-spin'
+         @run_bulk_upload =  false
+      else
+        @vendor_upload = "Bulk uploads is  currently not running"
+        @icon_class = ''
+        @run_bulk_upload = true
+    end
+
+  end
+
 end

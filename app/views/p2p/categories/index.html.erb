@@ -1,7 +1,7 @@
 
 
 <% content_for :pagetitle  do %>
-    Categories  -Admin 
+    Categories  -Admin
 <%end %>
 
 
@@ -46,7 +46,7 @@
         <td> <%= p2p_category.priority %></td>
         <td> <%= p2p_category.commission %></td>
         <td> <%= p2p_category.courier_charge %></td>
-        
+
         <td> <%= p2p_category.category.name unless p2p_category.category.nil? %></td>
 
         <td><%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_category_path(p2p_category) %>

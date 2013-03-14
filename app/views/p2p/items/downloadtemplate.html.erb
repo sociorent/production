@@ -11,10 +11,12 @@ Download Template <%=p2p_current_user.user.name %>
 
 	<div id="items" class="span9">
 		<%unless  @not_processed.count ==0 %>
-		<h4> Your pending Approval uploaded Files </h4>
-		<% @not_processed.each do |csv_file| %>
-			<p><%= link_to(csv_file.upload_csv_file_name, csv_file.upload_csv.url)%></p>
-		<% end%>
+		<h4> Your pending bulk uploads </h4>
+		<ul id="pending_uploads">
+			<% @not_processed.each do |csv_file| %>
+				<li><%= link_to(csv_file.upload_csv_file_name, csv_file.upload_csv.url)%></li>
+			<% end%>
+		</ul>
 		<% end%>
 		<h4> Upload Bulk Listing </h4>
 		<%= form_tag "/p2p/upload_csv" ,:method => 'post' ,:multipart => true ,:class => 'form-horizontal' do %>

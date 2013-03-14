@@ -396,7 +396,7 @@ edit_item =function(){
  				 params.newValue = $.trim(params.newValue);
 
 			if (params.newValue.length > 20) {
-				item_values['desc'] = params.newValue;
+				item_values['desc'] = escape(params.newValue);
 				$(this).removeClass('error');
 				$("#upload_pic").tooltip('show');
 			}

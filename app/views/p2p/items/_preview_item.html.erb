@@ -1,3 +1,4 @@
+<% states=["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Dadra and Nagar Haveli","Andaman and Nicobar Islands"]%>
 
 <%= stylesheet_link_tag "items/items_manifest"%>
 
@@ -61,7 +62,7 @@
     <div class="span3 pull-right" id="item_top_buy_button">
 
 
-      <% if p2p_current_user.nil? %>
+      <% if session[:userid].nil? %>
 
           <!-- Buyer View -->
           <div class="btn-group" id="listing_action">
@@ -85,7 +86,7 @@
             <% end %>
 
           </div>
-      <% elsif p2p_current_user.id.to_s != @item.user.id %>
+      <% elsif session[:userid].to_s != @item.user.id %>
 
 
           <% if defined?(@item.paytype) and @item.paytype == 2 %>
@@ -215,7 +216,7 @@
               <span id='fb-root'></span>
               <script src='http://connect.facebook.net/en_US/all.js'></script>
               <a class="btn" onclick='postToFeed(); return false;'><i class="icon-facebook-sign"></i> Share</a>
-            <script> 
+            <script>
               FB.init({appId: "424914297573197", status: true, cookie: true});
 
               function postToFeed() {
@@ -238,18 +239,18 @@
 
                 FB.ui(obj, callback);
               }
-            
+
             </script>
 
 
           </span>
-      
-      <%if !p2p_current_user.nil? and p2p_current_user.id.to_s != @item.user.id %>
+
+      <%if !session[:userid].nil? and session[:userid].to_s != @item.user.id %>
 
           <span class="item_top_details_detail btn action_popover" id="itemfavourite"  data-content="You have starred <%=@item.user.user.name%>, which will bring you a notification everytime <%=@item.user.user.name%> lists a new item" data-title="<i class='icon-star '></i> Favourite <%=@item.user.user.name%>" data-trigger="hover" data-placement="top" data-html=true >
 
             <%= ((p2p_current_user.favouriteusers.where(:fav_id => @item.user.id)).count == 0 ) ? "<i class='icon-star '></i> #{@item.user.user.name}".html_safe : "<i class='icon-star already_fav'></i> #{@item.user.user.name}".html_safe %></span>
-      <% elsif p2p_current_user.nil?  %>
+      <% elsif session[:userid].nil?  %>
 
           <a data-toggle="modal" href="#head_login_modal" class="item_top_details_detail btn action_popover"   data-content="Starring <%=@item.user.user.name%> brings you a notification everytime <%=@item.user.user.name%> lists a new item" data-title="<i class='icon-star '></i> Favourite <%=@item.user.user.name%>" data-trigger="hover" data-placement="top" data-html=true   >
             <i class='icon-star'></i> <%= @item.user.user.name %>
@@ -394,8 +395,7 @@
         </td>
       </tr>
 
-
-      <!-- load all spec -->
+     <!-- load all spec -->
       <% unless @attr.empty? %>
               <% @attr.each do |aspec| %>
                   <tr class="specs">
@@ -415,7 +415,33 @@
   <!-- specification end -->
 </div>
 
-</div>
+        <div id="address_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Shipping Address" aria-hidden="true">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3> Shipping Address </h3>
+          </div>
+          <div class="modal-body form-horizontal">
+            <form id="shipping_address_form">
+              <table class="table table-bordered table-striped">
+                <% @address.each_with_index do |(name,value),index| %>
+                  <tr>
+                    <td><%= name.gsub(/address/i,'').humanize.titleize %></td>
+                    <td>
+                      <%if(name=="address_state")%>
+                        <%= select_tag(name,get_states_selected(value).html_safe,:class=>"chosen")%>
+                      <% else%>
+                        <%= text_field_tag("#{name}",value)%>
+                      <% end%>
+                     </td>
+                  </tr>
+                <% end %>
+                <tr><td></td><td><a class="btn" id="conitinue_to_checkout">Continue Shipping</a></td></tr>
+              </table>
+            </form>
+          </div>
+        </div>
+
 
 <script>
 

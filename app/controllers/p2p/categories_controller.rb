@@ -110,7 +110,7 @@ class P2p::CategoriesController < ApplicationController
   # for new item
   def get_attributes
     cat = P2p::Category.find(params[:id])
-    @attr = cat.specs.select("id,name,display_type").all
+    @attributes = cat.specs.select("id,name,display_type")
     #  render :json => @attr
   end
 

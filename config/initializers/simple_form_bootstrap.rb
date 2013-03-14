@@ -42,13 +42,13 @@ SimpleForm.setup do |config|
   config.wrappers :adminform, :tag => 'table', :error_class => 'error' do |b|
     b.use :html5
     b.use :placeholder
-    b.wrapper :tag => 'tr' do |component|
-      component.wrapper :tag => 'td' do  |component1|
-        component1.use :input
-        component1.use :checkbox
+    b.wrapper :tag => 'tr' do |input|
+        input.wrapper :tag => 'td' do |comp|
+          comp.use :input
+          comp.use :label
+        end
       end
     end
-  end
 
 
   # Wrappers for forms and inputs using the Twitter Bootstrap toolkit.

@@ -62,7 +62,7 @@ class P2p::IndexController < ApplicationController
 
       # //if 0 results dn depend on sphinx
       if @result.count == 0 
-          @result = P2p::Item.where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
+          @result = item.listing_items_by_location(p2p_get_user_location).where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
       end
 
     elsif params[:category]!="" && params[:query] ==""
@@ -71,15 +71,17 @@ class P2p::IndexController < ApplicationController
     else
       flash[:notice]="No query has been entered"
       redirect_to "/p2p"
+      return
     end
   end
   def get_search_suggestions(query)
-    response =[{:label => query ,:value => URI.encode("#{query}")}]
+    #response =[{:label => query ,:value => URI.encode("#{query}")}]
+    response =[]
 
     item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).group('product_id').notsold.approved.select('product_id').search(query ,:match_mode => :any ,:star => true)
 
     if item_result.count == 0
-      item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).group('product_id').notsold.approved.select('product_id').where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
+      item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).group('product_id').notsold.approved.select('product_id').where("title like '%#{query}%' or title like lower('%#{query}%')").paginate(:page => params[:page] ,:per_page => 20)
     end
 
     used_cat =[]
@@ -94,14 +96,13 @@ class P2p::IndexController < ApplicationController
       next if used_cat.include?(res.category.id)
       used_cat.push(res.category.id)
 
-
-      response.push({:label=> "#{query} in #{res.category.name}",:value => "/p2p/#{res.name}"})
+      response.push({:label=> "#{query} in #{res.category.name}",:value => "#{res.name}"})
     end
 
     
     item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).notsold.approved.search(query ,:match_mode => :any ,:star => true)
     if item_result.count == 0
-      item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).notsold.approved.where("title like '%#{params[:query]}%' or title like lower('%#{params[:query]}%')").paginate(:page => params[:page] ,:per_page => 20)
+      item_result = P2p::Item.by_location_or_allover(p2p_get_user_location).notsold.approved.where("title like '%#{query}%' or title like lower('%#{query}%')").paginate(:page => params[:page] ,:per_page => 20)
     end
 
     item_result.each do |res|

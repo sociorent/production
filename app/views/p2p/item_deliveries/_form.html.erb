@@ -5,7 +5,7 @@
 
 
 
-<% if session[:isadmin]  or @p2p_item_delivery.item.user.id == p2p_current_user.id %>
+<% if session[:isadmin]  or @p2p_item_delivery.item.user.id == session[:userid] %>
 
     <div class="control-group">
 
@@ -48,7 +48,7 @@
 
 <% end %>
 
-<% if session[:isadmin]  or @p2p_item_delivery.buyer.id == p2p_current_user.id %>
+<% if session[:isadmin]  or @p2p_item_delivery.buyer.id == session[:userid] %>
 
  	<div class="control-group">
 

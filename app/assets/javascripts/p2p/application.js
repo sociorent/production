@@ -31,9 +31,15 @@
 //= require p2p/select2
 //= require private_pub
 //= require p2p/jquery.history
+//= require p2p/jqplot.min
+//= require p2p/jqplot.barRenderer.min
+//= require p2p/jqplot.pointLabels
+//= require p2p/jqplot.pieRenderer.min
+//= require p2p/jqplot.categoryAxisRenderer.min
 //= require p2p/jquery-scrolltofixed-min
 //= require p2p/search
 //= require p2p/category_menu
+//= require global/chosen.jquery
 // require_tree .
 
 

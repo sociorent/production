@@ -42,9 +42,8 @@ $(document).ready(function(){
       		$(elem).val(elem.item.label);
       		$("#check_availability_modal").modal('hide');
       		if (elem.item.value == 1 ){
-         		pay_now_citrus_pay();
+         		show_address_model();
          	}
-
       },
       focus:function(){
         return false;
@@ -131,14 +130,14 @@ $('#disapprove').on('click',function(){
 
 
 
-pay_now_citrus_pay =  function(){
+pay_now_citrus_pay =  function(shipping_addr){
 
   showNotifications('Redirecting to Payment Gateway. Please wait...!');
   var merchantId="wnw4zo7md1";
   var orderAmt =$("#OrderAmount").val();
   var signature_data;
   // signature parameter
-  sign_params= "merchantId=" + merchantId + "&item_id=" + window.item_id  + "&merchantTxnId=" + $("input[name=merchantTxnId]").val() + "&currency=INR";
+  sign_params= "merchantId=" + merchantId + "&item_id=" + window.item_id  + "&merchantTxnId=" + $("input[name=merchantTxnId]").val() + "&currency=INR&"+shipping_addr;
   // get the signature hmac sha1 encoded
   $.ajax({
         url:"/getSignature",
@@ -148,13 +147,13 @@ pay_now_citrus_pay =  function(){
         data : sign_params,
         success : function(data){
           showNotifications('Redirecting to Payment Gateway..... Please wait...!');
-          
+
           // set the signature to merchant key
           signature_data = data;
           $("input[name='reqtime']").val(signature_data.time);
           $("input[name='secSignature']").val(signature_data.signature);
           $("input[name='merchantTxnId']").val(signature_data.txn_id);
-          $("#citruspay_form").submit();
+          //$("#citruspay_form").submit();
           // submitting the form to citruspay
           return false;
 
@@ -162,7 +161,7 @@ pay_now_citrus_pay =  function(){
   return false;
 };
 
-$("#pay_now_citrus_pay").live("click",pay_now_citrus_pay);
+$("#pay_now_citrus_pay").live("click",show_address_model);
 
 
   $("#send_verify_code").click(function(){
@@ -227,7 +226,16 @@ $("#pay_now_citrus_pay").live("click",pay_now_citrus_pay);
          });//ajax
     });
 
+
   $('').tooltip('destroy');
-
-
+  $(".chosen").chosen();
 });
+window.show_address_model = function (){
+  $("#address_modal").modal('show');
+  $("#conitinue_to_checkout").click(function(){
+    var shipping_addr = $("#shipping_address_form").serialize()
+    console.log(shipping_addr);
+    pay_now_citrus_pay(shipping_addr);
+    return false;
+  });
+}

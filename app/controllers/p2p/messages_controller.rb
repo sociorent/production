@@ -48,7 +48,7 @@ class P2p::MessagesController < ApplicationController
     @message=P2p::Message.find(params[:id])
     resp =[]
     while !@message.nil?
-      if @message.receiver_id = p2p_current_user.id
+      if @message.receiver_id = session[:userid]
         @message.update_attributes(:receiver_status => 1) if @message.receiver_status != 0
         name = @message.sender.user.name
         id = @message.sender.id
@@ -92,10 +92,10 @@ class P2p::MessagesController < ApplicationController
         end
       elsif params[:tbl] == 'deletebox'
         msg = P2p::Message.deleted(p2p_current_user).find(id)
-        if msg.sender.id == p2p_current_user.id
+        if msg.sender.id == session[:userid]
           msg.update_attributes(:sender_status => 4 )
         end
-        if msg.receiver.id == p2p_current_user.id
+        if msg.receiver.id == session[:userid]
           msg.update_attributes(:receiver_status => 4 )
         end
         deleted_messages.push(id)

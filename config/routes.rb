@@ -80,6 +80,7 @@ Sociorent::Application.routes.draw do
       #scaffold controller and view
       resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries
       root :to => 'categories#index'
+      match 'jobs(/:job(/:cmd))' => 'users#show_jobs'
     end
 
       match 'gettemplate' => 'items#downloadtemplate'
@@ -133,6 +134,8 @@ Sociorent::Application.routes.draw do
       get  'favourites' => 'users#favouriteusers'
       post 'favourites' => 'users#setfavourite'
       match 'vendors(/:cmd)' => 'users#vendorsdetails'
+      match 'getusers(/:query)' => 'users#getusers'
+
 
 
       #post 'payments' => 'users#userpayments'
@@ -152,6 +155,7 @@ Sociorent::Application.routes.draw do
 
       get ':cat/:prod/:item' => 'items#view' ,:as => :item_url
       get ':cat(/:prod)' => "index#browse"
+      match "update_shipping_address" => "users#update_shipping"
 
   end
 

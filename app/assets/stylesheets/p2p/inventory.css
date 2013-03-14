@@ -75,3 +75,7 @@
 #inventory_buttons a.btn-primary{
 	color:white;
 }
+
+#pending_uploads li{
+	list-style-type: disc;
+}

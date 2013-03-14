@@ -87,10 +87,12 @@ class ApplicationController < ActionController::Base
 
 	  	if current_user.nil?
 	  		return nil
+	  		session[:userid] = nil
 	  	else
 	  		user = P2p::User.find_by_user_id(current_user.id)
 
 	  		session[:user_type] = user.user_type
+	  		session[:userid] = user.id
 
 	  		if user.user.is_admin 
 	  			session[:isadmin] = true

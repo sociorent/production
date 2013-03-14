@@ -1,63 +1,48 @@
-
 <div class="row" id="body_content" >
-
      <div class="span3">
-
       <ul class="nav nav-list">
-
         <%= render "/p2p/users/dashboard_menu.html.erb" %>
         <%#= render "/p2p/index/scat_menu" %>
-
       </ul>
     </div>
-
 	<div class="span9">
-
 			<div class="span8 pull-left ">
-				<h3>Your  Stastics </h3>
+					<h3>Your  Statistics </h3>
+				  <div id="items_status"></div>
+				  	<h3>Most Viewed Items</h3>
+				  <div id="users_view_count"></div>
+				<%if false %>
 
+									Total Items:
+								    <div class="progress">
+				    					 <div class="bar" style="width: 100%;"> <span class="badge dashboard_count_badge"><%= @total_items %></span></div>
+				    				</div>
+									Total Sold
+								    <div class="progress progress-success">
 
-					Total Items: 
-				    <div class="progress">
-    					 <div class="bar" style="width: 100%;"> <span class="badge dashboard_count_badge"><%= @total_items %></span></div>
-    				</div>
+				    					<div class="bar" style="width: <%= @sold_percentage %>%;"> <span class="badge  dashboard_count_badge"><%= @sold_count %> </span>  </div>
+				    				</div>
+									Approved
+								    <div class="progress progress-success">
 
+				    					<div class="bar" style="width: <%= @approved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @approved_count %> </span> </div>
+				    				</div>
+									Waiting for approval
+								    <div class="progress progress-success">
 
-					Total Sold
-				    <div class="progress progress-success">
-    					
-    					<div class="bar" style="width: <%= @sold_percentage %>%;"> <span class="badge  dashboard_count_badge"><%= @sold_count %> </span>  </div>
-    				</div>
+				    					<div class="bar" style="width: <%= @waiting_percentage %>%;"> <span class="badge dashboard_count_badge" style="text-align:center"> <%= @waiting_count %> </span> </div>
+				    				</div>
+									Disapproved
+								    <div class="progress progress-success">
 
-
-
-
-					Approved
-				    <div class="progress progress-success">
-    					
-    					<div class="bar" style="width: <%= @approved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @approved_count %> </span> </div>
-    				</div>
-
-					Waiting for approval
-				    <div class="progress progress-success">
-    					
-    					<div class="bar" style="width: <%= @waiting_percentage %>%;"> <span class="badge dashboard_count_badge" style="text-align:center"> <%= @waiting_count %> </span> </div>
-    				</div>
-
-
-					Disapproved
-				    <div class="progress progress-success">
-    					
-    					<div class="bar" style="width: <%= @disapproved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @disapproved_count %> </span> </div>
-    				</div>
-	</div>
-
+				    					<div class="bar" style="width: <%= @disapproved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @disapproved_count %> </span> </div>
+				    				</div>
+					</div>
+			<% end %>
 	<br/>
-
 			<% if false and session[:isadmin]  %>
 				<div class="box span3 pull-left">
 				<div class="box_title"> P2P Stastics </div>
-
 				<ul>
 				<li class="box_element">Total Items : <span id="total_item_count"> <%= P2p::Item.unscoped.notdeleted.count %> </span></li>
 				<li class="box_element">Sold Items : <span id="total_sold_count"> <%= P2p::Item.sold.count %> </span> </li>
@@ -65,12 +50,54 @@
 				<li class="box_element">Disapproved: <span id="total_wapproval_count"> <%= P2p::Item.unscoped.notdeleted.disapproved.count %> </span> </li>
 				</ul>
 				</div>
-
 			<% end %>
 				</div>
 		</div>
-
 	</div>
-
 </div>
-
+<script type="text/javascript">
+$(document).ready(function(){
+    var plot1 = $.jqplot('items_status', [[['Waiting (<%=@waiting_count%>)',<%=@waiting_count%>],['Approved (<%=@approved_count%>)',<%=@approved_count%>],['Disapproved (<%=@disapproved_count%>)',<%=@disapproved_count%>],['Sold (<%=@sold_count%>)',<%=@sold_count%>]]], {
+        gridPadding: {top:20, bottom:38, left:0, right:0},
+        title: 'Statistics of your Items',
+        grid: {
+            drawBorder: false,
+            drawGridlines: false,
+            background: '#ffffff',
+            shadow:false
+        },
+       	seriesColors: ['#006ccc', '#005C16','#D50000','#924D03' ],
+        seriesDefaults:{
+            renderer:$.jqplot.PieRenderer,
+            trendline:{ show:false },
+            rendererOptions: { padding: 20, showDataLabels: true }
+        },
+        legend:{
+            show:true,
+            placement: 'outside',
+            rendererOptions: {
+                numberRows: 4
+            },
+            location:'e',
+            marginTop: '15px'
+        }
+    });
+	var line1= [ <%= raw @count_items.join(",")%>];
+	$('#users_view_count').jqplot([line1], {
+        title:'Top '+line1.length+' Listings of Viewed Items ',
+        seriesDefaults:{
+            renderer:$.jqplot.BarRenderer,
+            rendererOptions: {
+                // Set the varyBarColor option to true to use different colors for each bar.
+                // The default series colors are used.
+                varyBarColor: true
+            }
+        },
+        axes:{
+            xaxis:{
+                renderer: $.jqplot.CategoryAxisRenderer
+            }
+        }
+    });
+	});
+</script>

@@ -44,7 +44,7 @@
             showNotifications("<%=flash[:notice]%>");
           <% end %>
 
-       // <#% if !p2p_current_user.nil? and  p2p_current_user.received_messages.unread.count > 0 %>
+       // <#% if !session[:userid].nil? and  p2p_current_user.received_messages.unread.count > 0 %>
 
         //     $('#notificationcontainer').notify('create',{
         //       title:"Pending Messages",
@@ -56,8 +56,8 @@
   </div>
 
 </body>
-<% unless p2p_current_user.nil? %>
-  <% @notification_channel = "/user_#{p2p_current_user.id}"%>
+<% unless session[:userid].nil? %>
+  <% @notification_channel = "/user_#{session[:userid]}"%>
   <%= subscribe_to @notification_channel %>
 <% end %>
 

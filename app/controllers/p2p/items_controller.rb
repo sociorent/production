@@ -9,7 +9,7 @@ class P2p::ItemsController < ApplicationController
   def new
     @item = p2p_current_user.items.new
   end
-  
+
   #creates the item..
   #the trick here is first time we dn save the item..
   #we simulate the save process
@@ -161,7 +161,7 @@ class P2p::ItemsController < ApplicationController
 
           attr = item.specs.find_by_spec_id(key.to_i)
           # skip if same value
-          next if attr.value == value 
+          next if attr.value == value
           attr.updated_at = update_time
 
           if value.strip.length == 0  or value == 'undefined'
@@ -247,17 +247,17 @@ class P2p::ItemsController < ApplicationController
       #@item = P2p::Item.find(params[:id])
       @cat =  P2p::Category.find_by_name(params[:cat])
       @prod=  @cat.products.find_by_name(params[:prod])
-      if !p2p_current_user.nil? and  session[:isadmin]
+      if !session[:userid].nil? and  session[:isadmin]
         @item = @prod.items.unscoped.find_by_title(params[:item])
       else
         @item = @prod.items.find_by_title(params[:item])
       end
       raise "Nothing found" if   @item.nil?
-      if !p2p_current_user.nil? and @item.paytype.nil? and p2p_current_user.id == @item.user.id
+      if !session[:userid].nil? and @item.paytype.nil? and session[:userid] == @item.user.id
         redirect_to "/p2p/itempayment/#{@item.id}"
         return
       end
-      if (p2p_current_user.nil? and @item.approveddate.nil?) or @item.paytype.nil?
+      if (session[:userid].nil? and @item.approveddate.nil?) or @item.paytype.nil?
         raise "Nothing found paytype and not approved"
       end
     rescue
@@ -275,8 +275,8 @@ class P2p::ItemsController < ApplicationController
       @category_name = @item.product.category.category.name
       @category_id = @item.product.category.category.id
     end
-    if !p2p_current_user.nil?
-      if  p2p_current_user.id != @item.user_id and !session[:isadmin]
+    if !session[:userid].nil?
+      if  session[:userid] != @item.user_id and !session[:isadmin]
         @item.update_attributes(:viewcount => @item.viewcount.to_i + 1 )
       end
     else
@@ -285,12 +285,12 @@ class P2p::ItemsController < ApplicationController
     @brand_name = @item.product.name
     @brand_id = @item.product.id
     @attr = @item.specs(:includes => :attr)
-    if !p2p_current_user.nil? and p2p_current_user.id == @item.user_id
+    if !session[:userid].nil? and session[:userid] == @item.user_id
       @messages = @item.messages.all
-    elsif !p2p_current_user.nil?
+    elsif !session[:userid].nil?
       # intialize the request messages
       @message = @item.messages.new
-      @buyerreqcount = @item.messages.find_all_by_sender_id(p2p_current_user.id).count
+      @buyerreqcount = @item.messages.find_all_by_sender_id(session[:userid]).count
     end
     @fullimage = @item.get_image(0,:view)
     @thumbimage = @item.get_image(0,:thumb)
@@ -310,6 +310,9 @@ class P2p::ItemsController < ApplicationController
     end
     #random image
     @rand_image = rand(0..(@item.get_image(0,:thumb).count-1))
+
+    # load address of the current user
+    @address = JSON.parse(current_user.address) rescue ""
   end
   def inventory
     user = p2p_current_user
@@ -329,7 +332,7 @@ class P2p::ItemsController < ApplicationController
         else
           @items = p2p_current_user.items.sold.paginate(:page => params[:page] , :per_page => 20)
           @user = p2p_current_user.user.name + "(" +  p2p_current_user.user.email  + ")"
-          @user_id = p2p_current_user.id
+          @user_id = session[:userid]
         end
         render :approve
         return
@@ -395,7 +398,7 @@ class P2p::ItemsController < ApplicationController
     else
       @items = p2p_current_user.items.waiting.paginate(:page => params[:page] , :per_page => 20)
       @user = p2p_current_user.user.name + "(" +  p2p_current_user.user.email  + ")"
-      @user_id = p2p_current_user.id
+      @user_id = session[:userid]
     end
     render :approve
   end
@@ -414,7 +417,7 @@ class P2p::ItemsController < ApplicationController
     else
       @items = p2p_current_user.items.disapproved.paginate(:page => params[:page] , :per_page => 20)
       @user = p2p_current_user.user.name + "(" +  p2p_current_user.user.email  + ")"
-      @user_id = p2p_current_user.id
+      @user_id = session[:userid]
     end
     render :approve
   end
@@ -552,7 +555,7 @@ oDeleteBoxTable.fnDraw();
       else
         @items = p2p_current_user.items.approved.notsold.paginate(:page => params[:page] , :per_page => 20)
         @user = p2p_current_user.user.name + "(" +  p2p_current_user.user.email  + ")"
-        @user_id = p2p_current_user.id
+        @user_id = session[:userid]
       end
     end
   end
@@ -572,7 +575,7 @@ oDeleteBoxTable.fnDraw();
     if request.xhr?
       layout :false
     end
-    if p2p_current_user.nil?
+    if session[:userid].nil?
       flash[:notice] = "Nothing found for you request"
       redirect_to '/p2p'
       return
@@ -637,7 +640,7 @@ oDeleteBoxTable.fnDraw();
       require 'csv'
       item = ['Brand','Title','Price','Condition','Location','Description','Send By','All over India','Image Url','Image Url','Image Url']
       if cat.name =="Books"
-        item[0] = 'Publisher'
+        item[0] = 'Book Category'
       end
       item = item + cat.specs.pluck('name')
       csv_string = CSV.generate do |csv|

@@ -5,7 +5,7 @@
 
 
 <!-- if not logged in user or owner or admin show preview -->
-<% if p2p_current_user.nil? or (p2p_current_user.id != @item.user.id and !session[:isadmin] ) %>
+<% if session[:userid].nil? or (session[:userid] != @item.user.id and !session[:isadmin] ) %>
 
     <%= render "/p2p/items/preview_item"  %>
 
@@ -76,7 +76,7 @@
 				                  	Disapproved
 			                  </a>
              				<% end %>
-             					<% if @item.user.id == p2p_current_user.id %>
+             					<% if @item.user.id == session[:userid] %>
 	                  		<a href="<%=@payurl%>" id="payment_btn" class="btn action_popover" data-content="<%=@paytype_content%>" data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom" >
 		      	           	<i class="action-icon icon icon-gift" title="<%=@paytype_title%>"></i>
 		    	              	Payment
@@ -99,7 +99,7 @@
 		              </button>
 	              <% end %>
 
-	              <%if @item.user.id == p2p_current_user.id%>
+	              <%if @item.user.id == session[:userid]%>
 		              <button class="btn " id="enable">
 		              	<i  class="action-icon icon-pencil"  title="Edit Listing"></i>
 		              </button>
@@ -364,7 +364,7 @@
 		item_values['brand'] = "<%= @brand_id %>";
 		item_values['price'] = "<%= @item.price %>";
 		item_values['condition'] = "<%= @item.condition %>";
-		item_values['desc'] = $("#desc_content").html();
+		item_values['desc'] = escape($("#desc_content").html());
 		item_values['location'] = "<%=@item.city.name%>";
 
 	  <% @attr.each do |aspec| %>

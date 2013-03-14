@@ -236,7 +236,7 @@
 
     	$('.master_check').on("click",function(){
     		var tbl=$("#" + $(this).attr("tbl")+ "_id");
-    		tbl.children("tbody tr td .msg_check").attr("checked","checked");
+    		tbl.find("tbody tr td .msg_check").attr("checked","checked");
 
     	});
 
@@ -340,7 +340,14 @@
 
 			$("#reply_to_modal .reply_to_user #p2p_message_receiver_id").val($("#show_msg .message_user_name").attr('recevid'));
 
-			$("#reply_to_user").html($(".message_user_name_content").text());
+			if ($.trim($(".message_user_name_content").text()) == 'Admin'){
+				$("#reply_to_user").html("Sociorent" );
+			}
+			else{
+				$("#reply_to_user").html($.trim($(".message_user_name_content").text()) );
+				
+			}
+
 
 			$("#reply_to_modal .reply_to_user #p2p_message_parent_id").val($(".reply_to_user").attr('msgid'));
 			console.log($("#reply_to_modal"));

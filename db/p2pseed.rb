@@ -5,6 +5,7 @@
 		user1 = User.find_by_email('admin@admin.com')
 		adminuser = P2p::User.new
 		adminuser.user = user1
+		adminuser.user_type = 1
 		adminuser.save
 
 		user1 = User.find_by_email('sen@sen.com')

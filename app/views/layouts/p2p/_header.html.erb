@@ -23,7 +23,7 @@
                   
         
                   <li class="action-icon" title="Messages" data-placement="bottom">
-                    <% unread_count = (p2p_current_user.nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
+                    <% unread_count = (session[:userid].nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
                     <a href="/p2p/messages"><i class="icon-envelope"></i> Messages
                       <span id="header_msg_count"><%= "(#{unread_count})" if  unread_count > 0  %><span>
                   </li>

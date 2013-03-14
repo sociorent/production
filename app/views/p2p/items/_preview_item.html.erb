@@ -415,6 +415,7 @@
   <!-- specification end -->
 </div>
 
+    <% unless session[:userid].nil? %>
         <div id="address_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Shipping Address" aria-hidden="true">
 
           <div class="modal-header">
@@ -441,6 +442,7 @@
             </form>
           </div>
         </div>
+      <% end %>
 
 
 <script>

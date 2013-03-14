@@ -157,6 +157,8 @@ class P2p::IndexController < ApplicationController
         end
       end
     end
+
+
     @products
   end
   

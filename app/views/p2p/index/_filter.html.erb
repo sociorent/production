@@ -19,13 +19,14 @@
 
 	<% item_price_res = (category.items.by_location_or_allover(p2p_get_user_location).select("distinct cast(p2p_items.price as UNSIGNED)").order('p2p_items.price asc')).pluck('price') %>
 
-		<% ranges = item_price_res.inject([]) do |spans, n| %>
-		  <% if spans.empty? || spans.last.last != n - 1 %>
-		    <% spans + [n..n] %>
-		  <% else %>
-		    <% spans[0..-2] + [spans.last.first..n] %>
-		  <% end %>
-		<% end %>
+    <% item_price_res =   item_price_res.in_groups(2) %>
+    
+  <% ranges = [] %>
+  <% item_price_res.insert(0,0)  if item_price_res.count.odd?  %>
+  <% item_price_res.each do |d| %>
+    <% ranges.push((d[0]-1)..(d[1]+1)) %>
+  <% end  %>
+
 
 	<% item_model_res = category.products.select("distinct p2p_products.name,p2p_products.id").order('p2p_products.name asc') %>
 	<% if item_model_res.count > 0 %>

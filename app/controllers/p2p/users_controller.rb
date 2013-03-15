@@ -361,8 +361,75 @@ end
 
   end
 
+
   def cms
     @page = StaticPage.new
+  end
+
+
+
+  def failed_uploads
+
+      #todo : find only for current user
+
+    @failed = P2p::FailedCsv.select('category_id,created_at,count(*) as cnt').group('created_at desc')
+
+  end
+
+  def download_failed
+    if params[:type] == 'csv'
+      @failed = P2p::FailedCsv.select('category_id,csv_data').where("created_at = '#{params[:dte]}'")
+
+
+      if @failed.count == 0
+        redirect_to '/p2p/faileduploads'
+        return
+      end
+
+      cat = P2p::Category.find(@failed[0].category_id)
+      require 'csv'
+      item = ['Brand','Title','Price','Condition','Location','Description','Send By','All over India','Image Url','Image Url','Image Url']
+      if cat.name =="Books"
+        item[0] = 'Book Category'
+      end
+
+      
+      item = item + cat.specs.pluck('name')
+      csv_string = CSV.generate do |csv|
+        csv << item
+        @failed.each do |fail|
+          csv  << CSV.parse_line(fail.csv_data)
+        end
+      end
+
+      send_data(csv_string ,:filename => "Failed #{cat.name} Items.csv")
+      return
+
+    elsif params[:type] == 'reason'
+      @failed = P2p::FailedCsv.select('category_id,reason').where("created_at = '#{params[:dte]}'")
+
+      cat = P2p::Category.find(@failed[0].category_id)
+      
+      if @failed.count == 0
+        redirect_to '/p2p/faileduploads'
+        return
+      end
+      
+      require 'csv'
+      csv_string = CSV.generate do |csv|
+        csv << CSV.parse_line('Find Reasons below. You can match the reasons row by row to the failed item in the Item CSV file')
+        @failed.each do |fail|
+          csv << CSV.parse_line(fail.reason)
+        end
+      end
+
+      send_data(csv_string ,:filename => "Failed #{cat.name} Reasons.csv")
+      return
+
+    else
+      redirect_to '/p2p/faileduploads'
+      return
+    end
   end
 
 end

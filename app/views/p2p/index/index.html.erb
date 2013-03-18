@@ -1,0 +1,86 @@
+<% content_for :pagetitle  do %>
+		Welcome
+<%end %>
+
+	<!-- listing the Categories Browse By category -->
+	<div class="clearfix"></div>
+	<div class="well" id="notice_container">
+				<p><i class="fright icon-remove" id="home_notice"></i></p>
+        <p><b>By the Students, For the Students. Sounds Interesting?</b><br>
+
+Sociorent Street is an online marketplace for Student Only Items. You can list your used items, be it Books, an old MP3 Player which you no longer use, a Pen Drive, Cycle, Mobile Phone and what not...
+Get Buyer Interest from your the same college or from the same city. You can also choose to ship your items anywhere. We'll arrange for a shipping in select cities as of now.
+<br>
+Browse the site and make the most of it!</p>
+      </div>
+	<div  class="row" id="index_menu_holder">
+		<div class="span11">
+		<ul class="btn-group">
+			<%used_cat = [] %>
+				<%used_cat.push(0)%>
+				<% @main_categories.each do |cat|%>
+					<% used_cat.push(cat.id) %>
+					<li class="btn">
+						<a href="/p2p/<%= cat.name %>" ><%= cat.name %></a></li>
+				<% end %>
+			</ul>
+			</div>
+		</div>
+
+		<!-- List Section -->
+		<div id="Itemlist" class="row">
+				<div id="items" class="span12">
+					<% @category_items.each_with_index do |(category_name,items),index| %>
+						<!-- loop and display only if the categories has products and items in it. -->
+							 <div class="itemsRow">
+								<div id="listHeader" class="row"><a href="/p2p/<%= category_name %>">
+									<p class="header_title"> <b><%= category_name %> </b></p>
+									<p class="header_view_all">View All</p></a>
+								</div>
+								<ul class="thumbnails row">
+
+				<!--           order the items by reqcount first, then by view count
+									used to list the most viewed and most wanted items at top
+									#TODO: THE NEW ITEMS WILL NEVER TURN UP TOP IN THE LIST
+
+									SO DO SOMETHING FOR THAT(DISCUSS)
+				-->     <% items.each do |p| %>
+										<li class="span3 aitem_holder">
+												<div class="thumbnail">
+																<a href="<%= URI.encode("/p2p/#{p.category.name}/#{p.product.name}/#{(p.title).gsub(/ /, "-")}/#{p.id}")%>">
+																	<div class="aitem_left">
+																			 <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+																 </div>
+																</a>
+
+															<div class="aitem_right">
+																 <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}/#{p.id}")%>">
+																	<div  title="<%= p.title %>">
+																		<div class="item_title"><%= p.title.truncate(20).titleize  %></div>
+																	</div>
+																</a>
+
+																<div class="item_category">
+																	<a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}") %>">
+																		<%= p.product.name  %>
+																	</a>
+																	<a href="<%= URI.encode("/p2p/#{p.product.category.name}")%>">
+																		<%= p.category.name  %>
+																	</a>
+																</div>
+																				<div class="item_condition"><%=p.condition%></div>
+																			<div class="item_price"><del>&#2352;</del> <%=p.price %>
+																</div>
+																<div class="buy_now"><a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">Buy Now</a></div>
+															<div class="clearfix"></div>
+											</div>
+											<div class="clearfix"></div>
+										</li>
+								<% end %>
+								</ul>
+							</div>
+						<% end %>
+				</div>
+				<!-- List Section -->
+		</div>
+</div>

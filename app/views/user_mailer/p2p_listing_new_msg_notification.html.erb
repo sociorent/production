@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+  	<div>Dear <%= @listing.user.user.name %></div>
+    <p>
+      You have received a message form <%= @user.name %> on your listing <a href="http://localhost:3000/p2p/<%=@listing.category.name%>/<%=@listing.product.name%>/<%=@listing.title%>"> <%=@listing.title%> <br/>
+      Check your message in <a href="http://localhost:3000/p2p/messages">
+    </p>
+    Thank you, <br/>
+    <a href="http://www.sociorent.com/p2p">P2P, Sociorent<s/a>
+  </body>
+</html>

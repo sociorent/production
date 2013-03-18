@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131095528) do
+ActiveRecord::Schema.define(:version => 20130315123005) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -292,6 +292,220 @@ ActiveRecord::Schema.define(:version => 20130131095528) do
     t.string   "status"
   end
 
+  create_table "p2p_categories", :force => true do |t|
+    t.string   "name"
+    t.integer  "category_id"
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
+    t.integer  "priority"
+    t.decimal  "courier_charge", :precision => 3, :scale => 2, :default => 0.0
+    t.decimal  "commission",     :precision => 3, :scale => 2, :default => 0.0
+    t.boolean  "delta",                                        :default => true
+  end
+
+  add_index "p2p_categories", ["category_id"], :name => "index_p2p_categories_on_category_id"
+
+  create_table "p2p_cities", :force => true do |t|
+    t.string   "name"
+    t.string   "latitude"
+    t.string   "longitude"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "pickup",     :default => 0
+  end
+
+  create_table "p2p_credits", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "type",         :default => 1
+    t.integer  "totalCredits"
+    t.integer  "available"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "p2p_credits", ["user_id"], :name => "index_p2p_credits_on_user_id"
+
+  create_table "p2p_failed_csvs", :force => true do |t|
+    t.text     "csv_data"
+    t.integer  "vendor_upload_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "reason"
+    t.integer  "category_id"
+  end
+
+  add_index "p2p_failed_csvs", ["category_id"], :name => "index_p2p_failed_csvs_on_category_id"
+
+  create_table "p2p_favourites", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "fav_id"
+  end
+
+  add_index "p2p_favourites", ["fav_id"], :name => "index_p2p_favourites_on_fav_id"
+  add_index "p2p_favourites", ["user_id"], :name => "index_p2p_favourites_on_user_id"
+
+  create_table "p2p_images", :force => true do |t|
+    t.integer  "item_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "img_file_name"
+    t.string   "img_content_type"
+    t.integer  "img_file_size"
+    t.datetime "img_updated_at"
+  end
+
+  add_index "p2p_images", ["item_id"], :name => "index_p2p_images_on_item_id"
+
+  create_table "p2p_item_deliveries", :force => true do |t|
+    t.string   "courier_name"
+    t.string   "tracking_no"
+    t.string   "shipping_charge"
+    t.datetime "shipping_date"
+    t.datetime "delivery_date"
+    t.string   "citrus_pay_id"
+    t.decimal  "commission",       :precision => 10, :scale => 2
+    t.integer  "p2p_item_id"
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
+    t.string   "txn_id"
+    t.string   "citrus_reason"
+    t.string   "citrus_ref_no"
+    t.integer  "buyer"
+    t.integer  "p2p_status",                                      :default => 0
+    t.text     "shipping_address"
+  end
+
+  add_index "p2p_item_deliveries", ["buyer"], :name => "index_p2p_item_deliveries_on_buyer"
+  add_index "p2p_item_deliveries", ["p2p_item_id"], :name => "index_p2p_item_deliveries_on_p2p_item_id"
+  add_index "p2p_item_deliveries", ["tracking_no"], :name => "index_p2p_item_deliveries_on_tracking_no"
+
+  create_table "p2p_item_histories", :force => true do |t|
+    t.integer  "item_id"
+    t.string   "columnname"
+    t.string   "oldvalue"
+    t.string   "newvalue"
+    t.boolean  "approved"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "p2p_item_histories", ["item_id"], :name => "index_p2p_item_histories_on_item_id"
+
+  create_table "p2p_item_specs", :force => true do |t|
+    t.integer  "spec_id"
+    t.string   "value"
+    t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "p2p_item_specs", ["item_id"], :name => "index_p2p_item_specs_on_item_id"
+  add_index "p2p_item_specs", ["spec_id"], :name => "index_p2p_item_specs_on_spec_id"
+
+  create_table "p2p_items", :force => true do |t|
+    t.integer  "product_id"
+    t.integer  "user_id"
+    t.string   "title"
+    t.text     "desc"
+    t.integer  "paytype"
+    t.datetime "solddate"
+    t.integer  "viewcount",       :default => 0
+    t.integer  "reqCount",        :default => 0
+    t.float    "price"
+    t.integer  "city_id"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.string   "condition"
+    t.datetime "disapproveddate"
+    t.datetime "approveddate"
+    t.string   "payinfo"
+    t.datetime "deletedate"
+    t.boolean  "delta",           :default => true
+  end
+
+  add_index "p2p_items", ["city_id"], :name => "index_p2p_items_on_city_id"
+  add_index "p2p_items", ["product_id"], :name => "index_p2p_items_on_product_id"
+  add_index "p2p_items", ["user_id"], :name => "index_p2p_items_on_user_id"
+
+  create_table "p2p_messages", :force => true do |t|
+    t.integer  "sender"
+    t.integer  "receiver"
+    t.string   "item_id"
+    t.text     "message"
+    t.datetime "readdatetime"
+    t.integer  "messagetype",     :default => 0
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.integer  "sender_id"
+    t.integer  "receiver_id"
+    t.string   "flag"
+    t.string   "sender_status"
+    t.integer  "parent_id"
+    t.string   "receiver_status"
+  end
+
+  add_index "p2p_messages", ["parent_id"], :name => "index_p2p_messages_on_parent_id"
+  add_index "p2p_messages", ["receiver_id"], :name => "index_p2p_messages_on_receiver_id"
+  add_index "p2p_messages", ["sender_id"], :name => "index_p2p_messages_on_sender_id"
+
+  create_table "p2p_products", :force => true do |t|
+    t.string   "name"
+    t.integer  "category_id"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.integer  "priority"
+    t.boolean  "delta",       :default => true
+  end
+
+  add_index "p2p_products", ["category_id"], :name => "index_p2p_products_on_category_id"
+
+  create_table "p2p_service_pincodes", :force => true do |t|
+    t.string   "pincode"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "p2p_specs", :force => true do |t|
+    t.string   "name"
+    t.integer  "display_type", :default => 1
+    t.integer  "parent_id"
+    t.integer  "category_id"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "priority"
+    t.boolean  "show_filter",  :default => false
+  end
+
+  add_index "p2p_specs", ["category_id"], :name => "index_p2p_specs_on_category_id"
+
+  create_table "p2p_users", :force => true do |t|
+    t.integer  "user_id"
+    t.boolean  "mobileverified", :default => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.integer  "user_type",      :default => 0
+    t.string   "mobile_number"
+  end
+
+  add_index "p2p_users", ["user_id"], :name => "index_p2p_users_on_user_id"
+
+  create_table "p2p_vendor_uploads", :force => true do |t|
+    t.boolean  "processed",               :default => false
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.string   "upload_csv_file_name"
+    t.string   "upload_csv_content_type"
+    t.integer  "upload_csv_file_size"
+    t.datetime "upload_csv_updated_at"
+  end
+
+  add_index "p2p_vendor_uploads", ["category_id"], :name => "index_p2p_vendor_uploads_on_category_id"
+  add_index "p2p_vendor_uploads", ["user_id"], :name => "index_p2p_vendor_uploads_on_user_id"
+
   create_table "pincodes", :force => true do |t|
     t.integer  "pincode"
     t.datetime "created_at", :null => false
@@ -299,10 +513,10 @@ ActiveRecord::Schema.define(:version => 20130131095528) do
   end
 
   create_table "publishers", :force => true do |t|
-    t.integer  "rental",     :default => 25
+    t.integer  "rental"
     t.string   "name"
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "rails_admin_histories", :force => true do |t|

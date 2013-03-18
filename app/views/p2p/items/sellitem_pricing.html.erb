@@ -1,0 +1,347 @@
+
+<div id="modal_payment_options">
+
+<h3> Choose Payment Options</h3>
+
+<div class="accordion" id="accordion2">
+
+<% if !@item.city.nil? and @item.city.name == "Bangalore" and @item.category.name !="Books" %>
+
+    <div class="accordion-group">
+
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        <i class="icon icon-star"> </i> Ship via Sociorent
+      </a>
+    </div>
+
+    <% if @item.paytype == 3 %>
+        <div id="collapseTwo" class="accordion-body collapse in">
+    <% else %>
+        <div id="collapseTwo" class="accordion-body collapse ">
+    <% end %>
+
+
+    <%= form_for @item , :url => "/p2p/itempayment/#{@item.id}",:html => {:id => 'sociorent_payment_form'}  do |f| %>
+        <div class="accordion-inner form-horizontal">
+
+          <%= f.hidden_field :paytype  ,:value => 3%>
+
+
+          <div class="control-group">
+            <label class="control-label"> Enter your Full Address with landmark for the pick-up:<br>
+(if the item is sold) </label>
+
+            <div class="controls">
+              <%= f.text_area :payinfo, :rows => "5" %>
+            </div>
+          </div> 
+
+         
+
+          <% sociorent_charges = ( @item.category.courier_charge + ( @item.price * (4.to_f/100.00))).ceil   %>
+
+          <div class="control-group">
+            <label class="control-label"> Sociorent Charges:</label>
+
+            <div class="controls">
+              <span class="highlight"> Rs. <%= sociorent_charges %> </span> (Courier charges + 4% of list price)
+             
+              
+
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label"> Amount you'll receive: Rs </label>
+
+            <div class="controls">
+              <%=@item.price.ceil%> - <%= sociorent_charges %> = <span class="highlight">Rs. <%= (@item.price - sociorent_charges).ceil %></span>
+
+              
+            </div>
+          </div>
+
+
+
+
+          <div class="control-group">
+            <label class="control-label">  Terms and conditions</label>
+
+            <div class="controls">
+              <%= check_box_tag 'terms'%>  I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.
+              <a href="#terms_and_conditions_modal" role="button" class="aslink terms_and_conditions_button" data-toggle="modal">Terms and conditions</a>
+              
+              <a href="#buyer_protection_modal" role="button" class="aslink"  id="buyer_protection_button" data-toggle="modal">Buyer Protection</a>
+
+            <!-- Modal -->
+            <div id="buyer_protection_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="buyer_protection_`lLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="buyer_protection_modalLabel">Terms and conditions</h3>
+              </div>
+              <div class="modal-body">
+                <p>
+                  <%= StaticPage.find_by_page_name('buyer_protection').page_content %>
+
+                </p>
+
+              </div>
+            </div>
+
+
+            </div>
+          </div>
+
+          <div class="control-group">
+
+            <div class="controls">
+              
+                  <%= f.submit "Create Listing", :id=>'sociorent_payment_submit',:class => 'btn btn-primary'  %>
+         
+
+            </div>
+          </div>
+
+
+
+
+        </div>
+        </div>
+        </div>
+
+    <% end %>
+
+<% end %>
+
+
+<div class="accordion-group">
+
+  <div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+      <i class="icon icon-gift"> </i> Ship yourself through Courier
+    </a>
+  </div>
+
+  <% if @item.paytype == 1 %>
+      <div id="collapseOne" class="accordion-body collapse  in">
+  <% else %>
+      <div id="collapseOne" class="accordion-body collapse ">
+  <% end %>
+
+  <div class="accordion-inner form-horizontal">
+
+    <%= form_for @item , :url => "/p2p/itempayment/#{@item.id}"  ,:html => {:id=> 'courier_payment_form' }  do |f| %>
+
+        <%= f.hidden_field :paytype  ,:value => 1%>
+
+
+        <div class="control-group">
+          <label class="control-label"> Cities you would courier to: </label>
+
+          <div class="controls">
+            <%#= f.collection_select :city ,P2p::City.all ,:id , :name  %>
+            <%= @item.city.name %>
+          </div>
+        </div>
+
+
+
+        <div class="control-group">
+          <label class="control-label"> Days to Dispatch </label>
+
+
+
+          <div class="controls">
+            <%= select_tag "dispatch_day" ,options_for_select([ ['1 Business Days',1],['2 Business Days',2],['3 Business Days',3],['4 Business Days',4],['5 Business Days',5] ] , ( (@item.payinfo.nil?) ? 1 : @item.payinfo.split(',')[0].to_i ) ) %>
+
+          </div>
+        </div>
+
+
+        <div class="control-group">
+          <label class="control-label">  Do you ship all over India: (Inlude the shipping charges in the product price)</label>
+
+          <div class="controls">
+            <%= check_box_tag 'alloverindia' %>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"> Sociorent Charges: </label>
+
+          
+
+          <% sociorent_charges = ( @item.price * (4.to_f/100.00)).ceil   %>
+
+
+          <div class="controls">
+            <span class="highlight"> Rs. <%= sociorent_charges %> </span> (4% of the list price)
+            <!--
+<code class="popover" data-content="Charges are subject to change." data-title="Information" data-html="true" data-delay="{show:0,hide:500}" data-trigger="hover"></code> -->
+
+            
+
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"> Amount you'll receive: Rs.  </label>
+
+          <div class="controls">
+                                        <span class="highlight"> <%=@item.price %> - <%= sociorent_charges %>
+                                          = Rs. <%= @item.price -  sociorent_charges %> </span>  
+
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">  Terms and conditions</label>
+
+          <div class="controls">
+            <%= check_box_tag 'terms'%>  I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.<a href="#terms_and_conditions_modal" role="button" class=" aslink terms_and_conditions_button" data-toggle="modal">Terms and conditions</a>
+            
+
+
+            <a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+
+            <!-- Modal -->
+            <div id="terms_and_conditions_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="terms_and_conditions_modallLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="terms_and_conditions_modalLabel">Terms and conditions</h3>
+              </div>
+              <div class="modal-body">
+                <p> <%= StaticPage.find_by_page_name('terms_conditions').page_content %></p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="control-group">
+
+          <div class="controls">
+
+            <%= f.submit "Create Listing",:id => 'courier_payment_submit',:class => 'btn btn-primary' %>
+
+          </div>
+        </div>
+
+    <% end %>
+
+
+
+  </div>
+  </div>
+  </div>
+
+
+  <div class="accordion-group">
+
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+        <i class="icon icon-user"> </i> Sell it Offline in your city
+      </a>
+    </div>
+
+    <% if @item.paytype == 2 %>
+        <div id="collapseThree" class="accordion-body collapse in">
+    <% else %>
+        <div id="collapseThree" class="accordion-body collapse ">
+    <% end %>
+
+
+    <div class="accordion-inner form-horizontal">
+
+      <%= form_for @item , :url => "/p2p/itempayment/#{@item.id}" ,:html => {:id => 'direct_payment_form' } do |f| %>
+
+          <%= f.hidden_field :paytype  ,:value => 2%>
+
+
+          <div class="control-group">
+            <label class="control-label"> City </label>
+
+            <div class="controls">
+              <%#= f.collection_select :city ,P2p::City.all ,:id , :name  %>
+              <%= @item.city.name %>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+            <label class="control-label"> Shipping:</label>
+
+            <div class="controls">
+              <%= select_tag "meet_at",options_for_select([["Meet in a Common Place",1],["Self Pick-up",2]]) %>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="controls">
+              <%= check_box_tag 'terms'%> I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.
+              <br><a href="#terms_and_conditions_modal" role="button" class="aslink terms_and_conditions_button" data-toggle="modal">Terms and conditions</a><br><a href="#terms_and_conditions_modal" role="button" class=" aslink terms_and_conditions_button" data-toggle="modal">Buyer protection</a>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+
+            <div class="controls">
+              <%=f.submit "Create Listing",:id=>'direct_payment_submit',:class => 'btn btn-primary' %>
+            </div>
+          </div>
+
+      <% end %>
+
+    </div>
+    </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+
+if ($("#sellitem_pricing_modal").length==1){
+
+
+    $("#buyer_protection_button").on('click',function(){
+        $("#modal_temp_content_body").html( $("#buyer_protection_modal .modal-body").html());
+
+        $("#modal_temp_content").show();
+        $("#modal_payment_options").hide();
+        return false;
+
+    });
+
+    $("#terms_and_conditions_modal").on('show',function(){
+        $("#modal_temp_content_body").html( $("#terms_and_conditions_modal .modal-body").html());
+
+        $("#modal_temp_content").show();
+        $("#modal_payment_options").hide();
+        return false;
+    });
+
+    $("#close_terms").on('click',function(){
+        $("#modal_temp_content").hide();
+        $("#modal_payment_options").show();
+
+
+    });
+}
+</script>
+
+</div>
+
+
+<div id="modal_temp_content" class="hide">
+
+  
+
+  <div id="modal_temp_content_body"></div>
+
+  <button id="close_terms" class="btn"> <i class="icon-arrow-left"></i> Back to payment options </button>
+</div>

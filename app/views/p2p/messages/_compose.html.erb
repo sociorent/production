@@ -1,0 +1,159 @@
+
+
+
+<div id="compose_form_holder">
+	<div id="compose_form_title">
+
+		<% if defined? class_name  %>
+
+		<% else %>
+			<%class_name = "" %>
+		<% end %>
+
+	<%= form_for message ,:validate => true  , :html => {:class => "form-horizontal #{class_name}"}, :remote => true  do |f| %>
+
+
+			<%= f.hidden_field :parent_id ,:readonly => true  %>
+			<% if defined? toany and toany %>
+				<div class="control-group">
+				
+				<%= f.label :receiver_id ,"Email" ,:class=> "control-label" %>
+
+				<div class="controls">
+					<%= f.hidden_field :receiver_id %>
+					<%= text_field_tag "to_receiver_id" ,"",:placeholder => "Email"  %>
+				</div>
+
+			</div>
+			
+			<% elsif defined? admin and admin %>
+				<%= f.hidden_field :receiver_id, :value => "1" ,:readonly => true  %>
+			<% elsif defined? ownerid  %>
+				<%= f.hidden_field :receiver_id, :value => ownerid ,:readonly => true  %>
+				<%= f.hidden_field :item_id, :value => itemid ,:readonly => true  %>
+				<%= f.hidden_field :from,  :value =>  "view" %>
+			<%else %>
+				<%= f.hidden_field :receiver_id, :value => "1" ,:readonly => true  %>
+			<% end %>
+
+		<!-- 1 - admin mesage
+		2- buy request 
+		0 - reply
+		 -->
+		<% if defined? admin and admin %>
+		 	<%= f.hidden_field :messagetype, :value => 1 %>
+		<% elsif defined? ownerid %>
+			<%= f.hidden_field :messagetype,  :value =>  2 %>
+	 	<% else %>
+	 		<%= f.hidden_field :messagetype,  :value => 0 %>
+	 	<% end %>
+
+	 	
+		<div class="control-group">
+			<%= f.label :message  ,"Personal Message", :class=> 'control-label' %>
+	 		<div class="controls"><%= f.text_area :message, :rows => 6,:cols => 25 %> 		</div>
+	 	</div>
+
+		<div class="control-group">
+
+	 		<div class="controls"><%= f.submit :submit, value:"Send Message" ,:id => "message_submit" , :class => "btn btn-primary"  %></div>
+	 	</div>
+
+	 <% end %>
+	</div>
+</div>
+
+
+<script>
+
+
+	$(document).ready(function(){
+
+
+	$("#compose_newmsg_modal").on('shown',function(){
+		$("#compose_newmsg_modal #to_receiver_id").val('');
+		$("#compose_newmsg_modal #p2p_message_message").val('');
+	});
+
+	$("#compose_newmsg_modal #message_submit").click(function(){
+		
+		if ($("#compose_newmsg_modal #p2p_message_receiver_id").val()==''){
+			showNotifications('Enter a Valid email');
+			return false;
+		}
+
+				
+			if ($("#p2p_message_message").val() == "") {
+				showNotifications('Enter a message');
+				return false;
+			}
+
+	});
+	
+
+		<% if class_name == '' %>
+			var obj = "#new_p2p_message"
+		<% else %>
+			var obj = "<%=class_name%>";
+		<% end %>
+
+		
+		$('#message_submit').on('submit',function(){
+
+
+			$("#compose_newmsg_modal .close").trigger('click');
+			$("#reply_to_modal .close").trigger('click');
+			showNotifications("Sending your message");
+			$("#compose_newmsg_modal").modal('hide');
+			$(obj).submit();
+			return false;
+		});
+
+		<% if defined? toany and toany %>
+
+
+    window.cache={}
+
+      $("#compose_newmsg_modal #to_receiver_id").autocomplete({
+        minLength: 2,
+        source: function( request, response ) {
+          var term = request.term;
+          if ( term in cache ) {
+            response( cache[ term ] );
+            return;
+          }
+
+      $.ajax({
+        url:'/p2p/users/list',
+        data:{q:term},
+        dataType:"json",
+        type:'post',
+        success:function(data){
+              cache[ term ] = data;
+                response( data );
+
+
+        }
+      });
+
+        },
+        select:function(event,elem){
+        	if (elem.item.value == -1 ) return false;
+
+        	$("#p2p_message_receiver_id").val(elem.item.value);
+        	$("#to_receiver_id").val(elem.item.label);
+        	return false;
+            
+        },
+        focus:function(){
+          	return false;
+        }
+      });
+
+	<% end %>
+
+});
+          
+    
+
+</script>

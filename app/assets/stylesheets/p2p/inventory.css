@@ -1,0 +1,81 @@
+.delete_item{
+	background: url("/assets/glyphicons-halflings.png");
+	background-position: 1097px 0px;
+	display: block;
+	width: 14px;
+	height: 14px;
+	margin-top: 2px;
+	display:inline-block;
+	opacity: 0.3;
+}
+
+.delete_item:hover{
+	opacity: 1;
+}
+
+.box{
+	border: 1px solid #ccc;
+	padding:10px;
+}
+
+.box > .box_title{
+	font-weight: bold;
+	text-align: center;
+	background: #ccc;
+	padding: 2px;
+}
+
+.box > ul {
+	margin-top: 3px;
+}
+
+.approved{
+	/*background-color: */
+}
+
+.dashboard_count_badge{
+	position: absolute;
+	left:56.5%;
+	margin-top:1.7px;
+}
+
+.nav-header{
+	color:white;
+	background-color: rgb(246, 87, 87);
+}
+
+.nav-header i{
+	margin-right: 10px;
+}
+
+.nav-header.browse_top {
+	display: block;
+	margin-top: 5px;
+}
+
+.nav-list .active > a{
+	background-color: #eee !important;
+	font-weight: bold;
+	color:#222;
+	-moz-text-shadow:none !important;
+	-webkit-text-shadow:none !important;
+	text-shadow:none !important;
+	text-decoration: none;
+
+}
+
+.nav-list .active > a:hover{
+	color:#222;
+}
+
+.instructions li{
+	list-style-type: disc;
+}
+
+#inventory_buttons a.btn-primary{
+	color:white;
+}
+
+#pending_uploads li{
+	list-style-type: disc;
+}

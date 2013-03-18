@@ -1,0 +1,47 @@
+
+
+<%= simple_nested_form_for @p2p_category do |f| %>
+ 	<%= f.input :name%>
+ 	<%= f.input :priority %>
+ 	<%= f.input :courier_charge %>
+ 	<%= f.input :commission %>
+	<%= f.association :category %>
+	<table class="table table-striped table-bordered ">
+		<thead>
+		<tr>
+			<th class="span2">Product Name</th>
+			<th class="span1">Action</th>
+		</tr>
+</thead>
+<tbody>
+		<%= f.fields_for :products do |product| %>
+			<tr>
+				<td> <%= product.text_field :name %> </td>
+				<td> <%= product.link_to_remove '<i class="icon-trash"></i>'.html_safe %> </td>
+			</tr><tr></tr>
+		<% end %>
+	<tr><td><%= f.link_to_add "Add a Spec", :specs, class: "btn"%></td></tr>
+	</tbody>
+	</table>
+		<table class="table table-striped table-bordered ">
+		<thead>
+		<tr>
+			<th class="span5">Specification</th>
+			<th class="span1">Show Filter</th>
+			<th class="span1">Action</th>
+		</tr>
+</thead>
+<tbody>
+	<%= f.fields_for  :specs  do |spec| %>
+	<tr>
+		<td> <%= spec.text_field  :name %></td>
+	  <td><%= spec.input  :show_filter , :label=>false %></td><td><%= spec.link_to_remove '<i class="icon-trash"></i>'.html_safe %></td>
+	</tr><tr></tr>
+	<% end %>
+</tbody>
+</table>
+	<p><%= f.link_to_add "Add a Product", :products, class: "btn" %></p>
+
+	<%= f.submit :class =>"btn" %>
+
+<% end %>

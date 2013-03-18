@@ -13,10 +13,11 @@ gem 'thinking-sphinx'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
+  gem 'jquery-ui-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-
+  gem "jquery-fileupload-rails"
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -38,6 +39,7 @@ gem 'jquery-rails'
 
 # Deploy with Capistrano
 gem 'capistrano'
+gem 'rvm-capistrano'
 
 # To use debugger
 # gem 'debugger'
@@ -48,7 +50,7 @@ gem 'omniauth'
 gem 'oauth2'
 gem 'omniauth-facebook'
 
-gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+gem "paperclip"
 
 gem 'koala'
 
@@ -72,3 +74,30 @@ gem 'thinking-sphinx-raspell', '1.1.2',
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
 gem 'rails_admin'
+gem 'simple_form'
+
+#jquery datatable
+gem 'jquery-datatables-rails'
+
+
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
+
+gem "twitter-bootstrap-rails"
+gem 'bootstrap-editable-rails'
+
+
+gem "private_pub"
+gem "thin"
+
+#getting user location
+gem "geocoder"
+
+#nested form
+gem "nested_form"
+
+gem "rack","~>1.4.1"
+
+gem 'roo'
+
+gem 'ckeditor_rails'

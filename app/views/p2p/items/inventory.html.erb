@@ -1,0 +1,41 @@
+<% content_for :pagetitle  do %>
+
+  Mystore for <%=p2p_current_user.user.name %>
+
+<%end %>
+
+
+<div id="body_content" class="row">
+    <div  class="span3">
+
+
+      <ul class="nav nav-list">
+
+
+      <%= render "/p2p/users/dashboard_menu.html.erb" %>
+      <%#= render "/p2p/index/scat_menu" %>
+
+
+      </ul>
+    </div>
+
+<div id="items" class="span9">
+
+
+    <div id="listHeader" class="row">
+      <p class="fleft"> <b> <%= (params.has_key?(:query) ? params[:query].titleize : "My Store" ) %> </b></p>
+      </a></p>
+    </div>
+
+    <% if session[:isadmin] %>
+      <div class="pull-right">
+        See items by Email: <input type="text" id="user_id" placeholder="Type email">
+      </div>
+    <% end %>
+
+    <%= render '/p2p/items/inventory_items_button' %>
+
+    <%= render "/p2p/items/inventory_items" , :items => @items %>
+  </div>
+
+</div>

@@ -158,7 +158,9 @@
                 </div>
 
                 <div class="modal-body">
-                  Seller aggres to <%=@item.payinfo%>
+                  
+                  <!-- Seller aggres to <%=@item.payinfo%> -->
+
                   <p><%= render 'p2p/messages/compose' , :ownerid => @item.user.id ,:itemid => @item.id ,:message =>  @item.messages.new %></p>
                 </div>
 

@@ -74,7 +74,7 @@
 
             <% if @item.paytype == 2 %>
 
-                <a href="#head_login_modal" role="button" class="btn  btn-warning " data-toggle="modal">Contact Seller</a>
+                <a href="#head_login_modal" role="button" class="btn  btn-warning " data-toggle="modal"> <i class="icon-white icon-user"></i>  Contact Seller</a>
 
 
             <% elsif @item.paytype == 1 %>
@@ -94,11 +94,11 @@
           <% if defined?(@item.paytype) and @item.paytype == 2 %>
 
               <% if p2p_current_user.mobileverified == true %>
-                  <a href="#contact_seller_modal" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
+                  <a href="#contact_seller_modal" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i> Contact Seller</a>
               <% else %>
                   <a href="#contact_seller_modal" role="button" class="btn  btn-warning hide" data-toggle="modal"  id="contact_seller_modal_button" ><i class="icon-white icon-user"></i>Contact Seller</a>
 
-                  <a href="#mobile_verify_modal" id="mobile_verify_modal_button" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
+                  <a href="#mobile_verify_modal" id="mobile_verify_modal_button" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i> Contact Seller</a>
 
                   <!-- Modal -->
                   <div id="mobile_verify_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mobile_verify_modallLabel" aria-hidden="true">

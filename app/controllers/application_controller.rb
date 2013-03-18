@@ -128,6 +128,17 @@ class ApplicationController < ActionController::Base
 
   def check_p2p_user_presence
 
+
+  	#set user variables
+
+  	if !current_user.nil? and session[:userid].nil?
+
+  		#call it so it sets the needed variables
+  		p2p_current_user
+
+  	end
+
+
 	guess_user_location
 
 	# check for ucrrent user and ignore the user presnce if the user is not logged in

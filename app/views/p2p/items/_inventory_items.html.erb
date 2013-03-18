@@ -33,13 +33,13 @@
 
               <div class="delete_item pull-right" itemid="<%=p.id%>"></div>
             </div>
-            <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+            <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title.gsub(/ /,"-")}/#{p.id}")%>">
               <div class="aitem_left">
                   <img src="<%=p.get_image(1,:search)[0][:url]%>" >
               </div>
             </a>
             <div class="aitem_right">
-              <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title}")%>">
+              <a href="<%= URI.encode("/p2p/#{p.product.category.name}/#{p.product.name}/#{p.title.gsub(/ /,"-")}/#{p.id}")%>">
                 <div  title="<%= p.title %>">
                   <div class="item_title"><%= p.title.truncate(20).titleize  %></div>
                 </div>

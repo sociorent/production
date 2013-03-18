@@ -104,6 +104,7 @@
 			$("#compose_newmsg_modal .close").trigger('click');
 			$("#reply_to_modal .close").trigger('click');
 			showNotifications("Sending your message");
+			$("#compose_newmsg_modal").modal('hide');
 			$(obj).submit();
 			return false;
 		});

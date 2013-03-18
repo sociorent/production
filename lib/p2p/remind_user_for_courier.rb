@@ -21,7 +21,7 @@ def send_warning(item)
 		pay = item.item_deliveries.where('p2p_status = 2').first
 
         @admin.sent_messages.create({:receiver_id => @admin.id,
-                                                  :message => "This is an auto generated system message. <a href='/p2p/#{item.category.name}/#{item.product.name}/#{item.title}'>#{item.title}</a> was ordered on  #{item.solddate}. You had agreed to ship the item by 2 days. Please dont forget to ship the item - System",
+                                                  :message => "This is an auto generated system message. <a href='/p2p/#{item.category.name}/#{item.product.name}/#{item.title.gsub(/ /,"-")}/#{item.id}'>#{item.title}</a> was ordered on  #{item.solddate}. You had agreed to ship the item by 2 days. Please dont forget to ship the item - System",
                                                   :messagetype => 5,
                                                   :sender_id => @admin.id,
                                                   :sender_status => 2,

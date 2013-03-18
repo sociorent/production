@@ -7,43 +7,24 @@
     </div>
 	<div class="span9">
 			<div class="span8 pull-left ">
-					<h3>Your  Statistics </h3>
+                 <% if p2p_current_user.items.count >0 %>
+    				<h3>Your  Statistics </h3>
 				  <div id="items_status"></div>
+                <% else %>
+                    <div class="well">
+                        <h4>Start selling your items.</h4>
+                        <p><a href="/p2p/sellitem" class="btn btn-primary white">Sell your Item</a></p>
+                    </div>
+                <% end %>
 				  <!-- For category chart only for admins and vendors -->
 				  <% if @cate_counts%>
 				  	<div id="category_status"></div>
 				  <% end%>
-				  <div id="users_view_count"></div>
-					<%if false %>
-
-									Total Items:
-								    <div class="progress">
-				    					 <div class="bar" style="width: 100%;"> <span class="badge dashboard_count_badge"><%= @total_items %></span></div>
-				    				</div>
-									Total Sold
-								    <div class="progress progress-success">
-
-				    					<div class="bar" style="width: <%= @sold_percentage %>%;"> <span class="badge  dashboard_count_badge"><%= @sold_count %> </span>  </div>
-				    				</div>
-									Approved
-								    <div class="progress progress-success">
-
-				    					<div class="bar" style="width: <%= @approved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @approved_count %> </span> </div>
-				    				</div>
-									Waiting for approval
-								    <div class="progress progress-success">
-
-				    					<div class="bar" style="width: <%= @waiting_percentage %>%;"> <span class="badge dashboard_count_badge" style="text-align:center"> <%= @waiting_count %> </span> </div>
-				    				</div>
-									Disapproved
-								    <div class="progress progress-success">
-
-				    					<div class="bar" style="width: <%= @disapproved_percentage %>%;"><span class="badge dashboard_count_badge"> <%= @disapproved_count %> </span> </div>
-				    				</div>
-					</div>
-			<% end %>
-	<br/>
-			<% if false and session[:isadmin]  %>
+                  <% if @count_items.count>0%>
+                  <div id="users_view_count"></div>
+                  <% end %>
+				<!-- TO DO :: For future use -> Admin Analytics -->
+				<% if false and session[:isadmin]  %>
 				<div class="box span3 pull-left">
 				<div class="box_title"> P2P Stastics </div>
 				<ul>

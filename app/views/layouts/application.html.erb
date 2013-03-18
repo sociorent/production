@@ -33,7 +33,7 @@
           </nav>
           <div class="clearfix"></div>
           <div class="contact_socio right">
-            <a href="mailto:care@sociorent.com"><img src="/assets/index/mail_icon.png">care@sociorent.com</a> | <img src="/assets/index/phone.png">+91-73531-12345 
+            <a href="mailto:care@sociorent.com"><img src="/assets/index/mail_icon.png">care@sociorent.com</a> | <img src="/assets/index/phone.png">+91-73531-12345
           </div>
         </div>
       </div>
@@ -45,20 +45,7 @@
    <div id="page_not_found"> <%= flash[:warning] %></div>
     <%= yield %>
   </div>
-
-  <div id="university_dialog" class="font-dialog">
-    <% logos=General.first.images %>
-    <% if logos%>
-      <ul class="university_logos">
-        <% logos.each do |logo| %>
-          <li><img src="<%= logo.image %>"></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No more logo of universities </p>
-    <% end %>
-
-  </div>
+  <div
   <%#= render :partial => "/static_page_dialog" %>
 
   <%= render :partial => "layouts/footer" %>

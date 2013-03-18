@@ -1,0 +1,91 @@
+<% content_for :pagetitle  do %>
+Vendors Details
+<% end %>
+
+<div id="body_content" class="row">
+	<div  class="span3">
+		<ul class="nav nav-list">
+			<%= render "/p2p/users/dashboard_menu.html.erb" %>
+		</ul>
+	</div>
+
+	<div class="span9">
+
+		<div class="tabbable">
+			<ul class="nav nav-tabs" id="vendor_user_tab">
+				<li class="active"><a data-toggle="tab"  href="#vendors_tab">Vendors</a></li>
+				<li ><a data-toggle="tab"  href="#users_tab">Users</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active " id="vendors_tab">
+					<h4>Vendors</h4>
+
+					 <button class="btn delete_vendor_user" tbl="vendor"><i  title="Remove from Vendor" class="action_icon icon-bookmark-empty"></i> De-Promote to Users</button>
+
+					 <button class="btn refresh_messsage" tbl="vendor"><i  title="Delete Selected" class="action_icon icon-refresh"></i></button>
+
+					<div class="input-append pull-right">
+						<input type="text" id="search_vendor" class="search_users" tbl="vendor" placeholder="Search Vendor Table">
+					  <span class="add-on">.<i title="Search Vendor" class="action icon icon-search"></i></span>
+					</div>
+
+
+					<table class="table table-condensed table-hover" id="vendor_id">
+						<thead>
+							<tr>
+								<th class="span1"><input type="checkbox" class="master_check"  tbl="vendor"></th>
+								<th class="span3">Name</th>
+								<th class="span4">Email</th>
+								<th class="span1">Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-pane" id="users_tab">
+
+					<h4>Users</h4>
+
+
+					 <button class="btn delete_vendor_user" tbl="user"><i  title="Remove from User" class="action_icon icon-bookmark"></i> Promote to vendors</button>
+
+					 <button class="btn refresh_messsage" tbl="user"><i  title="Delete Selected" class="action_icon icon-refresh"></i></button>
+
+					<div class="input-append pull-right">
+						<input type="text" id="search_user" class="search_users" tbl="user" placeholder="Search User Table">
+					  <span class="add-on">.<i title="Search User" class="action icon icon-search"></i></span>
+					</div>
+
+
+					<table class="table table-condensed table-hover" id="user_id">
+						<thead>
+							<tr>
+								<th class="span1"><input type="checkbox" class="master_check"  tbl="user"></th>
+								<th class="span3">Name</th>
+								<th class="span4">Email</th>
+								<th class="span1">Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<%= javascript_include_tag '/assets/p2p/vendor.js' %>

@@ -1,0 +1,41 @@
+
+.fleft {
+	float: left;
+}
+
+.fright {
+	float: right;
+}
+
+
+#flash_notice{
+
+	display:none;
+	position: fixed;
+	top: 8px;
+	left: 47%;
+	/*width: 65px;	*/
+	background: #F9EDBE;
+	border: 1px solid #d6c06b;
+	color: #222;
+	padding: 2px 8px;
+	z-index: 100000;
+
+}
+
+#home_notice {
+	margin-top: -10px;
+	cursor: pointer;
+}
+
+#notice_container {
+	font-size: 16px;
+}
+
+#sell_item_button {
+	margin-right: 10px;
+}
+
+#sell_item_button:hover {
+	text-decoration: none;
+}

@@ -1,0 +1,36 @@
+
+
+
+<div id="browse_sub_cat_menu">
+
+	<div id="filter_holder_title"><i class="icon-caret-down"></i> <%= category.name %></div>
+
+		<% temp_cat = category %>
+		
+		<% cat_tree = [] %>
+
+		<% while !temp_cat.nil? %>
+			<% cat_tree.push(temp_cat)%>
+			<% temp_cat = temp_cat.category %>
+		<% end %>
+
+		<% level = 1%>
+		<% cat_tree.reverse.each do |tree_cat| %>
+			
+			<div class=" sub_category level_<%=level%>">
+				<a href="/p2p/<%=tree_cat.name%>"> <i class="icon-caret-down"> </i><%= tree_cat.name %></a>
+			</div>
+
+			<% level += 1 %>
+
+		<% end %>
+
+<!-- overlay to be displayed during filter request -->
+	
+		<% category.subcategories.each do |scat| %>
+			<div class="sub_category level_<%=level%>">
+				<%= link_to "#{scat.name}" , "/p2p/#{scat.name}" %>
+			</div>
+		<% end %>
+
+</div>

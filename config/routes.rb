@@ -1,16 +1,23 @@
 Sociorent::Application.routes.draw do
 
+
+
+  get "item_history/index"
+
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
 
   ActiveAdmin.routes(self)
   
-  get 'aboutus' => 'static_pages#about_us'
-  get 'pricing' => 'static_pages#pricing'
-  get 'college_ambassadors' => 'static_pages#colleges'
-  get 'contactus' => 'static_pages#contactus'
-  get 'privacy_policy' => 'static_pages#privacypolicy'
-  get 'terms_of_use' => 'static_pages#termsofuse'
+  resources :static_pages
 
+  get 'static_pages/get_page/:page_name' => 'static_pages#get_page'
+
+  # get 'aboutus' => 'static_pages#about_us'
+  # get 'pricing' => 'static_pages#pricing'
+  # get 'college_ambassadors' => 'static_pages#colleges'
+  # get 'contactus' => 'static_pages#contactus'
+  # get 'privacy_policy' => 'static_pages#privacypolicy'
+  # get 'terms_of_use' => 'static_pages#termsofuse'
 
 
   get "home/index"
@@ -45,7 +52,6 @@ Sociorent::Application.routes.draw do
   match "/get_colleges" =>"users#get_colleges"
   match "/get_streams" => "users#get_streams"
 
-
   #matches #book/isbn
   get '/book/:isbn' => "home#book_deatils"
 
@@ -63,63 +69,111 @@ Sociorent::Application.routes.draw do
 
   devise_for :counters
 
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
+  ##P2P Routes
+  namespace :p2p do
 
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
+    root :to => "index#index"
 
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
+    resources :messages
+    match 'mark_as_read' =>'messages#mark_as_read'
+    resources :items
+    resources :images
+    resources :credits
+    
 
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+    #for adimn
+    scope 'admin' do
+      #scaffold controller and view
+      resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries
+      root :to => 'categories#index'
+      match 'jobs(/:job(/:cmd))' => 'users#show_jobs'
+    end
 
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
+      match 'gettemplate' => 'items#downloadtemplate'
 
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+#      get "categories/set_category" => "categories#set_category"
+#      get "categories/sub_category" => "categories#sub_category"
 
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
+      match 'getcategories' => "categories#getcategories"
+      get 'getbrand/:id' => "categories#get_brands"
 
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+      match 'getcities' => "cities#list"
 
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
+      post 'users/list' => 'users#list'
+      post 'users/verifymobile/code' => 'users#getcode'
+      post 'users/verifymobile/:code' => 'users#verifycode'
+      get  'paymentdetails(/:bought)' => 'users#paymentdetails'
+
+
+      post 'location' => 'users#setlocation'
+      post 'guesslocation' => 'users#guesslocation'
+
+      get 'sellitem' => "items#new"
+      post 'items/:id' => 'items#update'
+
+      match 'getbook_details/:isbn13' => "items#getbook_details"
+      get 'getserviceavailability/:itemid/:pincode' => 'service_pincodes#check_availability'
+
+
+      get 'faileduploads' => 'users#failed_uploads'
+      
+      get 'getattributes/:id' => "categories#get_attributes"
+      get 'getspec/:id' =>  "items#get_spec"
+      get 'getsubcategories' => "items#get_sub_categories"
+      get 'welcome' => 'users#welcome'
+      post 'welcome' => 'users#user_first_time'
+
+      match 'itempayment/:id' => 'items#sellitem_pricing'
+      get 'delete/:id' => "items#destroy"
+
+      post 'addimage/:item_id' => "items#add_image"
+      get  'addimage/:form_id/form' => "items#sellitem_pricing"
+
+      get 'sold/:id' => "items#sold"
+
+      get 'mystore(/:query(/user/:id))' => 'items#inventory'
+
+      get 'dashboard' => 'users#dashboard'
+      match 'upload_csv/'=>'items#upload_csv'
+      match 'approve(/:query)' => 'items#approve'
+      match 'approve/user/:id' => 'items#approve'
+      match 'disapprove' => 'items#disapprove'
+      match 'disapprove/user/:id' => 'items#disapprove'
+      match 'waiting(/user/:id)' => 'items#waiting'
+      get  'favourites' => 'users#favouriteusers'
+      post 'favourites' => 'users#setfavourite'
+      match 'vendors(/:cmd)' => 'users#vendorsdetails'
+      match 'getusers(/:query)' => 'users#getusers'
+
+      get 'getfailed/:type/:dte' => 'users#download_failed'
+      #post 'payments' => 'users#userpayments'
+
+      get 'getmessages(/:id)' => 'messages#getmessages'
+
+      match 'search/q' => "index#search_query"
+
+      match 'search/c/:cat(/:prod)' => "index#search_cat"
+
+      match "search/:id" =>"index#search"
+      #citruspay response catching
+      match "getCitursSignature" => "items#get_citrus_signature"
+      match "update_citrus" => "items#update_online_payment"
+      match ":cat/filters(/*applied_filters)" =>"index#browse_filter" ,  :applied_filters => /[^\/]*/
+      match ":cat/:prod/filters(/*applied_filters)" =>"index#browse_filter"  ,:applied_filters => /[^\/]*/
+
+      # get ':cat/:prod/:item' => 'items#view' ,:as => :item_url
+      get ':cat/:prod/:item/:id' => 'items#view' ,:as => :item_url
+      get ':cat(/:prod)' => "index#browse"
+      match "update_shipping_address" => "users#update_shipping"
+
+  end
+
+
   root :to => 'home#index'
 
   match '/system/*a', :to => 'errors#ignore_routing'
+  match '/assets/*a', :to => 'errors#ignore_routing'
 
   match '*a', :to => 'errors#routing'
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
+  
 end

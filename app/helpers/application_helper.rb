@@ -13,22 +13,22 @@ module ApplicationHelper
 
 			#puts "Processing :  "+ order.status.to_s + orders.inspect.to_s
 
-			if order.status.to_i == 4 and  !(state_id.include?(4)) 
+			if order.status.to_i == 4 and  !(state_id.include?(4))
 				state.push("cancelled")
 				state_id.push(4)
-			elsif order.status.to_i == 2 and  !(state_id.include?(2)) 
+			elsif order.status.to_i == 2 and  !(state_id.include?(2))
 				state.push("unshipped" )
 				state_id.push(2)
-			elsif order.status.to_i == 1 and  !(state_id.include?(1)) 
+			elsif order.status.to_i == 1 and  !(state_id.include?(1))
 				state.push("shipped" )
 				state_id.push(1)
 			end
 
 		end
 
-			
 
-			if state_id.count > 1 
+
+			if state_id.count > 1
 
 				val = "partially_" + state.join("_and_")
 
@@ -58,7 +58,7 @@ module ApplicationHelper
   def self.convert_order_status(status)
   #contants for order status
 
-     state = { 
+     state = {
       0 => 'New' ,
       1 => 'Fully Shipped' ,
       2 => 'Fully Unshipped' ,
@@ -67,11 +67,32 @@ module ApplicationHelper
       5 => 'Partially Cancelled and Partially Shipped',
       6 => 'Partially Cancelled and Partially Unshipped',
       7 => 'Partially Cancelled and Partially Unshipped and Partially Shipped',
-      8 => 'Approved' 
+      8 => 'Approved'
     }
 
     state[status];
  end
 
-end
 
+  def p2p_current_user
+  	if current_user.nil?
+  		return nil
+  	else
+  		return P2p::User.find_by_user_id(current_user.id)
+  	end
+
+  end
+
+  def get_seller_url
+  	if current_user
+  		if p2p_current_user.mobileverified == true
+        url = "/p2p/sellitem"
+      else
+      	url = "#seller_mobile_verify_modal"
+      end
+    else
+    	url = "#head_login_modal"
+    end
+    url
+  end
+end

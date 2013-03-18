@@ -11,7 +11,7 @@ $(document).ready ->
 			sociorent.collections.compare_object = new sociorent.collections.compare()
 			# orders collections
 			sociorent.collections.order_object = new sociorent.collections.order()
-			# wishlist collections	
+			# wishlist collections
 			sociorent.collections.wishlist_object = new sociorent.collections.wishlist()
 			# class adoption collections
 			sociorent.collections.class_adoption_object = new sociorent.collections.class_adoption()
@@ -28,7 +28,7 @@ $(document).ready ->
 
 			# load more count
 			sociorent.load_more = 0
-		
+
 		events:
 			"submit #search_books_form"	: "cancel_submit"
 			"submit #request_form" : "make_request"
@@ -44,7 +44,7 @@ $(document).ready ->
 			"click #update_shipping" : "update_shipping"
 			"click #send_verify_code" : "send_verification"
 			"click #load_more" : "load_more"
-			"click #go_top" : "go_top" 
+			"click #go_top" : "go_top"
 			"click #reset_verification" : "resend_verification"
 			"click .print_invoice" : "print_invoice"
 
@@ -61,9 +61,9 @@ $(document).ready ->
 			else
 				sociorent.fn.show_notification()
 				$.ajax "/home/book_request" ,
-					type: "post" 
+					type: "post"
 					async: true
-					data: 
+					data:
 						title: $("#request_title").val()
 						author: $("#request_author").val()
 						isbn: $("#request_isbn").val()
@@ -101,7 +101,7 @@ $(document).ready ->
 			else
 				alert "Please accept terms of use"
 		send_verification: ->
-			mobile = $("#verification_mobile").val() 
+			mobile = $("#verification_mobile").val()
 			if (mobile == "" || !(mobile.match(/^\d{10}$/)))
 				alert ("Enter atleast 6 characters")
 				false
@@ -118,14 +118,14 @@ $(document).ready ->
 							alert("Verfication code sent. Check Your Mobile")
 						else
 							alert("Try Different Mobile Number")
-			false	
+			false
 		resend_verification: ->
 			$("#verification_mobile").val("")
 			$("#verification_code").val("")
 			$("#verify_mobile_div").hide()
 			$("#send_verification_div").show()
 			console.log $("#verification_mobile").val()
-			
+
 
 		create_order: (event)->
 			# get the order type
@@ -166,7 +166,7 @@ $(document).ready ->
 					merchantId="wnw4zo7md1"
 					# signature parameter
 					sign_params= "merchantId=" + merchantId + "&orderAmount=" + orderAmt	+ "&merchantTxnId=" + $("input[name=merchantTxnId]").val() + "&currency=INR";
-					# get the signature hmac sha1 encoded 
+					# get the signature hmac sha1 encoded
 					$.ajax "/getSignature"
 						type : "post"
 						async : false
@@ -247,6 +247,6 @@ $(document).ready ->
 				scrollTop: 0
 			, 200
 		print_invoice: ->
-			
+
 
 	sociorent.views.app_object = new sociorent.views.app()

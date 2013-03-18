@@ -1,3 +1,5 @@
+<%= javascript_include_tag 'global/jquery.validate.min' %>
+
 <div id="devise_pages" class="login_form">
 	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 	  <div><%= f.label :email %>

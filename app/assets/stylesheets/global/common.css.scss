@@ -36,7 +36,7 @@
 
 .ui-dialog{
 	position: fixed;
-}	
+}
 .ui-dialog .ui-dialog-content{
 		background: url("/assets/paper.jpg") repeat !important;
 }
@@ -133,7 +133,7 @@ h1{
 
 
 }
-a { 
+a {
 	text-decoration: none;
 }
 
@@ -256,16 +256,16 @@ body {
 }
 
 .btn{
-	background: #F65757;
+	background: #F65757  !important;
 	color: white !important;
 	font-weight: 400 !important;
-	text-shadow: none;
+	text-shadow: none !important;
 	font-size: 13px !important;
 	padding: 4px 22px !important;
 }
 
 .btn:hover{
-	background: #F65757;
+	background: #F65757 !important;
 	color: white !important;
 	font-weight: 400 !important;
 	text-shadow: none;

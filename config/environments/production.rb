@@ -2,20 +2,20 @@ Sociorent::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
-  config.cache_classes = true
+  config.cache_classes = false
 
   # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = true
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = false
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
   config.serve_static_assets = true
 
   # Compress JavaScripts and CSS
-  config.assets.compress = true
+  config.assets.compress = false
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Generate digests for assets URLs
   config.assets.digest = true
@@ -25,9 +25,14 @@ Sociorent::Application.configure do
   config.assets.version = "1.0"
 
   config.assets.precompile += ['global/application.css', 'index/application.css', 'get_user_details.css', 'orders/print_invoice.css', 'inner.css']
-  config.assets.precompile += ['global/bootstrap.min.css' ,'footer.css','global/jquery-ui-1.8.24.custom.css', 'home/print_label.css', 'global/jquery-ui-1.9.1.custom.min.js', 'global/jquery.ui.dialog.js']
+  config.assets.precompile += ['global/bootstrap.min.css' ,'footer.css','global/jquery-ui-1.8.24.custom.css', 'home/print_label.css', 'global/jquery-ui-1.9.1.custom.min.js', 'global/jquery.ui.dialog.js','global/jquery.validate.min.js']
 
   config.assets.precompile += ['global/underscore.js','global/application.js', 'homepage/homepage.js', 'inner/application.js','get_user_details/get_user_details_manifest.js']
+
+  #assets for p2p2
+  config.assets.precompile += ['p2p/browse_filter.js','p2p/category_menu.js','p2p/search.js','p2p/inventory.js','p2p/application.js','p2p/index_manifest.js','p2p/messages.js']
+  config.assets.precompile += ['p2p/application.css','p2p/header.css','p2p/browse.css','items/items.css','items/items_manifest.css']
+  
   
   # Defaults to nil and saved in location specified by config.assets.prefix
   # config.assets.manifest = YOUR_PATH

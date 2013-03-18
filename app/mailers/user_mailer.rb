@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "\"SocioRent\" <alert@sociorent.com>", :bcc => "marudhu@devbrother.com"
+  default from: "\"SocioRent\" <alert@sociorent.com>"          #, :bcc => "marudhu@devbrother.com"
   def welcome_email(user)
   	@general = General.first
     @user = user
@@ -16,8 +16,7 @@ class UserMailer < ActionMailer::Base
   def p2p_listing_new_msg_notification(currentuser,listing)
       @listing = listing
       @user = currentuser
-      #mail(:to => listing.user.user.email , :subject => "You have received a new message for your listing")
-      mail(:to => 'marudhupandiyang@gmail.com' , :subject => "You have received a new message for your listing")
+      mail(:to => listing.user.user.email , :subject => "You have received a new message for your listing")
   end
 
 end

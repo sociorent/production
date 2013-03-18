@@ -4,14 +4,14 @@
   <div class="product">
     
 
-    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>" > 
+    <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title.gsub(/ /,"-")%>/<%=p.id%>" > 
       <div class="product_img">
        <img src="<%= p.get_image(1,:search)[0][:url] %>" ></img>
       </div>
     </a>
 
       <div class="product_title">
-        <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title%>" > 
+        <a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=p.title.gsub(/ /,"-")%>/<%=p.id%>" > 
           <em><%= p.title.slice(0,25)  %></em>
         </a>
       </div>

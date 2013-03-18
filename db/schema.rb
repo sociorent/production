@@ -330,7 +330,11 @@ ActiveRecord::Schema.define(:version => 20130315123005) do
     t.integer  "vendor_upload_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.string   "reason"
+    t.integer  "category_id"
   end
+
+  add_index "p2p_failed_csvs", ["category_id"], :name => "index_p2p_failed_csvs_on_category_id"
 
   create_table "p2p_favourites", :force => true do |t|
     t.integer  "user_id"

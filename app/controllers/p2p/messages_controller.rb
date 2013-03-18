@@ -23,6 +23,7 @@ class P2p::MessagesController < ApplicationController
     params[:p2p_message][:parent_id]=0
     @receiver_id = params[:p2p_message][:receiver_id]
     @message=user.sent_messages.create(params[:p2p_message])
+
     unless parent.nil?
       begin
         @message.parent_msg = P2p::Message.find(parent)
@@ -30,9 +31,15 @@ class P2p::MessagesController < ApplicationController
         @message.parent_msg = nil
       end
     end
+
     unless @message.item.nil?
       @message.item.reqCount +=1
       @message.item.save
+      
+      if @message.item.paytype == 2
+        UserMailer.p2p_listing_new_msg_notification(current_user,@message.item).deliver
+      end
+
     end
   end
 

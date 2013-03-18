@@ -106,7 +106,7 @@ class P2p::IndexController < ApplicationController
     end
 
     item_result.each do |res|
-      response.push({:label=> "#{res.title}" ,:value => URI.encode("/p2p/#{res.product.category.name}/#{res.product.name}/#{res.title}") }) unless res.nil?
+      response.push({:label=> "#{res.title}" ,:value => URI.encode("/p2p/#{res.product.category.name}/#{res.product.name}/#{res.title.gsub(/ /,"-")}/#{res.id}") }) unless res.nil?
     end
     return response
   end
@@ -310,7 +310,7 @@ class P2p::IndexController < ApplicationController
     res = []
     items.each do |itm|
       url = itm.get_image(1,:search)[0][:url]
-      temp_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}/#{itm.title}")
+      temp_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}/#{itm.title.gsub(/ /,"-")}/#{itm.id}")
       prod_url = URI.encode("/p2p/#{itm.product.category.name}/#{itm.product.name}")
       prod = itm.product.name
       cat = itm.product.category.name

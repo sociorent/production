@@ -12,7 +12,7 @@
     <li><a href="/p2p">Home</a> <span class="divider">/</span></li>
     <li><a href="/p2p/<%=@item.category.name%>"><%=@item.category.name.titleize %></a> <span class="divider">/</span></li>
     <li><a  href="/p2p/<%=@item.category.name%>/<%=@item.product.name%>"><%=@item.product.name.titleize %></a> <span class="divider">/</span></li>
-    <li class="active "> <%=link_to @item.title.titleize ,{:cat => @item.category.name ,:prod => @item.product.name ,:item => @item.title } %> </li>
+    <li class="active "> <%= @item.title.titleize %> <%= "/p2p/#{@item.category.name}/#{@item.product.name}/#{@item.title.gsub(/ /,"-")}/#{@item.id}" %> </li>
   </ul>
 </div>
 
@@ -74,7 +74,7 @@
 
             <% if @item.paytype == 2 %>
 
-                <a href="#head_login_modal" role="button" class="btn  btn-warning " data-toggle="modal">Contact Seller</a>
+                <a href="#head_login_modal" role="button" class="btn  btn-warning " data-toggle="modal"> <i class="icon-white icon-user"></i>  Contact Seller</a>
 
 
             <% elsif @item.paytype == 1 %>
@@ -94,11 +94,11 @@
           <% if defined?(@item.paytype) and @item.paytype == 2 %>
 
               <% if p2p_current_user.mobileverified == true %>
-                  <a href="#contact_seller_modal" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
+                  <a href="#contact_seller_modal" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i> Contact Seller</a>
               <% else %>
                   <a href="#contact_seller_modal" role="button" class="btn  btn-warning hide" data-toggle="modal"  id="contact_seller_modal_button" ><i class="icon-white icon-user"></i>Contact Seller</a>
 
-                  <a href="#mobile_verify_modal" id="mobile_verify_modal_button" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i>Contact Seller</a>
+                  <a href="#mobile_verify_modal" id="mobile_verify_modal_button" role="button" class="btn  btn-warning" data-toggle="modal"  ><i class="icon-white icon-user"></i> Contact Seller</a>
 
                   <!-- Modal -->
                   <div id="mobile_verify_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mobile_verify_modallLabel" aria-hidden="true">
@@ -158,7 +158,9 @@
                 </div>
 
                 <div class="modal-body">
-                  Seller aggres to <%=@item.payinfo%>
+                  
+                  <!-- Seller aggres to <%=@item.payinfo%> -->
+
                   <p><%= render 'p2p/messages/compose' , :ownerid => @item.user.id ,:itemid => @item.id ,:message =>  @item.messages.new %></p>
                 </div>
 
@@ -234,7 +236,7 @@
                 // calling the API ...
                 var obj = {
                   method: 'feed',
-                  redirect_uri: "http://<%=request.host%>:<%=request.port%>/p2p/<%=@item.category.name%>/<%=@item.product.name%>/<%=@item.title%>",
+                  redirect_uri: "http://<%=request.host%>:<%=request.port%>/p2p/<%=@item.category.name%>/<%=@item.product.name%>/<%=@item.title.gsub(/ /,"-")%>/<%=@item.id%>",
                   link: 'https://developers.facebook.com/docs/reference/dialogs/',
                   picture: "http://<%=request.host%>:<%=request.port%><%=@thumbimage[0][:url]%>",
                   name: "<%=@item.title%> ",

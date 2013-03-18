@@ -12,7 +12,7 @@
     <li><a href="/p2p">Home</a> <span class="divider">/</span></li>
     <li><a href="/p2p/<%=@item.category.name%>"><%=@item.category.name.titleize %></a> <span class="divider">/</span></li>
     <li><a  href="/p2p/<%=@item.category.name%>/<%=@item.product.name%>"><%=@item.product.name.titleize %></a> <span class="divider">/</span></li>
-    <li class="active "> <%= @item.title.titleize %> <%= "/p2p/#{@item.category.name}/#{@item.product.name}/#{@item.title.gsub(/ /,"-")}/#{@item.id}" %> </li>
+    <li class="active ">  <a href="<%="/p2p/#{@item.category.name}/#{@item.product.name}/#{@item.title.gsub(/ /,"-")}/#{@item.id}"%>"> <%= @item.title.titleize %> </a> </li>
   </ul>
 </div>
 

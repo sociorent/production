@@ -99,7 +99,7 @@ class P2p::Item < ActiveRecord::Base
 
     self.changes.each do |column,value|
 
-        next if ['approveddate','disapproveddate','solddate','deletedate','updated_at','viewcount','reqCount'].include?(column)
+        next if ['approveddate','disapproveddate','solddate','deletedate','updated_at','viewcount','reqCount','disapproved_reason'].include?(column)
         next if column =='paytype' and self.changes[:paytype].nil?
 
         self.itemhistories.create(:approved => false , :columnname => column , :newvalue => value[0] ,:oldvalue =>  value[1] )

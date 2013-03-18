@@ -39,11 +39,8 @@ class P2p::Message < ActiveRecord::Base
 
   def publish_to_stream
 
+
     message_notification = "
-         $('#notificationcontainer').notify('create', 'new_message_notification', {
-              username: '#{self.sender.user.name}',
-              msg: '#{self.message.slice(0,40)}'
-          });
 
         if (oInboxTable){
           oInboxTable.fnDraw();
@@ -57,6 +54,15 @@ class P2p::Message < ActiveRecord::Base
           oDeleteBoxTable.fnDraw();
         }
       "
+
+      if self.messagetype !=5 
+        message_notification += "
+        $('#notificationcontainer').notify('create', 'new_message_notification', {
+              username: '#{self.sender.user.name}',
+              msg: '#{self.message.slice(0,40)}'
+          });"
+
+      end
 
     receiver_unreadcount = self.receiver.received_messages.inbox.unread.count
 

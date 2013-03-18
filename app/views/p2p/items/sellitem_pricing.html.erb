@@ -1,3 +1,6 @@
+
+<div id="modal_payment_options">
+
 <h3> Choose Payment Options</h3>
 
 <div class="accordion" id="accordion2">
@@ -66,8 +69,26 @@
             <label class="control-label">  Terms and conditions</label>
 
             <div class="controls">
-              <%= check_box_tag 'terms'%>  I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.<a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+              <%= check_box_tag 'terms'%>  I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.
+              <a href="#terms_and_conditions_modal" role="button" class="aslink terms_and_conditions_button" data-toggle="modal">Terms and conditions</a>
               
+              <a href="#buyer_protection_modal" role="button" class="aslink"  id="buyer_protection_button" data-toggle="modal">Buyer Protection</a>
+
+            <!-- Modal -->
+            <div id="buyer_protection_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="buyer_protection_`lLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="buyer_protection_modalLabel">Terms and conditions</h3>
+              </div>
+              <div class="modal-body">
+                <p>
+                  <%= StaticPage.find_by_page_name('buyer_protection').page_content %>
+
+                </p>
+
+              </div>
+            </div>
+
 
             </div>
           </div>
@@ -178,7 +199,7 @@
           <label class="control-label">  Terms and conditions</label>
 
           <div class="controls">
-            <%= check_box_tag 'terms'%>  I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.<a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a>
+            <%= check_box_tag 'terms'%>  I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.<a href="#terms_and_conditions_modal" role="button" class=" aslink terms_and_conditions_button" data-toggle="modal">Terms and conditions</a>
             
 
 
@@ -191,7 +212,7 @@
                 <h3 id="terms_and_conditions_modalLabel">Terms and conditions</h3>
               </div>
               <div class="modal-body">
-                <p>I agree to terms and conditions</p>
+                <p> <%= StaticPage.find_by_page_name('terms_conditions').page_content %></p>
               </div>
             </div>
 
@@ -259,7 +280,7 @@
           <div class="control-group">
             <div class="controls">
               <%= check_box_tag 'terms'%> I have fully read and understood the Seller's Policies and agree to the Terms of Use of Sociorent Street.
-              <br><a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Terms and conditions</a><br><a href="#terms_and_conditions_modal" role="button" class=" " data-toggle="modal">Buyer protection</a>
+              <br><a href="#terms_and_conditions_modal" role="button" class="aslink terms_and_conditions_button" data-toggle="modal">Terms and conditions</a><br><a href="#terms_and_conditions_modal" role="button" class=" aslink terms_and_conditions_button" data-toggle="modal">Buyer protection</a>
             </div>
           </div>
 
@@ -281,3 +302,46 @@
 
 </div>
 
+<script>
+
+
+if ($("#sellitem_pricing_modal").length==1){
+
+
+    $("#buyer_protection_button").on('click',function(){
+        $("#modal_temp_content_body").html( $("#buyer_protection_modal .modal-body").html());
+
+        $("#modal_temp_content").show();
+        $("#modal_payment_options").hide();
+        return false;
+
+    });
+
+    $("#terms_and_conditions_modal").on('show',function(){
+        $("#modal_temp_content_body").html( $("#terms_and_conditions_modal .modal-body").html());
+
+        $("#modal_temp_content").show();
+        $("#modal_payment_options").hide();
+        return false;
+    });
+
+    $("#close_terms").on('click',function(){
+        $("#modal_temp_content").hide();
+        $("#modal_payment_options").show();
+
+
+    });
+}
+</script>
+
+</div>
+
+
+<div id="modal_temp_content" class="hide">
+
+  
+
+  <div id="modal_temp_content_body"></div>
+
+  <button id="close_terms" class="btn"> <i class="icon-arrow-left"></i> Back to payment options </button>
+</div>

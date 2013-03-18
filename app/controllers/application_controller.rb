@@ -52,11 +52,7 @@ class ApplicationController < ActionController::Base
 
 	        geocode  = Geocoder.search(request.env['REMOTE_ADDR'])
 
-	        puts session.inspect
-
 	        session[:city] = (geocode.count > 0 ) ? geocode[0].data["city"] : ""
-
-	        puts geocode.inspect
 
 	        city_id = P2p::City.find_or_create_by_name(session[:city]).id
 
@@ -128,7 +124,19 @@ class ApplicationController < ActionController::Base
 
   def check_p2p_user_presence
 
-	guess_user_location
+
+  	#set user variables
+
+  	if !current_user.nil? and session[:userid].nil?
+
+  		#call it so it sets the needed variables
+  		p2p_current_user
+
+  	end
+
+  	unless request.xhr?
+		guess_user_location
+	end
 
 	# check for ucrrent user and ignore the user presnce if the user is not logged in
 	if current_user.nil?

@@ -23,10 +23,7 @@ save_new_item = 	function(){
 					'keyboard':false,
 					'show':true
 				}).css({
-				    width: 'auto',
-				    'margin-left': function () {
-				        return -($(this).width() / 2);
-				    }
+				    width: ($(window).width()/2)
 				});
 
 

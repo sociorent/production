@@ -591,3 +591,8 @@ vertical-align: middle;
 	width: 900px;
 	height: auto;
 }
+
+.aslink{
+	color: blue !important;
+	text-decoration: underline;
+}

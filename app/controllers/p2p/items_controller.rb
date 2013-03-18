@@ -345,7 +345,6 @@ class P2p::ItemsController < ApplicationController
     @item = P2p::Item.find(params[:id])
     @item.solddate =Time.now
     @item.save
-    #render :json => {:status => 1 ,:id => "/p2p/#{@item.product.category.name}/#{@item.product.name}/#{@item.title}"}
     redirect_to URI.encode("/p2p/#{@item.product.category.name}/#{@item.product.name}/#{(@item.title).gsub(/ /, "-")}/#{@item.id}")
   end
   def add_image

@@ -21,7 +21,7 @@
 
       
         admin.sent_messages.create({:receiver_id => item.user.id ,
-                                              :message => "This is an auto generated system message. Your item #{item.title} has been idel for over 15 days and hence has been disapproved .Reply to this message asking the admin to re approve if you need the item to be on sociorent.  <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
+                                              :message => "This is an auto generated system message. Your item <a href='/p2p/#{item.category.name}/#{item.product.name}/#{item.title.gsub(/ /,"-")}/#{item.id}'> #{item.title} </a> has been idel for over 15 days and hence has been disapproved .Reply to this message asking the admin to re approve if you need the item to be on sociorent.  <br/> Thank you.. <br/> Sincerly, <br/> Admin - Sociorent",
                                               :messagetype => 5,
                                               :sender_id => admin.id,
                                               :sender_status => 2,
@@ -30,20 +30,6 @@
                                               :item_id => item.id
 
                                                   });
-
-        # admin.sent_messages.create({:receiver_id => admin.id,
-        #                                       :message => "This is an auto generated system message. #{item.title} has been idle for over 15 days and hence has been automatically disapproved and is waiting for your approval.. A automated message is sent to the user.Your can see it here <a href='" + URI.encode("/p2p/#{item.category.name}/#{item.product.name}/#{item.title}") + "'> #{item.title} </a>. <br/> Thank you.. <br/> Sincerly, <br/> Developers ",
-        #                                       :messagetype => 5,
-        #                                       :sender_id => admin.id,
-        #                                       :sender_status => 1,
-        #                                       :receiver_status => 0,
-        #                                       :parent_id => 0,
-        #                                       :item_id => item.id
-
-        #                                           });
-
-
-
 	end
 
 

@@ -114,6 +114,9 @@ Sociorent::Application.routes.draw do
       match 'getbook_details/:isbn13' => "items#getbook_details"
       get 'getserviceavailability/:itemid/:pincode' => 'service_pincodes#check_availability'
 
+
+      get 'faileduploads' => 'users#failed_uploads'
+      
       get 'getattributes/:id' => "categories#get_attributes"
       get 'getspec/:id' =>  "items#get_spec"
       get 'getsubcategories' => "items#get_sub_categories"
@@ -141,6 +144,9 @@ Sociorent::Application.routes.draw do
       post 'favourites' => 'users#setfavourite'
       match 'vendors(/:cmd)' => 'users#vendorsdetails'
       match 'getusers(/:query)' => 'users#getusers'
+
+      get 'getfailed/:type/:dte' => 'users#download_failed'
+      #post 'payments' => 'users#userpayments'
 
       get 'getmessages(/:id)' => 'messages#getmessages'
 

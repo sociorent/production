@@ -5,6 +5,8 @@ Dir.chdir(Rails.root) do
 
       Lock_File = File.open(Rails.root.join('log/update_bulk_vendor.lock'),'w',2)
 
+      tme = Time.now
+
       csvfiles = P2p::VendorUpload.where(:processed=>false)
 
       csvfiles.each do |csvfile_obj|
@@ -99,12 +101,12 @@ end
               rescue Exception => e
                 puts "Error Occured for User\n" + e.message + "       "  + e.backtrace.join('\n')
 
-                csvfile_obj.failed_csvs.create(:csv_data=>row.to_json())
+                csvfile_obj.failed_csvs.create(:csv_data=>row.to_s ,:reason => e.message, :created_at => tme ,:categroy_id => category.id )
                 next
               end
             end
           rescue  Exception => e
-            puts "caught#{e}\n" + e.backtrace.join('\n')
+            puts "caught#{e}\n" + e.message + e.backtrace.join('\n')
             csvfile_obj.update_attributes(:processed=>false)
           end
       end

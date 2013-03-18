@@ -37,7 +37,7 @@ Browsing
 				
 				<% prod.items.by_location_or_allover(p2p_get_user_location).limit(5).each do |p| %>
 				<li class="span2">
-					<a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=(p.title).gsub(/ /,"-")%>/<%p.id%>">
+					<a href="/p2p/<%=p.product.category.name%>/<%=p.product.name%>/<%=(p.title).gsub(/ /,"-")%>/<%=p.id%>">
 						<div class="thumbnail">
 							
 							<div class="image_holder">

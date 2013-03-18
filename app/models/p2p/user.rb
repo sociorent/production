@@ -7,7 +7,7 @@ class P2p::User < ActiveRecord::Base
   has_many :soldpayments ,:class_name => "P2p::ItemDelivery" , :through => :items ,:source => :item_deliveries
 
   has_many :vendor_uploads, :class_name=>"P2p::VendorUpload"
-  attr_accessible :mobileverified, :user_id ,:user_type
+  attr_accessible :mobileverified, :user_id ,:user_type, :mobile_number
 
   #user_type
   # => 0 normal user

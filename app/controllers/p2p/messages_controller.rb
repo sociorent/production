@@ -252,6 +252,7 @@ class P2p::MessagesController < ApplicationController
   def mark_as_read
     messages = p2p_current_user.received_messages.unread
     messages.update_all({:receiver_status => 1})
+    PrivatePub.publish_to("/user_#{p2p_current_user.id}", "$('#unread_count').html('');$('#header_msg_count').html('');")
     render :text=>"Updated"
   end
 end

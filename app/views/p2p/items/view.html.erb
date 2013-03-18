@@ -12,7 +12,7 @@
 <% else %>
 
 	<%= stylesheet_link_tag "items/items_manifest"%>
-	                              
+
 
 	<div class="main_wrapper">
 	     <div class="row">
@@ -51,31 +51,37 @@
 	          		<% end %>
 
 		             <% if @item.solddate.nil?  %>
-	                  <% if @item.approveddate.nil? %>
-				                  <a href="#" class="  btn"  >
-				                  	<i class=" action-icon icon-shopping-cart"  title="Listing has not been approved yet"></i>
-				                   Waiting for approval
-				                  </a>
-
-				                  <%if session[:isadmin]%>
-				                  	<button class="btn alert-info"  id="approve" itemid="<%=@item.id%>"><i  class="action-icon icon-thumbs-up" title="Approve this listing"></i></button>
-			                  	<%end %>
-		              	<% elsif @item.disapproveddate.nil? %>
-			                  <!-- if admin display the approve button -->
-
-			                  <a href="/p2p/sold/<%= @item.id %>" class=" btn"   >
-			                  	<i class="  action-icon  icon-shopping-cart" title="Mark this listing as sold"></i> Mark as sold
+		             		<% if @item.disapproveddate.nil? && @item.approveddate.nil? %>
+                				<a href="#" class="  btn"  >
+			                  	<i class=" action-icon icon-ban-circle"  title="Waiting For Approval"></i>
+				                  	Waiting For Approval
 			                  </a>
-
+			                   <%if session[:isadmin]%>
+				                  	<button class="btn alert-info"  id="approve" itemid="<%=@item.id%>"><i  class="action-icon icon-thumbs-up" title="Approve this listing"></i></button>
+ 				                  	<button class="btn alert-info" id="disapprove" data-org-title="Enter Reason" itemid="<%= @item.id %>"><i  class="icon-thumbs-down action-icon" title="DisApprove this listing"></i></button>
+		                  	<%end %>
+             				<% elsif @item.approveddate %>
+             						<% if @item.user.id == session[:userid] %>
+	             				 		<a href="/p2p/sold/<%= @item.id %>" class=" btn"   >
+				                  	<i class="  action-icon  icon-shopping-cart" title="Mark this listing as sold"></i> Mark as sold
+				                  </a>
+			                  <% end%>
 												<% if session[:isadmin]%>
+													<a href="#" class=" btn"   >Approved    </a>
 			                  	<button class="btn alert-info" id="disapprove"   itemid="<%= @item.id %>"><i  class="icon-thumbs-down action-icon" title="DisApprove this listing"></i></button>
 			                  <% end %>
-                		<% else %>
-			                  <a href="#" class="  btn"  >
-			                  	<i class=" action-icon icon-ban-circle"  title="Disapproved"></i>
-				                  	Disapproved
-			                  </a>
-             				<% end %>
+
+		              	<% elsif @item.disapproveddate %>
+			                  <!-- if admin display the approve button -->
+			                 <a href="#" class="  btn" >
+				                	<i class=" action-icon icon-shopping-cart"  title="Item Disapproved"></i>
+				                  Disapproved
+				                </a>
+				                <%if session[:isadmin]%>
+				                  	<button class="btn alert-info"  id="approve" itemid="<%=@item.id%>"><i  class="action-icon icon-thumbs-up" title="Approve this listing"></i></button>
+			                  <%end %>
+			              <% end %>
+
              					<% if @item.user.id == session[:userid] %>
 	                  		<a href="<%=@payurl%>" id="payment_btn" class="btn action_popover" data-content="<%=@paytype_content%>" data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="Payment Options" data-placement="bottom" >
 		      	           	<i class="action-icon icon icon-gift" title="<%=@paytype_title%>"></i>
@@ -86,14 +92,14 @@
        									<span class="btn action_popover"  data-title="Listing Sold" data-content="On <%= @item.solddate.strftime("%d-%b-%C%y") %>"  data-trigger="hover" data-placement="bottom"> <i class="icon-shoppingcart"> </i> Listing Sold  </span>
 
 		             		<% end %>
-	           
+
 	              <!-- check if the item is sold or not -->
 	              	<% if @item.deletedate.nil? %>
 		                <button class="btn"  id="delete_button"  itemid="<%=@item.id%>">
 		                	<i  class=" action-icon icon-trash" title="Remove Listing"></i>
 		                </button>
 		            	<% else%>
-		              
+
 		              <button class="btn">
 		               	<i  class=" action-icon icon-check" title="Deleted Listing"></i>
 		              </button>
@@ -115,7 +121,7 @@
 		              <a href="<%=@item_message_url%>" id="reqcount_<%=@item.id%>" role="button" class="btn " data-toggle="modal" ><i   class="action-icon icon-envelope" title="View Messages for this listing">  </i>  <%= @item.reqCount %> </a>
 		            <% end %>
 
-		            
+
 	              <button class="btn" id="viewcount" ><i  title="Number of view of this listing" class="action-icon icon-eye-open"></i><%= @item.viewcount %></button>
 
 
@@ -179,19 +185,19 @@
 	              <tr class="edit_visible">
 	                <td>Title </td>
 	                <td>
-	                	<span class="canEdit action-icon" id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=@item.title.titleize  %></span>
+	                	<span class="canEdit action-icon" id="title"  data-org-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ><%=@item.title.titleize  %></span>
 	               	</td>
 	              </tr>
 	              <tr>
 	                  <td>Category </td>
-	                  <td> <span class=" action-icon" id="category_item" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=@item.category.name %></span></td>
+	                  <td> <span class=" action-icon" id="category_item" data-type="select" data-org-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/p2p/getcategories" ><%=@item.category.name %></span></td>
 	              </tr>
 	              <tr>
 	                <td>
 	                	<%= (@item.category.name =="Books") ? 'Type' : 'Model'%>
 	                </td>
 	                <td>
-	                	<span id="model" class="action-icon "  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" >
+	                	<span id="model" class="action-icon"  data-placement="right" data-placeholder="Select a model"  data-org-title="Select Model" data-type="select" >
 	                		<%=@item.product.name%>
 	                	</span>
 	                </td>
@@ -204,7 +210,7 @@
 	                 <td>
 	                    <span class="highlight highlight_force_color">
 	                    	Rs.
-	                        <span class=" canEdit highlight action-icon  highlight_force_color" data-name="username"  title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price">
+	                        <span class=" canEdit highlight action-icon  highlight_force_color" data-name="username"  data-org-title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price">
 	                        	<%= @item.price %>
 	                        </span>
 	                    </span>
@@ -216,7 +222,7 @@
 	                  <span class="highlight"> Condition</span>
 	                </td>
 	                <td>
-	                  <span class=" canEdit highlight action-icon  highlight_force_color" data-name="username" data-type="select" data-source="['Brand New','Like New','Used','Old']" title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" > <%= @item.condition.titleize %> </span>
+	                  <span class=" canEdit highlight action-icon  highlight_force_color" data-name="username" data-type="select" data-source="['Brand New','Like New','Used','Old']" data-org-title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" > <%= @item.condition.titleize %> </span>
 	                </td>
 	              </tr>
 
@@ -226,7 +232,7 @@
 	                  <span class="highlight">Location</span>
 	                </td>
 	                <td>
-	              	  <span class="highlight canEdit action-icon highlight_force_color" data-name="username"  data-type="typeahead" data-source="/p2p/getcities"  title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" >
+	              	  <span class="highlight canEdit action-icon highlight_force_color" data-name="username"  data-type="typeahead" data-source="/p2p/getcities"  data-org-title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" >
 	              	  	<%= @item.city.name %>
 	              	  </span>
 	                 </td>
@@ -242,7 +248,7 @@
 	                        <%= aspec.spec.name %>
 	                      </td>
 	                      <td>
-	                        <span class=" canEdit action-icon" data-name="username"  title="Enter <%= aspec.spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>" data-placement="right">
+	                        <span class=" canEdit action-icon" data-name="username"  data-org-title="Enter <%= aspec.spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>" data-placement="right">
 	                        	<%= aspec.value.titleize  unless aspec.value.nil? %>
 	                        </span>
 	                      </td>
@@ -267,7 +273,7 @@
 	     <div class="row">
 	          <div id="desc" class="span10">
 	               <h4> <%= @item.title.titleize %> Description</h4>
-	               <span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class=" action-icon" inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= URI.decode(@item.desc).html_safe %> </span>
+	               <span id="desc_content" data-org-title="Enter Description(More than 20 letters)" data-type="wysihtml5" class=" action-icon" inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= URI.decode(@item.desc).html_safe %> </span>
 	          </div>
 
 	     </div>
@@ -292,7 +298,7 @@
 	                <tr>
 	                  <td> <%= @attr[i].spec.name %> </td>
 	                  <td>
-	                    <span class="canEdit" data-name="username"  title="<%=@attr[i].value%>"  specname="<%= @attr[i].spec.name %>" specid="<%= @attr[i].spec.id.to_s %>" id="item_<%= @attr[i].spec.id %>" data-placement="right">
+	                    <span class="canEdit" data-name="username"  data-org-title="<%=@attr[i].value%>"  specname="<%= @attr[i].spec.name %>" specid="<%= @attr[i].spec.id.to_s %>" id="item_<%= @attr[i].spec.id %>" data-placement="right">
 	                    	<%= @attr[i].value.titleize %>
 	                    </span>
 	                  </td>
@@ -303,7 +309,7 @@
 	        </div>
 	      </div>
 	    <% end %>
-	 
+
 	 		<!-- if we have more specs that are not yet used -->
 	    <% if @item.product.category.specs.count > spec_used.count %>
 	      <div id="add_more_spec" class="hide">
@@ -319,7 +325,7 @@
 	              <tr>
 	                <td><%= spec.name %> </td>
 	                <td>
-	                  <span class="canEdit" data-name="<%=spec.name%>"  title="Enter <%=spec.name%>"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>" data-placement="right">  </span>
+	                  <span class="canEdit" data-name="<%=spec.name%>" title="Enter <%=spec.name%>"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>" data-placement="right">  </span>
 	                </td>
 	              </tr>
 	           <% end %>
@@ -333,10 +339,11 @@
           </button>
 
           <button class="btn btn-danger hide " id="cancel_bottom" >
-          	<i  class=" icon-white icon-remove-circle action-icon" title="Cancel changes"></i> Cancel
+          	<i  class="icon-white icon-remove-circle action-icon" title="Cancel changes"></i> Cancel
           </button>
 
     </div>
+
 
 
 </div>
@@ -379,6 +386,21 @@
 
 <script>
 $(document).ready(function(){
-		$('.action-icon').tooltip('destroy');
+		<% if session[:userid] != @item.user.id %>
+		$('#table_specs td span').tooltip("destroy");
+		$('#table_specs td span').removeAttr("data-org-title");
+		$('#table_specs td span').removeAttr("title");
+		<% end%>
+		$('#table_specs td [data-orginal-title]').each(function(){
+				var $ele= $(this);
+				$ele.attr({"data-org-title":$ele.attr("data-original-title")}).removeAttr("data-orginal-title");
+		});
+		$("#enable").click(function(){
+			$('#table_specs td [data-org-title]').each(function(){
+				var $ele= $(this);
+				$ele.attr({"data-original-title":$ele.attr("data-org-title")}).removeAttr("data-org-title");
+			});
+		})
 });
+
 </script>

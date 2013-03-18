@@ -2,7 +2,7 @@ $(document).ready(function(){
 
       $(".delete_item").live("click",function(){
         var that = this;
-        
+
         showNotifications('Deleting item.Please wait..!');
 
         $.ajax({
@@ -26,27 +26,33 @@ $(document).ready(function(){
       });
 
 
+
       $('.disapprove_item').on('click',function(){
           var that  = $(this);
-          showNotifications('Please wait while we process it');
-          
-          $.ajax({
-            url:'/p2p/approve/disapprove',
-            data:{id: that.attr('itemid')},
-            dateType:'json',
-            type:'post',
-            success:function(data){
-                if (data ==  1) {
-                  showNotifications('Item Disapproved');
-                  that.closest('li').fadeOut(1000);
-                }
-                else{
+
+          $("#disapprove_reason_modal").modal("show");
+          $("#disapprove_item_with_reason").on("click",function(){
+            showNotifications('Please wait while we process it');
+            $.ajax({
+              url:'/p2p/approve/disapprove',
+              data:{id: that.attr('itemid'),"disapprove":$("#reason_disapprove").val()},
+              dateType:'json',
+              type:'post',
+              success:function(data){
+                  if (data ==  1) {
+                    $("#disapprove_reason_modal").modal("hide");
+                    showNotifications('Item Disapproved');
+                    $("#reason_disapprove").val("");
+                    that.closest('li').fadeOut(1000);
+                  }
+                  else{
+                    showNotifications('Something went wrong');
+                  }
+              },
+              error:function(){
                   showNotifications('Something went wrong');
-                }
-            },
-            error:function(){
-                showNotifications('Something went wrong');
-            }
+              }
+            });
           });
       });
 
@@ -108,12 +114,12 @@ $(document).ready(function(){
             return elem.item.label;
         },
         focus:function(){
-          
+
         }
       });
 
 
 });
-          
+
 
 

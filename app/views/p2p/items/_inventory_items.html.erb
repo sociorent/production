@@ -26,7 +26,6 @@
               <% if session[:isadmin] && p.disapproveddate.nil? %>
                  <div class="disapprove_item pull-right" itemid="<%=p.id%>"><i title="Disapprove listing" class="action icon icon-ban-circle"></i></div>
               <% end %>
-
               <% if session[:isadmin] && p.approveddate.nil? %>
                 <div class="approve_item pull-right" itemid="<%=p.id%>"><i title="Approve Listing" class="action icon icon-ok"></i></div>
               <% end %>
@@ -65,3 +64,20 @@
     <% end %>
   </ul>
 </div>
+  <div id="disapprove_reason_modal" class="modal hide fade span9" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Enter Reason for Disapprove</h3>
+    </div>
+    <div class="modal-body span7">
+      <div class="control-group">
+        <label class="control-label">Reason</label>
+        <div class="controls">
+          <input type="text" id="reason_disapprove" class="input text" >
+        </div>
+        <div class="controls">
+          <button class="btn " id="disapprove_item_with_reason">Disapprove</button>
+        </div>
+      </div>
+    </div>
+  </div>

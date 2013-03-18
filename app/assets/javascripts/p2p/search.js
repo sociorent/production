@@ -94,7 +94,7 @@
         return false;
       },
       focus:function(event,elem){
-        $("#top_search_input").val(elem.item.label);  
+        $("#top_search_input").val(elem.item.label);
         return false;
       }
     });
@@ -104,6 +104,68 @@
     $(".action_popover").popover();
     $('.action-icon').tooltip();
 
+
+    $("#seller_send_verify_code").live("click",function(){
+        var verify_ele = $(this)
+         $(this).html('Sending verification code').attr('disabled','disabled');
+
+         $.ajax({
+              url:'/p2p/users/verifymobile/code',
+              type:'post',
+              data:{"mobile":$("#seller_mobile_number").val()},
+              dataType:'json',
+              success:function(data){
+                   if (data.status== 1){
+                        $(verify_ele).removeClass('btn-primary').attr('disabled','disable').html('Code Sent');
+
+                        $("#seller_verify_code_submit").addClass('btn-primary');
+
+                   }else{
+                        showNotifications('Some error occured. Try again.');
+                        $(verify_ele).addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+                   }
+              },
+              error:function(){
+                        showNotifications('Some error occured. Try again.');
+                        $(verify_ele).addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+
+              }
+
+         });//ajax
+    });//click
+
+
+    $("#seller_verify_code_submit").live("click",function(){
+
+
+         if ($("#seller_verify_mobile").val().length  <4){
+              alert('Wrong code. Enter the correct code');
+              return false;
+         }
+
+         $(this).html('Verifying code').attr('disabled','disabled');
+
+         $.ajax({
+              url:'/p2p/users/verifymobile/' + $("#seller_verify_mobile").val(),
+              type:'post',
+              dataType:'json',
+              success:function(data){
+                   if (data.status== 1){
+                        location.href="/p2p/sellitem"
+                        location.reload
+                   }else{
+                        showNotifications('Some error occured. Try again.');
+                        $("#seller_verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+                   }
+              },
+              error:function(){
+                        showNotifications('Some error occured. Try again.');
+                        $("#seller_verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+              }
+         });//ajax
+    });
+    if(location.hash == "#verify_mobile")
+      $("#seller_mobile_verify_modal").modal("show");
   });
 
 

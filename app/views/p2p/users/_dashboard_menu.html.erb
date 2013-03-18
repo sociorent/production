@@ -30,7 +30,7 @@
 <li class="<%= (params[:action] == "paymentdetails" and params.has_key?(:bought)) ? "active" : "" %>"> <a href="/p2p/paymentdetails/bought"><i class="icon-money "></i>Bought History</a></li>
 <li class="<%= (params[:action] == "paymentdetails" and !params.has_key?(:bought)) ? "active" : "" %>"><a href="/p2p/paymentdetails"><i class="icon-money "></i>Sold History</a></li>
 
-<% if session[:user_type] = 1%>
+<% if session[:user_type] == 1%>
 	<li class="<%= (params[:action] == "downloadtemplate") ? "active" : "" %>"><a href="/p2p/gettemplate"><i class="icon-table "></i>Bulk Upload</a></li>
 	<li class="<%= (params[:action] == "failed_uploads") ? "active" : "" %>"><a href="/p2p/faileduploads"><i class="icon-ban-circle "></i>Failed Uploads</a></li>
 	
@@ -73,10 +73,10 @@
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane active" id="new">
-		  	<%= render :template => "static_pages/new" %> 
+		  	<%= render :template => "static_pages/new" %>
 		  </div>
 		  <div class="tab-pane" id="edit">
-				<%= render :template => "static_pages/edit" %> 
+				<%= render :template => "static_pages/edit" %>
 		  </div>
 		</div>
   </div>

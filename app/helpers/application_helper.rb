@@ -82,4 +82,17 @@ module ApplicationHelper
   	end
 
   end
+
+  def get_seller_url
+  	if current_user
+  		if p2p_current_user.mobileverified == true
+        url = "/p2p/sellitem"
+      else
+      	url = "#seller_mobile_verify_modal"
+      end
+    else
+    	url = "#head_login_modal"
+    end
+    url
+  end
 end

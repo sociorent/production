@@ -6,7 +6,7 @@ $(document).ready(function(){
 	$('#upload_image').click(function(){
      $('#image_upload').trigger('click');
 	});
-	
+
 	$('#upload_pic').click(function(){
      $('#image_upload').trigger('click');
 	});
@@ -15,7 +15,7 @@ $(document).ready(function(){
 	// edit new js
 
 	// set the configuration for tooltips
-	$('.action-icon').tooltip('destroy');
+	//$('.action-icon').tooltip('destroy');
 
 		// cancel edit function trigger
 	// #TODO: CHECK IF THE FORM IS CHANGED OR NOT AND REDIRECT ACCORDINGLY
@@ -34,7 +34,7 @@ $(document).ready(function(){
 			showNotifications('Add more images to delete this.');
 			return false;
 		}
-		
+
 		var that = $(this);
 
 
@@ -72,7 +72,7 @@ $(document).ready(function(){
 			if (window.image_count <0) window.image_count = 0;
 		}
 
-		
+
 
 	_.each($(".thumb_img"),function(elem){
 				if ($(elem).attr('imgid') == -1){

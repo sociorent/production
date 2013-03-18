@@ -161,8 +161,9 @@
 	});
 	$(".mark_as_read").live("click",function(){
 		$.post("/p2p/mark_as_read",function(data){
-			showNotifications("All Messages Marked as unread");
+			showNotifications("All unread messages marked as read");
 			oInboxTable.fnDraw();
+
 		});
 	});
 

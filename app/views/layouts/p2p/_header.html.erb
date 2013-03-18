@@ -9,7 +9,7 @@
         <div class="topbar_right pull-right">
           <div>
 
-            
+
             <div id="menuSet" class="span7 pull-right">
                 <li class="pull-left location_li">
                     <i class="icon-globe"></i><%=select_tag "user_location" ,options_for_select( P2p::City.all.collect{|city|  [city.name,city.id]} , p2p_get_user_location ),:prompt=>"Your Location?"%>
@@ -20,20 +20,20 @@
               <% if p2p_current_user %>
 
 
-                  
+
                   <li class=" action-icon" title="Sociorent.com" data-placement="bottom"><a href="/"><i class="icon-home"></i>Sociorent Home</a></li>
-        
+
                   <li class="action-icon" title="Messages" data-placement="bottom">
                     <% unread_count = (session[:userid].nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
                     <a href="/p2p/messages"><i class="icon-envelope"></i> Messages
                       <span id="header_msg_count"><%= "(#{unread_count})" if  unread_count > 0  %><span>
                   </li>
                   <li class=" action-icon" title="Dashboard" data-placement="bottom"><a href="/p2p/dashboard"><i class="icon-dashboard"></i>Dashboard</a></li>
-                  
+
                   <li class=" action-icon" title="Sign out" data-placement="bottom">
                     <%= link_to "<i class='icon-signout'></i> Sign Out".html_safe, destroy_user_session_path, :method => :delete %>
                   </li>
-            
+
                 <% end %>
 
             </div>
@@ -41,16 +41,12 @@
 
 
           <nav class="main_nav pull-right">
-            <ul>
-              <%if current_user%>
-                <%url = "/p2p/sellitem" %>
-              <% else %>
-                <%url = "#head_login_modal" %>
-              <% end %>
-              
+            <ul><%url = get_seller_url %>
               <!-- <li><a href="#faq_page" class="static_page_dialog_open">FAQ</a></li>
               <li><a href="#universities" class="open_university">UNIVERSITIES</a></li> -->
-                 <li><a href="<%=url%>" <%if current_user%>data-toggle="modal" role="button" <%end%> class="selected" id="sell_item_button"><i class="icon-shopping-cart"></i>Sell Your Item</a></li>
+                 <li><a href="<%=url%>" <%if current_user.nil? || p2p_current_user.mobileverified == false %>
+                  data-toggle="modal" role="button" <% end%>
+                  class="selected" id="sell_item_button"><i class="icon-shopping-cart"></i>Sell Your Item</a></li>
               <% if current_user %>
                 <li><a href="#" class="selected" id="my_account_button"><%= current_user.name %></a></li>
               <% else %>
@@ -71,6 +67,7 @@
     <div class="cB"></div>
        <%= render '/layouts/p2p/p2p_user_bar' %>
     </div>
+
 
 <!--
   <%#= request.env["HTTP_REFERER"]  %>
@@ -127,6 +124,48 @@
                     <%= render :template => "devise/passwords/new" %>
                   </div>
 
+                </div>
+
+                </div>
+
+                <div id="seller_mobile_verify_modal" class="modal hide fade span9" tabindex="-1" role="dialog" aria-labelledby="mobile_verify_modalLabel" aria-hidden="true">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="mobile_verify_Label">Verify Your Mobile Number </h3>
+                </div>
+                <div class="modal-body span7">
+                   <div class="control-group">
+                      <label class="control-label">Enter Mobile</label>
+                      <div class="controls">
+                        <input type="text" id="seller_mobile_number" value = "<%= current_user.mobile_number if current_user %>" class="input text" >
+                      </div>
+                    </div>
+
+                    <div class="control-group">
+                      <label class="control-label"> Verification Code:</label>
+                      <div class="controls">
+                        <button class="btn  btn-primary" id="seller_send_verify_code">
+                          Send
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="control-group">
+                      <label class="control-label"> Enter Code:</label>
+                      <div class="controls">
+                        <input type="text" id="seller_verify_mobile" class="input text" >
+                      </div>
+
+                    </div>
+
+                    <div class="control-group">
+                      <label class="control-label"> </label>
+
+                      <div class="controls">
+                        <button class="btn " id="seller_verify_code_submit">Verify Code</button>
+                      </div>
+
+                    </div>
                 </div>
 
                 </div>

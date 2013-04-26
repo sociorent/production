@@ -48,6 +48,7 @@
 //= require global/chosen.jquery
 //= require global/jstorage.min
 //= require ckeditor-jquery
+//= require jquery.tinycarousel.js
 // require_tree .
 
 

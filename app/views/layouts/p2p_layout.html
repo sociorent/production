@@ -21,6 +21,7 @@
 <body>
 
   <%= render "layouts/p2p/header" %>
+  <%= render '/layouts/p2p/p2p_user_bar' %>
 
   <div class="container">
     <div id="body_container">
@@ -29,6 +30,10 @@
          <%= yield %>
       </div>
     </div>
+
+    <!-- show the we are with in all pages of p2p or use it on ur own -->
+    <%#-= render '/layouts/wearewith' %>
+
     <%= render "layouts/p2p/footer_menu" %>
 
     <div class="clearfix"></div>

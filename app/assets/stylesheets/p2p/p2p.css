@@ -3,7 +3,9 @@
 	clear:both;
 }
 
-
+h1{
+	font-weight: normal;
+}
 
 .head_active{
 	font-weight: bold;
@@ -237,14 +239,10 @@ li.dropdown:hover > ul.dropdown-menu{
 #menuSet li{
 	display:inline-block;
 	margin-left: 5px;
-
+	color: white;
 }
 
-#menuSet li:hover ,#menuSet li:focus{
-	color: rgb(246, 87, 87);
-}
 #menuSet li a,#menuSet li a:visited ,#menuSet li a:focus,#menuSet li a:active{
-		color:inherit;
 		text-decoration: none;
 }
 /* new head css*/
@@ -252,23 +250,60 @@ li.dropdown:hover > ul.dropdown-menu{
 /**header**/
 .topbar{
 	border-top: 8px solid #0F8159;
-	background: url("/assets/paper.jpg") repeat;
+	background: #444 repeat;
 }
+
+
+#logo_holder{
+	margin-top: 10px;
+}
+
 .logo{
-	background: url("/assets/Sociorentstreet.png") no-repeat scroll 0 0 transparent;
-  height: 100px;
-  width: 301px;
-
+ /*	background: url("/assets/home-sprite-green.png") no-repeat scroll 0 0 transparent; */
+  height: 70px;
+	margin: 5px 0 25px;
+	color:#fff;
+	margin-right:50px;
+	text-align:center;
+	width:auto;
+	height:45px;
+	display: block;
 }
-.logo h1{
-	text-indent: -999px;
+
+.socio_logo_holder{
+	margin-top: 10px;
+	height: 0px;
 }
 
+.socio_logo_holder,.socio_logo{
+	width:230px;
+}
+.pointer{
+	margin-top: -20px;
+	margin-left: -60px;
+}
+
+.street_logo_holder{
+	margin-top: -4px;
+}
+.street_logo_holder,.street_logo{
+	width:250px;
+}
+
+
+.logo .pointer{
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -ms-transform:     rotate(90deg);
+  -o-transform:      rotate(90deg);
+  transform:         rotate(90deg);
+}
 
 [class*="grid"] {
     float: left;
     min-height: 1px;
-	padding:5px;
+		padding:5px;
+		padding-left:0px;
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
             box-sizing: border-box;
@@ -279,7 +314,7 @@ li.dropdown:hover > ul.dropdown-menu{
 }
 
 .main_nav{
-	margin: 7px 0px 10px 0px;
+	margin: 3px 0px 10px 0px;
 }
 .main_nav li a{
 	display: block;
@@ -295,7 +330,7 @@ li.dropdown:hover > ul.dropdown-menu{
 .main_nav li a.selected{
 	background: #F65757;
 	color: #fff;
-	padding: 8px 20px;
+	padding: 7.5px 20px;
 	margin-top:7px;
 	border-radius: 3px 3px 3px 3px;
 }
@@ -439,8 +474,13 @@ background-image: linear-gradient(to bottom, white, #DED);
 	text-align: center;
 }
 
+#user_bar{
+	background-color: #DEDEDD;
+	height: 44px;
+}
+
 #user_bar_holder form{
-	margin:0px !important;
+	margin:5px 0px !important;
 
 }
 .Location{

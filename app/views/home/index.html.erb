@@ -14,11 +14,9 @@
 	<div class="grid_3_5">
 		<h1 class="homepage_title">Why buy engineering textbooks, when you can <span class="tite_rent">RENT</span> at 75% Off?</h1>
 		<h2 class="green"><b>Save loads of money. Feel Great. Be Smart.</b></h2>
-		<a class="fb_big_logi left" href="/users/auth/facebook"></a>
-		<span class="login_or">OR</span>
-		<a class="left open_login_popup signup_link green">
-			<span>Sign up with Email</span>
+		<a class="fb_big_logi left" href="/users/auth/facebook">
 		</a>
+
 	</div>
 	<div class="grid_2_5">
 		<div class="slider-wrapper">
@@ -91,9 +89,9 @@
 				</div>
 			</div>
 		</div>
-			
-			<div class="cB"></div>
+		<div class="cB"></div>
 		</div>
+		<%= render '/layouts/wearewith' %>
 	</div>
 </div>
 
@@ -117,6 +115,7 @@
 	<div class="clear"></div>
 </div>
 
+<script src="/assets/jquery.tinycarousel.js"></script>
 <script type="text/javascript">
 $("document").ready(function(){
 
@@ -153,22 +152,22 @@ $("document").ready(function(){
   // Sliding logos //
   if($("#gallery").length){
     // Declare variables
-    var totalImages = jQuery("#gallery > li").length, 
+    var totalImages = jQuery("#gallery > li").length,
         imageWidth = jQuery("#gallery > li:first").outerWidth(true),
         totalWidth = imageWidth * totalImages,
         visibleImages = Math.round(jQuery("#gallery-wrap").width() / imageWidth),
         visibleWidth = visibleImages * imageWidth,
         stopPosition = (visibleWidth - totalWidth);
-        
+
     jQuery("#gallery").width(totalWidth);
-    
+
     jQuery("#gallery-prev").click(function(){
         if(jQuery("#gallery").position().left < 0 && !jQuery("#gallery").is(":animated")){
             jQuery("#gallery").animate({left : "+=" + imageWidth + "px"});
         }
         return false;
     });
-    
+
     jQuery("#gallery-next").click(function(){
         if(jQuery("#gallery").position().left > stopPosition && !jQuery("#gallery").is(":animated")){
             jQuery("#gallery").animate({left : "-=" + imageWidth + "px"});
@@ -177,14 +176,14 @@ $("document").ready(function(){
     });
   }
   var mouse_is_inside = false;
-	
-	$('.search_wrap').hover(function(){ 
-      mouse_is_inside=true; 
-  }, function(){ 
-      mouse_is_inside=false; 
+
+	$('.search_wrap').hover(function(){
+      mouse_is_inside=true;
+  }, function(){
+      mouse_is_inside=false;
   });
 
-	$("body").mouseup(function(){ 
+	$("body").mouseup(function(){
 	    if(! mouse_is_inside) {
 	    	$('#search_books').hide();
 	    	$("#searchClose").hide();
@@ -243,7 +242,7 @@ $("document").ready(function(){
     });
     return false;
 	})
-	
+
 
 	$("#book_details_box").dialog({
 		autoOpen: false,
@@ -260,7 +259,7 @@ $("document").ready(function(){
 
 	});
 
-
+	$('#slider-code').tinycarousel({ display: 2 });
 
 });
 </script>

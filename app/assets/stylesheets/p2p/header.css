@@ -31,10 +31,6 @@
 	display: inline-block;
 }
 
-.location_li i{
-	margin-top: 10px;
-	float:left;
-}
 
 @-moz-document url-prefix() {
   #user_location{
@@ -42,8 +38,10 @@
 	}
 }
 
-
 .location_li{
-	margin-top: -0.7em;
+	margin-top: -4px !important;
 	display: inline-block;
+	margin-top: 10px;
+	float:left;
+
 }

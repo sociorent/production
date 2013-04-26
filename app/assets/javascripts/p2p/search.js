@@ -9,6 +9,9 @@
 
   $(document).ready(function() {
 
+  //we are with slider
+  $('#slider-code').tinycarousel({ display: 2 });
+
     var cache = {};
 
         // $("#top_search_input").keyup(function(e){

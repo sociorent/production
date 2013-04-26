@@ -1,6 +1,6 @@
 /* Addition CSS */
 
-span.login_or{ 
+span.login_or{
 	width: 10px;
 	float: left;
 	padding: 35px 0px 0px 15px;
@@ -89,19 +89,23 @@ form#search{
 	opacity: 0.7;
 }
 .fb_big_logi{
-	background: url("/assets/home-sprite.png") no-repeat scroll -1px -79px transparent;
+	  background: url("/assets/home-sprite-green.png") no-repeat scroll -1px -79px transparent;
     display: block;
-    height: 50px;
+    background-color: #0F8159;
+    height: 21px;
     margin: 20px 0 0;
-    width: 239px;
+    width: 214px;
+    padding:15px;
 }
+
+
 .signup_link{
 	font-size: 18px;
 	margin-top: 20px;
 	padding: 12px;
 }
 .signup_link:active{
-	color:greep !important;		
+	color:greep !important;
 }
 
 .tite_rent {
@@ -121,7 +125,7 @@ form#search{
 .content h1{
 	padding: 30px 0;
 }
-	
+
 .info_icon{
 	border-radius: 50% 50% 50% 50%;
 	background: #fff;
@@ -286,7 +290,7 @@ form#search{
 		.mrp, .rent_price{
 			margin: 4px 0px 3px 5px;
 			height: 20px;
-			overflow: hidden;			
+			overflow: hidden;
 		}
 		.add_to_cart{
 			font-size: 13px;
@@ -423,7 +427,7 @@ form#search{
 			float: right;
 			padding: 0px;
 			margin-top: -50px;
-			
+
 			a{
 			float:left;
 			}
@@ -433,7 +437,7 @@ form#search{
 	.left{
 		float: left;
 		width: 35%;
-		
+
 		.book_image {
 			float: left;
 			width: 25%;
@@ -557,7 +561,7 @@ form#search{
 				margin-left: 15px;
 				margin-top: 20px;
 				display: none;
-			
+
 				.reviews_input{
 					width: 750px;
 				}

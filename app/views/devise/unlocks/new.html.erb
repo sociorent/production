@@ -1,3 +1,8 @@
+<% unless request.env["HTTP_REFERER"] %>
+  <div class="wrapper">
+<% end %>
+
+
 <h2>Resend unlock instructions</h2>
 
 <%= form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post }) do |f| %>
@@ -10,3 +15,8 @@
 <% end %>
 
 <%= render "devise/shared/links" %>
+
+
+<% unless request.env["HTTP_REFERER"] %>
+	</div>  
+<% end %>

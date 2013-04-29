@@ -1,0 +1,103 @@
+<% content_for :pagetitle  do %>
+	Result for <%= @cat.name %>
+<%end %>
+
+
+<div id="Itemlist" class="row">
+	<div class="span3">
+
+		<%= render '/street/menu_partial/browse_menu' , :category => @cat %>
+
+	<div id="filter" class="">
+	    <%= render "street/index/filter" , :category => @cat %>
+	</div>
+</div>
+
+<div class="span9">
+
+<div class="navbar">
+  <div class="navbar-inner  results_top_loading">
+  	<a href="#" id="browse_head">Results</a>
+
+  	<span id="filter_loading_image" class="hide" > Loading <img src="/assets/loading.gif"> </span>
+
+		<select class="pull-right" id="filter_sort">
+			<option value="0">Relevance</option>
+			<option value="1">Price High to low</option>
+			<option value="2">Price Low to high</option>
+		</select>
+  </div>
+</div>
+
+
+<div id="items">
+		      <div class="itemsRow">
+
+			        <ul class="thumbnails">
+
+			        <% @items.each do |itm| %>
+
+			          <li class="span3 aitem_holder">
+
+                        <div class="thumbnail">
+                              	<a href="<%= itm[:url] %>">
+                                  <div class="aitem_left">
+                                        <img src="<%=itm[:img]%>" >
+                                  </div>
+                                </a>
+                              <div class="aitem_right">
+                                 <a href="<%= itm[:url] %>">
+                                  <div  title="<%= itm[:title] %>">
+                                    <div class="item_title"><%= itm[:title].truncate(20).titleize  %></div>
+                                  </div>
+                                </a>
+
+                                <div class="item_category">
+                                  <a href="<%= itm[:prod_url] %>">
+                                    <%= itm[:prod] %>
+                                  </a>
+                                  <a href="<%= itm[:cat_url] %>">
+                                    <%= itm[:cat]  %>
+                                  </a>
+                                </div>
+                                        <div class="item_condition"><%=itm[:condition] %></div>
+                                      <div class="item_price"><del>&#2352;</del> <%=itm[:price].to_i %>
+                                </div>
+                                <div class="buy_now"><a href="<%= itm[:url] %>">Buy Now</a></div>
+                              <div class="clearfix"></div>
+                      </div>
+
+                      <div class="clearfix"></div>
+
+			          </li>
+			      <% end %>
+
+					<div id="load_more_content"></div>
+			      </ul>
+
+	   		    <div id="load_more">
+			    	<div class="btn btn-primary">Load More.....</div>
+			    </div>
+
+			</div>
+	</div>
+
+ </div>
+
+</div>
+
+<div class="remove_onload">
+	<script>
+		//set the filters if we have found it already..
+		$(document).ready(function(){
+      <% if @view_filter_set.count > 0 %>
+			window.filters = <%= raw @view_filter_set.to_json() %>;
+      <% else %>
+        window.filters={};
+      <% end %>
+		});
+
+
+	</script>
+
+</div>

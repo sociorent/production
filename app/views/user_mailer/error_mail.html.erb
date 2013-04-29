@@ -1,0 +1,38 @@
+<style>
+.error{
+	color:red;
+}
+</style>
+
+<h2><span class="error"> Error Occured in Sociorent <%= @street %>
+</span></h2>
+
+<body>
+
+
+		<h3>Exception obj:</h3>  <%= debug @ex %>
+		<br/><hr><br/>
+
+		<h3>BackTrace :</h3> <%= debug @ex.backtrace %>
+
+		<br/><hr><br/>
+
+		<h3>Session Dump:</h3> <%= debug @session %>
+
+		<br/><hr><br/>
+
+		<h3>Params Dump: </h3><%= debug @params %>
+
+		<br/><hr><br/>
+
+		<h3>Request Dump: </h3>
+			<%= debug @request %>
+
+		<br/><hr><br/>
+
+
+
+
+
+
+	</body>

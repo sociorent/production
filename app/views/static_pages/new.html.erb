@@ -1,0 +1,10 @@
+<%@page = StaticPage.new%>
+<%= form_for @page, :remote=> true  do |f|%>
+	<h4>Page Name</h4>
+	<%= f.text_field :page_name%>
+	<h4>Page Title</h4>
+	<%= f.text_field :page_title%>
+	<h4>Page Content:</h4>
+	<%= f.text_area :page_content, :class => 'ckeditor' %>
+	<%= f.submit  %>
+<%end%>

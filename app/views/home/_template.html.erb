@@ -1,6 +1,5 @@
-<% states=["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Dadra and Nagar Haveli","Andaman and Nicobar Islands"]%>
-
-<script type="script/template" id="search_template">
+  	<% states=["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Dadra and Nagar Haveli","Andaman and Nicobar Islands"]%>
+  	<script type="script/template" id="search_template">
 	<div class="book_left">
 		<%% image = image.replace('book','original'); %>
 		<img src='<%%= image %>'/>
@@ -19,17 +18,17 @@
 <script type="script/template" id="book_details_template">
 	<div class="book_heading"><%%= name %> <small><i>by</i> <%%= author %></small></div>
 	<div class="left">
-		
+
 		<div class="book_image">
 			<img src="<%%= book_image %>"/>
-		</div>	
+		</div>
 		<div class="auther_edition">
 			<div class="edition"><b><%%= edition %></b></div>
 			<div class="author">Author(s): <p><span class="blue author_names"></span></p></div>
 			<div class="add_to_wishlist">Add to my Wishlist</div>
 		</div>
 		<div class="clear"></div>
-		
+
 		<!--<div class="socio_rent_rank">
 			<div class="socio_rent_rank_left">
 				SocioRent Rank
@@ -75,17 +74,17 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-	<div class="text"> 
+	<div class="text">
 		<div class="text_left">Description</div>
 		<div class="text_right"><%%= description || "--" %></div>
 		<div class="clear"></div>
 	</div>
-	<!--<div class="text"> 
+	<!--<div class="text">
 		<div class="text_left">Strengths</div>
 		<div class="text_right"><%%= strengths || "--" %></div>
 		<div class="clear"></div>
 	</div>
-	<div class="text"> 
+	<div class="text">
 		<div class="text_left">Weaknesses</div>
 		<div class="text_right"><%%= weaknesses || "--" %></div>
 		<div class="clear"></div>
@@ -95,7 +94,7 @@
 		<div class="reviews_caption">
 			<div class="reviews_caption_left">User Reviews</div>
 
-			<% if current_user %>			
+			<% if current_user %>
 				<div class="reviews_caption_right">Leave a Review</div>
 			<% end %>
 
@@ -116,7 +115,7 @@
 	</div>
 </script>
 
-<script type="script/template" id="cart_template"> 
+<script type="script/template" id="cart_template">
 	<div class="cart_image">
 		<img src='<%%= book_image %>'>
 	</div>
@@ -126,7 +125,7 @@
 	</div>
 	<div class="cart_isbn">
 		<%%= isbn10 %>
-	</div> 
+	</div>
 	<div class="cart_price">
 		Rs. <%%= Math.ceil((price * publisher.rental)/100) %>
 	</div>
@@ -145,7 +144,7 @@
 	<div class="clear"></div>
 </script>
 
-<script type="script/template" id="compare_dialog_template"> 
+<script type="script/template" id="compare_dialog_template">
 	<div class="name_remove">
 		<div class="book_name"><%%= name %></div>
 		<div class="remove_from_compare"></div>
@@ -153,7 +152,7 @@
 	</div>
 	<div class="book_image">
 		<img src="<%%= book_image %>"/>
-	</div>	
+	</div>
 	<div class="auther_edition">
 		<div class="edition"><b><%%= edition %></b></div>
 		<div class="author">Author(s): <p><span class="blue"><%%= author %></span></p></div>

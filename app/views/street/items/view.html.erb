@@ -1,0 +1,466 @@
+	<% content_for :pagetitle  do %>
+  <%=@item.title %> listed under <%= @item.product.name %>, <%=@item.category.name %>
+<%end %>
+
+<!-- if not logged in user or owner or admin show preview -->
+<% if session[:userid].nil? or (session[:userid] != @item.user.id and !session[:isadmin] ) %>
+    <%= render "/street/items/preview_item"  %>
+<% else %>
+
+	<%= stylesheet_link_tag "items/items_manifest"%>
+
+	<div class="main_wrapper">
+	     <div class="row">
+	         <div class="span6">
+	         	 <!-- breadcumb -->
+		          <ul class="breadcrumb">
+			          <li>
+			           	<a href="/street">Street</a>
+			           	<span class="divider">/</span>
+			          </li>
+			          <li>
+			           	<a href="<%= make_category_url(@item.category) %>">
+			           		<%=@item.category.name.titleize %></a>
+			           		<span class="divider">/</span>
+			          </li>
+			          <li>
+			           	<a  href="<%= make_product_url(@item.product) %>">
+			           		<%=@item.product.name.titleize %>
+			           	</a>
+			          	<span class="divider">/</span>
+			          </li>
+			          <li class="active ">
+			          	<a href="<%=make_item_url(@item)%>"> <%= @item.title.titleize%> </a>
+			          </li>
+		          </ul>
+		        </div>
+
+	          <div class="span6">
+							<div class="btn-group" id="listing_action">
+	          		<!-- show the sold and not sold button based ont  -->
+	          		<!-- for admin show the sold and not sold button based on the sold dat -->
+
+	          		<!-- display the author button -->
+	          		<%if session[:isadmin]%>
+	          			<span class="btn action_popover disabled" id="owner_item" data-title="<i class='icon-user'></i> Owner" data-content="The owner of this item is <%=@item.user.user.name%> (<%=@item.user.user.email%>)." data-placement="bottom" data-trigger="hover" data-html="true"><i class="icon-user"></i> Owner</span>
+	          		<% end %>
+
+		             <% if @item.solddate.nil?  %>
+		             		<% if @item.disapproveddate.nil? && @item.approveddate.nil? %>
+                				<a href="#" class="  btn disabled"  >
+			                  	<i class="  icon-ban-circle"  data-toggle="tooltip" title="Waiting For Approval"></i>
+				                  	Waiting For Approval
+			                  </a>
+			                   <%if session[:isadmin]%>
+				                  	<button  class="btn alert-info"  id="approve" itemid="<%=@item.id%>" data-toggle="tooltip" title="Approve this listing" ><i  class=" icon-thumbs-up" ></i></button>
+ 				                  	<button class="btn alert-info" id="disapprove" data-original-title="Enter Reason" itemid="<%= @item.id %>" data-toggle="tooltip" title="DisApprove this listing"></button>
+		                  	<%end %>
+             				<% elsif @item.approveddate %>
+             						<% if @item.user.id == session[:userid]  and @item.totalcount > 0 %>
+	             				 		<a href="/street/sold/<%= @item.id %>" class=" btn" data-toggle="tooltip" title="Mark this listing as sold"   >
+				                  	<i class="icon-shopping-cart" ></i> Mark as sold
+				                  </a>
+			                  <% end%>
+												<% if session[:isadmin]%>
+													<a class=" btn disabled action_popover" data-title="Item Approved" data-content="This listing has been approved on <%=@item.approveddate.strftime("%d-%b-%C%y")%>" data-placement="top" data-trigger="hover" id="approved_btn_info"  > <i class="icon-thumbs-up"> </i>Approved    </a>
+			                  	<a href="#" class="btn alert-info" data-toggle="tooltip" title="DisApprove this listing" id="disapprove"   itemid="<%= @item.id %>"><i  class="icon-thumbs-down " ></i></a>
+			                  <% end %>
+
+		              	<% elsif @item.disapproveddate %>
+			                  <!-- if admin display the approve button -->
+			                 <button class="btn disabled action_popover"  data-content="This listing has been disapproved on <%=@item.disapproveddate.strftime("%d-%b-%C%y")%>" data-title="Item Disapproved" id="disapproved_btn_info"  data-trigger="hover" data-placement="top">
+				                	<i class="  icon-thumbs-down"  ></i>
+				                  Disapproved
+				                </button>
+				                <%if session[:isadmin]%>
+				                  	<button class="btn alert-info"  title="Approve this listing" data-toggle="tooltip" id="approve" itemid="<%=@item.id%>"><i  class=" icon-thumbs-up" ></i></button>
+			                  <%end %>
+			              <% end %>
+
+             					<% if @item.user.id == session[:userid] %>
+	                  		<a href="<%=@payurl%>" id="payment_btn" class="btn action_popover" data-content="<%=@paytype_content%>" data-html="true" data-trigger="hover" data-dealy="{show:0,hide:500}" data-title="<%=@item.paytype_text%>" data-placement="bottom" >
+		      	           	<i class=" icon icon-gift"></i>
+		    	              	Payment
+	  		                </a>
+	  		            	<% end %>
+	  		            <% else #solddate %>
+
+	  		            <% if @item.totalcount > 1 and @item.availablecount  > 0 %>
+	  		            	<% pop_title = 'Listing last sold' %>
+	  		            	<% pop_content = "This listing was last sold on #{@item.solddate.strftime("%d-%b-%C%y")}" %>
+	  		            <% else  %>
+	  		            	<% pop_title = 'Listing sold' %>
+	  		            	<% pop_content = "This listing was sold on #{@item.solddate.strftime("%d-%b-%C%y")}" %>
+	  		            <% end %>
+
+       						<span class="btn action_popover disabled"  data-title="<%= pop_title %>" data-content="<%= pop_content %>"  data-trigger="hover" data-placement="bottom"> <i class="icon-shoppingcart"> </i> <%= pop_title %>  </span>
+
+		             		<% end %>
+
+	              <!-- check if the item is sold or not -->
+	              <% if @item.solddate.nil? %>
+	              	<% if @item.deletedate.nil? %>
+		                <a href="#" class="btn"  id="delete_button" data-toggle="tooltip" data-title="Remove Listing"  itemid="<%=@item.id%>">
+		                	<i  class="icon-trash" ></i>
+		                </a>
+
+		            	<% else%>
+
+		              <a href="#" class="btn action_popover" data-placement="top" data-title="Deleted Listing" data-content="This listing was deleted on <%= @item.deletedate.strftime('%d-%b-%C%y')%>">
+		               	<i  class="icon-check"></i>
+		              </a>
+	              	<% end %>
+	              <% end %>
+
+	              <%if @item.user.id == session[:userid] or session[:isadmin] %>
+	              	<% if @item.solddate.nil? %>
+			              <a href="#" data-toggle="tooltip"  title="Edit Listing" class="btn " id="enable">
+			              	<i  class=" icon-pencil" ></i>
+			              </a>
+		              <% end %>
+
+		              <a href="#" data-toggle="tooltip"  title="Save changes" class="btn btn-success hide " id="save_top"  >
+		              	<i  class=" icon-white icon-ok-circle"></i> Save
+		              </a>
+
+		              <a href="#" data-toggle="tooltip" title="Cancel changes"  class="btn btn-danger hide " id="cancel_top" >
+		              	<i  class=" icon-white icon-remove-circle" ></i> Cancel
+		              </a>
+
+		              <a href="<%=@item_message_url%>" data-toggle="tooltip"  title="View Messages for this listing" id="reqcount_<%=@item.id%>" role="button" class="btn " data-toggle="modal" ><i   class="icon-envelope">  </i>  <%= @item.reqCount %> </a>
+		            <% end %>
+
+
+	              <button data-toggle="tooltip" title="Number of view of this listing" class="btn disabled"  id="viewcount" ><i   class="icon-eye-open"></i> <%= @item.viewcount %></button>
+	        </div> <!-- span6 action buttons-->
+	      </div>
+	    </div> <!-- row -->
+
+	     <div class="row">
+	        <div class="span4">
+	          <ul class="thumbnails">
+
+	        	  <li>
+		            <div class="thumbnail">
+		              <a href="#"  title="Clear pics uploaded just now" data-toggle="tooltip">
+		              	<i id="clearuploads" class="icon-trash pull-right hidden"  disabled="disabled"></i>
+		              </a>
+
+		              <a href="#" data-toggle="tooltip"  title="Upload more photos" ><div id="upload_pic" class="pull-right edit_visible"><i class="icon-upload"></i>Upload</div>
+
+		              <div class="clearfix"></div>
+
+		                <%= form_tag  "/street/items", :multipart => true, :id => "fileupload"   do %>
+		                  <div id="form_temp"></div>
+			                  <%= file_field_tag "img[]" ,:id=> "image_upload" ,:multiple  => 'true' ,:disabled => true  ,:accept => "image/*"  %>
+		                <% end %>
+				          <div id="view_image_holder">
+				            <a href="<%=@fullimage[@rand_image][:url]%>" id="view_image_fancy">
+				                 <img src="<%= @viewimage[@rand_image][:url] %>" imgid="<%= @viewimage[@rand_image][:id] %>" alt="Item pic" id="view_image">
+				            </a>
+				          </div>
+
+				          <div class="caption thumb_holder">
+				            <ul class="thumbnails">
+				              <% i = 0 %>
+				              <% @thumbimage.each do |img| %>
+					              <li class="thumbs picture_upload_preview">
+					                <i class="icon-remove pull-right remove_image hidden"></i>
+
+					                <a class="fancy_thumb" rel="fancy_thumb" imgid="<%= img[:id] %>" href="<%=@fullimage[i][:url]%>">
+				                  		<img  src="<%= img[:url]%>"  imgid="<%= img[:id] %>" alt="" id="image_<%= img[:id]%>" class="thumb_img" fancyimg="<%=@fullimage[i][:url]%>" viewimage="<%= @viewimage[i][:url] %>">
+				                  	</a>
+
+				                </li>
+				              <% i += 1 %>
+				              <% end %>
+				            </ul>
+				            <span class="small_text">Some images may load only on 10min from approval </span>
+				          </div>
+		          	</div> <!-- thumbnail div -->
+		      		</li>
+	          </ul>
+	        </div>
+
+	        <div class="span6">
+
+	        	<!-- show images for admin  -->
+	        		<% if @admin_images.count >0 %>
+	        			<i class="icon-info-sign"></i> Images that are waiting for verification (CTRL + CLICK to view the original size ) <br/>
+	        			<div class="admin_images">
+	        					<%@admin_images.each do |img_url|%>
+	        						<div class="admin_thumb_holder" >
+	        							<!-- <i class="icon-remove pull-right remove_image hidden"></i> -->
+	        							<a href="<%=img_url[:url]%>" class="admin_thumb" imgid="<%img_url[:id]%>" > <img src="<%=img_url[:url]%>"> </a>
+	        						</div>
+	        					<% end %>
+
+	        			</div>
+							<hr/>
+	        		<% end %>
+						<!-- show images for admin   end-->
+
+
+
+	          <center><code class="edit_visible"> All words in <span style="color:blue"> blue</span> are editable.Please click on them to edit</code></center>
+
+	          <table class="table table-bordered table-striped" id="table_specs">
+	            <colgroup>
+	              <col class="span1">
+	              <col class="span7">
+	            </colgroup>
+	             <thead>
+	              <tr>
+	                <th>Specification</th>
+	                <th>Value</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              <tr class="edit_visible">
+	                <td>Title </td>
+	                <td>
+	                	<span class="canEdit" data-toggle="tooltip" id="title" title="Enter a title for your listing" data-placeholder="Enter a title" ><%=@item.title.titleize  %></span>
+	               	</td>
+	              </tr>
+	              <tr>
+	                  <td>Category </td>
+	                  <td> <span data-toggle="tooltip" id="category_item"><%=@item.category.name %></span></td>
+	              </tr>
+	              <tr>
+	                <td>
+	                	<%if @item.category.id == 1 %>
+													Book Genere
+										<% elsif @item.category.id == 13 %>
+													Platform
+										<% elsif @item.category.id == 14 %>
+													Cloth Style
+										<% else %>
+													Brand
+										<% end %>
+
+	                </td>
+	                <td>
+	                	<span id="model" data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" >
+	                		<%=@item.product.name%>
+	                	</span>
+	                </td>
+	              </tr>
+	              <!-- Price -->
+	              <tr>
+	                 <td>
+	                   <span>Price</span>
+	                 </td>
+	                 <td>
+	                    <span >
+	                    	Rs.
+	                        <span class=" canEdit" data-name="username"  data-org-title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price">
+	                        	<%= @item.price %>
+	                        </span>
+	                    </span>
+	                 </td>
+	              </tr>
+	            <!-- Condition -->
+	              <tr>
+	                <td>
+	                  <span> Condition</span>
+	                </td>
+	                <td>
+	                  <span class=" canEdit " data-name="username" data-type="select" data-source="['Brand New','Like New','Used','Old']" data-org-title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" > <%= @item.condition.titleize %> </span>
+	                </td>
+	              </tr>
+
+	            <!-- Location -->
+	              <tr>
+	                <td>
+	                  <span >Location</span>
+	                </td>
+	                <td>
+	              	  <span class="canEdit" data-name="username"  data-type="typeahead" data-source="/street/getcities"  data-org-title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" >
+	              	  	<%= @item.city.name %>
+	              	  </span>
+	                 </td>
+	              </tr>
+
+			        <% if (!session[:user_type].nil? and session[:user_type] == 1 ) or session[:isadmin] %>
+			          <tr>
+			            <td>
+			              <span class="highlight" >Count</span>
+			            </td>
+			            <td>
+			             <span   class=" canEdit   highlight" data-name="count"  title="Enter count"  specname="count" specid="0" id="count"  data-placement="right" data-placeholder="Enter Item Count" > <%= @item.availablecount %> </span>
+
+			             <span class="pull-right action_popover" data-trigger="hover" data-html="true" data-title="Listing count details" data-content="<ul><li>Total: <%= @item.totalcount %> </li> <li>Sold: <%=@item.soldcount%> <li>Available: <%=@item.availablecount%> </li>  </ul>" > <i class="icon-table"></i> </span>
+			            </td>
+			          </tr>
+			        <% end %>
+
+	              <!-- load some specs hree -->
+
+	                <% spec_used = [] %>
+	                <% @attr.limit(4).each do |aspec| %>
+	                  <% spec_used.push(aspec.spec.id)%>
+	                    <tr class="specs">
+	                      <td>
+	                        <%= aspec.spec.name %>
+	                      </td>
+	                      <td>
+	                        <span class=" canEdit" data-name="username"  data-org-title="Enter <%= aspec.spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>" data-placement="right">
+	                        	<%= aspec.value.titleize  unless aspec.value.nil? %>
+	                        </span>
+	                      </td>
+	                    </tr>
+	                  <% end %>
+
+
+	              <!-- keep a check if we have shown all specs here or show more -->
+	              <%if spec_used.size < @attr.size %>
+	                <tr>
+	                  <td colspan="2">
+	                    <a class="btn btn-link aslink" href="#more_details"> <i class="icon-arrow-down"></i> View more</a>
+	                  </td>
+	                </tr>
+	              <% end %>
+	            </tbody>
+	          </table>
+	        </div>
+	     </div><!-- row ends -->
+
+
+	     <div class="row">
+	          <div id="desc" class="span10">
+	               <h4> <%= @item.title.titleize %> Description</h4>
+	               <span id="desc_content" data-org-title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="" inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= @item.desc.html_safe %> </span>
+	          </div>
+
+	     </div>
+
+	     <!-- if we have more specs -->
+
+			<% if spec_used.count < @attr.count %>
+
+	        <div class="row">
+	          <div class="span12" id="more_details">
+	            <table class="table table-bordered table-striped">
+	            <thead>
+	              <tr>
+	            	  <th class="span3">Specification</th>
+	                <th>Value</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	           <!-- load remaining spec -->
+              <% (spec_used.count..((@attr.count)-1)).each do |i| %>
+              		<% spec_used.push(@attr[i].spec.id)%>
+	                <tr>
+	                  <td> <%= @attr[i].spec.name %> </td>
+	                  <td>
+	                    <span class="canEdit" data-name="username"  data-org-title="<%=@attr[i].value%>"  specname="<%= @attr[i].spec.name %>" specid="<%= @attr[i].spec.id.to_s %>" id="item_<%= @attr[i].spec.id %>" data-placement="right">
+	                    	<%= @attr[i].value.titleize %>
+	                    </span>
+	                  </td>
+	                </tr>
+	            <% end %>
+	            </tbody>
+	          </table>
+	        </div>
+	      </div>
+	    <% end %>
+
+	 		<!-- if we have more specs that are not yet used -->
+	    <% if @item.product.category.specs.count > spec_used.count %>
+	      <div id="add_more_spec" class="hide">
+	        <b>Add More Specification here <br/></b>
+	        <table class="table table-bordered table-striped hide" id="empty_specs">
+	          <tr>
+	            <th class="span3">Specification</th>
+	            <th>Value</th>
+	          </tr>
+	          <% @item.product.category.specs.each do |spec| %>
+	          	<!-- skipe if we have already loaded this spec -->
+	            <% next if !spec_used.nil?  and spec_used.include?(spec.id) %>
+	              <tr>
+	                <td><%= spec.name %> </td>
+	                <td>
+	                  <span class="canEdit" data-name="<%=spec.name%>" title="Enter <%=spec.name%>"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>" data-placement="right" data-placeholder="<%=spec.placeholder%>">  </span>
+	                </td>
+	              </tr>
+	           <% end %>
+	          </table>
+	      </div>
+	    <%end %>
+
+    <div class="pull-right">
+          <button class="btn btn-success hide " id="save_bottom"  >
+          	<i  class=" icon-white icon-ok-circle" title="Save changes"></i> Save
+          </button>
+
+          <button class="btn btn-danger hide " id="cancel_bottom" >
+          	<i  class="icon-white icon-remove-circle" title="Cancel changes"></i> Cancel
+          </button>
+
+    </div>
+
+
+
+</div>
+
+
+	<script>
+
+		window.item_id = '<%= @item.id%>';
+
+	  window.editsaveurl = '/street/items/' + item_id;
+	  window.editsavetype = "put";
+
+	  window.image_count = <%= @viewimage.count %>;
+
+	  window.item_values ={};
+	  item_values['spec']={};
+
+	  window.edit = true;
+
+	  //load the values in the window namespace
+	  //for edit
+		item_values['title'] = "<%= raw @item.title %>";
+		item_values['cat'] = "<%= @category_id %>";
+		item_values['scat'] = "<%= @sub_category_id %>";
+		item_values['brand'] = "<%= @brand_id %>";
+		item_values['price'] = "<%= @item.price %>";
+		item_values['condition'] = "<%= @item.condition %>";
+		item_values['desc'] = "<%=@item.desc.html_safe%>";
+		item_values['location'] = "<%=@item.city.name%>";
+		item_values['count'] = "<%=@item.availablecount%>";
+
+		window.price = item_values['price'];
+		window.brand = item_values['brand'];
+
+	  <% @attr.each do |aspec| %>
+	    item_values['spec']['<%= aspec.spec.id%>'] = "<%= raw aspec.value %>";
+	  <% end %>
+	</script>
+<% end %>
+
+<%= javascript_include_tag 'p2p/item/common' %>
+<%= javascript_include_tag 'p2p/item/items' %>
+<%= javascript_include_tag 'p2p/item/view' %>
+
+<script>
+$(document).ready(function(){
+		<% if session[:userid] != @item.user.id %>
+		$('#table_specs td span').tooltip("destroy");
+		$('#table_specs td span').removeAttr("data-org-title");
+		$('#table_specs td span').removeAttr("title");
+		<% end%>
+		$('#table_specs td [data-orginal-title]').each(function(){
+				var $ele= $(this);
+				$ele.attr({"data-org-title":$ele.attr("data-original-title")}).removeAttr("data-orginal-title");
+		});
+		$("#enable").click(function(){
+			$('#table_specs td [data-org-title]').each(function(){
+				var $ele= $(this);
+				$ele.attr({"data-original-title":$ele.attr("data-org-title")}).removeAttr("data-org-title");
+			});
+		})
+});
+
+</script>

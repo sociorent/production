@@ -1,0 +1,2 @@
+module Street::MobileHelper
+end

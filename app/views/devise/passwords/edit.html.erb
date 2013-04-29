@@ -1,3 +1,8 @@
+<% unless request.env["HTTP_REFERER"] %>
+  <div class="wrapper">
+<% end %>
+
+
 <style>
 .password_reset{
 	width:400px;
@@ -23,3 +28,7 @@
 
 <%= render "devise/shared/links" %>
 </div>
+
+<% unless request.env["HTTP_REFERER"] %>
+  </div>
+<% end %>

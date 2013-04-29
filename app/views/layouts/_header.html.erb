@@ -1,0 +1,142 @@
+<!-- Header -->
+  <div class="topbar">
+    <div class="wrapper">
+      <div class="grid_1">
+        <a class="left logo" href="/"><h1>sociorent</h1></a>
+        <a class="left logo" href="/street/"><h1>sociorent</h1></a>
+        <div class="topbar_right right">
+          <nav class="main_nav right">
+            <ul>
+              <!-- <li><a href="#faq_page" class="static_page_dialog_open">FAQ</a></li>
+              <li><a href="#universities" class="open_university">UNIVERSITIES</a></li> -->
+              <li><a href="http://www.sociorent.com/blog">BLOG</a></li>
+              <% if current_user %>
+                <li><a class="selected" id="my_account_button">MY ACCOUNT</a></li>
+              <% else %>
+                <li><a class="selected open_login_popup" href="#" id="login_box_button">LOGIN</a></li>
+              <% end %>
+            </ul>
+          </nav>
+          <div class="clearfix"></div>
+          <div class="contact_socio right">
+            <a href="mailto:care@sociorent.com"><img src="/assets/index/mail_icon.png">care@sociorent.com</a> | <img src="/assets/index/phone.png">+91-73531-12345
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cB"></div>
+  </div>
+
+<%= render 'layouts/user_bar' %>
+
+<% if current_user.nil? %>
+  <%= render 'home/loginbox' %>
+<% end %>
+
+<script type="text/javascript">
+
+  $("#login_box").dialog({
+    autoOpen: false,
+    draggable: false,
+    title:'Login',
+    width: 650,
+    resizable: false,
+    modal: true
+  });
+
+
+  $(".login_error_msg").html("");
+  $("#login_box_left_login form").live("submit",function(){
+    if($(this).valid())
+    {
+      $("#loading_div").fadeIn();
+      $.ajax({
+        url: "/users/sign_in",
+        type:"post",
+        data:$("#login_box_left_login form").serialize(),
+        complete: function (jqxhr, txt_status) {
+          if(jqxhr.status==200){
+            location.reload();
+          }
+          else{
+            $("#loading_div").fadeOut();
+              $(".login_error_msg").html(jqxhr.responseText);
+
+          }
+        }
+      });
+     }
+    return false;
+
+  });
+  $(".forgot_password_form").live("submit",function(){
+    $("#loading_div").fadeIn();
+    $.ajax({
+      url: "/users/password",
+      type:"post",
+      data:$(".forgot_password_form").serialize(),
+      complete: function (jqxhr, txt_status) {
+        if(jqxhr.status==200){
+            $(".forgot_error").html("Check the Mail For Password Instructions");
+        }
+        else{
+            $(".forgot_error").html("Error Occured");
+        }
+
+        $("#loading_div").fadeOut();
+      }
+    });
+    return false;
+  })
+
+
+
+
+  $(".open_login_popup").live ("click", function(){
+    try{
+      $("#book_details").dialog ("close");
+    }
+    catch(ex){}
+
+    $("#login_box").dialog( "open");
+  });
+
+
+  $("a[href='/users/sign_in']").hide();
+
+  $("#devise_pages a").click(function(){
+
+      var action = $(this).text();
+
+      $("#login_box").dialog('option','title',action)
+
+      switch(action) {
+
+        case "Login" :{
+          $("#login_box_left .boxes").slideUp(0);
+          $("#login_box_left_login").slideDown(200);
+          break;
+        }
+
+        case "Sign Up": {
+          $("#login_box_left .boxes").slideUp(0);
+          $("#login_box_left_signup").slideDown(200);
+          break;
+        }
+
+        case "Forgot Password?": {
+          $("#login_box_left .boxes").slideUp(0);
+          $("#login_box_left_password").slideDown(200);
+          break;
+        }
+      }
+
+      $("#devise_pages a").css("display","none");
+      $("#devise_pages a").each (function(ele){
+        if ($(this).text() != action)
+          $(this).show();
+      });
+
+      return false
+    });
+</script>

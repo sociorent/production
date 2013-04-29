@@ -1,0 +1,47 @@
+#header {
+	margin-top: 20px;
+}
+
+.topMenu {
+	padding: 5px;
+	background-color:#F65757;
+	color:white !important;
+	border-radius: 2px;
+	margin-left:4px;
+	font-weight: bold;
+
+}
+ ul.submenu li {
+ 	text-align: left;
+ }
+.search_btn{
+	margin-bottom: 12px;
+}
+
+
+
+#user_location{
+	margin-top: 5px;
+	height: auto;
+	border: 1px solid #DDD;
+	padding: 0px 0px 0px 5px;
+	width: 130px;
+	background-color: white;
+	font-weight: bold;
+	display: inline-block;
+}
+
+
+@-moz-document url-prefix() {
+  #user_location{
+		margin-top: 6px;
+	}
+}
+
+.location_li{
+	margin-top: -4px !important;
+	display: inline-block;
+	margin-top: 10px;
+	float:left;
+
+}

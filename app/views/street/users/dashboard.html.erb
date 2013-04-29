@@ -1,0 +1,160 @@
+<div class="row" id="body_content" >
+     <div class="span3">
+      <ul class="nav nav-list">
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/street/index/scat_menu" %>
+      </ul>
+    </div>
+	<div class="span9">
+			<div class="span8 pull-left ">
+                 <% if (p2p_current_user.items.count > 0 || session[:isadmin] && P2p::Item.count>0)   %>
+    				<h3>Your  Statistics </h3>
+				  <div id="items_status"></div>
+                <% else %>
+                    <div class="well">
+                        <h4>Start selling your items.</h4>
+                        <p><a href="<%= get_seller_url%>"  <%if current_user.nil? || p2p_current_user.mobileverified == false %> data-toggle="modal" role="button" <% end%> class="btn btn-primary white">Sell your Item</a></p>
+                    </div>
+                <% end %>
+				  <!-- For category chart only for admins and vendors -->
+				  <% if @cate_counts%>
+				  	<div id="category_status"></div>
+				  <% end%>
+                  <% if @count_items.count>0%>
+                  <div id="users_view_count"></div>
+                  <% end %>
+				<!-- TO DO :: For future use -> Admin Analytics -->
+				<% if false and session[:isadmin]  %>
+				<div class="box span3 pull-left">
+				<div class="box_title"> P2P Stastics </div>
+				<ul>
+				<li class="box_element">Total Items : <span id="total_item_count"> <%= P2p::Item.unscoped.notdeleted.count %> </span></li>
+				<li class="box_element">Sold Items : <span id="total_sold_count"> <%= P2p::Item.sold.count %> </span> </li>
+				<li class="box_element">Waiting for Approval: <span id="total_wapproval_count"> <%= P2p::Item.notdeleted.notapproved.count %> </span> </li>
+				<li class="box_element">Disapproved: <span id="total_wapproval_count"> <%= P2p::Item.unscoped.notdeleted.disapproved.count %> </span> </li>
+				</ul>
+				</div>
+			<% end %>
+				</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+    <% if p2p_current_user.items.count >0 %>
+    var plot1 = $.jqplot('items_status', [[['<a href="/street/waiting">Waiting </a>(<%=@waiting_count%>)',<%=@waiting_count%>],['<a href="/street/approve/">Approved </a>(<%=@approved_count%>)',<%=@approved_count%>],['<a href="/street/disapprove">Disapproved</a> (<%=@disapproved_count%>)',<%=@disapproved_count%>],['<a href="/street/mystore/sold">Sold </a>(<%=@sold_count%>)',<%=@sold_count%>]]], {
+        gridPadding: {top:20, bottom:38, left:0, right:0},
+        title: 'Statistics of your Items',
+        animate: !$.jqplot.use_excanvas,
+        grid: {
+            drawBorder: false,
+            drawGridlines: false,
+            background: '#ffffff',
+            shadow:false
+        },
+       	seriesColors: ['#006ccc', '#005C16','#D50000','#924D03' ],
+        seriesDefaults:{
+            renderer:$.jqplot.PieRenderer,
+            trendline:{ show:false },
+            pointLabels: { show: true },
+            rendererOptions: { padding: 20, showDataLabels: true }
+        },
+        legend:{
+            show:true,
+            placement: 'outside',
+            rendererOptions: {
+                numberRows: 4
+            },
+            location:'e',
+            marginTop: '15px'
+        }
+    });
+    <% end %>
+	var line1= [ <%= raw @count_items.join(",")%>];
+	$('#users_view_count').jqplot([line1], {
+        title:'Top '+line1.length+' Listings of Viewed Items ',
+        animate: !$.jqplot.use_excanvas,
+        seriesDefaults:{
+            renderer:$.jqplot.BarRenderer,
+            pointLabels: { show: true },
+
+            rendererOptions: {
+                // Set the varyBarColor option to true to use different colors for each bar.
+                // The default series colors are used.
+                varyBarColor: true
+            }
+        },
+        axes:{
+            xaxis:{
+                renderer: $.jqplot.CategoryAxisRenderer,
+                ticks: [<%= raw @count_ticks.join(',') %>]
+
+            }
+        }
+    });
+	<% if @cate_counts %>
+	 var cate_data = [ <%= raw @cate_counts.join(",")%>];
+	$('#category_status').jqplot([cate_data], {
+        title:'Analysis of user viewed based on category',
+        animate: !$.jqplot.use_excanvas,
+        seriesDefaults:{
+            renderer:$.jqplot.BarRenderer,
+            pointLabels: { show: true },
+            rendererOptions: {
+                // Set the varyBarColor option to true to use different colors for each bar.
+                // The default series colors are used.
+                varyBarColor: true
+            }
+        },
+        axes:{
+          xaxis: {
+			          renderer: $.jqplot.CategoryAxisRenderer,
+			          label: 'Categories',
+			          labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+			          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+			          tickOptions: {
+			              angle: -30,
+			          },
+		        },
+	        yaxis: {
+	          label: 'Users Count',
+	          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+	        }
+	      }
+    });
+		var categories = [<%= raw @categories.join(",")%>];
+		$('#category_status').bind('jqplotDataClick',
+    function (ev, seriesIndex, pointIndex, data) {
+    	// console.log('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+    	// console.log(categories[pointIndex]);
+			location.href="/street/"+categories[pointIndex];
+    });
+	  <% end %>
+	  $('#items_status').bind('jqplotDataClick',
+    function (ev, seriesIndex, pointIndex, data) {
+    	href= "";
+    	if (data[0].indexOf('Approved') !== -1)
+    		href= "approve"
+    	else if (data[0].indexOf('Waiting') !== -1)
+    		href="waiting"
+    	else if (data[0].indexOf('Disapproved') !== -1)
+    		href="disapprove"
+    	else if (data[0].indexOf('Sold') !== -1)
+    		href="sold"
+    	location.href="/street/"+href;
+      //console.log('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+    });
+    $('#items_status,#category_status,#users_view_count').bind('jqplotDataHighlight',
+            function (ev, seriesIndex, pointIndex, data) {
+              $(this).css("cursor","pointer");
+    });
+
+    var item_names = [<%= raw @item_names.join(",")%>];
+        $('#users_view_count').bind('jqplotDataClick',
+    function (ev, seriesIndex, pointIndex, data) {
+            // console.log('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+            // console.log(item_names[pointIndex]);
+            location.href=item_names[pointIndex];
+    });
+});
+</script>

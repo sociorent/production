@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+  	<div>Dear <%= @listing.user.user.name %></div>
+    <p>
+      You have received a message form <%= @user.name %> on your listing <a href="<%=request.env['HTTP_HOST']%><%=make_product_url(@listing)%>"> <%=@listing.title%> <br/>
+      Check your message in <a href="<%=request.env['HTTP_HOST']%>/street/messages">
+    </p>
+    Thank you, <br/>
+    <a href="http://www.sociorent.com/street">P2P, Sociorent<s/a>
+  </body>
+</html>

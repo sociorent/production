@@ -1,0 +1,105 @@
+	<tr id="new_spec_holder"></tr>
+
+		<%done = true %>
+
+		<%@attributes.each do |attr| %>
+
+				<% if attr.placeholder.empty? %>
+					<% placeholder = attr.name %>
+				<% else %>
+					<% placeholder = attr.placeholder %>
+				<% end %>
+
+				<tr class="cat_spec">
+					<td > <%= attr.name  %></td>
+					<td >
+						<span class="specification canEdit" title="Enter <%= attr.name %>" specname="<%= attr.name %>" specid="<%= attr.id.to_s %>"  data-placement="right" data-placeholder= "Enter <%= placeholder %>" id="item_<%= attr.id %>" >
+					</span>
+
+					<!-- give isbn fetch on default -->
+				<script>
+					<% if done and attr.name.downcase.starts_with?("isbn") and attr.name.index('13') != nil  %>
+
+							//$('#model').closest('tr').find('td:first').text('Book Type');
+
+							$("#item_<%=attr.id%>").editable('show');
+
+							$("#item_<%=attr.id%>").on("save",function(e,params){
+								// load books
+
+								window.item_values['spec']['1'] = params.newValue;
+
+								showNotifications('Fetching book deatils');
+
+								$.ajax({
+									url:'/street/getbook_details/' + params.newValue,
+									type:"post",
+									dataType:'json',
+									success:function(data){
+
+										// reset all values
+										if (data == null || Object.keys(data).length == 0 ){
+											$('.canEdit').editable();
+										}
+										else{
+
+											if (!(data['price'] == null ||  data['price'] == undefined || $.trim(data['price']) == '')){
+												window.item_values['price'] =  data['price'] ;
+												window.price = data['price'];
+												$("#price").text(data['price']);
+											}
+
+
+											if (!(data['desc'] == null ||  data['desc'] == undefined || $.trim(data['desc']) == '')){
+												window.item_values['desc'] = data['description'];
+												$('#desc_content').text(data['description']);
+											}
+
+											if (!(data['publisher'] == null ||  data['publisher'] == undefined || $.trim(data['publisher']) == '')){
+												window.item_values['spec']['2'] =  data['publisher'] ;
+												$('#item_2').text(data['publisher']);
+											}
+
+											//ignore 2nd specificatino as it is isbn13 which the user already entered
+
+											if (!(data['isbn10'] == null ||  data['isbn10'] == undefined || $.trim(data['isbn10']) == '')){
+												window.item_values['spec']['3'] = data['isbn10'];
+												$('#item_3').text(data['isbn10']);
+											}
+
+											if (!(data['pages'] == null ||  data['pages'] == undefined || $.trim(data['pages']) == '')){
+												window.item_values['spec']['4'] = data['pages'];
+												$('#item_4').text(data['pages']);
+											}
+
+											if (!(data['author'] == null ||  data['author'] == undefined || $.trim(data['author']) == '')){
+												window.item_values['spec']['5'] = data['author'];
+												$('#item_5').text(data['author']);
+											}
+
+											if (!(data['edition'] == null ||  data['edition'] == undefined || $.trim(data['edition']) == '')){
+												window.item_values['spec']['5'] = data['edition'];
+												$('#item_5').text(data['author']);
+											}
+
+											$('#notificationcontainer').notify('create',{
+												title:'Helping you out..!',
+												text: 'Specifications are prefilled, change them if you need.'
+											});
+
+										}
+									},
+									error:function(){
+										showNotifications('Some error occured Try again');
+									}
+								});
+
+							 });//item save
+
+							<% done = false %>
+					<% end %>
+				</script>
+
+					</td>
+				</tr>
+		<% end %>

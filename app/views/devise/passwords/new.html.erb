@@ -1,3 +1,7 @@
+<% unless request.env["HTTP_REFERER"] %>
+  <div class="wrapper">
+<% end %>
+
 <div id="devise_pages">
 	<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post,:class=>"forgot_password_form" }) do |f| %>
 	  <%= devise_error_messages! %>
@@ -32,3 +36,6 @@
   });
 });
 </script>
+<% unless request.env["HTTP_REFERER"] %>
+  </div>
+<% end %>

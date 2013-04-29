@@ -14,7 +14,7 @@
 			<p>Bangalore - 560045</p>
 			<p>Phone: +91-7353-11-2345</p>
 		</div>
-		
+
 		<div class="order_heading_right">
 			<% address=JSON.parse(@user.address)%>
 			<p><%= @user.name %></p>
@@ -44,9 +44,9 @@
 			</div>
 			<div class="cart_isbn">
 				<%= book.isbn10 %>
-			</div> 
+			</div>
 			<div class="cart_price">
-				Rs. <%= ((book.price.to_i * book.publisher.rental.to_i)/100).ceil %>
+				Rs. <%= ((book.price.to_i * book.publisher.rental.to_i)/100.to_f).ceil %>
 			</div>
 			<div class="cart_price">
 				Rs. <%= book.price %>

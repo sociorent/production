@@ -2,7 +2,7 @@ class Book < ActiveRecord::Base
   attr_protected []
   attr_accessor :book_image, :book_original, :published_date
 
-  has_many :images, :as => :imageable
+  has_many :images, :as => :imageable_socio
   has_many :reviews
 
   belongs_to :category

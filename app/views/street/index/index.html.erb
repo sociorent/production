@@ -1,0 +1,100 @@
+<% content_for :pagetitle  do %>
+		Welcome
+<%end %>
+
+	<!-- listing the Categories Browse By category -->
+	<div class="clearfix"></div>
+	<div class="well" id="notice_container">
+				<p><i class="fright icon-remove" id="home_notice"></i></p>
+        <p><b>By the Students, For the Students. Sounds Interesting?</b><br><br>
+
+Sociorent Street is an online marketplace for Student Only Items. You can list your used items, be it Books, an old MP3 Player which you no longer use, a Pen Drive, Cycle, Mobile Phone and what not...
+Get Buyer Interest from the same college as yours or from the same city. You can also choose to ship your items anywhere. We'll arrange for a shipping in select cities as of now.
+<br>
+Browse the site and make the most of it!</p>
+      </div>
+	<div  class="row" id="index_menu_holder">
+		<div class="span11">
+		<ul class="btn-group">
+			<%used_cat = [] %>
+				<%used_cat.push(0)%>
+				<% @main_categories.order('priority').each do |cat|%>
+					<% used_cat.push(cat.id) %>
+					<li class="btn others">
+						<a class="others_drop" href="<%=make_category_url(cat)%>" ><%= cat.name %></a></li>
+				<% end %>
+
+				<li class="btn others"> 
+					<a class="dropdown-toggle others_drop" data-toggle="dropdown" href="#"> Others
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<% @category.order('priority').where("id not in (#{used_cat.join(',')})").each do |cat|%>
+								<% used_cat.push(cat.id) %>
+								<li> <a href="<%=make_category_url(cat)%>" ><%= cat.name %></a> </li>
+							<% end %>
+						</ul>
+					
+				</li>
+
+			</ul>
+			</div>
+		</div>
+
+		<!-- List Section -->
+		<div id="Itemlist" class="row">
+				<div id="items" class="span12">
+					<% @category_items.each_with_index do |(category_url,items),index| %>
+						<!-- loop and display only if the categories has products and items in it. -->
+
+							 <div class="itemsRow">
+								<div id="listHeader" class="row"><a href="<%=category_url%>">
+									<p class="header_title"> <b><%= items[0].category.name %> </b></p>
+									<p class="header_view_all">View All</p></a>
+								</div>
+								<ul class="thumbnails row">
+
+				<!--           order the items by reqcount first, then by view count
+									used to list the most viewed and most wanted items at top
+									#TODO: THE NEW ITEMS WILL NEVER TURN UP TOP IN THE LIST
+
+									SO DO SOMETHING FOR THAT(DISCUSS)
+				-->     <% items.each do |p| %>
+										<li class="span3 aitem_holder">
+												<div class="thumbnail">
+																<a href="<%= make_item_url(p) %>">
+																	<div class="aitem_left">
+																			 <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+																 </div>
+																</a>
+
+															<div class="aitem_right">
+																 <a href="<%= make_item_url(p) %>">
+																	<div  title="<%= p.title %>">
+																		<div class="item_title"><%= p.title.truncate(20).titleize  %></div>
+																	</div>
+																</a>
+
+																<div class="item_category">
+																	<a href="<%= make_product_url(p.product) %>">
+																		<%= p.product.name  %>
+																	</a>
+																	<a href="<%= make_category_url(p.category) %>">
+																		<%= p.category.name  %>
+																	</a>
+																</div>
+																				<div class="item_condition"><%=p.condition%></div>
+																			<div class="item_price"><del>&#2352;</del> <%=p.price %>
+																</div>
+																<div class="buy_now"><a href="<%= make_item_url(p) %>">Buy Now</a></div>
+															<div class="clearfix"></div>
+											</div>
+											<div class="clearfix"></div>
+										</li>
+								<% end %>
+								</ul>
+							</div>
+						<% end %>
+				</div>
+				<!-- List Section -->
+		</div>
+</div>

@@ -1,0 +1,60 @@
+
+<div class="container box_sizing" id="main_wrapper">
+	<div class="span10">
+		<p id="logo">
+		<span id="logo_text">
+		<img src="<%=Rails.root.join('app/assets/images/Sociorentstreet.png')%>" /> <br>
+		Sociorent Student Services Private Limited
+		</span>
+		<span id="invoice_title">INVOICE</span>
+		</p>
+		<p id="divider">===================================================================================================
+	</div>
+	<div class="span10">
+		<div class="span4">
+			<b><%= @payment.buyer.user.name %></b>, <br><%= @address %>
+		<br><br>
+		</div>
+		<div class="span5">
+		<p class="span5" id="order_number_invoice">
+			<b>Order: <%= @payment.id %></b><br>
+			<b>Listing: <%= @payment.item.id %></b><br>
+			Date: <%= @payment.shipping_date.strftime("%d/%m/%Y") %><br>
+			Customer ID : <%= @payment.buyer.user.id %><br>
+			</p>
+
+		<p class="span5" id="user_invoice_address">
+				<b>Delivery Addresss :<br/>
+			<%= @payment.buyer.user.name %></b> <br>
+			<%= @address %>
+		</p>
+
+	</div>
+	<div class="span10" id="books_list">
+		<table class="table table-striped">
+      <thead>
+        <tr>
+        	<th>Product</th>
+        	<th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<td><%= @payment.item.title.titleize %></td>
+      	<td>Rs. <%= @payment.item.price.to_i %></td>
+      </tbody>
+    </table>
+	</div>
+	<div class="span10">
+		<p>
+			**** Please refer to the terms of use and privacy policy in the website<br>
+			**** Please retain this invoice for your reference
+		</p>
+	</div>
+	<div class="span10">
+		<p id="footer">
+			******* This is a Computer Generated Inovice, doesn't require a Signature *******
+		</p>
+		
+	</div>
+</div>
+

@@ -1,0 +1,29 @@
+<% content_for :pagetitle  do %>
+  <% if session[:isadmin] %>
+  <%= params[:action].titleize %> listings for <%= @user %>
+  <% else %>
+    <%= params[:action].titleize %> - <%= p2p_current_user.user.name %>
+  <% end %>
+<%end %>
+<div class="row" id="body_content">
+     <div class="span3">
+      <ul class="nav nav-list">
+        <%= render "/street/users/dashboard_menu" %>
+        <%#= render "/street/index/scat_menu" %>
+      </ul>
+    </div>
+	<div class="span9">
+    <div id="listHeader" class="row">
+      <p class="fleft"> <b><%= params[:action].titleize %></b></p>
+      </a></p>
+    </div>
+    <% if session[:isadmin] %>
+      <div class="pull-right">
+        See items by Email: <input type="text" id="user_id" placeholder="Type email">
+      </div>
+    <% end %>
+      <%= render '/street/items/inventory_items_button' %>
+      <%= render "/street/items/inventory_items" , :items => @items %>
+	</div>
+</div>
+

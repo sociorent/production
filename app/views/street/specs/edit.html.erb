@@ -1,0 +1,31 @@
+
+<% content_for :pagetitle  do %>
+    Edit <%= @p2p_spec.name %> specification -Admin
+<%end %>
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span9">
+
+			<h3>Editing Specification</h3>
+
+
+			<%= render 'form' %>
+
+			<%= link_to 'Show', street_spec_path(@p2p_spec) %> |
+			<%= link_to 'Back', street_specs_path %>
+
+</div></div>

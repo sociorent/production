@@ -1,0 +1,59 @@
+<% content_for :pagetitle  do %>
+		Welcome
+<%end %>
+
+	<!-- listing the Categories Browse By category -->
+	<div class="clearfix"></div>
+	<div class="listheader">
+				<b><%=params[:name]%> </>
+  </div>
+
+		<!-- List Section -->
+		<div id="Itemlist" class="row">
+				<div id="items" class="span12">
+
+							 <div class="itemsRow">
+
+								<ul class="thumbnails">
+
+				    <% @items.each do |p| %>
+										<li class="span3 aitem_holder">
+												<div class="thumbnail">
+																<a href="<%= make_item_url(p) %>">
+																	<div class="aitem_left">
+																			 <img src="<%=p.get_image(1,:search)[0][:url]%>" >
+																 </div>
+																</a>
+
+															<div class="aitem_right">
+																 <a href="<%= make_item_url(p) %>">
+																	<div  title="<%= p.title %>">
+																		<div class="item_title"><%= p.title.truncate(20).titleize  %></div>
+																	</div>
+																</a>
+
+																<div class="item_category">
+																	<a href="<%= make_product_url(p.product) %>">
+																		<%= p.product.name  %>
+																	</a>
+																	<a href="<%= make_category_url(p.category) %>">
+																		<%= p.category.name  %>
+																	</a>
+																</div>
+																				<div class="item_condition"><%=p.condition%></div>
+																			<div class="item_price"><del>&#2352;</del> <%=p.price %>
+																</div>
+																<div class="buy_now">
+																	<a href="<%= make_item_url(p) %>">Buy Now</a>
+																</div>
+															<div class="clearfix"></div>
+											</div>
+											<div class="clearfix"></div>
+										</li>
+								<% end %>
+								</ul>
+							</div>
+
+				</div>
+				<!-- List Section -->
+		</div>

@@ -1,13 +1,13 @@
 <%- if controller_name != 'sessions' %>
-<%= link_to "Login", new_session_path(resource_name), :class => "btn" %>
+<%= link_to "Login", new_session_path(resource_name), :class => "btn" ,:id=>'login_button' %>
 <% end -%>
 
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-<%= link_to "Sign Up", new_registration_path(resource_name), :class => "btn" %>
+<%= link_to "Sign Up", new_registration_path(resource_name), :class => "btn" ,:id=>'signup_button' %>
 <% end -%>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-  <%= link_to "Forgot Password?", new_password_path(resource_name), :class => "btn" %>
+  <%= link_to "Forgot Password?", new_password_path(resource_name), :class => "btn" ,:id=>'forgot_pass_button' %>
 <% end -%>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>

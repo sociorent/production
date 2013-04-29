@@ -1,0 +1,142 @@
+<%= stylesheet_link_tag "items/items_manifest"%>
+
+<div class="main_wrapper">
+	<div class="row">
+		<div class="span6">
+			<ul class="breadcrumb">
+			  <li><a href="/street">Home</a> <span class="divider">/</span></li>
+			  <li> New Listing <span class="divider">/</span></li>
+			  <li> New Listing <span class="divider">/</span></li>
+			  <li> New Title</li>
+			</ul>
+		</div>
+
+		<div class="span6">
+		<!-- New Form -->
+	  	<div class="btn-group" id="listing_action">
+			  <button class="btn "   title="Remove Listing">
+			  	<i  class=" icon-trash"></i>
+			  </button>`
+			  <button class="btn "  title="Edit Listing"   id="enable">
+			  			<i  class=" icon-pencil"></i>
+			  </button>
+    	</div>
+		</div>
+
+  	<button class="btn btn-success" id="save"  ><i  class="  icon-white icon-ok-circle" title="Save changes"></i></button>
+
+		<button class="btn btn-danger" id="cancel" ><i  class=" icon-white icon-remove-circle " title="Cancel changes"></i></button>
+	</div>
+
+	<div class="row">
+		<div class="span4">
+			<ul class="thumbnails">
+			  <li class="span4">
+          <div class="thumbnail">
+						<i id="clearuploads" class="icon-trash  pull-right hidden" title="Clear pics uploaded just now" disabled="disabled"></i>
+						<div id="upload_pic" title="Upload more photos" class=" pull-right edit_visible"><i class="icon-upload"></i>Upload</div>
+						<div class="clearfix"></div>
+					  <%= form_tag  "/street/items", :multipart => true, :id => "fileupload"   do %>
+				    		<div id="form_temp"></div>
+				          <%= file_field_tag "img[]" ,:id=> "image_upload" ,:multiple  => 'true' ,:disabled => true  ,:accept => "image/*"  %>
+				  	<% end %>
+         		<div id="view_image_holder">
+			       	<div id="upload_image"></div>
+	              <div class="caption thumb_holder">
+		              <ul class="thumbnails">
+						      </ul>
+	            </div>
+	          </div>
+	        </div>
+        </li>
+			</ul>
+		</div>
+
+		<div class="span6">
+			<center><code class="edit_visible"> All words in <span style="color:blue"> blue</span> are editable.Please click on them to edit</code></center>
+			<table class="table table-bordered table-striped" id="table_specs">
+            <colgroup>
+              <col class="span1">
+              <col class="span7">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+				<tr class="edit_visible">
+					<td>Title </td>
+					<td> <span class="canEdit " id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ></span></td>
+				</tr>
+				<tr>
+					<td>Category </td>
+					<td> <span class="canEdit " id="category_item" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/street/getcategories" ></span></td>
+				</tr>
+				<tr>
+					<td>Model</td>
+					<td>
+						<span id="model" class=" "  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ></span>
+							<input type="text" id="add_new_model" placeholder="Other Model" size=10>
+					</td>
+				</tr>
+	      <tr>
+	        <td>
+	        <span class="highlight">Price</span>
+	        </td>
+	        <td>
+	         	<span class="highlight <%= (itemid.empty? ? '' : 'highlight_force_color')%>"> Rs.
+	       		 <span class="canEdit highlight   <%= (itemid.empty? ? '' : 'highlight_force_color')%>" data-name="username"  title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price"> </span>
+	       		</span>
+	        </td>
+	      </tr>
+	      <tr>
+		      <td>
+	    	    <span class="highlight"> Condition</span>
+	  	    </td>
+		      <td>
+		        <span class="canEdit highlight   <%= (itemid.empty? ? '' : 'highlight_force_color')%>" data-name="username" data-type="select" data-source="['Brand New','Like New','Good Conditon','Used']" title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" ></span>
+		      </td>
+		    </tr>
+	      <tr>
+	        <td>
+	          <span class="highlight">Location</span>
+	        </td>
+	        <td>
+	         <span class="highlight canEdit   <%= (itemid.empty? ? '' : 'highlight_force_color')%>" data-name="username"  data-type="typeahead" data-source="/street/getcities"  title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Select the Location" ></span>
+	        </td>
+	      </tr>
+     </tbody>
+    </table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div id="desc" class="span10">
+			<h4> <%= title.titleize %> Description</h4>
+			<span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="canEdit " inputclass="desc_content_form" data-wysihtml5="{image:false}"> <%= description.html_safe %> </span>
+		</div>
+	</div>
+
+
+<script>
+		// save url
+		window.editsavetype = '<%= (itemid.empty?) ? "post": "put"%>';
+
+		// image count intially 0 for new item
+		window.image_count =  0;
+
+		// initialize item values
+		window.item_values ={};
+		window.item_values['spec']={};
+
+		// save edit is false for js
+		window.edit = false;
+
+		$(document).ready(function(){
+			$("#image_upload").val("");
+ 		});
+
+</script>
+

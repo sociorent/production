@@ -1,0 +1,35 @@
+
+
+
+
+
+<% content_for :pagetitle  do %>
+    Service Pincode  -Admin
+<%end %>
+
+
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span9">
+
+	<h3>New Service Pincode</h3>
+
+		<%= render 'form' %>
+
+		<%= link_to 'Back', street_service_pincodes_path %>
+
+</div></div>

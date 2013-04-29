@@ -36,7 +36,7 @@
 
 .ui-dialog{
 	position: fixed;
-}	
+}
 .ui-dialog .ui-dialog-content{
 		background: url("/assets/paper.jpg") repeat !important;
 }
@@ -125,15 +125,16 @@ li {
 /**typo**/
 .homepage_title{
 	font-family: 'Arvo';
+	font-size: 30px;
+	font-weight: normal;
 }
 h1{
 	font-size: 34px;
 	line-height: 50px;
 	color: #1A1A1A;
-
-
+	font-weight: normal !important;
 }
-a { 
+a {
 	text-decoration: none;
 }
 
@@ -200,16 +201,49 @@ body {
 /**header**/
 .topbar{
 	border-top: 8px solid #0F8159;
-	background: url("/assets/paper.jpg") repeat;
+	background: #444 repeat;
 }
+
 .logo{
-	background: url("/assets/Sociorent.png") no-repeat scroll 0 0 transparent;
+
   height: 70px;
-  width: 301px;
-	margin: 10px 0 25px;
+	margin: 20px 0 25px;
+	color:#fff;
+	margin-right:50px;
+	text-align:center;
+	width:auto;
+	height:45px;
 }
+
+.logo .pointer{
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -ms-transform:     rotate(90deg);
+  -o-transform:      rotate(90deg);
+  transform:         rotate(90deg);
+}
+
+.socio_logo_holder{
+	margin-top: 30px;
+}
+
+.socio_logo_holder,.socio_logo{
+	width:230px;
+	.pointer{
+		margin-top: 9px;
+		margin-left: -60px;
+	}
+}
+
+.street_logo_holder{
+	margin-top: 15px;
+}
+.street_logo_holder,.street_logo{
+	width:250px;
+}
+
 .logo h1{
-	text-indent: -999px;
+	/** text-indent: -999px; **/
 }
 
 .foot_box{
@@ -217,11 +251,11 @@ body {
 	margin-top: 60px;
 }
 .main_nav{
-	margin-top: 25px;
+	margin-top: 35px;
 }
 .main_nav li a{
 	display: block;
-	color: #797979;
+	color: #fff;
 	padding: 15px 20px;
 	font-size: 15px;
 	font-weight: bold;
@@ -256,16 +290,16 @@ body {
 }
 
 .btn{
-	background: #F65757;
+	background: #F65757  !important;
 	color: white !important;
 	font-weight: 400 !important;
-	text-shadow: none;
+	text-shadow: none !important;
 	font-size: 13px !important;
 	padding: 4px 22px !important;
 }
 
 .btn:hover{
-	background: #F65757;
+	background: #F65757 !important;
 	color: white !important;
 	font-weight: 400 !important;
 	text-shadow: none;

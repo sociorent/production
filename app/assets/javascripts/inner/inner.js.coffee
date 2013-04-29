@@ -99,8 +99,6 @@ $(document).ready ->
 				# reset the compare search collections
 				sociorent.collections.compare_search_object.reset $.parseJSON(msg.books)
 				sociorent.fn.renderCompareSearch()
-				$("#compare_search_input").autocomplete
-					source: msg.books
 
 
 	options =

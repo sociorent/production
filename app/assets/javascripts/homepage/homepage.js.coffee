@@ -1,7 +1,7 @@
 window.sociorent = window.sociorent || {fn: {}, models: {}, collections: {}, views: {}}
 
 $(document).ready ->
-	
+
 	# backbone model
 	sociorent.models.search = Backbone.Model.extend
 		initialize: ->
@@ -46,7 +46,7 @@ $(document).ready ->
 			#add has for the url
 
 			window.location.hash = "book/" + @model.get "isbn13"
-				
+
 			# update authors in book details
 			author = @model.get "author"
 			author_array = author.split ","
@@ -71,8 +71,8 @@ $(document).ready ->
 			$.ajax "/home/add_to_cart" ,
 				type:"post"
 				async:true
-				data: 
-					book: that.model.id 
+				data:
+					book: that.model.id
 				success: (msg)->
 					$("#login_box").dialog("open");
 			false
@@ -113,8 +113,8 @@ $(document).ready ->
 			$.ajax "/home/add_to_cart" ,
 				type:"post"
 				async:true
-				data: 
-					book: that.model.id 
+				data:
+					book: that.model.id
 				success: (msg)->
 					$("#login_box").dialog("open");
 			false
@@ -126,15 +126,15 @@ $(document).ready ->
 			search()
 			false
 
-	# Backbone for reviews 
+	# Backbone for reviews
 	sociorent.models.review = Backbone.Model.extend()
-	
+
 	sociorent.collections.review = Backbone.Collection.extend
 		model: sociorent.models.review
 
 		initialize: ->
 			@on "reset", ()->
-				if @models.length == 0 
+				if @models.length == 0
 					$(".reviews_content").html "<div>No reviews are made yet.</div>"
 
 		comparator: (model)->
@@ -168,7 +168,7 @@ $(document).ready ->
 			unless $.trim(val) == ""
 				$("#search_books .name, #search_books .isbn, #search_books .author").highlight(val)
 			$("#no_search_result").hide()
-		else 
+		else
 			$("#search_books").append "<div id='no_search_result_caption'>No books found.</div>"
 			$("#no_search_result").show()
 		$("#search_books").stop().fadeIn(500)
@@ -193,7 +193,7 @@ $(document).ready ->
 
 	# type watch plugin for search box
 	options =
-	  callback: -> 
+	  callback: ->
 	  	search()
 	  wait: 200
 	  highlight: true
@@ -217,7 +217,7 @@ $(document).ready ->
 	$(".open_login_popup").live "click", ->
 		$("#book_details").dialog "close"
 		$("#login_box").dialog "open"
-		
+
 	$("a[href='/users/sign_in']").hide()
 	$("#devise_pages a").click ->
 		action = $(this).text()
@@ -233,7 +233,7 @@ $(document).ready ->
 				$("#login_box_left .boxes").slideUp 0
 				$("#login_box_left_password").slideDown 200
 		$("#devise_pages a").css("display","none")
-		$("#devise_pages a").each (ele) -> 
+		$("#devise_pages a").each (ele) ->
 			if $(this).text() != action
 				$(this).show()
 		false

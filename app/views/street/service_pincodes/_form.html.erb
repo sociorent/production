@@ -1,0 +1,12 @@
+<% url = (@p2p_service_pincode.new_record?) ? street_service_pincodes_path : street_service_pincode_path(@p2p_service_pincode) %>
+<%= simple_form_for(@p2p_service_pincode,:url=>url) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :pincode %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

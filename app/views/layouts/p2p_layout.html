@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title><%= content_for?(:pagetitle) ? yield(:pagetitle) + "- Peer2Peer, Sociorent"  : "Welcome to Peer2Peer, Sociorent"%></title>
+
+<meta name="Description" content="Sociorent.com - A new companion for Engineering Students. Rent books at flat 25% of the MRP. Free door delivery. Rental Period of 6 months."/>
+<meta name="Keywords" content="Rent books Online, Rent engineering books, book rental online, engineering books, engineering colleges india, rent books india, easy book rentals, cool book rentals/">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+  <%= stylesheet_link_tag  'p2p/application'%>
+  <%= javascript_include_tag 'p2p/application'%>
+  <%= csrf_meta_tags %>
+
+</head>
+
+
+<body>
+
+  <%= render "layouts/p2p/header" %>
+  <%= render '/layouts/p2p/p2p_user_bar' %>
+
+  <div class="container">
+    <div id="body_container">
+      <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+      <div class="info-warning" id="flash_notice">  </div>
+         <%= yield %>
+      </div>
+    </div>
+
+    <!-- show the we are with in all pages of p2p or use it on ur own -->
+    <%#-= render '/layouts/wearewith' %>
+
+    <%= render "layouts/p2p/footer_menu" %>
+
+    <div class="clearfix"></div>
+
+    <script>
+      $(document).ready(function(){
+          <% unless flash[:notice].nil? %>
+            showNotifications("<%=flash[:notice]%>");
+          <% end %>
+          <% unless p2p_get_user_location %>
+          $("#static").modal("show");
+          $("#submit_user_location").on("click",function(){
+              $.post("/street/location", {"location":$("#location").val()},function(data){
+                if(data.status == 2)
+                  showNotifications("Error: Entered city not available. Try with different location");
+                else
+                  location.reload();
+
+              });
+          });
+          <% end%>
+
+
+
+    $("#sell_item_button").click(function(){
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate() + 1);
+        var c_value=escape('/street/sellitem') + "; expires="+exdate.toUTCString();
+        document.cookie='return_url' + "=" + c_value + ";path=/";
+    });
+
+    if (window.location.hash == "#_=_")
+    {
+      window.location.hash ="";
+    }
+
+    $('.action_popover').tooltip('destroy');
+
+     });
+    </script>
+  </div>
+
+  <% unless p2p_get_user_location %>
+    <div id="static" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+      <h4>Choose Your Location</h4>
+    </div>
+    <div class="modal-body">
+      <p><input type="text" id="location" placeholder="Your Location?"> <%#=select_tag "location" ,options_for_select( P2p::City.all.collect{|city|  [city.name,city.id]} , p2p_get_user_location ),:prompt=>"Your Location?"%>
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="submit_user_location" class="btn btn-primary">Set Location</button>
+    </div>
+    </div>
+  <% end %>
+
+<div class="pull-right"> Page Rendered in <%= sprintf('%.3f', (Time.now.usec - @start_time).abs / 1000000.0) %> seconds </div>
+
+</body>
+<% unless session[:userid].nil? %>
+  <% @notification_channel = "/user_#{session[:userid]}"%>
+  <%= subscribe_to @notification_channel %>
+<% end %>
+
+</html>

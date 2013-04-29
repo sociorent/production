@@ -15,10 +15,11 @@
 		<h1 class="homepage_title">Why buy engineering textbooks, when you can <span class="tite_rent">RENT</span> at 75% Off?</h1>
 		<h2 class="green"><b>Save loads of money. Feel Great. Be Smart.</b></h2>
 		<a class="fb_big_logi left" href="/users/auth/facebook"></a>
-		<span class="login_or">OR</span>
+		<span class="login_or">or</span>
 		<a class="left open_login_popup signup_link green">
 			<span>Sign up with Email</span>
 		</a>
+
 	</div>
 	<div class="grid_2_5">
 		<div class="slider-wrapper">
@@ -52,16 +53,16 @@
 
 		<h1>How does it work?</h1>
 		<div class="row">
-			<div class="span6">
+			<div class="span5">
 				<div class="info_icon icon1 left">
 					<div></div>
 				</div>
-				<div class="left info_cont1" style="margin-top: 12px;">
+				<div class="left info_cont1">
 					<h2>Rent all your text books the easiest way. Best prices.</h2>
 					<span>Brand New Books. We’ll deliver directly to you all over India.</span>
 				</div>
 			</div>
-			<div class="span6">
+			<div class="span5">
 				<div class="info_icon icon2 left">
 					<div></div>
 				</div>
@@ -72,7 +73,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="span6">
+			<div class="span5">
 				<div class="info_icon icon3 left">
 					<div></div>
 				</div>
@@ -81,7 +82,7 @@
 					<span>We have multiple and simple payment options to make things easier.</span>
 				</div>
 			</div>
-			<div class="span6">
+			<div class="span5">
 				<div class="info_icon icon4 left">
 					<div></div>
 				</div>
@@ -91,23 +92,9 @@
 				</div>
 			</div>
 		</div>
-			
-			<div class="cB"></div>
+		<div class="cB"></div>
 		</div>
-		<!-- <h1>We are with</h1>
-			<div  id="gallery-prev" class="caro_prev left"></div>
-		<div class="werwith" id="gallery-wrap">
-	
-			<ul class="carousal left" id="gallery">
-			<%# @images.each do |image| %>
-				<li><img src="<%#= image.image %>"></li>
-			<%# end %>
-			</ul>
-			
-		</div>
-		<div  id="gallery-next" class="caro_next left"></div>
-			<div class="cB"></div> -->
-
+		<%#-= render '/layouts/wearewith' %>
 	</div>
 </div>
 
@@ -131,6 +118,7 @@
 	<div class="clear"></div>
 </div>
 
+<script src="/assets/jquery.tinycarousel.js"></script>
 <script type="text/javascript">
 $("document").ready(function(){
 
@@ -167,22 +155,22 @@ $("document").ready(function(){
   // Sliding logos //
   if($("#gallery").length){
     // Declare variables
-    var totalImages = jQuery("#gallery > li").length, 
+    var totalImages = jQuery("#gallery > li").length,
         imageWidth = jQuery("#gallery > li:first").outerWidth(true),
         totalWidth = imageWidth * totalImages,
         visibleImages = Math.round(jQuery("#gallery-wrap").width() / imageWidth),
         visibleWidth = visibleImages * imageWidth,
         stopPosition = (visibleWidth - totalWidth);
-        
+
     jQuery("#gallery").width(totalWidth);
-    
+
     jQuery("#gallery-prev").click(function(){
         if(jQuery("#gallery").position().left < 0 && !jQuery("#gallery").is(":animated")){
             jQuery("#gallery").animate({left : "+=" + imageWidth + "px"});
         }
         return false;
     });
-    
+
     jQuery("#gallery-next").click(function(){
         if(jQuery("#gallery").position().left > stopPosition && !jQuery("#gallery").is(":animated")){
             jQuery("#gallery").animate({left : "-=" + imageWidth + "px"});
@@ -191,14 +179,14 @@ $("document").ready(function(){
     });
   }
   var mouse_is_inside = false;
-	
-	$('.search_wrap').hover(function(){ 
-      mouse_is_inside=true; 
-  }, function(){ 
-      mouse_is_inside=false; 
+
+	$('.search_wrap').hover(function(){
+      mouse_is_inside=true;
+  }, function(){
+      mouse_is_inside=false;
   });
 
-	$("body").mouseup(function(){ 
+	$("body").mouseup(function(){
 	    if(! mouse_is_inside) {
 	    	$('#search_books').hide();
 	    	$("#searchClose").hide();
@@ -257,7 +245,7 @@ $("document").ready(function(){
     });
     return false;
 	})
-	
+
 
 	$("#book_details_box").dialog({
 		autoOpen: false,
@@ -274,7 +262,7 @@ $("document").ready(function(){
 
 	});
 
-
+	$('#slider-code').tinycarousel({ display: 2 });
 
 });
 </script>

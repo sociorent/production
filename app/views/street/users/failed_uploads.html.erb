@@ -1,0 +1,54 @@
+<% content_for :pagetitle  do %>
+
+  Failed Uploads<%=p2p_current_user.user.name %>
+
+<%end %>
+
+
+<div id="body_content" class="row">
+    <div  class="span3">
+
+
+      <ul class="nav nav-list">
+
+
+      <%= render "/street/users/dashboard_menu.html.erb" %>
+      <%#= render "/street/index/scat_menu" %>
+
+
+      </ul>
+    </div>
+
+		<div id="items" class="span9">
+
+			<h4> Failed Item in Bulk Uploads </h4>
+			<table class="table table-bordered table-striped">
+				<tr>
+					<th>S.No</th>
+					<th>Category</th>
+					<th>Failed Count</th>
+					<th>Date</th>
+					<th>Time</th>
+					<th>Failed Items</th>
+					<th>Failed Reason</th>
+				</tr>
+				<tbody>
+					<%i = 1 %>
+					<% @failed.each do |failed| %>
+						<tr>
+							<td><%= i %></td>
+							<td><%= failed.category.name %></td>
+							<td><%= failed.cnt  %></td>
+							<td><%= failed.created_at.strftime("%d-%b-%C%y") %></td>
+							<td><%= failed.created_at.strftime("%m:%S") %></td>
+							<td><%= link_to('Download CSV' , URI.encode("/street/getfailed/csv/#{failed.created_at.utc.to_s.sub('UTC','')}")) %></td>
+							<td><%= link_to('Download Reason' , URI.encode("/street/getfailed/reason/#{failed.created_at.utc.to_s.sub('UTC','')}")) %></td>
+						</tr>
+
+						<% i += 1 %>
+					<% end %>
+				</tbody>
+			</table>
+
+		</div>
+</div>

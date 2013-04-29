@@ -1,0 +1,93 @@
+<% url = (@p2p_item_delivery.new_record?) ? street_item_deliveries_path : street_item_delivery_path(@p2p_item_delivery) %>
+
+<%= simple_form_for(@p2p_item_delivery ,:url => url) do |f| %>
+  <%= f.error_notification %>
+
+  <% (@p2p_item_delivery.shipping_date = @p2p_item_delivery.shipping_date.strftime("%m/%d/%Y") ) unless @p2p_item_delivery.shipping_date.nil? %>
+  
+  <% (@p2p_item_delivery.delivery_date = @p2p_item_delivery.delivery_date.strftime("%m/%d/%Y") )  unless @p2p_item_delivery.delivery_date.nil? %>
+
+  <div class="form-inputs">
+
+
+
+
+<% if session[:isadmin]  or @p2p_item_delivery.item.user.id == session[:userid] %>
+
+    <div class="control-group">
+
+      <div class="controls">
+        <%= f.input :courier_name %>
+      </div>
+
+    </div>
+
+
+    <div class="control-group">
+
+      <div class="controls">
+        <%= f.input :tracking_no %>
+      </div>
+
+    </div>
+
+    <div class="control-group">
+
+      <%= f.label :shipping_date %>
+      <div class="controls">
+        <%= f.input :shipping_date , as: :string, input_html:{ class: 'datepicker' }, :include_blank => true,:label=>false%>
+      </div>
+
+    </div>
+
+  <% if session[:isadmin] %>
+
+    <div class="control-group">
+
+        <%= f.label :shipping_charge %>
+        <div class="controls">
+          <%= f.number_field :shipping_charge %>
+        </div>
+
+    </div>
+
+  <% end %>
+
+<% end %>
+
+<% if session[:isadmin]  or @p2p_item_delivery.buyer.id == session[:userid] %>
+
+ 	<div class="control-group">
+
+      <%= f.label :delivery_date %>
+  		<div class="controls">
+  			<%= f.input :delivery_date ,as: :string, input_html:{ class: 'datepicker' },:include_blank => true,:label=>false %>
+  		</div>
+
+  	</div>
+
+ </div>
+
+<% end %>
+
+
+
+<% if session[:isadmin] %>
+
+  <div class="control-group">
+
+      <%= f.label :commission %>
+      <div class="controls">
+        <%= f.number_field :commission %>
+      </div>
+
+  </div>
+
+<% end %>
+
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+
+<% end %>

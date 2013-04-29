@@ -1,3 +1,7 @@
+<% unless request.env["HTTP_REFERER"] %>
+  <div class="wrapper">
+<% end %>
+
 <div id="devise_pages">
   <%= form_for(resource, :as => resource_name, :html=>{:class=>"validate_reg"},:url => registration_path(resource_name)) do |f| %>
     <%= devise_error_messages! %>
@@ -47,3 +51,6 @@
   });
 });
 </script>
+<% unless request.env["HTTP_REFERER"] %>
+  </div>
+<% end %>

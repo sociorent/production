@@ -1,0 +1,15 @@
+
+
+
+<% if current_user %>
+  <div id="user">
+    <div class="left">
+      <div style="width:100%">Welcome, <%= current_user.name %></div>
+    </div>
+    <div class="right span8">
+      <div class="p2p_menu_button pull-right">
+        <%= link_to "SignOut", destroy_user_session_path, :method => :delete %>
+      </div>
+    </div>
+  </div>
+<% end %>

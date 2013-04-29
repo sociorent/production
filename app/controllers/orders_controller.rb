@@ -6,13 +6,13 @@ class OrdersController < ApplicationController
 		user = current_user
 		cart = user.cart
 		books = cart.books.uniq
-		
+
 		# total price - save this in orders
 		deposit_total = 0
 		rental_total = 0
 		cart_items=[]
 		books.each do |book|
-			rental_price = ((book.price.to_i * book.publisher.rental.to_i)/100).ceil
+			rental_price = ((book.price.to_i * book.publisher.rental.to_i)/100.to_f).ceil
 			rental_total += rental_price
 			deposit_total += book.price.to_i
 			product={"productID" =>book.isbn13,"unitCost"=>rental_price,"productDescription"=>book.name}
@@ -20,13 +20,13 @@ class OrdersController < ApplicationController
 		end
 		shipping_charge = deposit_total < 1000 ? 50 : 0
 		total = deposit_total + shipping_charge
-		
+
 		# check the transaction status, if cancelled then store nothing,, and redirect to books page
 		if params[:TxStatus] && params[:TxStatus]=="CANCELED"
 			flash[:warning]="Transaction Failed. Try again"
 			redirect_to "/"
 			return
-		end
+	end
 
 		order_type = params[:order_type]
 		accept_terms_of_use = params[:accept_terms_of_use]
@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
 
 		unless params[:bank_id].nil?
     	bank=Bank.where(:id=>params[:bank_id]).first
-    	
+
     	unless bank.nil?
     		#adding the bank to order
     		order.bank = bank
@@ -49,11 +49,11 @@ class OrdersController < ApplicationController
     		# send_sms(user.mobile_number,sms_text)
     	end
     end
-	
+
     # adding all the books in the cart to orders
 		order.books = books
 		order.save
-    
+
     # Changing the Current Status all books orders to unshipped
     # TODO : Should be implemented in above line
     order.books.update_all(:status => 2)
@@ -86,7 +86,7 @@ class OrdersController < ApplicationController
     else
     	college = College.where(:name => select).first
     	@orders = college.orders
-    end	  
+    end
     @orders.each do |order|
 	    if @rented_books.count <= offset
 	      @rented_books += order.books
@@ -112,7 +112,7 @@ class OrdersController < ApplicationController
     	college.users.includes(:orders).each do |user|
     		@orders += user.orders
     	end
-    	
+
     end
     @orders.each do |order|
       if @rented_books.count <= count

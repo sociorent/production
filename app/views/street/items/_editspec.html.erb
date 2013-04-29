@@ -1,0 +1,31 @@
+
+	<% spec_done = [] %>
+
+		<% spec.each do |aspec| %>
+			<% spec_done.push( aspec.spec.id ) %>
+			              <tr>
+			                <td>
+			                  <%= aspec.spec.name %>
+			                </td>
+			                <td>
+			                 <span class="canEdit" data-name="username"  title="Enter <%= spec.name %>"  specname="<%= aspec.spec.name %>" specid="<%= aspec.spec.id.to_s %>" id="item_<%= aspec.spec.id %>"> <%= aspec.value.titleize %> </span>
+			                </td>
+			              </tr>
+		<% end %>
+
+		<% if defined? itemspec %>
+			<% itemspec.each do |spec| %>
+			 <% next if spec_done.include?(spec.id) %>
+
+				<tr class="edit_hidden_spec">
+					<td class="span1  item_label"> <%= spec.name %> </td>
+					<td class="span2 specification"  specname="<%= spec.name %>" specid="<%= spec.id.to_s %>" id="item_<%= spec.id %>"> Enter a value for <%= spec.name %> </td>
+				</tr>
+
+
+
+			<%end %>
+
+		<%end %>
+
+	<!-- </table> -->

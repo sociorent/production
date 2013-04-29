@@ -1,0 +1,29 @@
+<% content_for :pagetitle  do %>
+    Payments
+<%end %>
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+		<div class="span9">
+
+			<h3>Updating <%= @p2p_item_delivery.item.title %> </h3>
+
+      <%= link_to raw('<i class="icon-arrow-left"></i> Back'), street_item_deliveries_path, class: "pull-right btn" %>
+
+
+			<%= render 'form' %>
+
+			
+		</div>
+</div>

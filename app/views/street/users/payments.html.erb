@@ -1,0 +1,56 @@
+<h1>Your Payment Details</h1>
+
+<%= will_paginate(@p2p_item_deliveries , :renderer => BootstrapPagination::Rails) %>
+<table class="table table-striped table-bordered">
+  <tr>
+    <th>Item ID</th>
+    <th>Courier Name</th>
+    <th>Tracking Num</th>
+    <th>Shipping Date</th>
+    <th>Deleviry Date</th>
+    <th>Commission</th>
+    <th>Shipping Charge</th>
+    <th>Citrus pay ID</th>
+    <th>Citrus Pay reason</th>
+    <th>Citrus Ref no</th>
+    <th>Actions</th>
+  </tr>
+
+<% @p2p_item_deliveries.each do |p2p_item_delivery| %>
+  <tr>
+    <td><%= p2p_item_delivery.item.id %></td>
+    <td><%= p2p_item_delivery.user.user.email %><br/><%=p2p_item_delivery.user.user.name%><br/><i class="icon-mobile-phone"></i> <%=p2p_item_delivery.user.user.mobile_number%></td>
+    <td><%= (p2p_item_delivery.txn_id == "") ? "-NA-" : p2p_item_delivery.txn_id %></td>
+    <td><%= (p2p_item_delivery.courier_name == "") ? "-NA-" : p2p_item_delivery.courier_name %></td>
+    <td><%= (p2p_item_delivery.tracking_no == "") ? "-NA-" : p2p_item_delivery.tracking_no %></td>
+    <td><%= (p2p_item_delivery.shipping_date.nil?) ? "-NA-" : p2p_item_delivery.shipping_date.strftime("%d-%b-%C%y")  %></td>
+    <td><%= (p2p_item_delivery.delivery_date.nil?) ? "-NA-" : p2p_item_delivery.delivery_date.strftime("%d-%b-%C%y") %></td>
+    <td><%= p2p_item_delivery.commission %></td>
+    <td><%= p2p_item_delivery.shipping_charge %></td>
+    
+    <td><%= (p2p_item_delivery.citrus_pay_id == "" ) ? "-NA-" : p2p_item_delivery.citrus_pay_id %></td>
+    <td><%= (p2p_item_delivery.citrus_reason == "") ? "-NA-" : p2p_item_delivery.citrus_reason %></td>
+    <td><%= (p2p_item_delivery.citrus_ref_no == "" ) ? "-NA-" : p2p_item_delivery.citrus_ref_no %></td>
+
+    <td><%#= link_to 'Show', p2p_item_delivery %>
+    <%= link_to '<i class="icon-edit"></i>'.html_safe, edit_p2p_item_delivery_path(p2p_item_delivery) %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+
+<%= will_paginate(@p2p_item_deliveries , :renderer => BootstrapPagination::Rails) %>
+<br />
+
+<%#= link_to 'New Item delivery', new_p2p_item_delivery_path %>
+
+<script>
+
+    <% if params.has_key?(:bought)%>
+        window.bought = '/street/paymentdetails';
+    <% else %>
+        window.bought = '/street/paymentdetails/bought';
+    <% end %>
+    
+</script>

@@ -1,0 +1,48 @@
+
+
+ <button class="btn delete_messsage" tbl="<%=table_name%>"><i  title="Delete Selected" class=" icon-trash"></i></button>
+ <button class="btn refresh_messsage" tbl="<%=table_name%>"><i  title="Delete Selected" class=" icon-refresh"></i></button>
+ <% if table_name == "inbox" %>
+ <button class="btn mark_as_read" tbl="<%=table_name%>">Mark All as Read</button>
+ <% end %>
+
+
+<div class="input-append input-prepend pull-right">
+	<span class="add-on">
+		<i data-title="Info" data-content="Use # to search messages for a particular listing<br/>Eg, #Nokia" data-html="true" data-placement="left" class="icon-info-sign action_popover" data-trigger="hover"></i></span>
+	<input type="text" id="search_<%=table_name%>" class="search_messages" tbl="<%=table_name%>" placeholder="Search <%=table_name%>">
+  <span class="add-on"><i title="Search <%=table_name%>" class="action icon icon-search"></i></span>
+</div>
+
+
+
+<table class="table table-bordered table-striped table-hover" tbl="<%=table_name%>" id="<%=table_name%>_table" >
+	<thead>
+		<tr>
+			<th><input type="checkbox" class="master_check"  tbl="<%=table_name%>"></th>
+
+			<th> <i class="action icon-tag"></i>
+				Ref</th>
+			<th> <i class="action icon-user"></i>
+				Sender </th>
+
+			<th> <i class="action icon-envelope"></i>
+				Message</th>
+
+			<th> <i class="action icon-time"></i>
+				Time</th>
+
+		</tr>
+	</thead>
+
+	<tbody>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+	</tbody>
+
+</table>

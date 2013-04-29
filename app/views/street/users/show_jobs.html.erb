@@ -1,0 +1,41 @@
+<% content_for :pagetitle  do %>
+ Vendors Details
+<% end %>
+<div id="body_content" class="row">
+	<div  class="span3">
+		<ul class="nav nav-list">
+			<%= render "/street/users/dashboard_menu.html.erb" %>
+
+		</ul>
+	</div>
+	<div class="span9">
+
+
+		<h4>Background Task</h4>
+
+
+
+		<h6>Vendor Bulk uploads</h6>
+
+
+		 	<i id="icon-spin" class="icon-spinner <%=@icon_class%>"></i>
+		 	<span id="background">
+		 		<%= @vendor_upload %>
+
+		 		<% if @run_bulk_upload %>
+		 			<%= link_to 'Start Bulk Upload','/street/admin/jobs/bulk/start',:id => 'start_background' ,:class=> 'aslink' %>
+		 		<% end %>
+			</span>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+$("document").ready(function(){
+	if ($.jStorage.get("background"))
+	{
+		$("#icon-spin").addClass("icon-spin");
+		$("#background").html("Job started , please wait few mins.");
+	}
+});
+</script>

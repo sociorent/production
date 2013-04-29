@@ -1,0 +1,28 @@
+<div class="container box_sizing" id="main_wrapper">
+	<div class="span10">
+		<p id="logo">		<img src="<%=Rails.root.join('app/assets/images/Sociorentstreet.png')%>" /></p>
+		<p id="divider">===================================================================================================
+	</div>
+	<div class="span10 offset1">
+		
+		<p class="span6" id="user_address">TO <br/>
+			<span id="user_address_content"> <%= @address  %>		</span>
+		</p>
+
+		<p class="span3" id="order_number">
+			Order: <%= @payment.id %><br>
+			Ph: <%= @payment.buyer.mobile_number %>
+			</p>
+	</div>
+	<div class="span12" id="price_container">
+		<p id="total_quantity">Total Quantity Inside: 1 </p>
+	</div>
+	<div class="span10 offset1">
+		<p id="socio_rent_address">From: <span id=""> <%= @senderaddress %> <br/> Phone: <%= @payment.item.user.mobile_number %> </p>
+	</div>
+	<div class="span10 offset1">
+		<p id="footer">
+			Handle with care
+		</p>
+	</div>
+</div>

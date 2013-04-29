@@ -3,3 +3,18 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-Agent: *
 # Disallow: /
+
+
+#all bots..
+User-agent: *
+
+Disallow: /street/dashboard
+Disallow: /street/profile
+Disallow: /street/mystore
+Disallow: /street/favourites
+Disallow: /street/paymentdetails/*
+Disallow: /street/gettemplate/*
+Disallow: /street/faileduploads
+Disallow: /street/admin/*
+Disallow: /street/vendors
+Disallow: /street/messages/*

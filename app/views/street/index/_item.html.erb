@@ -1,0 +1,25 @@
+<!--Partial template for ini=itial stage item view  -->
+<%items.each do |p| %>
+  <div class="product">
+    <a href="<%=make_item_url(p)%>" >
+      <div class="product_img">
+        <img src="<%= p.get_image(1,:search)[0][:url] %>" ></img>
+      </div>
+    </a>
+
+    <div class="product_title">
+      <a href="<%=make_item_url(p)%>" >
+        <em><%= p.title.slice(0,25)  %></em>
+      </a>
+    </div>
+
+
+    <div class="product_tag">
+      <em>Price: <del>&#2352;</del> <%=p.price %></em>
+    </div>
+
+    <div class="product_tag">
+      <em>Condition: <%=p.condition %></em>
+    </div>
+  </div>
+<% end %>

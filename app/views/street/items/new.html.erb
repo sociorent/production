@@ -1,0 +1,189 @@
+<% content_for :pagetitle  do %>
+  Create a new listing
+<%end %>
+
+<%= stylesheet_link_tag "items/items_manifest"%>
+
+<div class="main_wrapper">
+  <div class="row">
+    <div class="span6">
+      <ul class="breadcrumb">
+        <li><a href="/street">New Listing</a></li>
+      </ul>
+    </div>
+
+    <div class="span6">
+    <!-- New Form -->
+      <div class="btn-group" id="listing_action">
+        <a href="#"  data-toggle="tooltip" class="btn btn-success"  data-title="Save this listing"  id="save_top"  ><i  class="  icon-white icon-ok-circle" title="Save changes"></i> Save</a>
+        <a href="#"  data-toggle="tooltip"  class="btn btn-danger"  data-title="Cancel the changes"  id="cancel_top" ><i  class=" icon-white icon-remove-circle " title="Cancel changes"></i> Cancel</a >
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="span4">
+      <ul class="thumbnails">
+        <li class="span4">
+          <div class="thumbnail">
+            <a id="clearuploads" class="pull-right hidden aslink" data-toggle="tooltip" title="Clear pics uploaded just now" ><i class="icon-trash" disabled="disabled"></i>Clear Uploaded</a>
+            <div id="upload_pic" title="Upload more photos" class=" pull-right edit_visible"><i class="icon-upload"></i>Upload</div>
+            <div class="clearfix"></div>
+            <%= form_tag  "/street/items", :class=> 'hide', :multipart => true, :id => "fileupload"   do %>
+                <div id="form_temp"></div>
+                  <%= file_field_tag "img[]" ,:id=> "image_upload" ,:multiple  => 'true' ,:disabled => true  ,:accept => "image/*"  %>
+            <% end %>
+            <div id="view_image_holder">
+              <div id="upload_image">
+                <i class="icon-picture"></i>
+              </div>
+                <div class="caption thumb_holder">
+                  <ul class="thumbnails">
+                  </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="span6">
+      <center><code class="edit_visible"> All words in <span style="color:blue"> blue</span> are editable.Please click on them to edit</code></center>
+      <table class="table table-bordered table-striped" id="table_specs">
+            <colgroup>
+              <col class="span1">
+              <col class="span7">
+            </colgroup>
+            <thead>
+<!--               <tr>
+                <th>Specification</th>
+                <th>Value</th>
+              </tr>
+ -->            </thead>
+            <tbody>
+        <tr class="edit_visible">
+          <td>Product Name </td>
+          <td> <span class="canEdit " id="title"  data-original-title="Enter a title for your listing" data-placement="right" data-placeholder="Enter a title" ></span></td>
+        </tr>
+        <tr>
+          <td>Category </td>
+          <td>
+
+            <span class="canEdit " id="category_item" data-type="select" data-original-title="Select a category"  data-placement="right" data-placeholder="Select a category"   data-source="/street/getcategories" ></span>
+
+            <span id="scategory_item_holder" class="hidden"> ~>
+              <span class="canEdit " id="scategory_item" data-type="select" data-original-title="Select a sub Sub  category"   data-source="/street/getsubcategories" ></span>
+            </span>
+
+          </td>
+        </tr>
+        <tr>
+          <td>Brand</td>
+          <td>
+            <span id="model" class=" "  data-placement="right" data-placeholder="Select a model"  title="Select Model" data-type="select" ></span>
+              <span id="other_model_holder" class="hidden">
+                ~> <span id="add_new_model" id="add_new_model" data-title="Enter other Model" size="3">
+              </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <span>Price</span>
+          </td>
+          <td>
+            <span> Rs.
+             <span class="canEdit   " data-name="username"  title="Enter Price"   data-placement="right" data-placeholder="Enter the price"  specname="price" specid="0" id="price"> </span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span> Condition</span>
+          </td>
+          <td>
+            <span class="canEdit   " data-name="username" data-type="select" data-source="['Brand New','Like New','Good Conditon','Used']" title="Enter Condition"  specname="condition" specid="0" id="condition"  data-placement="right" data-placeholder="Select the condition" ></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span>Location</span>
+          </td>
+          <td>
+           <span class=" canEdit  " data-name="username"  title="Enter Location"  specname="location" specid="0" id="location"  data-placement="right" data-placeholder="Enter the Location" ></span>
+          </td>
+        </tr>
+        <% if !session[:user_type].nil? and session[:user_type] == 1 %>
+          <tr>
+            <td>
+              <span>Count</span>
+            </td>
+            <td>
+             <span class=" canEdit  " data-name="count"  title="Enter count"  specname="count" specid="0" id="count"  data-placement="right" data-placeholder="Enter Item Count" ></span>
+            </td>
+          </tr>
+        <% end %>
+     </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="desc" class="span10">
+      <h4> Description</h4>
+      <span id="desc_content" title="Enter Description(More than 20 letters)" data-type="wysihtml5" class="canEdit " inputclass="desc_content_form" data-wysihtml5="{image:false}"></span>
+    </div>
+  </div>
+
+<div class="span10">
+  <div class="btn-group pull-right" id="listing_action">
+    <button  data-toggle="tooltip"  class="btn btn-success"  data-title="Save this listing"  id="save_bottom"  ><i  class="  icon-white icon-ok-circle" title="Save changes"></i> Save</button>
+    <button  data-toggle="tooltip" class="btn btn-danger"  data-title="Cancel the changes"  id="cancel_bottom" ><i  class=" icon-white icon-remove-circle " title="Cancel changes"></i> Cancel</button>
+  </div>
+</div>
+
+
+  <!-- Modal -->
+  <div id="sellitem_pricing_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="sellitem_pricing_modallLabel" aria-hidden="true">
+
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="sellitem_pricing_modalLabel">Final Step</h3>
+    </div>
+
+    <div class="modal-body form-horizontal">
+
+
+    </div>
+  </div>
+
+
+<%= javascript_include_tag '/assets/p2p/item/new' %>
+
+  <script>
+      // save url
+      window.editsavetype = 'post';
+
+      // image count intially 0 for new item
+      window.image_count =  0;
+      window.editsaveurl = '/street/items';
+
+      // initialize item values
+      window.item_values ={};
+      item_values['spec']={};
+
+      // save edit is false for js
+      window.edit = false;
+      window.price = '';
+      window.brand = '';
+
+
+      $(document).ready(function(){
+        $("#image_upload").val("");
+
+        //enable edit
+        edit_item();
+
+      });
+  </script>
+</div>

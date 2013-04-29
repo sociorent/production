@@ -1,17 +1,25 @@
 Sociorent::Application.routes.draw do
 
+
+
+  get "item_history/index"
+
   mount RailsAdmin::Engine => '/cb_admin', :as => 'rails_admin'
 
   ActiveAdmin.routes(self)
-  
-  get 'aboutus' => 'static_pages#about_us'
-  get 'pricing' => 'static_pages#pricing'
-  get 'college_ambassadors' => 'static_pages#colleges'
-  get 'contactus' => 'static_pages#contactus'
+
+  resources :static_pages
+
   get 'privacy_policy' => 'static_pages#privacypolicy'
-  get 'terms_of_use' => 'static_pages#termsofuse'
 
+  get 'page/:id' => 'static_pages#show'
+  get 'college_ambassadors' => 'static_pages#colleges'
 
+  # get 'aboutus' => 'static_pages#about_us'
+  # get 'pricing' => 'static_pages#pricing'
+  # get 'contactus' => 'static_pages#contactus'
+  # get 'privacy_policy' => 'static_pages#privacypolicy'
+  # get 'terms_of_use' => 'static_pages#termsofuse'
 
   get "home/index"
   match "/search" => "home#search"
@@ -45,7 +53,6 @@ Sociorent::Application.routes.draw do
   match "/get_colleges" =>"users#get_colleges"
   match "/get_streams" => "users#get_streams"
 
-
   #matches #book/isbn
   get '/book/:isbn' => "home#book_deatils"
 
@@ -63,63 +70,147 @@ Sociorent::Application.routes.draw do
 
   devise_for :counters
 
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
+  ##P2P Routes
+  namespace :street do
 
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
 
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
+    root :to => "index#index"
 
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
 
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
 
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+    match 'aboutus' => 'static_pages#aboutus'
+    match 'contactus' => 'static_pages#contactus'
+    match 'privacy_policy' => 'static_pages#privacypolicy'
+    match 'how_to_sell' => 'static_pages#howtosell'
+    match 'how_to_buy' => 'static_pages#howtobuy'
+    match 'buyer_protection' => 'static_pages#buyerprotection'
+    match 'terms_of_use' => 'static_pages#terms'
+    match 'seller_policy' => 'static_pages#sellerpolicy'
+    match 'buyer_policy' => 'static_pages#buyerpolicy'
 
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
+    post '/profile/updateaddress' => 'users#updateaddress'
 
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+    resources :messages
+    match 'mark_as_read' =>'messages#mark_as_read'
+    resources :items
+    resources :images
+    resources :credits
 
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
+    match 'profile' => 'users#profile'
+
+    #for adimn
+    scope 'admin' do
+      #scaffold controller and view
+      resources :categories ,:products ,:specs ,:service_pincodes , :item_deliveries , :cities ,:static_pages
+
+
+      match 'staticpage' => "users#staticpages"
+      match 'static_pages/get_page/:page_name' => 'static_pages#get_page'
+
+      match 'cities/:id/destory' => 'cities#destroy'
+
+      root :to => 'categories#index'
+      match 'jobs(/:job(/:cmd))' => 'users#show_jobs'
+    end
+
+    scope 'mob' do
+      match 'getcities' => 'mobile#get_city'
+      match  'recentitems(/:cat(/:prod))' => 'mobile#recent_items'
+      get '/query/:query/:city' => 'mobile#recent_items'
+      match 'update_view_count/:id'=> "mobile#update_view_count"
+    end
+
+      match "/get_city/:q" => "index#get_city"
+      match "sellers/:id/:name" => "index#seller_items"
+
+      match 'gettemplate' => 'items#downloadtemplate'
+
+#      get "categories/set_category" => "categories#set_category"
+#      get "categories/sub_category" => "categories#sub_category"
+
+      match 'getcategories' => "categories#getcategories"
+      match 'getsubcategories/:id' => "categories#getsubcategories"
+
+      get   'getbrand/:id' => "categories#get_brands"
+
+      match 'getcities' => "cities#list"
+
+      post 'users/list' => 'users#list'
+      post 'users/verifymobile/code' => 'users#getcode'
+      post 'users/verifymobile/:code' => 'users#verifycode'
+      get  'paymentdetails(/:bought)' => 'users#paymentdetails'
+      get  'paymentdetails/:type/:id(/:bought)' => 'item_deliveries#print_invoice_label'
+
+
+      post 'location' => 'users#setlocation'
+      post 'guesslocation' => 'users#guesslocation'
+
+      get 'sellitem' => "items#new"
+      post 'items/:id' => 'items#update'
+
+      match 'getbook_details/:isbn13' => "items#getbook_details"
+      get 'getserviceavailability/:itemid/:pincode' => 'service_pincodes#check_availability'
+
+
+      get 'faileduploads' => 'users#failed_uploads'
+
+      get 'getattributes/:id' => "categories#get_attributes"
+      get 'getspec/:id' =>  "items#get_spec"
+      get 'welcome' => 'users#welcome'
+      post 'welcome' => 'users#user_first_time'
+
+      match 'itempayment/:id' => 'items#sellitem_pricing'
+      get 'delete/:id' => "items#destroy"
+
+      post 'addimage/:item_id' => "items#add_image"
+      get  'addimage/:form_id/form' => "items#sellitem_pricing"
+
+      get 'sold/:id' => "items#sold"
+
+
+      get 'mystore(/:query(/user/:id))' => 'items#inventory'
+
+      get 'dashboard' => 'users#dashboard'
+      match 'upload_csv/'=>'items#upload_csv'
+      match 'approve(/:query)' => 'items#approve'
+      match 'approve/user/:id' => 'items#approve'
+      match 'disapprove' => 'items#disapprove'
+      match 'disapprove/user/:id' => 'items#disapprove'
+      match 'waiting(/user/:id)' => 'items#waiting'
+      get  'favourites' => 'users#favouriteusers'
+      post 'favourites' => 'users#setfavourite'
+      post 'favourites/:id' => 'users#setfavourite'
+      match 'vendors(/:cmd)' => 'users#vendorsdetails'
+      match 'getusers(/:query)' => 'users#getusers'
+
+      get 'getfailed/:type/:dte' => 'users#download_failed'
+      #post 'payments' => 'users#userpayments'
+
+      get 'getmessages(/:id)' => 'messages#getmessages'
+
+      match 'search/q' => "index#search_query"
+
+      match 'search/c/:ignore1/:cat(/:ignore2/:prod)' => "index#search_cat"
+
+      match "search/:id" =>"index#search"
+      #citruspay response catching
+      match "getCitursSignature" => "items#get_citrus_signature"
+      match "update_citrus" => "items#update_online_payment"
+      match ":ignore1/:cat/filters(/*applied_filters)" =>"index#browse_filter" ,  :applied_filters => /[^\/]*/
+      match ":ignore1/:cat/:ignore2/:prod/filters(/*applied_filters)" =>"index#browse_filter"  ,:applied_filters => /[^\/]*/
+
+      # get ':cat/:prod/:item' => 'items#view' ,:as => :item_url
+      get ':ignore1/:cat/:ignore2/:prod/:item/:id' => 'items#view' ,:as => :item_url
+      get ':ignore1/:cat(/:ignore2/:prod)' => "index#browse"
+      match "update_shipping_address" => "users#update_shipping"
+  end
+
+
   root :to => 'home#index'
 
   match '/system/*a', :to => 'errors#ignore_routing'
+  match '/assets/*a', :to => 'errors#ignore_routing'
 
   match '*a', :to => 'errors#routing'
-  # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
 end

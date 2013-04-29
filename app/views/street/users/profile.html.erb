@@ -1,0 +1,286 @@
+
+
+
+<% content_for :pagetitle  do %>
+    Categories  -Admin
+<%end %>
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span9">
+
+	<h3> <%= p2p_current_user.user.name %> Profile </h3>
+
+
+        <% if !flash[:notice].nil? %>
+          <div class="alert alert-error"> 
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              Update your Mobile number and address to continue 
+          </div>
+        <% end %>
+
+
+      <%if !p2p_current_user.mobileverified %> 
+        <div class="alert alert-error"> 
+          <li>Your Mobile Number is not Verified</li>
+        </div>
+      <% end %>
+
+      <%if p2p_current_user.address.nil? %> 
+        <div class="alert alert-error"> 
+          <li>You have no address</li>
+        </div>
+      <% end %>
+
+
+<div class="tabbable">
+  <ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a  data-toggle="tab" href="#mobile">Mobile Number</a></li>
+    <li><a  data-toggle="tab" href="#address">Address</a></li>
+  </ul>
+   
+  <div class="tab-content">
+    <div class="tab-pane active" id="mobile">
+
+
+        <h4> Update Mobile </h4>
+          <div>
+             <div class="control-group">
+                <label class="control-label">Mobile Number</label>
+                <div class="controls">
+                  <input type="text" id="profile_mobile_number" value = "<%= @mobile %>" class="input text" >
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label"> Verification Code:</label>
+                <div class="controls">
+                  <button class="btn  btn-primary" id="profile_send_verify_code" disabled="disabled">
+                    Send
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label"> Enter Verification Code:</label>
+                <div class="controls">
+                  <input type="text" id="profile_verify_mobile" class="input text"  disabled="disabled" >
+                </div>
+
+              </div>
+
+              <div class="control-group">
+                <label class="control-label"> </label>
+
+                <div class="controls">
+                  <button class="btn " id="profile_verify_code_submit"  disabled="disabled">Verify Code</button>
+                </div>
+
+              </div>
+
+          </div>
+
+    </div>
+    <div class="tab-pane" id="address">
+  
+
+         <h4> Update Address </h4>
+
+                            <form id="profile_address_form">
+                              <table class="table table-bordered table-striped">
+                                <% @address.each_with_index do |(name,value),index| %>
+                                  <tr>
+                                    <td><%= name.gsub(/address/i,'').humanize.titleize %></td>
+                                    <td>
+                                      <%if(name=="address_state")%>
+                                        <%= select_tag("address[#{name}]",get_states_selected(value).html_safe,:class=>"chosen")%>
+                                      <% else%>
+                                        <%= text_field_tag("address[#{name}]",value)%>
+                                      <% end%>
+                                     </td>
+                                  </tr>
+                                <% end %>
+                                <tr><td></td><td><a class="btn btn-primary" id="profile_update_address">Update Address</a></td></tr>
+                              </table>
+                            </form>
+    </div>
+  </div>
+  </div>
+
+
+ </div>
+</div>
+
+<script>
+
+disableverify=function(){
+
+            $("#profile_send_verify_code").attr('disabled','disabled');
+            $("#profile_verify_code_submit").attr('disabled','disabled');
+            $("#profile_verify_mobile").attr('disabled','disabled');
+}
+
+	$(document).ready(function(){
+
+
+    <% if !@mobile_present and !@address_present %>
+      $("#myTab li:nth-child(2) a").tab('show');
+    <% end %>
+
+    $("#profile_mobile_number").keypress(function(){
+      if (!(/^\d{10}$/.test($("#profile_mobile_number").val())) ){
+          showNotifications('Enter a valid mobile number');
+          disableverify();
+          return true;
+      }
+      if ($("#profile_mobile_number").val() == "<%=p2p_current_user.mobile_number%>"){
+        disableverify();
+        return true;
+      }
+
+    $("#profile_send_verify_code").removeAttr('disabled');
+    $("#profile_verify_code_submit").removeAttr('disabled');
+    $("#profile_verify_mobile").removeAttr('disabled');
+
+    });
+
+
+
+    $("#profile_verify_code_submit").live("click",function(){
+
+         if ($("#profile_verify_mobile").val().length  !=6 ){
+              alert('Wrong code. Enter the correct code');
+              return false;
+         }
+
+         $(this).html('Verifying code').attr('disabled','disabled');
+
+         $.ajax({
+              url:'/street/users/verifymobile/' + $("#profile_verify_mobile").val(),
+              type:'post',
+              dataType:'json',
+              success:function(data){
+                   if (data.status == 1){
+												showNotifications('Successfully Verified Mobile');
+												$("#profile_verify_code_submit").removeClass('btn-primary').removeAttr('disabled').html('Verified Successfully');
+                        <% unless @address_present %>
+                          $("#myTab li:nth-child(2) a").tab('show');
+                        <% end %>
+                  }
+                   else{
+                        $("#profile_verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+                   }
+              },
+              error:function(){
+                        $("#profile_verify_code_submit").addClass('btn-primary').removeAttr('disabled').html('Failed.Retry');
+              }
+         });//ajax
+    });
+
+
+    $("#address_address_city").val($("#user_location").val());
+
+    window.cache_profile_city = {};
+
+    $("#address_address_city").autocomplete({
+            minLength: 2,
+            source: function( request, response ) {
+             var term = request.term;
+              if ( term in window.cache_profile_city ) {
+                response( window.cache_profile_city[ term ] );
+                return;
+              }
+              $.getJSON( "/street/get_city/" + request.term,{}, function( data, status, xhr ) {
+                window.cache_profile_city[ term ] = data;
+                response( data );
+              });
+            }
+
+    });
+
+
+    $("#profile_update_address").live("click",function(){
+
+        if (!(/^\d{6}$/.test($("#address_address_pincode").val()))){
+          showNotifications('Enter a valid Pincode');
+          $("#address_address_pincode").addClass('error');
+          return false;
+        }
+
+
+        if ($("#address_address_street_1").val().length <2 || $("#address_address_city").val().length <2 ){
+          showNotifications('Enter a valid address');
+          return false;
+        }
+
+        $("#address_address_pincode").removeClass('error');
+
+         $.ajax({
+              url:'/street/profile/updateaddress',
+              type:'post',
+              data:$('#profile_address_form').serialize(),
+              dataType:'json',
+              success:function(data){
+                   if (data.status== 1){
+                        <% if cookies.has_key?(:redirect_to) %>
+                            window.location.href="<%=cookies[:redirect_to]%>";
+                            return false;
+                        <% end %>
+
+												showNotifications('Successfully Updated address');
+                        $(".alert-error").remove();
+                   }else{
+                        showNotifications('Some error occured. Try again.');
+                   }
+              },
+              error:function(){
+                        showNotifications('Some error occured. Try again.');
+              }
+         });//ajax
+    });
+
+
+
+    $("#profile_send_verify_code").live("click",function(){
+        var verify_ele = $(this)
+         $(this).html('Sending verification code');
+
+         $.ajax({
+              url:'/street/users/verifymobile/code',
+              type:'post',
+              data:{"mobile":$("#profile_mobile_number").val()},
+              dataType:'json',
+              success:function(data){
+                   if (data.status == 1){
+                        $(verify_ele).removeClass('btn-primary').html('Code Sent. Resend Code');
+                   }else if (data.status == 10){
+                        showNotifications('Mobile Number Already in use.');
+                        $("#profile_send_verify_code").addClass('btn-primary').removeAttr('disabled').html('Mobile in use. Send Again');
+                   }
+                   else{
+                        showNotifications('Some error occured. Try again.');
+                   }
+              },
+              error:function(){
+                        showNotifications('Some error occured. Try again.');
+              }
+
+         });//ajax
+    });//click
+
+	});
+
+</script>

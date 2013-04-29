@@ -1,0 +1,146 @@
+.arrow{
+	display: table-cell;
+	vertical-align: middle;
+	float:left;
+	margin-top:8px;
+	font-size:0.5em;
+	font-weight:bold;
+}
+
+
+#browse_tags{
+	background-color:#eee;
+	height:30px;
+	margin-bottom:5px;
+}
+
+#browse_sort{
+	height:30px;
+}
+
+#browse_left{
+	margin-left: 0;
+}
+
+#browse_title{
+	font-weight:bold;
+	font-size:1.8em;
+	margin-bottom:10px;
+
+}
+
+#browse_content{
+	margin-left:15px;
+}
+
+div.dropdown:hover > ul.dropdown-menu{
+    display: block;
+}
+
+#load_more{
+	text-align:center;
+	display: block;
+}
+
+#browse_button {
+	margin-top: 5px;
+}
+
+#filter_sort {
+	margin: 5px;
+	width: 150px;
+}
+.spec-filter {
+	line-height: 15px;
+	font: 12px;
+}
+
+#browse_head {
+	margin: 10px 0px 0px -7px;
+	display: inline-block;
+	font-weight: bold;
+	color: black;
+}
+
+#filters{
+	display: block;
+
+}
+
+#dummy_filter_holder{
+/*	position: absolute;
+	margin-left: "0px"
+*/
+}
+
+#pull_here{
+	display: none;
+	position: absolute;
+}
+
+
+.thumbnail > .caption > .item_title{
+	height:1.3em;
+	overflow-y:hidden;
+}
+
+#browse_sub_cat_menu{
+	margin-bottom: 5px;
+}
+
+#browse_sub_cat_menu a,#browse_sub_cat_menu a:visited,#browse_sub_cat_menu a:hover,#browse_sub_cat_menu a:focus{
+	text-decoration: none;
+	display: block;
+	padding:3px;
+	margin-left: 5px;
+	margin-right: 15px;
+}
+
+#browse_sub_cat_menu .filter_title{
+	margin-top: 3px;
+}
+#browse_sub_cat_menu .level_1{
+	padding-left:4px;
+}
+
+#browse_sub_cat_menu .level_2{
+	padding-left:8px;
+}
+
+#browse_sub_cat_menu .level_3{
+	padding-left:12px;
+}
+
+#browse_sub_cat_menu .level_4{
+	padding-left: 16px;
+}
+
+#browse_sub_cat_menu .level_5{
+	padding-left: px;
+}
+
+.sub_category:hover{
+	background-color:#EEE;
+}
+
+#browse_sub_cat_menu #filter_holder_title{
+	background-color: rgb(246, 87, 87);
+    color: rgb(255, 255, 255);
+    border-radius: 1px ;
+    padding: 3px;
+    font-weight: bold;
+}
+.dropdown-menu{
+	z-index: 10000;
+}
+.sub_category .icon-caret-down{
+	padding-right: 10px;
+}
+
+.spec_filter_check_label{
+	height: 14px;
+	width: 83%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}

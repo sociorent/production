@@ -1,28 +1,34 @@
 class StaticPagesController < ApplicationController
-  layout "StaticPage"
 
-  def about_us
-  	@aboutus = StaticPage.where(:page_name => 'about_us').first
+  def new
+    @page = StaticPage.new
   end
 
-  def pricing
-  	@pricing = StaticPage.where(:page_name => 'pricing').first
+  def create
+    page = StaticPage.create(params[:static_page])
   end
 
-  def colleges
-  	@colleges = StaticPage.where(:page_name => 'colleges').first
+  def edit
+    @page = StaticPage.find(params[:id])
   end
 
-  def contactus
-  	@contactus = StaticPage.where(:page_name => 'contact_us').first
+  def update
+    @page = StaticPage.find(params[:id])
+    @page = @page.update_attributes(params[:static_page])
+  end
+
+  def get_page
+    @page = StaticPage.find_by_page_name(params[:page_name])
+    render :json => @page
+  end
+
+  def show
+    @page = StaticPage.find_by_page_name(params[:id])
   end
 
   def privacypolicy
-  	@privacy_policy = StaticPage.where(:page_name => 'privacy_policy').first
-  end
-
-  def termsofuse
-  	@termsofuse = StaticPage.where(:page_name => 'terms_of_use').first
+    @page = StaticPage.find_by_page_name('privacy_policy')
+    render :show
   end
   
 end

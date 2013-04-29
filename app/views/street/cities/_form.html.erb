@@ -1,0 +1,16 @@
+
+<% url = (@p2p_city.new_record?) ? street_cities_path : street_city_path(@p2p_city) %>
+<% meth = (@p2p_city.new_record?) ? 'post' : 'put' %>
+
+<%= simple_form_for(@p2p_city ,:url => url  ,:method => meth) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+  	<%= f.input :name %>
+  	<%= f.input :show_city %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

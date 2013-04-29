@@ -1,0 +1,56 @@
+
+
+
+<% content_for :pagetitle  do %>
+    Specifications  -Admin
+<%end %>
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+<div class="span9">
+
+    <h3>Listing Specification</h3>
+
+    <%= link_to '<h5><i class="icon-plus-sign-alt"></i> New Specification</h5>'.html_safe, new_street_spec_path %>
+
+
+
+    <table class="table table-striped table-bordered">
+      <tr>
+        <th>Name</th>
+
+        <th>Priority</th>
+        <th>Category</th>
+        <th>Action</th>
+      </tr>
+
+    <% @p2p_specs.each do |p2p_spec| %>
+      <tr>
+        <td><%= p2p_spec.name %></td>
+        <td><%= p2p_spec.priority %></td>
+        <td><%= p2p_spec.category.name %></td>
+
+        <td><%= link_to '<i class="icon-edit"></i>'.html_safe, edit_street_spec_path(p2p_spec) %>
+            <%= link_to '<i class="icon-trash"></i>'.html_safe, street_spec_path(p2p_spec), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+
+      </tr>
+    <% end %>
+    </table>
+
+    <br />
+
+</div></div>

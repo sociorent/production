@@ -1,0 +1,49 @@
+<% content_for :pagetitle  do %>
+    Categories  -Admin
+<%end %>
+
+
+
+<div class="row" id="body_content" >
+
+     <div class="span3">
+
+      <ul class="nav nav-list">
+
+        <%= render "/street/users/dashboard_menu.html.erb" %>
+        <%#= render "/p2p/index/scat_menu" %>
+
+      </ul>
+    </div>
+
+
+  <div class="span9">
+
+
+  <h3>Listing Cities </h3>
+
+  <%= link_to '<h5><i class="icon-plus-sign-alt"></i> New City</h5>'.html_safe, new_street_city_path %>
+
+  <input type="text" class="pull-right" id="search_city" placeholder="Search City">
+
+  <table id="city_table" class="table table-bordered-table-striped">
+    <thead>
+      <th>Name</th>
+      <th>Show</th>
+      <th>Actions</th>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+  </table>
+
+  </div>
+</div>
+
+<%=javascript_include_tag '/assets/p2p/cities.js' %>

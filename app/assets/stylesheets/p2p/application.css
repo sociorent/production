@@ -1,0 +1,32 @@
+/*
+*= require jquery.ui.core
+*= require jquery.ui.theme
+*= require jquery.ui.autocomplete
+*= require jquery.ui.datepicker
+*= require jquery.fileupload-ui
+*= require footer
+*= require bootstrap
+*= require global/bootstrap-wysihtml5-0.0.2.css
+*= require p2p/font-awesome.min
+*= require p2p/select2
+*= require p2p/index/common
+*= require p2p/index/itemList
+*= require p2p/inventory
+*= require p2p/p2p
+*= require p2p/ui.notify
+*= require p2p/header
+*= require index/user_bar
+*= require p2p/slider
+*= require p2p/jquery.fancybox.css
+*= require p2p/jquery.fancybox-buttons.css
+*= require p2p/jquery.fancybox-thumbs.css
+*= require global/chosen
+*= require_tree .
+*/
+
+
+/*#TODO  REMOVE AFTER ADDIN JQUERY UI FOR AUTOCOMPLETE IMAGE*/
+
+.ui-autocomplete-loading{
+	background:url('/assets/ajax_small.gif') no-repeat right center;
+}

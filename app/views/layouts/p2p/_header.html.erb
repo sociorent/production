@@ -1,0 +1,207 @@
+<div class="topbar">
+    <div class="wrapper">
+      <div class="grid_1">
+
+        <div class="topbar_right">
+          <div>
+            <div id="menuSet" class="span8 pull-right">
+                <li class="pull-left location_li">
+                    <i class="icon-globe"></i>
+                    <input type="text" id="user_location" placeholder="Your Location?" value="<%( (session[:city].nil?) ? '' :  session[:city] )%>">
+                  </li>
+
+
+              <% if p2p_current_user %>
+
+
+
+                  <li data-toggle="tooltip" title="Sociorent.com" data-placement="bottom"><a href="/"><i class="icon-home"></i>Sociorent Home</a></li>
+
+                  <li data-toggle="tooltip" title="Messages" data-placement="bottom">
+                    <% unread_count = (session[:userid].nil?) ? 0 :  p2p_current_user.received_messages.inbox.unread.count %>
+                    <a href="/street/messages"><i class="icon-envelope"></i> Messages
+                      <span id="header_msg_count"><%= "(#{unread_count})" if  unread_count > 0  %><span>
+                  </li>
+                  <li data-toggle="tooltip" title="Dashboard" data-placement="bottom"><a href="/street/dashboard"><i class="icon-dashboard"></i>Dashboard</a></li>
+
+                  <li data-toggle="tooltip" title="Sign out" data-placement="bottom">
+                    <%= link_to "<i class='icon-signout'></i> Sign Out".html_safe, destroy_user_session_path, :method => :delete %>
+
+                  </li>
+
+                <% end %>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+
+          <nav class="main_nav pull-right">
+            <ul><%url = get_seller_url %>
+                 <li><a href="<%=url%>" <%if current_user.nil? || ( !session[:userid].nil?  and p2p_current_user.mobileverified == false ) %>
+                  data-toggle="modal" role="button" <% end%>
+                  class="selected" id="sell_item_button"><i class="icon-shopping-cart"></i>Sell Your Item</a></li>
+              <% if current_user %>
+                <li><a href="/street/dashboard" class="selected" id="my_account_button"><%= current_user.name %></a></li>
+              <% else %>
+                <li>
+                  <a href="#head_login_modal" class="selected " role="button" data-toggle="modal">Login / SignUp</a>
+                </li>
+              <% end %>
+            </ul>
+          </nav>
+
+
+        <a class="pull-left logo socio_logo_holder"  href="/">
+          <img  class="socio_logo" src="/assets/logo/socio.png" />
+          <img  class="pointer hide"  id="sociorent_pointer" src="/assets/pointleft.png" />
+        </a>
+        <a class="pull-left logo street_logo_holder" href="/street/">
+          <img  class="street_logo" src="/assets/logo/streetlogo.png" />
+          <img class="pointer" id="street_pointer" src="/assets/pointleft.png" />
+        </a>
+
+    </div>
+    </div>
+    <div class="clearfix"></div>
+   </div>
+  </div>
+ </div>
+
+                <div id="head_login_modal" class="modal hide fade span9" tabindex="-1" role="dialog" aria-labelledby="head_login_modalLabel" aria-hidden="true">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="head_login_modalLabel">Login</h3> (If you are an existing Sociorent user, you can login with same credentials)
+                </div>
+
+                <div class="modal-body span7" id="login_popup_content">
+
+                  <div class="pull-right">
+                        <a class="fb_big_logi" href="/users/auth/facebook"></a>
+                  </div>
+
+                  <div id="login_box" class="boxes">
+                    <%= render :template => "devise/sessions/new" %>
+                  </div>
+
+                  <div id="signup_box" class="boxes">
+                    <%= render :template => "devise/registrations/new" %>
+                  </div>
+                  <div id="forgot_box" class="boxes">
+                    <%= render :template => "devise/passwords/new" %>
+                  </div>
+
+                </div>
+
+                </div>
+
+                <div id="seller_mobile_verify_modal" class="modal hide fade span9" tabindex="-1" role="dialog" aria-labelledby="mobile_verify_modalLabel" aria-hidden="true">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="mobile_verify_Label">Verify Your Mobile Number </h3>
+                </div>
+                <div class="modal-body span7">
+                   <div class="control-group">
+                      <label class="control-label">Enter Mobile</label>
+                      <div class="controls">
+                        <input type="text" id="seller_mobile_number" value = "<%= current_user.mobile_number if current_user %>" class="input text" >
+                      </div>
+                    </div>
+
+                    <div class="control-group">
+                      <label class="control-label"> Verification Code:</label>
+                      <div class="controls">
+                        <button class="btn  btn-primary" id="seller_send_verify_code">
+                          Send
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="control-group">
+                      <label class="control-label"> Enter Code:</label>
+                      <div class="controls">
+                        <input type="text" id="seller_verify_mobile" class="input text" >
+                      </div>
+
+                    </div>
+
+                    <div class="control-group">
+                      <label class="control-label"> </label>
+
+                      <div class="controls">
+                        <button class="btn " id="seller_verify_code_submit">Verify Code</button>
+                      </div>
+
+                    </div>
+                </div>
+              </div>
+              <% unless session[:userid].nil? %>
+                <div id="address_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Shipping Address" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3> Shipping Address </h3>
+                  </div>
+                  <div class="modal-body form-horizontal">
+                    <form id="shipping_address_form">
+                      <table class="table table-bordered table-striped">
+                        <% @address=[] if @address.nil? %>
+                        <% @address.each_with_index do |(name,value),index| %>
+                          <tr>
+                            <td><%= name.gsub(/address/i,'').humanize.titleize %></td>
+                            <td>
+                              <%if(name=="address_state")%>
+                                <%= select_tag(name,get_states_selected(value).html_safe,:class=>"chosen")%>
+                              <% else%>
+                                <%= text_field_tag("#{name}",value)%>
+                              <% end%>
+                             </td>
+                          </tr>
+                        <% end %>
+                        <tr><td></td><td><a class="btn" id="conitinue_to_checkout">Continue Shipping</a></td></tr>
+                      </table>
+                    </form>
+                  </div>
+                </div>
+              <% end %>
+
+
+<!-- set the container hidden to avoid a flash of unstyled content
+when the page first loads -->
+<div id="notificationcontainer" style="display:none">
+
+    <!--
+    Later on, you can choose which template to use by referring to the
+    ID assigned to each template.  Alternatively, you could refer
+    to each template by index, so in this example, "basic-tempate" is
+    index 0 and "advanced-template" is index 1.
+    -->
+    <div id="simple_notification">
+        <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+        <h1><i class="action icon-envelope icon-white"></i> #{title}</h1>
+        <p>#{text}</p>
+    </div>
+
+     <div id="new_message_notification">
+        <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+        <h1><i class="action icon-envelope icon-white"></i> You have a new message from #{username}</h1>
+        <p style="margin:10px;">#{msg}</p>
+    </div>
+
+     <div id="new_item_notification">
+        <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+        <h1><i class="action icon-envelope icon-white"></i> You have a listed a new item #{title}</h1>
+        <p style="margin:10px;">#{msg}</p>
+    </div>
+
+
+</div>
+
+<div class="block_div">
+  <img src="/assets/lightbox-ico-loading.gif"/>
+</div>
+
+
+ <div class="modal hide fade" id="notification_modal">
+      <div class="modal-body" style="text-align:center">
+       </div>
+  </div>

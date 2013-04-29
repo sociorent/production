@@ -1,0 +1,28 @@
+
+
+
+  <div id="user_bar">
+    <div id="user_bar_holder" class="container">
+    <div class="pull-left">
+      <%#= render "/street/index/scat_menu"  ,:dropdown => true %>
+      <!-- <div style="width:100%">Welcome, <%#= current_user.name %></div> -->
+    </div>
+    <div class="pull-right span4">
+    </div>
+    <div class="clearfix"></div>
+      <form method="get" id="top_search_form" action="/street/search/q/">
+        <div class="row search_bar">
+
+          <%= render '/street/index/scat_menu' ,:dropdown => true %>
+
+          <input id="top_search_input" type="text" class="span6" name="query" value="<%= params[:query]%>" placeholder="What are you looking for">
+
+          <%=select_tag "category" ,options_for_select( P2p::Category.all.collect{|cate|  [cate.name,cate.id]},params[:category]),:prompt=>"All categories",:class=>"span2"%>
+
+          <a class='btn search_btn'><span> Search <i class="icon-search"></i></span></a>
+        </div>
+        <input type="hidden" id ="user_city" value ="<%= (session.has_key?(:city)) ? session[:city] : "" %>">
+      </form>
+    <div class="clear"></div>
+  </div>
+</div>

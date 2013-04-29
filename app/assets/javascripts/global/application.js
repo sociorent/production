@@ -12,9 +12,22 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require global/jquery.ui.core.js
+//= require global/jquery.ui.widget.js
+//= require global/jquery.ui.position.js
 //= require ./underscore.js
-//= require ./jquery-ui-1.9.1.custom.min.js
-//= require_tree .
+//= require ./backbone
+//= require ./jquery.ui.menu
+//= require ./jquery.sticky
+//= require ./jquery.ui.dialog.js
+//= require ./jquery.ui.tabs
+//= require ./jquery.validate.min
+//= require ./chosen.jquery
+//= require ./jquery.sticky
+//= require ./jquery.typewatch
+//= require ./bootstrap.min
+//= require ./jquery.nivo.slider.pack
+//= require ./jquery.timeago
 
 $(document).ready(function(){
 	$("#resources_button").click(function(){
@@ -34,7 +47,7 @@ $(document).ready(function(){
 		current = $(this).attr("href");
 		// page=current.replace("_"," ")
 		// page=page.slice(1).toUpperCase()
-		
+
 		$("#static_page_dialog").dialog('option','title',$(current).attr('title'))
 		$("#static_page_dialog .sub").hide();
 		$(current).show();
@@ -52,13 +65,13 @@ $(document).ready(function(){
       modal: true
 	});
 	$(".open_university").click(function(){
-			$("#university_dialog").dialog("open");	
+			$("#university_dialog").dialog("open");
 	});
 	if($("#page_not_found").html().trim()!="")
 		$("#page_not_found").fadeIn(1000).delay(5000).fadeOut(300);
 	$(".rails_notice").delay(5000).fadeOut(300);
 
-	
+
 	//start router on page load
 	if (/^book\/\d{13}/i.test(window.location.hash.substr(1)) ){
 

@@ -1,5 +1,12 @@
+<%= javascript_include_tag 'global/jquery.validate.min' %>
+
+<% unless request.env["HTTP_REFERER"] %>
+  <div class="wrapper">
+<% end %>
+
+
 <div id="devise_pages" class="login_form">
-	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :remote => true) do |f| %>
 	  <div><%= f.label :email %>
 	  <%= f.email_field :email %></div>
 
@@ -10,7 +17,9 @@
 	    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
 	  <% end -%>
 
-	  <div><%= f.submit "Sign in", :class => "btn" %></div>
+	  <div><%= f.submit "Sign in", :class => "btn" %>
+      <span id="loginError"></span>
+    </div>
 	<% end %><br/>
 
 	<%= render "devise/shared/links" %>
@@ -32,5 +41,15 @@ $(document).ready(function(){
         return $(label).closest(".control-group").addClass("error");
       }
   });
+
+  $("#new_user").bind("ajax:error", function(event, data, status, xhr) {
+    if(data.status == 401)
+      $("#loginError").html(data.responseText);
+  });
+
 });
 </script>
+
+<% unless request.env["HTTP_REFERER"] %>
+  </div>
+<% end %>

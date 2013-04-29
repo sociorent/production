@@ -278,7 +278,7 @@ class P2p::Item < ActiveRecord::Base
           end
         end
 
-        unless img.first.img.exists?
+        unless img.first.img?
 
             if type  == :view
               res.push({:url => "/assets/p2p/noimage_view.jpg" ,:id => 0})
@@ -289,8 +289,9 @@ class P2p::Item < ActiveRecord::Base
             elsif type == :full
               res.push({:url => "/assets/p2p/noimage_view.jpg" ,:id => 0})
             end
-          end
-          res.push ({:url => img.first.img.url(type) , :id => img.first.id.to_s })
+        end
+
+        res.push ({:url => img.first.img.url(type) , :id => img.first.id.to_s })
       else
         img.each do |img|
 
@@ -306,7 +307,7 @@ class P2p::Item < ActiveRecord::Base
                   end
                next
               end
-          unless img.img.exists?
+          unless img.img?
 
             if type  == :view
               res.push({:url => "/assets/p2p/noimage_view.jpg" ,:id => 0})
